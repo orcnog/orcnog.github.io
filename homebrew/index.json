@@ -6,14 +6,14 @@
 		"For example, add \"My Homebrew.json\" to the \"toImport\" array below, and have a valid JSON homebrew file in this (\"homebrew/\") directory."
 	],
 	"toImport": [
-        "dnd/adventure/house_of_elazar.json",
-        "sw5e/sw5e.json",
-        "dnd/adventure/orcnogTWC.json",
-        "sw5e/adventure/DoD/ep1_traitors_gambit/adventure.json",
-        "sw5e/adventure/DoD/ep2_wretched_hive/adventure.json",
-        "sw5e/adventure/Halcyon/creatures.json",
-        "sw5e/adventure/ImperialDecryptor/creatures.json",
-        "sw5e/adventure/LostTemple/creatures.json",
-        "sw5e/adventure/Rugosa/adventure.json"
-    ]
+		"dnd/adventure/house_of_elazar.json",
+		"sw5e/sw5e.json",
+		"dnd/adventure/orcnogTWC.json",
+		"sw5e/adventure/DoD/ep1_traitors_gambit/adventure.json",
+		"sw5e/adventure/DoD/ep2_wretched_hive/adventure.json",
+		"sw5e/adventure/Halcyon/creatures.json",
+		"sw5e/adventure/ImperialDecryptor/creatures.json",
+		"sw5e/adventure/LostTemple/creatures.json",
+		"sw5e/adventure/Rugosa/adventure.json"
+	]
 }

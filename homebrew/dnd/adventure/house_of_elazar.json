@@ -1,448 +1,448 @@
 {
-    "$schema": "https://raw.githubusercontent.com/TheGiddyLimit/5etools-utils/master/schema/brew-fast/homebrew.json",
-    "_meta": {
-        "sources": [
-            {
-                "json": "orcnogHoE",
-                "abbreviation": "HoE",
-                "full": "The House of Elazar",
-                "convertedBy": [
-                    "orcnog"
-                ],
-                "version": "1.0",
-                "color": "#851f21",
-                "targetSchema": "1.2"
-            }
-        ],
-        "dateAdded": 1729028448,
-        "dateLastModified": 1729028448
-    },
-    "monster": [
-        {
-            "name": "Creepy Doll",
-            "source": "orcnogHoE",
-            "page": 0,
-            "size": [
-                "S"
-            ],
-            "type": "construct",
-            "alignment": [
-                "C",
-                "E"
-            ],
-            "ac": [
-                {
-                    "ac": 12,
-                    "from": [
-                        "natural armor"
-                    ]
-                }
-            ],
-            "hp": {
-                "average": 21,
-                "formula": "6d4 + 6"
-            },
-            "speed": {
-                "walk": 30
-            },
-            "str": 3,
-            "dex": 16,
-            "con": 12,
-            "int": 10,
-            "wis": 14,
-            "cha": 18,
-            "skill": {
-                "deception": "+6",
-                "perception": "+4",
-                "persuasion": "+6",
-                "stealth": "+7"
-            },
-            "senses": [
-                "darkvision 120 ft."
-            ],
-            "passive": 14,
-            "resist": [
-                {
-                    "resist": [
-                        "bludgeoning",
-                        "piercing",
-                        "slashing"
-                    ],
-                    "note": "from nonmagical attacks that aren't silvered",
-                    "cond": true
-                }
-            ],
-            "immune": [
-                "fire",
-                "poison"
-            ],
-            "conditionImmune": [
-                "charmed",
-                "exhaustion",
-                "frightened",
-                "paralyzed",
-                "petrified",
-                "poisoned"
-            ],
-            "languages": [
-                "Common",
-                "Infernal",
-                "telepathy 60 ft. Infernal",
-                "Common",
-                "telepathy 60 ft."
-            ],
-            "cr": "2",
-            "spellcasting": [
-                {
-                    "name": "Innate Spellcasting",
-                    "type": "spellcasting",
-                    "headerEntries": [
-                        "The doll's spellcasting ability is Charisma (spell save {@dc 14}). It can innately cast the following spells, requiring only verbal components:"
-                    ],
-                    "will": [
-                        "{@spell suggestion}"
-                    ],
-                    "daily": {
-                        "1e": [
-                            "{@spell dominate person}",
-                            "{@spell modify memory}"
-                        ]
-                    },
-                    "ability": "cha"
-                }
-            ],
-            "trait": [
-                {
-                    "name": "Devil's Sight",
-                    "entries": [
-                        "Magical darkness doesn't impede the doll's darkvision."
-                    ]
-                },
-                {
-                    "name": "Inanimate",
-                    "entries": [
-                        "While the doll remains motionless, it is indistinguishable from an ordinary doll."
-                    ]
-                },
-                {
-                    "name": "Undying Evil",
-                    "entries": [
-                        "If the doll is destroyed, it regains all its hit points and reappears at a nearby location in 24 hours unless a {@spell remove curse} spell is cast on its remains."
-                    ]
-                }
-            ],
-            "action": [
-                {
-                    "name": "Giggle",
-                    "entries": [
-                        "The doll targets one creature it can see within 30 feet of it. The target must succeed on a {@dc 14} Wisdom saving throw or take 7 ({@damage 2d6}) psychic damage and become {@condition frightened} for 1 minute. The target can repeat the saving throw at the end of each of its turns, with disadvantage if the doll is within line of sight, ending the effect on itself on a success."
-                    ]
-                }
-            ],
-            "traitTags": [
-                "Devil's Sight"
-            ],
-            "senseTags": [
-                "SD"
-            ],
-            "languageTags": [
-                "C",
-                "I",
-                "TP"
-            ],
-            "damageTags": [
-                "Y"
-            ],
-            "spellcastingTags": [
-                "I"
-            ],
-            "conditionInflict": [
-                "frightened"
-            ],
-            "conditionInflictSpell": [
-                "charmed",
-                "incapacitated"
-            ],
-            "savingThrowForced": [
-                "wisdom"
-            ],
-            "savingThrowForcedSpell": [
-                "wisdom"
-            ]
-        }
-    ],
-    "adventure": [
-        {
-            "name": "The House of Elazar",
-            "source": "orcnogHoE",
-            "id": "orcnogHoE",
-            "group": "homebrew",
-            "author": "Tom Cartos",
-            "published": "2024-10-15",
-            "cover": {
-                "type": "external",
-                "url": ""
-            },
-            "level": {
-                "start": 3,
-                "end": 3
-            },
-            "storyline": "",
-            "contents": [
-                {
-                    "name": "Intro",
-                    "headers": [
-                        {
-                            "header": "Adventure Summary",
-                            "depth": 1
-                        }
-                    ]
-                },
-                {
-                    "name": "Adventure",
-                    "headers": [
-                        {
-                            "header": "Opening Read",
-                            "depth": 1
-                        },
-                        {
-                            "header": "Hamelia",
-                            "depth": 1
-                        },
-                        {
-                            "header": "The Manor",
-                            "depth": 1
-                        }
-                    ]
-                }
-            ]
-        }
-    ],
-    "adventureData": [
-        {
-            "id": "orcnogHoE",
-            "source": "orcnogHoE",
-            "data": [
-                {
-                    "type": "section",
-                    "name": "The House of Elazar by Tom Cartos",
-                    "page": 1,
-                    "id": "000",
-                    "entries": [
-                        {
-                            "type": "entries",
-                            "page": 1,
-                            "entries": [
-                                "Level 3 One-Shot Halloween Adventure for 3 to 5 players."
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "type": "section",
-                    "name": "Intro",
-                    "page": 1,
-                    "id": "001",
-                    "entries": [
-                        "Almost everyone agrees that the Elazar Household at the top of the hill is a creepy place at best. Children dare one another to get close enough to touch the heavy iron knocker on the front door before running away squealing, and even the bravest of the townsfolk only walk past if absolutely necessary. The current occupant is Emmanuel Elazar, a pale gaunt man whose thin features and long sleek hair make him appear much younger than his 50+ years.",
-                        "He very rarely leaves the house, but it somehow always seems empty anyway. Emmanuel is in fact a vampire, from a long line of vampires, but he is the first who has not fully embraced the blood curse. The house has been in his family for generations, but seldom used in recent years so Emmanuel returned here in the hope that he could find a way to remove his vampirism without his family knowing about it. It is important to note that Emmanuel does not wish to remove the curse out of any particular sentimentality or ‘goodness’, but rather he finds its downsides to outweigh the boons it bestows. In particular he finds the taste of blood utterly repulsive and longs for real food.",
-                        "After many decades of searching, Emmanuel believes he has found a way to remove his affliction, but it requires the ritual sacrifice of a pair of identical female pre-pubescent twins. Luckily for him, just such a pair lives in the town a few streets over. They have been missing now for over a week as Emmanuel prepares the rites. Despite being a well-practiced spell caster, there is a lot to do, and his thralls are only really capable of manual tasks.",
-                        "Unluckily for Emmanuel, the townsfolk have hired a group of travelling adventurers to find the boys, and they have a pretty good idea where they should start looking. Should they make their way through the largely abandoned house and into the lair below, will they ultimately decide to save the boys, or will they deem it a greater victory for the town if the resident vampire removes his dark powers and leaves for good?",
-                        {
-                            "type": "entries",
-                            "name": "Adventure Summary",
-                            "page": 1,
-                            "id": "002",
-                            "entries": [
-                                "The House of Elazar is a one-shot Halloween-flavored adventure designed for D&D 5e.",
-                                {
-                                    "type": "entries",
-                                    "name": "Players",
-                                    "page": 1,
-                                    "id": "004",
-                                    "entries": [
-                                        "This adventure is designed for 3 to 5 players at level 3 (but optimized for 4 players)."
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "Map Information",
-                                    "page": 1,
-                                    "id": "005",
-                                    "entries": [
-                                        "GRID SIZE - 24x19 (300DPI)",
-                                        "VTT SIZE - 3360x2660 (140DPI)",
-                                        "RECOMMENDED PRINT SIZE - A2/ANSI C"
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "Plot Summary",
-                                    "page": 1,
-                                    "id": "006",
-                                    "entries": [
-                                        {
-                                            "type": "list",
-                                            "style": "list-decimal",
-                                            "items": [
-                                                "Players meet a village girl, Hamelia, outside the manor, who will accompany them inside.",
-                                                "Players should find a secret passageway in the kitchen pantry, but realize it's sealed by a magical barrier.",
-                                                "Players should find a book, The Rite of Sepins, in the library giving them the passkey to break the barrier.",
-                                                "Players descend into the bowels of the manor, and find Elazar about to perform the ritual.",
-                                                "Players must decide if they should kill him, help him, or something else, before his horde of thralls engulfs them."
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "type": "section",
-                    "name": "Adventure",
-                    "page": 2,
-                    "id": "007",
-                    "entries": [
-                        {
-                            "type": "entries",
-                            "name": "Opening Read",
-                            "page": 2,
-                            "id": "008",
-                            "entries": [
-                                "{@note {@b Show: Spooky Hogsbottom image}}",
-                                {
-                                    "type": "insetReadaloud",
-                                    "page": 1,
-                                    "id": "009",
-                                    "entries": [
-                                        "Almost everyone in Hogsbottom agrees that the Elazar Household at the top of the hill is a creepy place at best. Children dare one another to get close enough to touch the heavy iron knocker on the front door before running away squealing, and even the bravest of the townsfolk only walk past if absolutely necessary.  It's rumored that only one Hogsbottom dweller has even set foot in the house, and that was just a child on a foolish dare.  While the manor always seems to give off an abandoned kinda vibe, there is in fact one current occupant.  The owner of the estate is Emmanuel Elazar, a pale gaunt man whose thin features and long sleek hair make him appear much younger than his 50+ years.",
-                                        "Rarely seen outside his home, rumors of his true nature have swirled for decades.  Some say \"hermit\", others \"mad scientist\", some even say \"vampire\", and some even think he died years ago and he now wanders his grounds at night as a spirit, as if he didn't know he was dead.  But for as long as any of the locals could remember, he never bothered anyone in town.  So, they just let him and his spooky mansion be.  Live and let live… or so they hoped."
-                                    ]
-                                },
-                                "{@note {@b Show: Missing Children image}}",
-                                {
-                                    "type": "insetReadaloud",
-                                    "page": 1,
-                                    "id": "010",
-                                    "entries": [
-                                        "A week ago, two young boys from the town went missing.  Twins, in fact, hair as red as a sunrise.  Their parents came to their room to wake them one morning, and they were nowhere to be found.  No one saw them leave, there was no sign of struggle… they'd just vanished.  In response, the good townsfolk of Hogsbottom have hired a group of travelling adventurers to find the boys, and they have a pretty good idea where those adventurers should start looking."
-                                    ]
-                                },
-                                "{@note {@b Show: Creepy Cornfield image}}",
-                                {
-                                    "type": "insetReadaloud",
-                                    "page": 1,
-                                    "id": "011",
-                                    "entries": [
-                                        "As night falls over the countryside, you set out for the spooky residence.  Leaving the relative comfort of the village streets, you pass through a few acres of crops on the outskirts of the town.  As the twilight drains away there is barely enough light even for shadows.  All manor of life and terrain is obscured.  Even the stars and moon cower behind a dense layer of cloud.  And with that foreboding energy, every tree, every eerie stalk of corn, every twisting root on the ground seems to come alive as the night engulfs the world.  Your ears become sharper and your mind paranoid, every rustle of grass snap of a twig is a predator, even if it is just a rabbit or a field mouse.",
-                                        "It's several minutes before you finally spot the house.  The dark, intimidating manor, looms atop a small hill on the opposite end of a dirt path cutting through a cornfield.  As you step onto the dirt path to cross the field, you can see your breath in the cold, heavy air.  Dead corn husks crunch under your feet..."
-                                    ]
-                                },
-                                "{@note {@b Show: Spooky Manor image}}",
-                                {
-                                    "type": "insetReadaloud",
-                                    "page": 1,
-                                    "id": "012",
-                                    "entries": [
-                                        "A cold, menacing fog clings to the ground as you approach the gloomy manor.  The smell of mud and rotting flowers wafts past your nose.  A black bird caws from atop the 2-story house, then quickly turns its head to eye you, and flies off, flapping loudly. The air is thick and still, and you feel the slightest of chills run down your spine.  Suddenly, you hear a twig snap behind you...",
-                                        "{@b Roll for Initiative!}"
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type": "entries",
-                            "name": "Hamelia",
-                            "page": 2,
-                            "id": "013",
-                            "entries": [
-                                "Hamelia's presence spooks the adventurers.  She is introduced via encounter.",
-                                {
-                                    "type": "inset",
-                                    "name": "Encounter: Bats!",
-                                    "page": 2,
-                                    "id": "014",
-                                    "entries": [
-                                        {
-                                            "type": "link",
-                                            "href": {
-                                                "type": "internal",
-                                                "path": "dmscreen.html#%7B%22w%22%3A10%2C%22h%22%3A10%2C%22ctc%22%3Atrue%2C%22fs%22%3Afalse%2C%22lk%22%3Afalse%2C%22ps%22%3A%5B%7B%22x%22%3A0%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A9%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A9%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A0%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A51%2C%22s%22%3A%7B%7D%7D%2C%7B%22x%22%3A5%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A5%2C%22s%22%3A%7B%22s%22%3A%22NUMBER%22%2C%22d%22%3A%22DESC%22%2C%22ri%22%3Atrue%2C%22m%22%3Afalse%2C%22rg%22%3Afalse%2C%22rri%22%3Afalse%2C%22g%22%3Atrue%2C%22p%22%3Atrue%2C%22a%22%3Afalse%2C%22k%22%3Afalse%2C%22piHp%22%3Afalse%2C%22piHm%22%3Afalse%2C%22piV%22%3Atrue%2C%22piO%22%3Afalse%2C%22c%22%3A%5B%5D%2C%22cndc%22%3A%5B%5D%2C%22r%22%3A%5B%7B%22id%22%3A%2260d7e106-5d6a-46c3-ad7b-9d3a23e0ce49%22%2C%22n%22%3A%22Commoner%22%2C%22n_m%22%3A%22Hamelia%22%2C%22h%22%3A4%2C%22g%22%3A4%2C%22i%22%3A20%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2250d24b16-e4d7-4c94-86d5-f55ab92cd31e%22%2C%22n%22%3A%22Giant%20Bat%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A2%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%22d36107b8-e7c3-4cc4-914f-ed2a77e1cd3e%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2271fa036c-ecb6-448b-a005-5df0ed51a37b%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A2%2C%22k%22%3A%5B%5D%7D%5D%2C%22rdp%22%3A%5B%5D%2C%22n%22%3A1%7D%7D%5D%2C%22ex%22%3A%5B%5D%7D"
-                                            },
-                                            "text": "[ DM Screen link ]"
-                                        },
-                                        "",
-                                        {
-                                            "type": "table",
-                                            "rows": [
-                                                [
-                                                    {
-                                                        "type": "list",
-                                                        "name": "Roster",
-                                                        "items": [
-                                                            "{@creature Commoner||Hamelia} x 1",
-                                                            "{@creature Giant Bat} x 1",
-                                                            "{@creature Swarm of Bats} x 2"
-                                                        ]
-                                                    }
-                                                ]
-                                            ]
-                                        },
-                                        "{@note Adjusted XP: 300}"
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "Encounter Script",
-                                    "entries": [
-                                        {
-                                            "type": "entries",
-                                            "name": "Turn 0",
-                                            "entries": [
-                                                {
-                                                    "type": "insetReadaloud",
-                                                    "entries": [
-                                                        "You whirl around to see… a young village girl peering at you from around a tree, hair as red as a sunrise."
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "type": "entries",
-                                            "name": "On Hamelia's Turn",
-                                            "entries": [
-                                                {
-                                                    "type": "insetReadaloud",
-                                                    "entries": [
-                                                        "Oh, didn't mean to startle you… My name is Hamelia.  And I hear you're headed inside this horrible house to look for a missing pair of twins. Well, I'm coming with you, and I'll not take \"no\" for an answer!  See, those two missing boys… those are my older brothers.  And I'll not rest until they're found--now, lead the way!  We haven't got all night!",
-                                                        "The girl shrieks, as a chaotic flapping sound fills the air. Dozens of fanged bats begin to swarm around you!"
-                                                    ]
-                                                },
-                                                "Add Giant Bat and Swarm of Bats to the roster."
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type": "entries",
-                            "name": "The Manor",
-                            "entries": [
-                                {
-                                    "type": "insetReadaloud",
-                                    "entries": [
-                                        "You make your way up some stone steps to the house.",
-                                        "Ivy and ferns grew through the crevices of the old winding stone path, which lead directly to the colossal structure. The mansion looms proudly behind creaky iron gates, flanked by rows of skeletal tree, swaying gently to the cold autumn wind. At its threshold stands a delicate marble fountain, the soft gurgling of the clear water melodic as it resonates in the surrounding silence.",
-                                        "There's a chill in the air."
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
+	"$schema": "https://raw.githubusercontent.com/TheGiddyLimit/5etools-utils/master/schema/brew-fast/homebrew.json",
+	"_meta": {
+		"sources": [
+			{
+				"json": "orcnogHoE",
+				"abbreviation": "HoE",
+				"full": "The House of Elazar",
+				"convertedBy": [
+					"orcnog"
+				],
+				"version": "1.0",
+				"color": "#851f21",
+				"targetSchema": "1.2"
+			}
+		],
+		"dateAdded": 1729028448,
+		"dateLastModified": 1729028448
+	},
+	"monster": [
+		{
+			"name": "Creepy Doll",
+			"source": "orcnogHoE",
+			"page": 0,
+			"size": [
+				"S"
+			],
+			"type": "construct",
+			"alignment": [
+				"C",
+				"E"
+			],
+			"ac": [
+				{
+					"ac": 12,
+					"from": [
+						"natural armor"
+					]
+				}
+			],
+			"hp": {
+				"average": 21,
+				"formula": "6d4 + 6"
+			},
+			"speed": {
+				"walk": 30
+			},
+			"str": 3,
+			"dex": 16,
+			"con": 12,
+			"int": 10,
+			"wis": 14,
+			"cha": 18,
+			"skill": {
+				"deception": "+6",
+				"perception": "+4",
+				"persuasion": "+6",
+				"stealth": "+7"
+			},
+			"senses": [
+				"darkvision 120 ft."
+			],
+			"passive": 14,
+			"resist": [
+				{
+					"resist": [
+						"bludgeoning",
+						"piercing",
+						"slashing"
+					],
+					"note": "from nonmagical attacks that aren't silvered",
+					"cond": true
+				}
+			],
+			"immune": [
+				"fire",
+				"poison"
+			],
+			"conditionImmune": [
+				"charmed",
+				"exhaustion",
+				"frightened",
+				"paralyzed",
+				"petrified",
+				"poisoned"
+			],
+			"languages": [
+				"Common",
+				"Infernal",
+				"telepathy 60 ft. Infernal",
+				"Common",
+				"telepathy 60 ft."
+			],
+			"cr": "2",
+			"spellcasting": [
+				{
+					"name": "Innate Spellcasting",
+					"type": "spellcasting",
+					"headerEntries": [
+						"The doll's spellcasting ability is Charisma (spell save {@dc 14}). It can innately cast the following spells, requiring only verbal components:"
+					],
+					"will": [
+						"{@spell suggestion}"
+					],
+					"daily": {
+						"1e": [
+							"{@spell dominate person}",
+							"{@spell modify memory}"
+						]
+					},
+					"ability": "cha"
+				}
+			],
+			"trait": [
+				{
+					"name": "Devil's Sight",
+					"entries": [
+						"Magical darkness doesn't impede the doll's darkvision."
+					]
+				},
+				{
+					"name": "Inanimate",
+					"entries": [
+						"While the doll remains motionless, it is indistinguishable from an ordinary doll."
+					]
+				},
+				{
+					"name": "Undying Evil",
+					"entries": [
+						"If the doll is destroyed, it regains all its hit points and reappears at a nearby location in 24 hours unless a {@spell remove curse} spell is cast on its remains."
+					]
+				}
+			],
+			"action": [
+				{
+					"name": "Giggle",
+					"entries": [
+						"The doll targets one creature it can see within 30 feet of it. The target must succeed on a {@dc 14} Wisdom saving throw or take 7 ({@damage 2d6}) psychic damage and become {@condition frightened} for 1 minute. The target can repeat the saving throw at the end of each of its turns, with disadvantage if the doll is within line of sight, ending the effect on itself on a success."
+					]
+				}
+			],
+			"traitTags": [
+				"Devil's Sight"
+			],
+			"senseTags": [
+				"SD"
+			],
+			"languageTags": [
+				"C",
+				"I",
+				"TP"
+			],
+			"damageTags": [
+				"Y"
+			],
+			"spellcastingTags": [
+				"I"
+			],
+			"conditionInflict": [
+				"frightened"
+			],
+			"conditionInflictSpell": [
+				"charmed",
+				"incapacitated"
+			],
+			"savingThrowForced": [
+				"wisdom"
+			],
+			"savingThrowForcedSpell": [
+				"wisdom"
+			]
+		}
+	],
+	"adventure": [
+		{
+			"name": "The House of Elazar",
+			"source": "orcnogHoE",
+			"id": "orcnogHoE",
+			"group": "homebrew",
+			"author": "Tom Cartos",
+			"published": "2024-10-15",
+			"cover": {
+				"type": "external",
+				"url": ""
+			},
+			"level": {
+				"start": 3,
+				"end": 3
+			},
+			"storyline": "",
+			"contents": [
+				{
+					"name": "Intro",
+					"headers": [
+						{
+							"header": "Adventure Summary",
+							"depth": 1
+						}
+					]
+				},
+				{
+					"name": "Adventure",
+					"headers": [
+						{
+							"header": "Opening Read",
+							"depth": 1
+						},
+						{
+							"header": "Hamelia",
+							"depth": 1
+						},
+						{
+							"header": "The Manor",
+							"depth": 1
+						}
+					]
+				}
+			]
+		}
+	],
+	"adventureData": [
+		{
+			"id": "orcnogHoE",
+			"source": "orcnogHoE",
+			"data": [
+				{
+					"type": "section",
+					"name": "The House of Elazar by Tom Cartos",
+					"page": 1,
+					"id": "000",
+					"entries": [
+						{
+							"type": "entries",
+							"page": 1,
+							"entries": [
+								"Level 3 One-Shot Halloween Adventure for 3 to 5 players."
+							]
+						}
+					]
+				},
+				{
+					"type": "section",
+					"name": "Intro",
+					"page": 1,
+					"id": "001",
+					"entries": [
+						"Almost everyone agrees that the Elazar Household at the top of the hill is a creepy place at best. Children dare one another to get close enough to touch the heavy iron knocker on the front door before running away squealing, and even the bravest of the townsfolk only walk past if absolutely necessary. The current occupant is Emmanuel Elazar, a pale gaunt man whose thin features and long sleek hair make him appear much younger than his 50+ years.",
+						"He very rarely leaves the house, but it somehow always seems empty anyway. Emmanuel is in fact a vampire, from a long line of vampires, but he is the first who has not fully embraced the blood curse. The house has been in his family for generations, but seldom used in recent years so Emmanuel returned here in the hope that he could find a way to remove his vampirism without his family knowing about it. It is important to note that Emmanuel does not wish to remove the curse out of any particular sentimentality or 'goodness', but rather he finds its downsides to outweigh the boons it bestows. In particular he finds the taste of blood utterly repulsive and longs for real food.",
+						"After many decades of searching, Emmanuel believes he has found a way to remove his affliction, but it requires the ritual sacrifice of a pair of identical female pre-pubescent twins. Luckily for him, just such a pair lives in the town a few streets over. They have been missing now for over a week as Emmanuel prepares the rites. Despite being a well-practiced spell caster, there is a lot to do, and his thralls are only really capable of manual tasks.",
+						"Unluckily for Emmanuel, the townsfolk have hired a group of travelling adventurers to find the boys, and they have a pretty good idea where they should start looking. Should they make their way through the largely abandoned house and into the lair below, will they ultimately decide to save the boys, or will they deem it a greater victory for the town if the resident vampire removes his dark powers and leaves for good?",
+						{
+							"type": "entries",
+							"name": "Adventure Summary",
+							"page": 1,
+							"id": "002",
+							"entries": [
+								"The House of Elazar is a one-shot Halloween-flavored adventure designed for D&D 5e.",
+								{
+									"type": "entries",
+									"name": "Players",
+									"page": 1,
+									"id": "004",
+									"entries": [
+										"This adventure is designed for 3 to 5 players at level 3 (but optimized for 4 players)."
+									]
+								},
+								{
+									"type": "entries",
+									"name": "Map Information",
+									"page": 1,
+									"id": "005",
+									"entries": [
+										"GRID SIZE - 24x19 (300DPI)",
+										"VTT SIZE - 3360x2660 (140DPI)",
+										"RECOMMENDED PRINT SIZE - A2/ANSI C"
+									]
+								},
+								{
+									"type": "entries",
+									"name": "Plot Summary",
+									"page": 1,
+									"id": "006",
+									"entries": [
+										{
+											"type": "list",
+											"style": "list-decimal",
+											"items": [
+												"Players meet a village girl, Hamelia, outside the manor, who will accompany them inside.",
+												"Players should find a secret passageway in the kitchen pantry, but realize it's sealed by a magical barrier.",
+												"Players should find a book, The Rite of Sepins, in the library giving them the passkey to break the barrier.",
+												"Players descend into the bowels of the manor, and find Elazar about to perform the ritual.",
+												"Players must decide if they should kill him, help him, or something else, before his horde of thralls engulfs them."
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "section",
+					"name": "Adventure",
+					"page": 2,
+					"id": "007",
+					"entries": [
+						{
+							"type": "entries",
+							"name": "Opening Read",
+							"page": 2,
+							"id": "008",
+							"entries": [
+								"{@note {@b Show: Spooky Hogsbottom image}}",
+								{
+									"type": "insetReadaloud",
+									"page": 1,
+									"id": "009",
+									"entries": [
+										"Almost everyone in Hogsbottom agrees that the Elazar Household at the top of the hill is a creepy place at best. Children dare one another to get close enough to touch the heavy iron knocker on the front door before running away squealing, and even the bravest of the townsfolk only walk past if absolutely necessary.  It's rumored that only one Hogsbottom dweller has even set foot in the house, and that was just a child on a foolish dare.  While the manor always seems to give off an abandoned kinda vibe, there is in fact one current occupant.  The owner of the estate is Emmanuel Elazar, a pale gaunt man whose thin features and long sleek hair make him appear much younger than his 50+ years.",
+										"Rarely seen outside his home, rumors of his true nature have swirled for decades.  Some say \"hermit\", others \"mad scientist\", some even say \"vampire\", and some even think he died years ago and he now wanders his grounds at night as a spirit, as if he didn't know he was dead.  But for as long as any of the locals could remember, he never bothered anyone in town.  So, they just let him and his spooky mansion be.  Live and let live... or so they hoped."
+									]
+								},
+								"{@note {@b Show: Missing Children image}}",
+								{
+									"type": "insetReadaloud",
+									"page": 1,
+									"id": "010",
+									"entries": [
+										"A week ago, two young boys from the town went missing.  Twins, in fact, hair as red as a sunrise.  Their parents came to their room to wake them one morning, and they were nowhere to be found.  No one saw them leave, there was no sign of struggle... they'd just vanished.  In response, the good townsfolk of Hogsbottom have hired a group of travelling adventurers to find the boys, and they have a pretty good idea where those adventurers should start looking."
+									]
+								},
+								"{@note {@b Show: Creepy Cornfield image}}",
+								{
+									"type": "insetReadaloud",
+									"page": 1,
+									"id": "011",
+									"entries": [
+										"As night falls over the countryside, you set out for the spooky residence.  Leaving the relative comfort of the village streets, you pass through a few acres of crops on the outskirts of the town.  As the twilight drains away there is barely enough light even for shadows.  All manor of life and terrain is obscured.  Even the stars and moon cower behind a dense layer of cloud.  And with that foreboding energy, every tree, every eerie stalk of corn, every twisting root on the ground seems to come alive as the night engulfs the world.  Your ears become sharper and your mind paranoid, every rustle of grass snap of a twig is a predator, even if it is just a rabbit or a field mouse.",
+										"It's several minutes before you finally spot the house.  The dark, intimidating manor, looms atop a small hill on the opposite end of a dirt path cutting through a cornfield.  As you step onto the dirt path to cross the field, you can see your breath in the cold, heavy air.  Dead corn husks crunch under your feet..."
+									]
+								},
+								"{@note {@b Show: Spooky Manor image}}",
+								{
+									"type": "insetReadaloud",
+									"page": 1,
+									"id": "012",
+									"entries": [
+										"A cold, menacing fog clings to the ground as you approach the gloomy manor.  The smell of mud and rotting flowers wafts past your nose.  A black bird caws from atop the 2-story house, then quickly turns its head to eye you, and flies off, flapping loudly. The air is thick and still, and you feel the slightest of chills run down your spine.  Suddenly, you hear a twig snap behind you...",
+										"{@b Roll for Initiative!}"
+									]
+								}
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Hamelia",
+							"page": 2,
+							"id": "013",
+							"entries": [
+								"Hamelia's presence spooks the adventurers.  She is introduced via encounter.",
+								{
+									"type": "inset",
+									"name": "Encounter: Bats!",
+									"page": 2,
+									"id": "014",
+									"entries": [
+										{
+											"type": "link",
+											"href": {
+												"type": "internal",
+												"path": "dmscreen.html#%7B%22w%22%3A10%2C%22h%22%3A10%2C%22ctc%22%3Atrue%2C%22fs%22%3Afalse%2C%22lk%22%3Afalse%2C%22ps%22%3A%5B%7B%22x%22%3A0%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A9%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A9%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A0%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A51%2C%22s%22%3A%7B%7D%7D%2C%7B%22x%22%3A5%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A5%2C%22s%22%3A%7B%22s%22%3A%22NUMBER%22%2C%22d%22%3A%22DESC%22%2C%22ri%22%3Atrue%2C%22m%22%3Afalse%2C%22rg%22%3Afalse%2C%22rri%22%3Afalse%2C%22g%22%3Atrue%2C%22p%22%3Atrue%2C%22a%22%3Afalse%2C%22k%22%3Afalse%2C%22piHp%22%3Afalse%2C%22piHm%22%3Afalse%2C%22piV%22%3Atrue%2C%22piO%22%3Afalse%2C%22c%22%3A%5B%5D%2C%22cndc%22%3A%5B%5D%2C%22r%22%3A%5B%7B%22id%22%3A%2260d7e106-5d6a-46c3-ad7b-9d3a23e0ce49%22%2C%22n%22%3A%22Commoner%22%2C%22n_m%22%3A%22Hamelia%22%2C%22h%22%3A4%2C%22g%22%3A4%2C%22i%22%3A20%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2250d24b16-e4d7-4c94-86d5-f55ab92cd31e%22%2C%22n%22%3A%22Giant%20Bat%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A2%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%22d36107b8-e7c3-4cc4-914f-ed2a77e1cd3e%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2271fa036c-ecb6-448b-a005-5df0ed51a37b%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A2%2C%22k%22%3A%5B%5D%7D%5D%2C%22rdp%22%3A%5B%5D%2C%22n%22%3A1%7D%7D%5D%2C%22ex%22%3A%5B%5D%7D"
+											},
+											"text": "[ DM Screen link ]"
+										},
+										"",
+										{
+											"type": "table",
+											"rows": [
+												[
+													{
+														"type": "list",
+														"name": "Roster",
+														"items": [
+															"{@creature Commoner||Hamelia} x 1",
+															"{@creature Giant Bat} x 1",
+															"{@creature Swarm of Bats} x 2"
+														]
+													}
+												]
+											]
+										},
+										"{@note Adjusted XP: 300}"
+									]
+								},
+								{
+									"type": "entries",
+									"name": "Encounter Script",
+									"entries": [
+										{
+											"type": "entries",
+											"name": "Turn 0",
+											"entries": [
+												{
+													"type": "insetReadaloud",
+													"entries": [
+														"You whirl around to see... a young village girl peering at you from around a tree, hair as red as a sunrise."
+													]
+												}
+											]
+										},
+										{
+											"type": "entries",
+											"name": "On Hamelia's Turn",
+											"entries": [
+												{
+													"type": "insetReadaloud",
+													"entries": [
+														"Oh, didn't mean to startle you... My name is Hamelia.  And I hear you're headed inside this horrible house to look for a missing pair of twins. Well, I'm coming with you, and I'll not take \"no\" for an answer!  See, those two missing boys... those are my older brothers.  And I'll not rest until they're found--now, lead the way!  We haven't got all night!",
+														"The girl shrieks, as a chaotic flapping sound fills the air. Dozens of fanged bats begin to swarm around you!"
+													]
+												},
+												"Add Giant Bat and Swarm of Bats to the roster."
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "entries",
+							"name": "The Manor",
+							"entries": [
+								{
+									"type": "insetReadaloud",
+									"entries": [
+										"You make your way up some stone steps to the house.",
+										"Ivy and ferns grew through the crevices of the old winding stone path, which lead directly to the colossal structure. The mansion looms proudly behind creaky iron gates, flanked by rows of skeletal tree, swaying gently to the cold autumn wind. At its threshold stands a delicate marble fountain, the soft gurgling of the clear water melodic as it resonates in the surrounding silence.",
+										"There's a chill in the air."
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
 }

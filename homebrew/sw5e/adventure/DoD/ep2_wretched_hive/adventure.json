@@ -6,7 +6,9 @@
 				"abbreviation": "DoDAWH",
 				"full": "Dawn of Defiance, Episode 2: A Wretched Hive",
 				"url": "https://raw.githubusercontent.com/orcnog/5etools-brew/main/sw5e/DoD/ep2_wretched_hive/adventure.json",
-				"authors": ["Rodney Thompson"],
+				"authors": [
+					"Rodney Thompson"
+				],
 				"convertedBy": [
 					"orcnog"
 				]
@@ -577,9 +579,9 @@
 				"intimidate": "+12",
 				"perception": "+6",
 				"persuasion": "+8",
-                "special": [
-                    "{@skill Lore|Lore|orcnogSW5e} {@skillCheck Lore 8}"
-                ]
+				"special": [
+					"{@skill Lore|Lore|orcnogSW5e} {@skillCheck Lore 8}"
+				]
 			},
 			"passive": 16,
 			"resist": [
@@ -608,8 +610,8 @@
 						"Darga's innate tech casting ability is intelligence (tech save {@dc 16}). It can innately cast the following powers:"
 					],
 					"will": [
-							"{@spell assess the situation|orcnogSW5e}"
-						],
+						"{@spell assess the situation|orcnogSW5e}"
+					],
 					"daily": {
 						"1": [
 							"{@spell kolto cloud|orcnogSW5e}",
@@ -1673,9 +1675,9 @@
 				"insight": "+9",
 				"medicine": "+8",
 				"perception": "+9",
-                "special": [
-                    "{@skill Lore|Lore|orcnogSW5e} {@skillCheck Lore 8}"
-                ]
+				"special": [
+					"{@skill Lore|Lore|orcnogSW5e} {@skillCheck Lore 8}"
+				]
 			},
 			"passive": 21,
 			"languages": [
@@ -2025,8 +2027,8 @@
 			"skill": {
 				"intimidation": "+4",
 				"survival": "+2"
-            },
-            "passive": 10,
+			},
+			"passive": 10,
 			"languages": [
 				"Galactic Basic",
 				"Dosh",
@@ -2334,7 +2336,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["A low wind causes deep bass sounds to waft up from the gaps in the city's streets, which open into short shafts before continuing on into the open air beneath the bridge city. The sounds of repulsorlifts fill the street as five swoop bikes circle around you, then turn as though to attack. The swoop bikers' leader, a tough-looking Human woman with spiky black hair, urges the thugs on as they rev their bikes' engines."]
+											"entries": [
+												"A low wind causes deep bass sounds to waft up from the gaps in the city's streets, which open into short shafts before continuing on into the open air beneath the bridge city. The sounds of repulsorlifts fill the street as five swoop bikes circle around you, then turn as though to attack. The swoop bikers' leader, a tough-looking Human woman with spiky black hair, urges the thugs on as they rev their bikes' engines."
+											]
 										}
 									]
 								},
@@ -2346,7 +2350,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["One of the grinning thugs clutches a battered vibroblade in one hand while revving the engine of his swoop bike with the other. The sputtering bike looks cobbled together from a dozen other bikes, but it has a menacing quality nonetheless."]
+											"entries": [
+												"One of the grinning thugs clutches a battered vibroblade in one hand while revving the engine of his swoop bike with the other. The sputtering bike looks cobbled together from a dozen other bikes, but it has a menacing quality nonetheless."
+											]
 										},
 										{
 											"type": "entries",
@@ -2365,7 +2371,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["This slender Human woman is clearly a veteran of many battles, as she has numerous scars and marks of combat across her face, arms, and hands. Her spiky black hair matches the dark armored clothing she wears, and a perpetual sneer adorns her face."]
+											"entries": [
+												"This slender Human woman is clearly a veteran of many battles, as she has numerous scars and marks of combat across her face, arms, and hands. Her spiky black hair matches the dark armored clothing she wears, and a perpetual sneer adorns her face."
+											]
 										},
 										{
 											"type": "entries",
@@ -2466,7 +2474,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["Most of the buildings on this street look half destroyed or collapsed, and none of the damage is recent. Dominating one side of the street is a crumbling warehouse, which has the half-buried wreckage of a landspeeder jutting from its front. The walls of the warehouse have large chunks taken out of them, exposing the building's interior to the street."]
+											"entries": [
+												"Most of the buildings on this street look half destroyed or collapsed, and none of the damage is recent. Dominating one side of the street is a crumbling warehouse, which has the half-buried wreckage of a landspeeder jutting from its front. The walls of the warehouse have large chunks taken out of them, exposing the building's interior to the street."
+											]
 										}
 									]
 								},
@@ -2474,10 +2484,13 @@
 									"type": "entries",
 									"name": "Warrick Raden (1)",
 									"entries": [
-										"Warrick Raden is a bully and an errand boy in Darga the Hutt's organization. For the most part, Raden is content to throw his weight around, but he is far too paranoid to draw too much attention to himself. A surprise visit by a group of strangers new to Cato Neimoidia is enough to spook Raden, causing him to suspect the worst. Like most other Devaronian males, he's spent a good amount of time exploring the galaxy, but some close run-ins with the authorities have made him extremely wary of dealing with authority figures.",												{
+										"Warrick Raden is a bully and an errand boy in Darga the Hutt's organization. For the most part, Raden is content to throw his weight around, but he is far too paranoid to draw too much attention to himself. A surprise visit by a group of strangers new to Cato Neimoidia is enough to spook Raden, causing him to suspect the worst. Like most other Devaronian males, he's spent a good amount of time exploring the galaxy, but some close run-ins with the authorities have made him extremely wary of dealing with authority figures.",
+										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["This disheveled Devaronian male is hunched over slightly, as if trying to make himself less visible. A twist to his lip bares his jagged teeth, and he seems to be more content skulking about than walking out in the open."]
+											"entries": [
+												"This disheveled Devaronian male is hunched over slightly, as if trying to make himself less visible. A twist to his lip bares his jagged teeth, and he seems to be more content skulking about than walking out in the open."
+											]
 										},
 										{
 											"type": "entries",
@@ -2496,7 +2509,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["This street tough looks as though he is the veteran of many cantina brawls and street fights, with scars adorning nearly every part of his body. He seems to radiate violence and lawlessness"]
+											"entries": [
+												"This street tough looks as though he is the veteran of many cantina brawls and street fights, with scars adorning nearly every part of his body. He seems to radiate violence and lawlessness"
+											]
 										},
 										{
 											"type": "entries",
@@ -2516,7 +2531,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["This spiderlike droid resembles a massive arachnid with threepronged claws at the end of each appendage. The droid's underbelly bristles with tools, such as circular saws and arc welders. Atop the droid sit several large visual sensors, facing forward and glowing a faint blue color."]
+											"entries": [
+												"This spiderlike droid resembles a massive arachnid with threepronged claws at the end of each appendage. The droid's underbelly bristles with tools, such as circular saws and arc welders. Atop the droid sit several large visual sensors, facing forward and glowing a faint blue color."
+											]
 										},
 										{
 											"type": "entries",
@@ -2573,7 +2590,9 @@
 								{
 									"type": "insetReadaloud",
 									"name": "",
-									"entries": ["Darga's throne room is both opulent and repulsive. A thick layer of oddly scented smoke drifts through the air, rising out of braziers in the corners of the room. Once-beautiful tapestries line the walls, though most of them have been torn, burned, or stained to the point that they are almost unrecognizable. A raised dais in the center of the room supports the massive bulk of Darga the Hutt, and behind his dais a large, open balcony seems to extend into darkness."]
+									"entries": [
+										"Darga's throne room is both opulent and repulsive. A thick layer of oddly scented smoke drifts through the air, rising out of braziers in the corners of the room. Once-beautiful tapestries line the walls, though most of them have been torn, burned, or stained to the point that they are almost unrecognizable. A raised dais in the center of the room supports the massive bulk of Darga the Hutt, and behind his dais a large, open balcony seems to extend into darkness."
+									]
 								},
 								"When Warrick Raden leads the heroes into the room, the sounds of conversation and music come to a halt. Silence reigns as every eye turns to watch Raden lead the visitors into an open space in front of the opulent dais. Darga's eyes roll from the heroes to Raden, then sharpen quickly with anger. He booms something in Huttese at the Devaronian (\"What is the meaning of bringing outsiders here?\"), who immediately begins groveling, begging for the Hutt's forgiveness as th rest of the court hoots with laughter and derision. Darga cuts him off with a harsh word (\"Silence!\") and calls for his protocol droid, {@creature 3PO Series Protocol Droid|orcnogSW5e|TC-663}. From this point on, Darga begins addressing the heroes directly, using {@creature 3PO Series Protocol Droid|orcnogSW5e|TC-663} as a translator.",
 								"Darga's giant eyes rest on them all for a long moment before th Hutt demands to know why they have come to his palace and how the convinced Raden to escort them. Darga is satisfied with any answer tha is not confrontational. He really isn't looking for trouble with the heroes he just wants to feel them out and see if they could be useful in som way. He's already impressed with their ability to locate his hidden palac (though it may not seem like much of a feat, there are many in Darga' own organization who couldn't manage it) and wants to discove whether they have any skills that he could exploit.",
@@ -2725,7 +2744,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["High above the gladiator pit, Darga the Hutt presides over the beginning of the match, looking down on you with a slimy grin. Standing just to his left is the protocol droid translator, who relays the Hutt's decree down to you: \"Fight for the chance to be my personal gladiator team! Riches and fame for all who are strong enough to seize them!\" With that, the Hutt blows a massive horn that echoes throughout the open gladiator pit. Dirt crunches underfoot, and flickering light shines on you from the lamps mounted around the perimeter."]
+											"entries": [
+												"High above the gladiator pit, Darga the Hutt presides over the beginning of the match, looking down on you with a slimy grin. Standing just to his left is the protocol droid translator, who relays the Hutt's decree down to you: \"Fight for the chance to be my personal gladiator team! Riches and fame for all who are strong enough to seize them!\" With that, the Hutt blows a massive horn that echoes throughout the open gladiator pit. Dirt crunches underfoot, and flickering light shines on you from the lamps mounted around the perimeter."
+											]
 										}
 									]
 								},
@@ -2737,7 +2758,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["The five gladiators are an odd mix, making a team that seems as mismatched as it is diverse. Three Gamorreans wielding vibro-axes snort and drool hungrily, pounding on their armored chests and looking as though they were preparing for a feast. A sly-looking Rodian paces back and forth casually, gripping a blaster at his hip, clenching and unclenching his fist as he waits for the fight to start. A cobbled-together battle droid with three photoreceptors and a massive grenade launcher stands stock still, its only movement the occasional twitch of an electronic eye swiveling to examine you from a different angle."]
+											"entries": [
+												"The five gladiators are an odd mix, making a team that seems as mismatched as it is diverse. Three Gamorreans wielding vibro-axes snort and drool hungrily, pounding on their armored chests and looking as though they were preparing for a feast. A sly-looking Rodian paces back and forth casually, gripping a blaster at his hip, clenching and unclenching his fist as he waits for the fight to start. A cobbled-together battle droid with three photoreceptors and a massive grenade launcher stands stock still, its only movement the occasional twitch of an electronic eye swiveling to examine you from a different angle."
+											]
 										},
 										{
 											"type": "entries",
@@ -2775,7 +2798,9 @@
 								{
 									"type": "insetReadaloud",
 									"name": "",
-									"entries": ["\"The slaves you have been selling us are worthless, Darga! They have been dying before we can even get them to market. They are used up\u2014second-rate! I want my credits back for the last four shipments!\""]
+									"entries": [
+										"\"The slaves you have been selling us are worthless, Darga! They have been dying before we can even get them to market. They are used up\u2014second-rate! I want my credits back for the last four shipments!\""
+									]
 								},
 								"Darga lets out a low, rumbling laugh that sounds sinister even for the gluttonous Hutt. He rolls his eyes toward the heroes, utters a side remark (\"See what ungrateful business partners I have?\") and then gives the slavers an angry response, translated by his protocol droid. The crime lord tells them that they have had the same business agreement for years now and that he is not responsible if they don't know how to take care of their own product. He says that if they do not apologize and leave, he will have no choice but to dispose of them. The Hutt seems unconcerned that they are all heavily armed because he believes that the slavers are just trying to talk tough and wouldn't dare attempt to harm him",
 								{
@@ -2786,7 +2811,8 @@
 										"At this point, the slavers and the Hutt descend into a seemingly fruitless argument about slaves and payment, with neither side budging. In truth, Darga could appease the slavers easily, since he actually pays nothing for the slaves he passes on. However, he is stalling the delegation, waiting to see if the heroes will intervene on his behalf.",
 										"If the heroes do nothing, Darga eventually turns a disappointed eye on them before granting the slavers their wish. Similarly, if the heroes intervene on the slavers' behalf, Darga grumbles about his guests not knowing when to keep their mouths shut, but again he acquiesces to the slavers' demands. In both of these cases, the Hutt grudgingly invites the slavers to remain for a time in his court.",
 										"If the heroes intervene on the Hutt's behalf, they can impress Darga by convincing the slavers not only to withdraw their request but also to continue buying slaves from the Hutt. The Zabrak leader begins the encounter unfriendly toward the heroes. Shifting his attitude to indifference through a DC 16 Charisma ({@skill Persuasion}) will earn the heroes a chance to convince him to keep his business with Darga. Unfortunately, the slavers are correct\u2014Darga has been selling them slaves who have very little life left, and they have every right to be upset. Convincing them to continue buying from the Hutt is no easy task, and the heroes will need to present a solution that is beneficial for the slavers.",
-										"If the heroes present a reasonable solution to the negotiations, they gain Advantage on Charisma ({@skill Persuasion}) checks to convince the slavers to keep their bargain with Darga. If the heroes succeed on a DC 20 {@skill Persuasion} check, they convince the Zabrak to accept the deal, and they earn Darga's favor for this challenge"											]
+										"If the heroes present a reasonable solution to the negotiations, they gain Advantage on Charisma ({@skill Persuasion}) checks to convince the slavers to keep their bargain with Darga. If the heroes succeed on a DC 20 {@skill Persuasion} check, they convince the Zabrak to accept the deal, and they earn Darga's favor for this challenge"
+									]
 								},
 								{
 									"type": "entries",
@@ -2880,7 +2906,9 @@
 								{
 									"type": "insetReadaloud",
 									"name": "Counseling Darga",
-									"entries": ["The heroes might be unsure of how to provide Darga with counsel during the encounter with the Imperial liaison, and they might look to their skills as a means of determining the correct course of action. Though you should be careful not to give away the right answers with simple skill checks, you can steer the heroes in the right direction. For example, a successful DC 15 Intelligence ({@skill Lore}) check can reveal that the Empire has made offers of security retinues to nobles and powerful administrators in the past, most of the time on worlds where Imperial forces were particularly thin. A successful DC 15 Intelligence ({@skill Lore}) check can tell the heroes that biological resources of any kind are notoriously unstable, and rarity is one of the only things that can drive their value up. Lastly, a successful DC 15 Intelligence ({@skill Lore}) check can tell the heroes that Imperial contracts are almost always spread very thin, and that the Empire rarely offers substantial contract increases to individuals."]
+									"entries": [
+										"The heroes might be unsure of how to provide Darga with counsel during the encounter with the Imperial liaison, and they might look to their skills as a means of determining the correct course of action. Though you should be careful not to give away the right answers with simple skill checks, you can steer the heroes in the right direction. For example, a successful DC 15 Intelligence ({@skill Lore}) check can reveal that the Empire has made offers of security retinues to nobles and powerful administrators in the past, most of the time on worlds where Imperial forces were particularly thin. A successful DC 15 Intelligence ({@skill Lore}) check can tell the heroes that biological resources of any kind are notoriously unstable, and rarity is one of the only things that can drive their value up. Lastly, a successful DC 15 Intelligence ({@skill Lore}) check can tell the heroes that Imperial contracts are almost always spread very thin, and that the Empire rarely offers substantial contract increases to individuals."
+									]
 								}
 							]
 						}
@@ -2945,7 +2973,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["Shadows flicker across the floor of the aviary as the swaying trees within block out the moonlight shining down through the ceiling. The occasional flutter of wings or gust of air can be heard faintly as a bird takes flight or lands on a nearby branch. The soft rustle of leaves provides a thin background noise, masking the sounds of your footsteps as you pass down the dimly lit winding path, flanked on either side by the trunks of large trees."]
+											"entries": [
+												"Shadows flicker across the floor of the aviary as the swaying trees within block out the moonlight shining down through the ceiling. The occasional flutter of wings or gust of air can be heard faintly as a bird takes flight or lands on a nearby branch. The soft rustle of leaves provides a thin background noise, masking the sounds of your footsteps as you pass down the dimly lit winding path, flanked on either side by the trunks of large trees."
+											]
 										}
 									]
 								},
@@ -2971,7 +3001,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["This large black bird has a smooth, sloping head and reflective eyes, its black-feathered body looming large in the darkness. Razor-sharp talons cap the end of its claws, and the creature's massive wingspan makes it seem nearly the size of a small Human."]
+											"entries": [
+												"This large black bird has a smooth, sloping head and reflective eyes, its black-feathered body looming large in the darkness. Razor-sharp talons cap the end of its claws, and the creature's massive wingspan makes it seem nearly the size of a small Human."
+											]
 										},
 										{
 											"type": "entries",
@@ -3065,7 +3097,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["Late in the evening, the guest quarters of Darga's palace are quiet and peaceful. Small lights faintly illuminate the common area of the guest wing, and a stillness permeates the area, as though the building itself were in a deep sleep. Only the occasional shuffle of a servant's footsteps breaks the silence of the night."]
+											"entries": [
+												"Late in the evening, the guest quarters of Darga's palace are quiet and peaceful. Small lights faintly illuminate the common area of the guest wing, and a stillness permeates the area, as though the building itself were in a deep sleep. Only the occasional shuffle of a servant's footsteps breaks the silence of the night."
+											]
 										},
 										"When the Quarren enter the heroes' rooms, have the heroes make a Wisdom ({@skill Perception}) check versus the Quarren Dexterity ({@skill Stealth}) checks to notice their arrival. The heroes checks have disadvantage if they are sleeping. Any heroes who fail the check are surprised and do not act during the surprise round."
 									]
@@ -3078,7 +3112,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["This slender Quarren wears gray overlapping robes and brandishes a customized blaster pistol. Eyes closed to menacing slits, the Quarren seems to radiate danger as he prepares to pull the trigger."]
+											"entries": [
+												"This slender Quarren wears gray overlapping robes and brandishes a customized blaster pistol. Eyes closed to menacing slits, the Quarren seems to radiate danger as he prepares to pull the trigger."
+											]
 										},
 										{
 											"type": "entries",
@@ -3098,7 +3134,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["Though she might have been beautiful once, this young, greenskinned Twi'lek woman looks like she has seen her fair share of hard times, and now she seems more worn down than youthful. However, her face is hard and her eyes cold, and there is a distinct air of hatred around her."]
+											"entries": [
+												"Though she might have been beautiful once, this young, greenskinned Twi'lek woman looks like she has seen her fair share of hard times, and now she seems more worn down than youthful. However, her face is hard and her eyes cold, and there is a distinct air of hatred around her."
+											]
 										},
 										{
 											"type": "entries",
@@ -3118,7 +3156,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["This towering Wookiee warrior seems to ooze malice and hatred. His matted black fur has been burned or slashed in some places, giving it an uneven look, and a permanent snarl seems to grace his lips. He wears battle armor and has a bowcaster slung over his shoulder, and his narrowed eyes seem to be looking for a fight."]
+											"entries": [
+												"This towering Wookiee warrior seems to ooze malice and hatred. His matted black fur has been burned or slashed in some places, giving it an uneven look, and a permanent snarl seems to grace his lips. He wears battle armor and has a bowcaster slung over his shoulder, and his narrowed eyes seem to be looking for a fight."
+											]
 										},
 										{
 											"type": "entries",
@@ -3208,7 +3248,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["This large area has been cleared of any furniture or other accoutrements and turned into a guard room. At one end is a set of doors that appear to be sealed shut with large metal plates welded over them. At the other end, a heavy blast door blocks off what appear to be stairs leading down to the next floor. Another door sits in one of the side walls."]
+											"entries": [
+												"This large area has been cleared of any furniture or other accoutrements and turned into a guard room. At one end is a set of doors that appear to be sealed shut with large metal plates welded over them. At the other end, a heavy blast door blocks off what appear to be stairs leading down to the next floor. Another door sits in one of the side walls."
+											]
 										}
 									]
 								},
@@ -3221,7 +3263,8 @@
 											"type": "entries",
 											"name": "Gamorrean Minion Tactics",
 											"entries": [
-												"The Gamorrean guards fight with rather straightforward tactics, simply moving up to the heroes and swinging their vibro-axes. Not exceptionally intelligent foes, each guard attacks the nearest enemy, though if reduced to fewer than 8 hit points, they try to flee and seek reinforcements from elsewhere in the palace."											]
+												"The Gamorrean guards fight with rather straightforward tactics, simply moving up to the heroes and swinging their vibro-axes. Not exceptionally intelligent foes, each guard attacks the nearest enemy, though if reduced to fewer than 8 hit points, they try to flee and seek reinforcements from elsewhere in the palace."
+											]
 										}
 									]
 								},
@@ -3325,7 +3368,7 @@
 											"items": [
 												"2 x {@creature Gamorrean Jailer|orcnogDoDEp2|Gamorren Jailer}",
 												"5 x {@creature Gamorrean Warrior|orcnogDoDEp2} (CR 2)",
-                                                "1 x {@creature Jedi Master Denia|orcnogDoDEp2} {@color (Allied)|008e2f}",
+												"1 x {@creature Jedi Master Denia|orcnogDoDEp2} {@color (Allied)|008e2f}",
 												"<hr/>",
 												"See: {@area Out of Captivity Encounter Map|Out of Captivity Encounter Map|x}"
 											]
@@ -3347,7 +3390,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["This dank, musty area used to be nice (if bare) servants' quarters, but it has since fallen into disarray. Where plain doors likely stood at the entrance to each room off of the main chamber, barred prison doors have been crudely forced into place. A water pipe has ruptured, flooding parts of the floor with water, and thick mold has grown on the walls. Many of the lights in this area flicker or are simply missing, casting shadows about the room"]
+											"entries": [
+												"This dank, musty area used to be nice (if bare) servants' quarters, but it has since fallen into disarray. Where plain doors likely stood at the entrance to each room off of the main chamber, barred prison doors have been crudely forced into place. A water pipe has ruptured, flooding parts of the floor with water, and thick mold has grown on the walls. Many of the lights in this area flicker or are simply missing, casting shadows about the room"
+											]
 										},
 										"When the heroes exit Denia's cell into the larger dungeon area, let them make a DC 15 Wisdom ({@skill Perception}) check to notice the pounding of footsteps coming down the secret passageway. If they fail the check, they are surprised when combat begins."
 									]
@@ -3360,7 +3405,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["This stout Gamorrean guard shares the porcine appearance of other members of his species. Massive, fleshy green arms hoist a vibro-ax, while thin strands of drool trickle from his exposed tusks."]
+											"entries": [
+												"This stout Gamorrean guard shares the porcine appearance of other members of his species. Massive, fleshy green arms hoist a vibro-ax, while thin strands of drool trickle from his exposed tusks."
+											]
 										},
 										{
 											"type": "entries",
@@ -3379,7 +3426,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["This lumbering Gamorrean hefts a stun baton in one hand, its length crackling with energy. Eyes twitching from one side to the other as though trying to look in both directions at once, the Gamorrean advances with an air of caution that comes from experience in preventing enemies from escaping."]
+											"entries": [
+												"This lumbering Gamorrean hefts a stun baton in one hand, its length crackling with energy. Eyes twitching from one side to the other as though trying to look in both directions at once, the Gamorrean advances with an air of caution that comes from experience in preventing enemies from escaping."
+											]
 										},
 										{
 											"type": "entries",
@@ -3426,7 +3475,7 @@
 									"entries": [
 										"\"The Hutt has fled aboard his personal yacht,\" Demos says respectfully.",
 										"\"I am on my way now, with the Assiduous.\" the hologram of the handsome man says. \"Pray that you have not summoned the Empire on a fool's errand, for the Inquisitorius is not gentle with those who deal with Jedi.\"",
-                                        "The hologram fades, and the Neimoidian straightens slowly, looking pale."
+										"The hologram fades, and the Neimoidian straightens slowly, looking pale."
 									]
 								},
 								"After finishing his communication with Draco, the majordomo waits in the throne room with his Trandoshan bodyguard and four Gamorrean guards. The heroes need to pass through this room if they want to leave the palace. If the heroes are spotted, Demos orders his guards to attack and attempts to stop them from leaving with {@creature Jedi Master Denia|orcnogDoDEp2|Denia}."
@@ -3448,7 +3497,7 @@
 												"1 x {@creature Igren Demos|orcnogDoDEp2}",
 												"5 x {@creature Gamorrean Warrior|orcnogDoDEp2}",
 												"1 x {@creature Trandoshan Bodyguard|orcnogDoDEp2}",
-                                                "1 x {@creature Jedi Master Denia|orcnogDoDEp2} {@color (Allied)|008e2f}",
+												"1 x {@creature Jedi Master Denia|orcnogDoDEp2} {@color (Allied)|008e2f}",
 												"<hr/>",
 												"See: {@area Confrontation with Demos Encounter Map|Confrontation with Demos Encounter Map|x}"
 											]
@@ -3470,7 +3519,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["The darkened audience chamber is much different than when the Hutt crime lord holds court in it. Gone is the cacophony of music that Darga normally has piped in, and the smell of smoke has all but dissipated. Instead, the chamber remains nearly silent, dimly lit and free of the excess that the Hutt brings to the room. The dais sits empty, and small shafts of light shine down from the ceiling, creating brightly illuminated circles on the floor that provide only faint light around them."]
+											"entries": [
+												"The darkened audience chamber is much different than when the Hutt crime lord holds court in it. Gone is the cacophony of music that Darga normally has piped in, and the smell of smoke has all but dissipated. Instead, the chamber remains nearly silent, dimly lit and free of the excess that the Hutt brings to the room. The dais sits empty, and small shafts of light shine down from the ceiling, creating brightly illuminated circles on the floor that provide only faint light around them."
+											]
 										}
 									]
 								},
@@ -3483,7 +3534,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["This slender Neimoidian is dressed in robes of dark greens and blues, with a ceremonial headdress that makes him seem taller than he truly is. The majordomo moves with grace, radiating both elegance and superiority, and his red eyes seem to focus on a distant spot, as though seeing something that no one else sees"]
+											"entries": [
+												"This slender Neimoidian is dressed in robes of dark greens and blues, with a ceremonial headdress that makes him seem taller than he truly is. The majordomo moves with grace, radiating both elegance and superiority, and his red eyes seem to focus on a distant spot, as though seeing something that no one else sees"
+											]
 										},
 										{
 											"type": "entries",
@@ -3517,7 +3570,9 @@
 										{
 											"type": "insetReadaloud",
 											"name": "",
-											"entries": ["This tall Trandoshan is armed with a blaster rifle and wears battle armor decorated with a variety of traditional Trandoshan sigils. His talons click on the floor as he moves, and his face shows no sign of concern as he grips his weapon with practiced calm."]
+											"entries": [
+												"This tall Trandoshan is armed with a blaster rifle and wears battle armor decorated with a variety of traditional Trandoshan sigils. His talons click on the floor as he moves, and his face shows no sign of concern as he grips his weapon with practiced calm."
+											]
 										},
 										{
 											"type": "entries",

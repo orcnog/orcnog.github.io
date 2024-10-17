@@ -10,7 +10,7 @@
 					"orcnog"
 				],
 				"version": "1.4",
-                "color": "#7151b6",
+				"color": "#7151b6",
 				"targetSchema": "1.2.0"
 			}
 		],
@@ -803,7 +803,7 @@
 				[
 					"Ligers",
 					"-1",
-					"A motley crew of what look like… barbarians?  Some even wear lion and/or tiger pelts."
+					"A motley crew of what look like... barbarians?  Some even wear lion and/or tiger pelts."
 				],
 				[
 					"Din of Thieves",
@@ -818,7 +818,7 @@
 				[
 					"Lost Mimes of Phandelver",
 					"+0",
-					"A group of odd looking patrons all with black and white striped shirts and white face paint…  plus they look lost."
+					"A group of odd looking patrons all with black and white striped shirts and white face paint...  plus they look lost."
 				],
 				[
 					"The Thunder Bums",
@@ -2153,7 +2153,7 @@
 				},
 				{
 					"name": "Carnival Locations",
-					"headers": [						
+					"headers": [
 						"Ticket Booth",
 						"Big Top",
 						"Bubble-Pop Teapot",
@@ -3164,8 +3164,7 @@
 							"entries": [
 								{
 									"type": "list",
-									"items":
-									[
+									"items": [
 										"{@area Ticket Booth|081|x}",
 										"{@area Big Top|087|x}",
 										"{@area Bubble-Pop Teapot|08b|x}",
@@ -3631,7 +3630,6 @@
 										"\"In worlds so full of magic, is time an illusion?\"",
 										"\"How do I know you exist?\"",
 										"\"What is joy?\""
-
 									]
 								},
 								"If the characters ignore Feathereen or make light of her questions, she rocks the gondola and tries to pitch her passengers into the water. Each occupant must succeed on a DC 12 Dexterity saving throw to stay inside the boat.",
@@ -3992,7 +3990,7 @@
 											"style": "inset"
 										}
 									]
-								},										
+								},
 								{
 									"type": "entries",
 									"name": "Trivia Questions",
@@ -4218,11 +4216,11 @@
 										{
 											"type": "list",
 											"items": [
-												"No-one’s better at poems than artistic gno-ems, but this one thinks they can rhyme...",
+												"No-one's better at poems than artistic gno-ems, but this one thinks they can rhyme...",
 												"Fun and games galore are in store: fly in a bubble or swim on a swan...",
 												"The main event is held in a tent, at midnight come to the Big Top...",
 												"Have your fill at the carnival, run by Misters Witch and Light...",
-												"Such a shame it’s the end of the game, but the night is still young..."
+												"Such a shame it's the end of the game, but the night is still young..."
 											]
 										}
 									]
@@ -4401,8 +4399,8 @@
 										"Every snail needs a jockey, and any saddles not filled by characters are filled by other attendees (use the {@creature commoner} stat block to represent these NPCs). All the snails and their riders begin at the start line; fireworks signal the start of the race, after which the riders race their snails to the finish line.",
 										"On a whiteboard or notepad, jot down the giant snails, their numbers, and their riders. Next to the names, keep a running total of how far each snail travels in feet during the race. The course is 480 feet long.",
 										"Have the Goblin referee announce this before the race:",
-										"\"Here are the rules: no magic, and no contact. If anyone is caught cheating, you’re out! But if you’re not caught... good for you!\"",
-										"If any competitors wish to cast spells or sabotage other players they may do so with Sleight of Hand checks contested by the referees’ Perception (10). If any of the other players spot them they can call them out to the referees and get them instantly disqualified!",
+										"\"Here are the rules: no magic, and no contact. If anyone is caught cheating, you're out! But if you're not caught... good for you!\"",
+										"If any competitors wish to cast spells or sabotage other players they may do so with Sleight of Hand checks contested by the referees' Perception (10). If any of the other players spot them they can call them out to the referees and get them instantly disqualified!",
 										"During the Race",
 										{
 											"type": "list",
