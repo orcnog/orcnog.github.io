@@ -1,9 +1,10 @@
 name: Reapply My Custom Changes After Sync
+# I'm removing the trigger for this... it's not relevant to my current setup, i don't think.
 
-on:
-  push:
-    branches:
-      - main  # Detects Pull app sync to main branch
+on: {}
+  # push:
+  #   branches:
+  #     - main  # Detects Pull app sync to main branch
 
 jobs:
   reapply-changes:
