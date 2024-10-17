@@ -468,13 +468,13 @@ CleanUtil._DASH_COLLAPSE_REGEX = /[ ]*([\u2014\u2013])[ ]*/g;
 // SOURCES =============================================================================================================
 globalThis.SourceUtil = class {
 	static ADV_BOOK_GROUPS = [
+		{group: "homebrew", displayName: "Homebrew"},
 		{group: "core", displayName: "Core"},
 		{group: "supplement", displayName: "Supplements"},
 		{group: "setting", displayName: "Settings"},
 		{group: "setting-alt", displayName: "Additional Settings"},
 		{group: "supplement-alt", displayName: "Extras"},
 		{group: "prerelease", displayName: "Prerelease"},
-		{group: "homebrew", displayName: "Homebrew"},
 		{group: "screen", displayName: "Screens"},
 		{group: "recipe", displayName: "Recipes"},
 		{group: "other", displayName: "Miscellaneous"},
