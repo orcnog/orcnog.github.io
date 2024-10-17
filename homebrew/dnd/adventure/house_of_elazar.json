@@ -1,6 +1,11 @@
 {
 	"$schema": "https://raw.githubusercontent.com/TheGiddyLimit/5etools-utils/master/schema/brew-fast/homebrew.json",
 	"_meta": {
+		"dependencies": {
+			"monster": [
+				"MM"
+			]
+		},
 		"sources": [
 			{
 				"json": "orcnogHoE",
@@ -18,157 +23,168 @@
 		"dateLastModified": 1729028448
 	},
 	"monster": [
-		{
-			"name": "Creepy Doll",
+        {
+            "name": "Creepy Doll",
 			"source": "orcnogHoE",
-			"page": 0,
-			"size": [
-				"S"
-			],
-			"type": "construct",
-			"alignment": [
-				"C",
-				"E"
-			],
-			"ac": [
-				{
-					"ac": 12,
-					"from": [
-						"natural armor"
-					]
-				}
-			],
-			"hp": {
-				"average": 21,
-				"formula": "6d4 + 6"
-			},
-			"speed": {
-				"walk": 30
-			},
-			"str": 3,
-			"dex": 16,
-			"con": 12,
-			"int": 10,
-			"wis": 14,
-			"cha": 18,
-			"skill": {
-				"deception": "+6",
-				"perception": "+4",
-				"persuasion": "+6",
-				"stealth": "+7"
-			},
-			"senses": [
-				"darkvision 120 ft."
-			],
-			"passive": 14,
-			"resist": [
-				{
-					"resist": [
-						"bludgeoning",
-						"piercing",
-						"slashing"
-					],
-					"note": "from nonmagical attacks that aren't silvered",
-					"cond": true
-				}
-			],
-			"immune": [
-				"fire",
-				"poison"
-			],
-			"conditionImmune": [
-				"charmed",
-				"exhaustion",
-				"frightened",
-				"paralyzed",
-				"petrified",
-				"poisoned"
-			],
-			"languages": [
-				"Common",
-				"Infernal",
-				"telepathy 60 ft. Infernal",
-				"Common",
-				"telepathy 60 ft."
-			],
-			"cr": "2",
-			"spellcasting": [
-				{
-					"name": "Innate Spellcasting",
-					"type": "spellcasting",
-					"headerEntries": [
-						"The doll's spellcasting ability is Charisma (spell save {@dc 14}). It can innately cast the following spells, requiring only verbal components:"
-					],
-					"will": [
-						"{@spell suggestion}"
-					],
-					"daily": {
-						"1e": [
-							"{@spell dominate person}",
-							"{@spell modify memory}"
-						]
+            "page": 1,
+            "size": [
+                "S"
+            ],
+            "type": "construct",
+            "alignment": [
+                "L",
+                "E"
+            ],
+            "ac": [
+                12
+            ],
+            "hp": {
+                "average": 21,
+                "formula": "6d4 + 6"
+            },
+            "speed": {
+                "walk": 40
+            },
+            "str": 6,
+            "dex": 14,
+            "con": 13,
+            "int": 12,
+            "wis": 11,
+            "cha": 10,
+            "skill": {
+                "stealth": "+4"
+            },
+            "senses": [
+                "darkvision 60 ft."
+            ],
+            "passive": 10,
+            "resist": [
+                {
+                    "resist": [
+                        "bludgeoning",
+                        "piercing",
+                        "slashing"
+                    ],
+                    "note": "from nonmagical attacks",
+                    "cond": true
+                }
+            ],
+            "immune": [
+                "poison"
+            ],
+            "conditionImmune": [
+                "charmed",
+                "exhaustion",
+                "frightened",
+                "paralyzed"
+            ],
+            "languages": [
+                "speaks and understands the languages known by its creator"
+            ],
+            "cr": "2",
+            "trait": [
+                {
+                    "name": "False Appearance",
+                    "entries": [
+                        "While the creepy doll remains motionless, it is indistinguishable from an ordinary, inanimate doll."
+                    ]
+                }
+            ],
+            "action": [
+                {
+                    "name": "Multiattack",
+                    "entries": [
+                        "The creepy doll makes one attack with its scissors and uses Giggle."
+                    ]
+                },
+                {
+                    "name": "Scissors",
+                    "entries": [
+                        "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}7 ({@damage 2d4 + 2}) slashing damage."
+                    ]
+                },
+                {
+                    "name": "Giggle",
+                    "entries": [
+                        "The creepy doll targets one creature it can see within 10 feet of it that has a brain. The target must succeed on a {@dc 12} Intelligence saving throw or take 11 ({@damage 2d10}) psychic damage. Also on a failure, roll {@dice 3d6}. If the total equals or exceeds the target's Intelligence score, that score is reduced to 0. The target is {@condition stunned} until it regains at least one point of Intelligence, as from the {@spell greater restoration} spell or similar magic."
+                    ]
+                },
+                {
+                    "name": "Body Exchange",
+                    "entries": [
+                        "The creepy doll initiates an Intelligence contest with an {@condition incapacitated} humanoid within 5 feet of it. If it wins the contest, the creepy doll's spirit inhabits the target's body while the target's spirit is placed into the creepy doll's body. The creepy doll controls the target's body completely. It retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being {@condition charmed} and {@condition frightened}. It otherwise uses the possessed target's statistics, but doesn't gain access to the target's knowledge, class features, or proficiencies. The target retains its alignment, Intelligence, Wisdom, and Charisma while inhabiting the creepy doll's body.",
+                        "The body exchange lasts until the doll's spirit is forced out by magic. (The {@spell dispel evil and good} spell will accomplish this, though the doll is not one of the creature types whose possession that spell normally ends.) The body and the doll must be within 5 feet of each other for such an effect to work. The target is immune to this doll's Body Exchange for 24 hours after winning the Intelligence contest or after the exchange ends."
+                    ]
+                }
+            ],
+            "traitTags": [
+                "False Appearance"
+            ],
+            "senseTags": [
+                "D"
+            ],
+            "actionTags": [
+                "Multiattack"
+            ],
+            "damageTags": [
+                "S",
+                "Y"
+            ],
+            "miscTags": [
+                "MW"
+            ],
+            "conditionInflict": [
+                "stunned"
+            ],
+            "savingThrowForced": [
+                "intelligence"
+            ],
+            "hasToken": true,
+            "hasFluff": true,
+            "hasFluffImages": true
+        },
+        {
+            "name": "Hamelia",
+			"source": "orcnogHoE",
+			"isNpc": true,
+			"isNamedCreature": true,
+			"page": 1,
+            "size": [
+                "S"
+            ],
+			"_copy": {
+				"name": "Commoner",
+				"source": "MM",
+				"_mod": {
+					"*": {
+						"mode": "replaceTxt",
+						"replace": "the commoner",
+						"with": "Hamelia",
+						"flags": "i"
 					},
-					"ability": "cha"
-				}
-			],
-			"trait": [
-				{
-					"name": "Devil's Sight",
-					"entries": [
-						"Magical darkness doesn't impede the doll's darkvision."
-					]
-				},
-				{
-					"name": "Inanimate",
-					"entries": [
-						"While the doll remains motionless, it is indistinguishable from an ordinary doll."
-					]
-				},
-				{
-					"name": "Undying Evil",
-					"entries": [
-						"If the doll is destroyed, it regains all its hit points and reappears at a nearby location in 24 hours unless a {@spell remove curse} spell is cast on its remains."
-					]
-				}
-			],
-			"action": [
-				{
-					"name": "Giggle",
-					"entries": [
-						"The doll targets one creature it can see within 30 feet of it. The target must succeed on a {@dc 14} Wisdom saving throw or take 7 ({@damage 2d6}) psychic damage and become {@condition frightened} for 1 minute. The target can repeat the saving throw at the end of each of its turns, with disadvantage if the doll is within line of sight, ending the effect on itself on a success."
-					]
-				}
-			],
-			"traitTags": [
-				"Devil's Sight"
-			],
-			"senseTags": [
-				"SD"
-			],
-			"languageTags": [
-				"C",
-				"I",
-				"TP"
-			],
-			"damageTags": [
-				"Y"
-			],
-			"spellcastingTags": [
-				"I"
-			],
-			"conditionInflict": [
-				"frightened"
-			],
-			"conditionInflictSpell": [
-				"charmed",
-				"incapacitated"
-			],
-			"savingThrowForced": [
-				"wisdom"
-			],
-			"savingThrowForcedSpell": [
-				"wisdom"
-			]
+                    "action": [
+                        {
+                            "mode": "replaceArr",
+                            "replace": "Club",
+                            "items": {
+                                "name": "Sling-shot",
+                                "entries": [
+                                    "{@atk rw} {@hit 2} to hit, ranged 20/40 ft., one target. {@h}4 ({@damage 1d6 + 1}) bludgeoning damage."
+                                ]
+                            }
+                        }
+                    ]
+                }
+			},
+            "ac": [
+                11
+            ],
+            "str": 8,
+            "dex": 12,
+            "con": 8,
+            "skill": {
+                "stealth": "+2"
+            }
 		}
 	],
 	"adventure": [
