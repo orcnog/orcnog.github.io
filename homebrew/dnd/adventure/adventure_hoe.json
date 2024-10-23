@@ -8,7 +8,7 @@
 		},
 		"sources": [
 			{
-				"json": "orcnogHoE",
+				"json": "HoE",
 				"abbreviation": "HoE",
 				"full": "The House of Elazar",
 				"convertedBy": [
@@ -25,7 +25,7 @@
 	"monster": [
 		{
 			"name": "Creepy Doll",
-			"source": "orcnogHoE",
+			"source": "HoE",
 			"page": 1,
 			"size": [
 				"S"
@@ -145,7 +145,7 @@
 		},
 		{
 			"name": "Hamelia",
-			"source": "orcnogHoE",
+			"source": "HoE",
 			"isNpc": true,
 			"isNamedCreature": true,
 			"page": 1,
@@ -190,8 +190,8 @@
 	"adventure": [
 		{
 			"name": "The House of Elazar",
-			"source": "orcnogHoE",
-			"id": "orcnogHoE",
+			"source": "HoE",
+			"id": "HoE",
 			"group": "homebrew",
 			"author": "Tom Cartos",
 			"published": "2024-10-15",
@@ -333,8 +333,8 @@
 	],
 	"adventureData": [
 		{
-			"id": "orcnogHoE",
-			"source": "orcnogHoE",
+			"id": "HoE",
+			"source": "HoE",
 			"data": [
 				{
 					"type": "section",
@@ -622,7 +622,7 @@
 							"page": 2,
 							"id": "meet hamelia",
 							"entries": [
-								"Suddenly, a young village girl's presence spooks the adventurers.  And Hamelia is introduced to the party in the context of an encounter. See Hamelia's {@area biography|hamelia|x} and {@creature Hamelia|orcnogHoE|statblock} for more info.",
+								"Suddenly, a young village girl's presence spooks the adventurers.  And Hamelia is introduced to the party in the context of an encounter. See Hamelia's {@area biography|hamelia|x} and {@creature Hamelia|HoE|statblock} for more info.",
 								"Read the following aloud:",
 								{
 									"type": "insetReadaloud",
@@ -649,7 +649,7 @@
 											"type": "list",
 											"style": "list-no-bullets",
 											"items": [
-												"1 x {@creature Hamelia|orcnogHoE}",
+												"1 x {@creature Hamelia|HoE}",
 												"2 x {@creature Giant Bat}",
 												"2 x {@creature Swarm of Bats}",
 												"{@note Adjusted XP: 300}",
