@@ -206,30 +206,127 @@
 			"storyline": "",
 			"contents": [
 				{
-					"name": "Intro",
+					"name": "Introduction",
 					"headers": [
-						{
-							"header": "Adventure Summary",
-							"depth": 1
-						}
+						"Background",
+						"Hogsbottom",
+						"Overview",
+						"Key NPCs",
+						"Running the Adventure"
 					]
 				},
 				{
-					"name": "Adventure",
+					"name": "The Approach",
 					"headers": [
+						"Opening Read",
+						"Meet Hamelia"
+					],
+					"ordinal": {
+						"type": "chapter",
+						"identifier": 1
+					}
+				},
+				{
+					"name": "The Manor",
+					"headers": [
+						"Ground Floor",
 						{
-							"header": "Opening Read",
-							"depth": 1
+							"depth": 1,
+							"header": "11: Lobby"
 						},
 						{
-							"header": "Hamelia",
-							"depth": 1
+							"depth": 1,
+							"header": "12: Toilet"
 						},
 						{
-							"header": "The Manor",
-							"depth": 1
+							"depth": 1,
+							"header": "13: Cloakroom"
+						},
+						{
+							"depth": 1,
+							"header": "14: Secret Chamber"
+						},
+						{
+							"depth": 1,
+							"header": "15: Trapdoor"
+						},
+						{
+							"depth": 1,
+							"header": "16: Sitting Room"
+						},
+						{
+							"depth": 1,
+							"header": "17: Dining Room"
+						},
+						{
+							"depth": 1,
+							"header": "18: Picture Gallery"
+						},
+						{
+							"depth": 1,
+							"header": "19: Kitchen"
+						},
+						{
+							"depth": 1,
+							"header": "20: Pantry"
+						},
+						{
+							"depth": 1,
+							"header": "21: Trapdoor"
+						},
+						{
+							"depth": 1,
+							"header": "22: Conservatory"
+						},
+						"Upper Floor",
+						{
+							"depth": 1,
+							"header": "23: Landing"
+						},
+						{
+							"depth": 1,
+							"header": "24: Balcony"
+						},
+						{
+							"depth": 1,
+							"header": "25: Guest Bedroom"
+						},
+						{
+							"depth": 1,
+							"header": "26: Master Bedroom"
+						},
+						{
+							"depth": 1,
+							"header": "27: Children's Bedroom"
+						},
+						{
+							"depth": 1,
+							"header": "28: Toy Room"
+						},
+						{
+							"depth": 1,
+							"header": "29: Library"
+						},
+						{
+							"depth": 1,
+							"header": "30: Study"
 						}
-					]
+					],
+					"ordinal": {
+						"type": "chapter",
+						"identifier": 2
+					}
+				},
+				{
+					"name": "The Lair",
+					"headers": [
+						"Basement 1: The Chapel",
+						"Basement 2: The Lair"
+					],
+					"ordinal": {
+						"type": "chapter",
+						"identifier": 3
+					}
 				}
 			]
 		}
@@ -241,73 +338,227 @@
 			"data": [
 				{
 					"type": "section",
-					"name": "The House of Elazar by Tom Cartos",
+					"name": "Introduction",
 					"page": 1,
-					"id": "000",
+					"id": "introduction",
 					"entries": [
 						{
 							"type": "entries",
-							"page": 1,
 							"entries": [
-								"Level 3 One-Shot Halloween Adventure for 3 to 5 players."
+								"<style>.ve-night-mode .rd__b-inset--readaloud {background-color: #292229; /*302334*/} .ve-night-mode .rd__h--0, .ve-night-mode .rd__h--1, .ve-night-mode .rd__h--2 {color: #f24a38;} .ve-night-mode .rd__h--1 {border-bottom-color: #f24a38;} .ve-night-mode .hwin .ve-tbl-border {background-color: #942c20;} .ve-night-mode .stats__sect-header-inner {color: #f24a38; border-bottom-color: #942c20;} .ve-night-mode .stats__h-name {color: #f24a38;}</style>"
 							]
-						}
-					]
-				},
-				{
-					"type": "section",
-					"name": "Intro",
-					"page": 1,
-					"id": "001",
-					"entries": [
-						"Almost everyone agrees that the Elazar Household at the top of the hill is a creepy place at best. Children dare one another to get close enough to touch the heavy iron knocker on the front door before running away squealing, and even the bravest of the townsfolk only walk past if absolutely necessary. The current occupant is Emmanuel Elazar, a pale gaunt man whose thin features and long sleek hair make him appear much younger than his 50+ years.",
-						"He very rarely leaves the house, but it somehow always seems empty anyway. Emmanuel is in fact a vampire, from a long line of vampires, but he is the first who has not fully embraced the blood curse. The house has been in his family for generations, but seldom used in recent years so Emmanuel returned here in the hope that he could find a way to remove his vampirism without his family knowing about it. It is important to note that Emmanuel does not wish to remove the curse out of any particular sentimentality or 'goodness', but rather he finds its downsides to outweigh the boons it bestows. In particular he finds the taste of blood utterly repulsive and longs for real food.",
-						"After many decades of searching, Emmanuel believes he has found a way to remove his affliction, but it requires the ritual sacrifice of a pair of identical female pre-pubescent twins. Luckily for him, just such a pair lives in the town a few streets over. They have been missing now for over a week as Emmanuel prepares the rites. Despite being a well-practiced spell caster, there is a lot to do, and his thralls are only really capable of manual tasks.",
-						"Unluckily for Emmanuel, the townsfolk have hired a group of travelling adventurers to find the boys, and they have a pretty good idea where they should start looking. Should they make their way through the largely abandoned house and into the lair below, will they ultimately decide to save the boys, or will they deem it a greater victory for the town if the resident vampire removes his dark powers and leaves for good?",
+						},
+						"The House of Elazar by Tom Cartos is a spooky one-shot adventure designed for Dungeons & Dragons 5th Edition. The adventure is designed for 3 to 5 players of 3rd level, but its encounters are mechanically balanced for 4 players. This text is written for the Dungeon Master, and it introduces the small town of Hogsbottom (the starting setting of most of my D&D one-shots), the opening narration to help emmerse your players in the setting, and descriptions of each explorable room in the Manor, as well as encounter blocks which describe and help run individual combat encounters.",
 						{
 							"type": "entries",
-							"name": "Adventure Summary",
+							"name": "Background",
 							"page": 1,
-							"id": "002",
+							"id": "background",
 							"entries": [
-								"The House of Elazar is a one-shot Halloween-flavored adventure designed for D&D 5e.",
+								"Almost everyone agrees that the Elazar Household at the top of the hill is a creepy place at best. Children dare one another to get close enough to touch the heavy iron knocker on the front door before running away squealing, and even the bravest of the townsfolk only walk past if absolutely necessary. The current occupant is Emmanuel Elazar, a pale gaunt man whose thin features and long sleek hair make him appear much younger than his 50+ years.",
+								"He very rarely leaves the house, but it somehow always seems empty anyway. Emmanuel is in fact a vampire, from a long line of vampires, but he is the first who has not fully embraced the blood curse. The house has been in his family for generations, but seldom used in recent years so Emmanuel returned here in the hope that he could find a way to remove his vampirism without his family knowing about it. It is important to note that Emmanuel does not wish to remove the curse out of any particular sentimentality or 'goodness', but rather he finds its downsides to outweigh the boons it bestows. In particular he finds the taste of blood utterly repulsive and longs for real food.",
+								"After many decades of searching, Emmanuel believes he has found a way to remove his affliction, but it requires the ritual sacrifice of a pair of identical female pre-pubescent twins. Luckily for him, just such a pair lives in the town a few streets over. They have been missing now for over a week as Emmanuel prepares the rites. Despite being a well-practiced spell caster, there is a lot to do, and his thralls are only really capable of manual tasks.",
+								"Unluckily for Emmanuel, the townsfolk have hired a group of travelling adventurers to find the boys, and they have a pretty good idea where they should start looking. Should they make their way through the largely abandoned house and into the lair below, will they ultimately decide to save the boys, or will they deem it a greater victory for the town if the resident vampire removes his dark powers and leaves for good?"
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Hogsbottom",
+							"page": 1,
+							"id": "hogsbottom",
+							"entries": [
+								"Hogsbottom is a quaint, pig-themed town nestled at the foot of Hogs Hill, known for its simple folk and odd local legends. While it seems like a peaceful, if not somewhat backward, rural town, a few  small-town mysteries add a dash of intrigue to daily life. At its center is The Swaggering Swine, a lively tavern run by the jovial Hampton J. Porkbelly, where villagers gather to celebrate and unwind. Nearby, Darathra Shendrel, the town's skilled blacksmith, crafts the finest weapons around.",
+								"Just beyond the cornfields lies Elazar Manor, home to the mysterious Emmanuel Elazar, a recluse who keeps to himself, leaving the townsfolk content to let him be. Higher up, atop Hogs Hill, stands Hogsbottom Manor, home to the miserly family of Lord Higby Hogbottom IV, the town's namesake.",
+								"Hogsbottom is a place where life moves at its own pace, steeped in tradition and local color. As a DM, you're free to adapt Hogsbottom's details\u2014whether swapping names or locations\u2014but its rustic charm and unique quirks provide a solid backdrop for any adventure."
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Overview",
+							"page": 1,
+							"id": "overview",
+							"entries": [
+								"The following sequence of events should summarize the players' journey through this adventure. You'll find that Chapter 1 follows a fairly strict script, but then once the players make their way inside the mansion, it opens up to sandbox-style exploration, but the major plot points are noted below:",
 								{
-									"type": "entries",
-									"name": "Players",
-									"page": 1,
-									"id": "004",
+									"type": "list",
+									"style": "list-decimal",
+									"items": [
+										"Players meet a village girl, Hamelia, outside the manor, who will accompany them inside.",
+										"Players should find a secret passageway in the kitchen pantry, but realize it's sealed by a magical barrier.",
+										"Players should find a book, The Rite of Sepins, in the library giving them the passkey to break the barrier.",
+										"Players descend into the bowels of the manor, and find Elazar about to perform the ritual.",
+										"Players must decide if they should kill him, help him, or something else, before his horde of thralls engulfs them."
+									]
+								}
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Key NPCs",
+							"page": 1,
+							"id": "key npcs",
+							"entries": [
+								"There are only 2 key NPCs in this story: a young village girl named Hamliea, and the vampire antagonist, Elazar.",
+								{
+									"type": "inset",
+									"name": "Hamelia",
+									"page": 2,
+									"id": "hamelia",
 									"entries": [
-										"This adventure is designed for 3 to 5 players at level 3 (but optimized for 4 players)."
+										{
+											"type": "list",
+											"style": "list-no-bullets",
+											"items": [
+												"Name: Hamelia Hamm",
+												"Age: 11",
+												"Parents: John & Peggy Hamm",
+												"Two Brothers: Sam & George (the twins that were kidnapped)",
+												"Story: Hamelia is the one and only resident of the town who has stepped foot inside the Elazar House.  She did it on a dare, and when she made it inside, she found that, although it was incredibly creepy, there was not a soul to be found.  Inside, she found a false wall leading to a hatch in the floor, to which she is happy to lead the adventurers.  She does not know what's down the hatch, though."
+											]
+										}
 									]
 								},
+								"",
+								{
+									"type": "inset",
+									"name": "Elazar",
+									"page": 2,
+									"id": "elazar",
+									"entries": [
+										{
+											"type": "list",
+											"style": "list-no-bullets",
+											"items": [
+												"Name: Emmanuel Elazar",
+												"Age: 53",
+												"Residence: The House Elazar - spooky manor on the hill outside of Hogsbottom",
+												"Story: Emmanuel Elazar is a reclusive vampire who hides away in his ancestral home, despising the blood curse he inherited. Desperate to rid himself of vampirism, he has devised a sinister ritual that requires the sacrifice of twin children. Though his goal is to end his own curse, his willingness to perform horrific acts reveals his lack of empathy for human life."
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Running the Adventure",
+							"page": 1,
+							"id": "running the adventure",
+							"entries": [
+								"You will need to prepare the adventure before running it with players.  First (and this is basic DM stuff for running {@i any} session), you'll need to decide if you'll be playing in-person vs. online, and with how many players.  This will inform whether you need to draw (or print) the maps for an in-person session, or if you'll need to load this adventure into an online VTT (Virtual Table Table) application or service, and whether or not to re-balance the encounters.  Once you've got a solid grasp on the play-through logistics, instruct your players (with several days' notice) to build a level 3 character.",
 								{
 									"type": "entries",
 									"name": "Map Information",
 									"page": 1,
-									"id": "005",
+									"id": "map information",
 									"entries": [
-										"GRID SIZE - 24x19 (300DPI)",
-										"VTT SIZE - 3360x2660 (140DPI)",
-										"RECOMMENDED PRINT SIZE - A2/ANSI C"
+										"This adventure is written specifically to utlize the set of maps by Tom Cartos, packaged as \"The House of Elazar\". You can find these maps in high resolution on {@link Tom Cartos' Patreon|https://www.patreon.com/posts/house-of-elazar-42929701}.",
+										{
+											"type": "list",
+											"style": "list-no-bullets",
+											"items": [
+												"GRID SIZE - 24x19 (300DPI)",
+												"VTT SIZE - 3360x2660 (140DPI)",
+												"RECOMMENDED PRINT SIZE - A2/ANSI C"
+											]
+										}
 									]
 								},
 								{
 									"type": "entries",
-									"name": "Plot Summary",
+									"name": "Encounter Blocks",
 									"page": 1,
-									"id": "006",
+									"id": "encounter blocks",
 									"entries": [
+										"Throughout the adventure text, you will see Encounter Blocks.  This is not a convention of D&D adventure texts, but rather my own method of streamlining combat encounters for DMs using 5eTools. Each encounter block will list out the enemies and link to an initiative tracker (leveraging the 5eTools DM Screen) to run during the combat itself. Do not read the encounter block information out loud to your players -- they for the DM's eyes only.",
+										"Hover over each line in the example Encounter Block below to see tips on how to read or use that information.",
 										{
-											"type": "list",
-											"style": "list-decimal",
-											"items": [
-												"Players meet a village girl, Hamelia, outside the manor, who will accompany them inside.",
-												"Players should find a secret passageway in the kitchen pantry, but realize it's sealed by a magical barrier.",
-												"Players should find a book, The Rite of Sepins, in the library giving them the passkey to break the barrier.",
-												"Players descend into the bowels of the manor, and find Elazar about to perform the ritual.",
-												"Players must decide if they should kill him, help him, or something else, before his horde of thralls engulfs them."
+											"type": "inset",
+											"name": "Encounter: Example",
+											"page": 2,
+											"id": "encounter block example",
+											"entries": [
+												{
+													"type": "list",
+													"style": "list-no-bullets",
+													"items": [
+														"{@footnote 1 x|This shows you a creature type and the quantity of those creatures in this encounter. In this case, there's 1 bugbear. Hover over the actual creature name to see its statblock.|Quantity of Creature A} {@creature Bugbear||Example Creature A}",
+														"{@footnote 3 x|This shows you a creature type and the quantity of those creatures in this encounter. In this case there are 3 goblins. Hover over the actual creature name to see its statblock.|Quantity of Creature B} {@creature Goblin||Example Creature B}",
+														"{@footnote {@note Adjusted XP: 150}|This tells you the \"Adjusted XP\" of the encounter, which helps you estimate its difficulty and helps you balance the encounter against a party's \"{@footnote daily budget|A rough estimate of the adjusted XP value for encounters the party can handle before the characters will need to take a long rest.|Daily Budget}\", using the {@table The Adventuring Day; Adventuring Day XP|DMG|Adventuring Day XP} table in the {@book DMG}.|Encounter Difficulty}",
+														"<hr/>",
+														"{@footnote Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#%7B%22w%22%3A10%2C%22h%22%3A10%2C%22ctc%22%3Atrue%2C%22fs%22%3Afalse%2C%22lk%22%3Afalse%2C%22ps%22%3A%5B%7B%22x%22%3A0%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A9%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A9%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A0%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A51%2C%22s%22%3A%7B%7D%7D%2C%7B%22x%22%3A5%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A5%2C%22s%22%3A%7B%22s%22%3A%22NUMBER%22%2C%22d%22%3A%22DESC%22%2C%22ri%22%3Atrue%2C%22m%22%3Afalse%2C%22rg%22%3Afalse%2C%22rri%22%3Afalse%2C%22g%22%3Atrue%2C%22p%22%3Atrue%2C%22a%22%3Afalse%2C%22k%22%3Afalse%2C%22piHp%22%3Afalse%2C%22piHm%22%3Afalse%2C%22piV%22%3Atrue%2C%22piO%22%3Afalse%2C%22c%22%3A%5B%5D%2C%22cndc%22%3A%5B%5D%2C%22r%22%3A%5B%7B%22id%22%3A%22bb6ef15b-e29c-4413-874a-a076d531534f%22%2C%22n%22%3A%22Bugbear%22%2C%22h%22%3A27%2C%22g%22%3A27%2C%22i%22%3A2%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%223315949a-f18e-4556-a12c-d0e14fb38038%22%2C%22n%22%3A%22Goblin%22%2C%22h%22%3A7%2C%22g%22%3A7%2C%22i%22%3A1%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%22bb4f5e3d-879f-4433-9d56-e53aeb90dabf%22%2C%22n%22%3A%22Goblin%22%2C%22h%22%3A7%2C%22g%22%3A7%2C%22i%22%3A1%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A2%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%22ace81fd4-1b22-40f8-895f-8a5b45a41bd8%22%2C%22n%22%3A%22Goblin%22%2C%22h%22%3A7%2C%22g%22%3A7%2C%22i%22%3A1%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A3%2C%22k%22%3A%5B%5D%7D%5D%2C%22rdp%22%3A%5B%5D%2C%22n%22%3A1%7D%7D%5D%2C%22ex%22%3A%5B%5D%7D}|You would click this link to launch the initiative tracker for this encounter|Launch Encounter Initiative Tracker}"
+													]
+												}
 											]
 										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "Presentation Cues",
+									"page": 1,
+									"id": "presentation cues",
+									"entries": [
+										"You will come across optional presentation cues throughout the adventure text as well. They will look like this:",
+										"{@note {@b This is an example presentation cue.}}",
+										" "
+									]
+								},
+								{
+									"type": "entries",
+									"name": "DM Actions",
+									"page": 1,
+									"id": "dm actions",
+									"entries": [
+										"Throughout the adventure text, you will see cues intended to instruct the DM on what actions to take. These cues are not a convention of D&D adventure texts either, but rather my own method of meant of suggesting to the DM when to execute certain in-game actions to enhance the emmersion and story-telling.",
+										"Media actions, which represent presentation actions, such as playing a sound track or sound effect, showing an image to your players, or starting a combat initiative tracker, will be in yellow. They are completely optional, and will never be crucial to the adventure experience.  Furthermore, they will largely depend on what your \"presentation\" setup and capabilities are, for ex: you may not have a way to display an image to your players or play a sound effect in-person. Use at your own discretion, as always. Example media cue:",
+										"{@cue Show the spooky library image.|media}",
+										"Other DM Action cues will be in green. These will cue things like asking a player for an Investigation check, or describing a potential trap that the players might trigger.  Example DM cue:",
+										"{@cue Call for a group perception check (DC 12).}",
+										"In some rare cases, a DM action will be shown in red. This is just to emphasize its importance, or to just make double-sure that you don't somehow miss it, for instance if it instructs the DM to do something during a combat encounter on a specific trigger (this kind of thing is particularly easy to miss when you're focusing on what monster actions to take next, or responding to a player's question about whether their attack hit, helping to calculate damage, etc.). Example critical cue:",
+										"{@cue Round 2: The roof caves in!|critical}",
+										"Whatever their use case, cues are intended to function as the writer mudging you, the DM, directly about something you should be doing at that point in the adventure.",
+										"Sometimes the DM Actions need to be lengthier, contain multiple possible actions based on an initial condition, or even contain nested readalouds. In these cases, a DM Action Block may be used.",
+										{
+											"type": "insetDMAction",
+											"name": "DM Action",
+											"page": 1,
+											"id": "dm action",
+											"entries": [
+												"This is an example of a DM Action block. It can contain much more information that may just be much longer than a single {@cue cue}, or may indeed need to be visually organized into unique logical structure.",
+												{
+													"type": "entries",
+													"name": "Option 1",
+													"entries": [
+														"Do thing one."
+													]
+												},
+												{
+													"type": "entries",
+													"name": "Option 2",
+													"entries": [
+														"Do thing two."
+													]
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "Readalouds",
+									"page": 1,
+									"id": "readalouds",
+									"entries": [
+										"When you see an inset block like the following throughout this adventure, this text is meant to be read aloud to your players in-game.  (This {@i is} a convention of D&D adventure texts.)",
+										{
+											"type": "insetReadaloud",
+											"page": 1,
+											"entries": [
+												"This is an example readaloud text block."
+											]
+										},
+										"When you are ready to start the adventure, begin by reading the \"Open Read\" readaloud block to your players."
 									]
 								}
 							]
@@ -316,21 +567,21 @@
 				},
 				{
 					"type": "section",
-					"name": "Adventure",
+					"name": "The Approach",
 					"page": 2,
-					"id": "007",
+					"id": "the approach",
 					"entries": [
 						{
 							"type": "entries",
 							"name": "Opening Read",
 							"page": 2,
-							"id": "008",
+							"id": "opening read",
 							"entries": [
 								"{@note {@b Show: Spooky Hogsbottom image}}",
+								"Read the following aloud to your players:",
 								{
 									"type": "insetReadaloud",
 									"page": 1,
-									"id": "009",
 									"entries": [
 										"Almost everyone in Hogsbottom agrees that the Elazar Household at the top of the hill is a creepy place at best. Children dare one another to get close enough to touch the heavy iron knocker on the front door before running away squealing, and even the bravest of the townsfolk only walk past if absolutely necessary.  It's rumored that only one Hogsbottom dweller has even set foot in the house, and that was just a child on a foolish dare.  While the manor always seems to give off an abandoned kinda vibe, there is in fact one current occupant.  The owner of the estate is Emmanuel Elazar, a pale gaunt man whose thin features and long sleek hair make him appear much younger than his 50+ years.",
 										"Rarely seen outside his home, rumors of his true nature have swirled for decades.  Some say \"hermit\", others \"mad scientist\", some even say \"vampire\", and some even think he died years ago and he now wanders his grounds at night as a spirit, as if he didn't know he was dead.  But for as long as any of the locals could remember, he never bothered anyone in town.  So, they just let him and his spooky mansion be.  Live and let live... or so they hoped."
@@ -340,26 +591,24 @@
 								{
 									"type": "insetReadaloud",
 									"page": 1,
-									"id": "010",
 									"entries": [
-										"A week ago, two young boys from the town went missing.  Twins, in fact, hair as red as a sunrise.  Their parents came to their room to wake them one morning, and they were nowhere to be found.  No one saw them leave, there was no sign of struggle... they'd just vanished.  In response, the good townsfolk of Hogsbottom have hired a group of travelling adventurers to find the boys, and they have a pretty good idea where those adventurers should start looking."
+										"A week ago, two young boys from the town went missing.  Twins, in fact, hair as red as a sunrise.  Their parents came to their room to wake them one morning, and they were nowhere to be found.  No sign of struggle... no one saw them leave... they had just... vanished.  So, the good townsfolk of Hogsbottom hired themselves a group of travelling adventurers to find the missing boys, and they have a pretty good idea where those adventurers should start looking..."
 									]
 								},
 								"{@note {@b Show: Creepy Cornfield image}}",
 								{
 									"type": "insetReadaloud",
 									"page": 1,
-									"id": "011",
 									"entries": [
-										"As night falls over the countryside, you set out for the spooky residence.  Leaving the relative comfort of the village streets, you pass through a few acres of crops on the outskirts of the town.  As the twilight drains away there is barely enough light even for shadows.  All manor of life and terrain is obscured.  Even the stars and moon cower behind a dense layer of cloud.  And with that foreboding energy, every tree, every eerie stalk of corn, every twisting root on the ground seems to come alive as the night engulfs the world.  Your ears become sharper and your mind paranoid, every rustle of grass snap of a twig is a predator, even if it is just a rabbit or a field mouse.",
-										"It's several minutes before you finally spot the house.  The dark, intimidating manor, looms atop a small hill on the opposite end of a dirt path cutting through a cornfield.  As you step onto the dirt path to cross the field, you can see your breath in the cold, heavy air.  Dead corn husks crunch under your feet..."
+										"Night falls over the countryside as you set out for the spooky residence.  Leaving the relative comfort of the village streets, you pass through a few acres of crops on the outskirts of the town.  Twilight drains away, and all manor of life and terrain is obscured.  Even the stars and moon cower behind a dense layer of cloud.",
+										"As you traverse the cornfields, you can see your breath in the cold, heavy air.  Dead corn husks crunch under your feet.  A tattered scarecrow creaks as it turns in the wind, seeming to face you... as if watching you... or maybe warning you.",
+										"Peering ahead, you finally spot the house.  The dark, intimidating manor, looms atop a small hill beyond the cornfield."
 									]
 								},
 								"{@note {@b Show: Spooky Manor image}}",
 								{
 									"type": "insetReadaloud",
 									"page": 1,
-									"id": "012",
 									"entries": [
 										"A cold, menacing fog clings to the ground as you approach the gloomy manor.  The smell of mud and rotting flowers wafts past your nose.  A black bird caws from atop the 2-story house, then quickly turns its head to eye you, and flies off, flapping loudly. The air is thick and still, and you feel the slightest of chills run down your spine.  Suddenly, you hear a twig snap behind you...",
 										"{@b Roll for Initiative!}"
@@ -369,94 +618,228 @@
 						},
 						{
 							"type": "entries",
-							"name": "Hamelia",
+							"name": "Meet Hamelia",
 							"page": 2,
-							"id": "013",
+							"id": "meet hamelia",
 							"entries": [
-								"Hamelia's presence spooks the adventurers.  She is introduced via encounter.",
+								"Suddenly, a young village girl's presence spooks the adventurers.  And Hamelia is introduced to the party in the context of an encounter. See Hamelia's {@area biography|hamelia|x} and {@creature Hamelia|orcnogHoE|statblock} for more info.",
+								"Read the following aloud:",
 								{
-									"type": "inset",
-									"name": "Encounter: Bats!",
-									"page": 2,
-									"id": "014",
+									"type": "insetReadaloud",
+									"page": 1,
 									"entries": [
-										{
-											"type": "link",
-											"href": {
-												"type": "internal",
-												"path": "dmscreen.html#%7B%22w%22%3A10%2C%22h%22%3A10%2C%22ctc%22%3Atrue%2C%22fs%22%3Afalse%2C%22lk%22%3Afalse%2C%22ps%22%3A%5B%7B%22x%22%3A0%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A9%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A9%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A0%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A51%2C%22s%22%3A%7B%7D%7D%2C%7B%22x%22%3A5%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A5%2C%22s%22%3A%7B%22s%22%3A%22NUMBER%22%2C%22d%22%3A%22DESC%22%2C%22ri%22%3Atrue%2C%22m%22%3Afalse%2C%22rg%22%3Afalse%2C%22rri%22%3Afalse%2C%22g%22%3Atrue%2C%22p%22%3Atrue%2C%22a%22%3Afalse%2C%22k%22%3Afalse%2C%22piHp%22%3Afalse%2C%22piHm%22%3Afalse%2C%22piV%22%3Atrue%2C%22piO%22%3Afalse%2C%22c%22%3A%5B%5D%2C%22cndc%22%3A%5B%5D%2C%22r%22%3A%5B%7B%22id%22%3A%2260d7e106-5d6a-46c3-ad7b-9d3a23e0ce49%22%2C%22n%22%3A%22Commoner%22%2C%22n_m%22%3A%22Hamelia%22%2C%22h%22%3A4%2C%22g%22%3A4%2C%22i%22%3A20%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2250d24b16-e4d7-4c94-86d5-f55ab92cd31e%22%2C%22n%22%3A%22Giant%20Bat%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A2%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%22d36107b8-e7c3-4cc4-914f-ed2a77e1cd3e%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2271fa036c-ecb6-448b-a005-5df0ed51a37b%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A2%2C%22k%22%3A%5B%5D%7D%5D%2C%22rdp%22%3A%5B%5D%2C%22n%22%3A1%7D%7D%5D%2C%22ex%22%3A%5B%5D%7D"
-											},
-											"text": "[ DM Screen link ]"
-										},
-										"",
-										{
-											"type": "table",
-											"rows": [
-												[
-													{
-														"type": "list",
-														"name": "Roster",
-														"items": [
-															"{@creature Commoner||Hamelia} x 1",
-															"{@creature Giant Bat} x 1",
-															"{@creature Swarm of Bats} x 2"
-														]
-													}
-												]
-											]
-										},
-										"{@note Adjusted XP: 300}"
-									]
-								},
-								{
-									"type": "entries",
-									"name": "Encounter Script",
-									"entries": [
-										{
-											"type": "entries",
-											"name": "Turn 0",
-											"entries": [
-												{
-													"type": "insetReadaloud",
-													"entries": [
-														"You whirl around to see... a young village girl peering at you from around a tree, hair as red as a sunrise."
-													]
-												}
-											]
-										},
-										{
-											"type": "entries",
-											"name": "On Hamelia's Turn",
-											"entries": [
-												{
-													"type": "insetReadaloud",
-													"entries": [
-														"Oh, didn't mean to startle you... My name is Hamelia.  And I hear you're headed inside this horrible house to look for a missing pair of twins. Well, I'm coming with you, and I'll not take \"no\" for an answer!  See, those two missing boys... those are my older brothers.  And I'll not rest until they're found--now, lead the way!  We haven't got all night!",
-														"The girl shrieks, as a chaotic flapping sound fills the air. Dozens of fanged bats begin to swarm around you!"
-													]
-												},
-												"Add Giant Bat and Swarm of Bats to the roster."
-											]
-										}
+										"A cold, menacing fog clings to the ground as you approach the gloomy manor.  A black bird caws from atop the 2-story house, then quickly turns its head to eye you, and flies off, flapping loudly. The air is thick and still, and you feel the slightest of chills run down your spine.  Suddenly, you hear a twig snap behind you...",
+										"{@b Roll for Initiative!}"
 									]
 								}
 							]
 						},
 						{
 							"type": "entries",
-							"name": "The Manor",
+							"name": "Encounter: Bats!",
+							"id": "encounter bats",
 							"entries": [
 								{
-									"type": "insetReadaloud",
+									"type": "inset",
+									"name": "Encounter: Bats!",
+									"page": 2,
+									"id": "encounter block bats",
 									"entries": [
-										"You make your way up some stone steps to the house.",
-										"Ivy and ferns grew through the crevices of the old winding stone path, which lead directly to the colossal structure. The mansion looms proudly behind creaky iron gates, flanked by rows of skeletal tree, swaying gently to the cold autumn wind. At its threshold stands a delicate marble fountain, the soft gurgling of the clear water melodic as it resonates in the surrounding silence.",
-										"There's a chill in the air."
+										{
+											"type": "list",
+											"style": "list-no-bullets",
+											"items": [
+												"1 x {@creature Hamelia|orcnogHoE}",
+												"2 x {@creature Giant Bat}",
+												"2 x {@creature Swarm of Bats}",
+												"{@note Adjusted XP: 300}",
+												"<hr/>",
+												"Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#%7B%22w%22%3A10%2C%22h%22%3A10%2C%22ctc%22%3Atrue%2C%22fs%22%3Afalse%2C%22lk%22%3Afalse%2C%22ps%22%3A%5B%7B%22x%22%3A0%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A9%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A9%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A0%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A51%2C%22s%22%3A%7B%7D%7D%2C%7B%22x%22%3A5%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A5%2C%22s%22%3A%7B%22s%22%3A%22NUMBER%22%2C%22d%22%3A%22DESC%22%2C%22ri%22%3Atrue%2C%22m%22%3Afalse%2C%22rg%22%3Afalse%2C%22rri%22%3Afalse%2C%22g%22%3Atrue%2C%22p%22%3Atrue%2C%22a%22%3Afalse%2C%22k%22%3Afalse%2C%22piHp%22%3Afalse%2C%22piHm%22%3Afalse%2C%22piV%22%3Atrue%2C%22piO%22%3Afalse%2C%22c%22%3A%5B%5D%2C%22cndc%22%3A%5B%5D%2C%22r%22%3A%5B%7B%22id%22%3A%2260d7e106-5d6a-46c3-ad7b-9d3a23e0ce49%22%2C%22n%22%3A%22Commoner%22%2C%22n_m%22%3A%22Hamelia%22%2C%22h%22%3A4%2C%22g%22%3A4%2C%22i%22%3A20%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2250d24b16-e4d7-4c94-86d5-f55ab92cd31e%22%2C%22n%22%3A%22Giant%20Bat%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A2%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%22d36107b8-e7c3-4cc4-914f-ed2a77e1cd3e%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2271fa036c-ecb6-448b-a005-5df0ed51a37b%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A2%2C%22k%22%3A%5B%5D%7D%5D%2C%22rdp%22%3A%5B%5D%2C%22n%22%3A1%7D%7D%5D%2C%22ex%22%3A%5B%5D%7D}"
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "Running the Encounter",
+									"entries": [
+										{
+											"type": "entries",
+											"name": "Turn 0",
+											"entries": [
+												"Before combat can begin (i.e. on \"Turn 0\"), read the following:",
+												{
+													"type": "insetReadaloud",
+													"entries": [
+														"You whirl around to see... a young village girl peering at you from behind a tree, hair as red as a sunrise."
+													]
+												}
+											]
+										},
+										{
+											"type": "entries",
+											"name": "Turn 1",
+											"entries": [
+												"Regardless of whose turn is first, and regardless of their action, interrupt by having Hamelia say to the adventurers:",
+												{
+													"type": "insetReadaloud",
+													"entries": [
+														"Oh, didn't mean to startle you... My name is Hamelia.  And I hear you're headed inside this horrible house to look for a missing pair of twins. Well, I'm coming with you, and I'll not take \"no\" for an answer!  See, those two missing boys... those are my older brothers.  And I'll not rest until they're found--now, lead the way!  We haven't got all night!",
+														"The girl shrieks, as a chaotic flapping sound fills the air. Dozens of fanged bats begin to swarm around you!"
+													]
+												}
+											]
+										},
+										{
+											"type": "entries",
+											"name": "Restart the initiative order",
+											"entries": [
+												"Now, the actually combat begins. Add the Giant Bat and Swarm of Bats to the initiatve tracker, and start over at the top of the order."
+											]
+										}
 									]
 								}
 							]
 						}
 					]
+				},
+				{
+					"type": "entries",
+					"name": "The Manor",
+					"id": "the manor",
+					"entries": [
+						{
+							"type": "insetReadaloud",
+							"entries": [
+								"You make your way up some stone steps to the house.",
+								"Ivy and ferns grew through the crevices of the old winding stone path, which lead directly to the colossal structure. The mansion looms proudly behind creaky iron gates, flanked by rows of skeletal tree, swaying gently to the cold autumn wind. At its threshold stands a delicate marble fountain, the soft gurgling of the clear water melodic as it resonates in the surrounding silence.",
+								"There's a chill in the air."
+							]
+						}
+					]
+				},
+				{
+					"type": "entries",
+					"name": "The Lair",
+					"id": "the lair",
+					"entries": [
+						{
+							"type": "insetReadaloud",
+							"entries": [
+								"You make your way up some stone steps to the house.",
+								"Ivy and ferns grew through the crevices of the old winding stone path, which lead directly to the colossal structure. The mansion looms proudly behind creaky iron gates, flanked by rows of skeletal tree, swaying gently to the cold autumn wind. At its threshold stands a delicate marble fountain, the soft gurgling of the clear water melodic as it resonates in the surrounding silence.",
+								"There's a chill in the air."
+							]
+						}
+					]
+				},
+				{
+					"type": "section",
+					"name": "Appendix A: Magic Items",
+					"page": 52,
+					"id": "199",
+					"entries": [
+						"A magic item is a wondrous treasure that adventurers find in a monster's hoard, in a trap-riddled dungeon, or in the possession of a slain foe. Every adventure holds the promise\u2014but not a guarantee\u2014of finding one or more magic items, and part of the fun of exploring a dungeon is the thrill of unearthing an item found nowhere else.",
+						{
+							"type": "section",
+							"name": "Using a Magic Item",
+							"page": 52,
+							"id": "19a",
+							"entries": [
+								"A magic item's description explains how the item works. Handling a magic item is enough to give a character a sense that something is extraordinary about the item. Casting the {@spell identify} spell on the item then reveals its properties. Alternatively, a character can concentrate on the item during a short rest, while being in physical contact with the item. At the end of the rest, the character learns the item's properties. Potions are an exception; a little taste is enough to tell the taster what the potion does.",
+								"Certain magic items require a user to {@b attune} to them before their magical properties can be used. Attuning to a magic item requires that you spend a short rest concentrating on it (this can't be the same short rest used to learn an item's properties). Depending on the nature of the item, this concentration can take the form of prayers, weapon practice, or meditation. In any case, the concentration period must be uninterrupted. Once you are attuned to an item, you can use its magical properties.",
+								"An item can be attuned to only one creature at a time. A creature can be attuned to no more than three magic items at any given time, and you can attune yourself to only one item during a short rest.",
+								"Your attunement to an item ends when the item has been more than 100 feet away from you for 24 hours and when you die. You can also voluntarily end your attunement to an item with another short rest."
+							]
+						},
+						{
+							"type": "section",
+							"name": "Item Descriptions",
+							"page": 52,
+							"id": "19b",
+							"entries": [
+								{
+									"type": "list",
+									"columns": 3,
+									"items": [
+										"{@item +1 Armor}",
+										"{@item +1 Weapon}",
+										"{@item Boots of Striding and Springing}",
+										"{@item Gauntlets of Ogre Power}",
+										"{@item Potion of Flying}",
+										"{@item Potion of Healing}",
+										"{@item Potion of Invisibility}",
+										"{@item Potion of Vitality}",
+										"{@item Ring of Protection}",
+										"{@item Spell Scroll}",
+										"{@item Spider Staff|LMoP}",
+										"{@item Staff of Defense|LMoP}",
+										"{@item Wand of Magic Missiles}"
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "section",
+					"name": "Appendix B: Monsters",
+					"page": 54,
+					"id": "1a9",
+					"entries": [
+						"The monsters appearing in the adventure are presented in this section in alphabetical order.",
+						{
+							"type": "list",
+							"columns": 3,
+							"items": [
+								"{@creature Ash Zombie|LMoP}",
+								"{@creature Bugbear}",
+								"{@creature Commoner}",
+								"{@creature Cultist}",
+								"{@creature Doppelganger}",
+								"{@creature Evil Mage|LMoP}",
+								"{@creature Flameskull}",
+								"{@creature Ghoul}",
+								"{@creature Giant Spider}",
+								"{@creature Goblin}",
+								"{@creature Grick}",
+								"{@creature Gundren Rockseeker|lmop}",
+								"{@creature Hobgoblin}",
+								"{@creature Mormesk the Wraith|LMoP}",
+								"{@creature Nezznar the Black Spider|LMoP}",
+								"{@creature Nothic}",
+								"{@creature Nundro Rockseeker|lmop}",
+								"{@creature Ochre Jelly}",
+								"{@creature Ogre}",
+								"{@creature Orc}",
+								"{@creature Owlbear}",
+								"{@creature Redbrand Ruffian|LMoP}",
+								"{@creature Sildar Hallwinter|LMoP}",
+								"{@creature Skeleton}",
+								"{@creature Spectator}",
+								"{@creature Stirge}",
+								"{@creature Twig Blight}",
+								"{@creature Wolf}",
+								"{@creature Young Green Dragon} ({@creature Venomfang|lmop})",
+								"{@creature Zombie}"
+							]
+						}
+					]
+				},
+				{
+					"type": "section",
+					"name": "Credits",
+					"entries": [
+						{
+							"type": "entries",
+							"name": "Adventure Playtesters",
+							"entries": [
+								"Aaron Wampler, Alexander Mihalas, Ali Ryder, André Bégin, Andrew Balenko, Angi Lindsay, Bill Benham, Brandyn Whitaker, Chris Conner, Éric Leroux, James deMoss, James Row, Jay H Anderson, Joe Mauer, Josh Dillard, Kevin Grigsby, Krupal Desai, Kyle Turner, Manon Crevier, Manon Leroux, Mark Leftwich, Mark Meredith, Mélanie Côté, Michael Wibberley, Mike Hensley, Mike Mihalas, Nicholas Mihalas, Pam Lindsay, Patrick Simpson-Munday, Ricky Jacobsen, Rob Baldus, Ross Bagby, Sam Simpson, Scott Horn, Scott Rogers, Shawn Merwin, Travis Woodall, Will Straley, William Babbit, Yan Lacharité, Zoë Mihalas"
+							],
+							"id": "1a4"
+						}
+					],
+					"id": "1a3"
 				}
 			]
 		}
