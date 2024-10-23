@@ -17,6 +17,8 @@
     --rgb-border--statblock: #{vars.$rgb-border-yellow--statblock};
 
     --rgb-dm-action: #{vars.$rgb-dm-action};
+    --rgb-media-action: #{vars.$rgb-media-action};
+    --rgb-critical-action: #{vars.$rgb-critical-action};
 }
 
 :root.ve-night-mode {
@@ -33,5 +35,7 @@
     --rgb-border--statblock: #{vars-night.$rgb-border-grey--statblock-night};
     
     --rgb-dm-action: #{vars-night.$rgb-dm-action--night};
+    --rgb-media-action: #{vars-night.$rgb-media-action--night};
+    --rgb-critical-action: #{vars-night.$rgb-critical-action--night};
 }
 // endregion

@@ -1883,6 +1883,13 @@ globalThis.Renderer = function () {
 				this._recursiveRender(text, textStack, meta);
 				textStack[0] += `</i>`;
 				break;
+            case "@cue":
+                const [toDisplay, color] = Renderer.splitTagByPipe(text);
+                const ptColor = this._renderString_renderTag_getCueColorPart(color);
+                textStack[0] += `<i class="ve-dm-action" style="color: ${ptColor}">`;
+                this._recursiveRender(toDisplay, textStack, meta);
+                textStack[0] += `</i>`;
+                break;
 			case "@tip": {
 				const [displayText, titielText] = Renderer.splitTagByPipe(text);
 				textStack[0] += `<span title="${titielText.qq()}">`;
@@ -2225,6 +2232,30 @@ globalThis.Renderer = function () {
 		if (!color) return "";
 		const scrubbedColor = BrewUtilShared.getValidColor(color, {isExtended: true});
 		return scrubbedColor.startsWith("--") ? `var(${scrubbedColor})` : `#${scrubbedColor}`;
+	};
+
+	this._renderString_renderTag_getCueColorPart = function (color) {
+		if (!color) return "";
+        switch (color) {
+            case `dm`:
+            case `dm-action`:
+                color = `--rgb-dm-action`;
+                break;
+            case `media`:
+            case `media-action`:
+                color = `--rgb-media-action`;
+                break;
+            case `critical`:
+            case `critical-action`:
+                color = `--rgb-critical-action`;
+                break;
+            case `success`:
+            case `info`:
+            case `warning`:
+            case `danger`:
+                color = `--rgb-${color}`;
+        }
+		return this._renderString_renderTag_getBrewColorPart(color);
 	};
 
 	this._renderString_renderTag_hitYourSpellAttack = function (textStack, meta, options, tag, text) {

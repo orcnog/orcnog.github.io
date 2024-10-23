@@ -250,24 +250,27 @@
 /* -------------------------------------------- */
 
 .stats--book {
-	@include vars.mix-shadow-1;
-
+    @include vars.mix-shadow-1;
+    
 	font-family: Roboto, Helvetica, sans-serif;
-	background: #fff;
-
+    background: vars.$rgb-stats-book;
+	// background: #fff;
+    
 	::selection {
-		background: #242527;
+        background: #242527;
 		color: #fff;
 		text-shadow: none;
 	}
-
+    
 	.ve-tbl-border {
-		background: #c0c0c0;
+        background: #c0c0c0;
 	}
 }
 
 .ve-night-mode .stats--book {
-	::selection {
+    background: vars-night.$rgb-stats-book--night;
+
+    ::selection {
 		color: #242527;
 		background: #fff;
 	}
