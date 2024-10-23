@@ -11,6 +11,7 @@
 		"gen": "node node/generate-all.js",
 		"gen:search-index": "node node/generate-search-index.js",
 		"gen:pages": "node node/generate-pages.js",
+		"gen:appendix": "node node/generate-appendices.js",
 		"clean-jsons": "node node/clean-jsons.js",
 		"test:js": "eslint . --ext .js,.cjs,.mjs",
 		"lint:js": "npm run test:js -- --fix",
