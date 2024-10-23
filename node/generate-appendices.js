@@ -115,10 +115,10 @@ const generateAppendices = ({ items, creatures, sections }) => {
 	if (creatures.length) {
 		newAppendices.push({
 			type: "section",
-			name: `${nextAppendixName}Monsters`,
+			name: `${nextAppendixName}Monsters and NPCs`,
 			page: 54,
 			entries: [
-				"The monsters appearing in the adventure are presented in this section in alphabetical order.",
+				"The monsters and NPCs appearing in the adventure are presented in this section in alphabetical order.",
 				{
 					type: "list",
 					columns: 3,
