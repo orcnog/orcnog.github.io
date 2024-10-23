@@ -8,6 +8,7 @@
 	"toImport": [
 		"dnd/adventure/adventure_hoe.json",
 		"dnd/adventure/adventure_twc.json",
+		"dnd/book/book_odmg.json",
 		"sw5e/sw5e.json",
 		"sw5e/adventure/DoD/ep1_traitors_gambit/adventure.json",
 		"sw5e/adventure/DoD/ep2_wretched_hive/adventure.json",
