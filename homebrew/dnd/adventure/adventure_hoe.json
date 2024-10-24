@@ -211,7 +211,6 @@
 						"Background",
 						"Hogsbottom",
 						"Overview",
-						"Key NPCs",
 						"Running the Adventure"
 					]
 				},
@@ -219,7 +218,15 @@
 					"name": "The Approach",
 					"headers": [
 						"Opening Read",
-						"Meet Hamelia"
+						"Meet Hamelia",
+                        {
+                            "depth": 1,
+                            "header": "Encounter: Bats!"
+                        },
+                        {
+                            "depth": 1,
+                            "header": "Groundskeeper"
+                        }
 					],
 					"ordinal": {
 						"type": "chapter",
@@ -329,10 +336,17 @@
 					}
 				},
 				{
-					"name": "Monsters and NPCs",
+					"name": "Key NPCs",
 					"ordinal": {
 						"type": "appendix",
 						"identifier": "A"
+					}
+				},
+				{
+					"name": "Monsters",
+					"ordinal": {
+						"type": "appendix",
+						"identifier": "B"
 					}
 				}
 			]
@@ -405,45 +419,6 @@
 							"page": 1,
 							"id": "key npcs",
 							"entries": [
-								"There are only 2 key NPCs in this story: a young village girl named Hamliea, and the vampire antagonist, Elazar.",
-								{
-									"type": "inset",
-									"name": "Hamelia",
-									"page": 2,
-									"id": "hamelia",
-									"entries": [
-										{
-											"type": "list",
-											"style": "list-no-bullets",
-											"items": [
-												"Name: Hamelia Hamm",
-												"Age: 11",
-												"Parents: John & Peggy Hamm",
-												"Two Brothers: Sam & George (the twins that were kidnapped)",
-												"Story: Hamelia is the one and only resident of the town who has stepped foot inside the Elazar House.  She did it on a dare, and when she made it inside, she found that, although it was incredibly creepy, there was not a soul to be found.  Inside, she found a false wall leading to a hatch in the floor, to which she is happy to lead the adventurers.  She does not know what's down the hatch, though."
-											]
-										}
-									]
-								},
-								"",
-								{
-									"type": "inset",
-									"name": "Elazar",
-									"page": 2,
-									"id": "elazar",
-									"entries": [
-										{
-											"type": "list",
-											"style": "list-no-bullets",
-											"items": [
-												"Name: Emmanuel Elazar",
-												"Age: 53",
-												"Residence: The House Elazar - spooky manor on the hill outside of Hogsbottom",
-												"Story: Emmanuel Elazar is a reclusive vampire who hides away in his ancestral home, despising the blood curse he inherited. Desperate to rid himself of vampirism, he has devised a sinister ritual that requires the sacrifice of twin children. Though his goal is to end his own curse, his willingness to perform horrific acts reveals his lack of empathy for human life."
-											]
-										}
-									]
-								}
 							]
 						},
 						{
@@ -601,74 +576,100 @@
 										"A cold, menacing fog clings to the ground as you approach the gloomy manor.  A black bird caws from atop the 2-story house, then quickly turns its head to eye you, and flies off, flapping loudly. The air is thick and still, and you feel the slightest of chills run down your spine.  Suddenly, you hear a twig snap behind you...",
 										"{@b Roll for Initiative!}"
 									]
-								}
-							]
-						},
-						{
-							"type": "entries",
-							"name": "Encounter: Bats!",
-							"id": "encounter bats",
-							"entries": [
-								{
-									"type": "inset",
-									"name": "Encounter: Bats!",
-									"page": 2,
-									"id": "encounter block bats",
-									"entries": [
-										{
-											"type": "list",
-											"style": "list-no-bullets",
-											"items": [
-												"1 x {@creature Hamelia|HoE}",
-												"2 x {@creature Giant Bat}",
-												"2 x {@creature Swarm of Bats}",
-												"{@note Adjusted XP: 300}",
-												"<hr/>",
-												"Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#%7B%22w%22%3A10%2C%22h%22%3A10%2C%22ctc%22%3Atrue%2C%22fs%22%3Afalse%2C%22lk%22%3Afalse%2C%22ps%22%3A%5B%7B%22x%22%3A0%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A9%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A9%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A0%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A51%2C%22s%22%3A%7B%7D%7D%2C%7B%22x%22%3A5%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A5%2C%22s%22%3A%7B%22s%22%3A%22NUMBER%22%2C%22d%22%3A%22DESC%22%2C%22ri%22%3Atrue%2C%22m%22%3Afalse%2C%22rg%22%3Afalse%2C%22rri%22%3Afalse%2C%22g%22%3Atrue%2C%22p%22%3Atrue%2C%22a%22%3Afalse%2C%22k%22%3Afalse%2C%22piHp%22%3Afalse%2C%22piHm%22%3Afalse%2C%22piV%22%3Atrue%2C%22piO%22%3Afalse%2C%22c%22%3A%5B%5D%2C%22cndc%22%3A%5B%5D%2C%22r%22%3A%5B%7B%22id%22%3A%2260d7e106-5d6a-46c3-ad7b-9d3a23e0ce49%22%2C%22n%22%3A%22Commoner%22%2C%22n_m%22%3A%22Hamelia%22%2C%22h%22%3A4%2C%22g%22%3A4%2C%22i%22%3A20%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2250d24b16-e4d7-4c94-86d5-f55ab92cd31e%22%2C%22n%22%3A%22Giant%20Bat%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A2%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%22d36107b8-e7c3-4cc4-914f-ed2a77e1cd3e%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2271fa036c-ecb6-448b-a005-5df0ed51a37b%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A2%2C%22k%22%3A%5B%5D%7D%5D%2C%22rdp%22%3A%5B%5D%2C%22n%22%3A1%7D%7D%5D%2C%22ex%22%3A%5B%5D%7D}"
-											]
-										}
-									]
 								},
-								{
-									"type": "entries",
-									"name": "Running the Encounter",
-									"entries": [
-										{
-											"type": "entries",
-											"name": "Turn 0",
-											"entries": [
-												"Before combat can begin (i.e. on \"Turn 0\"), read the following:",
-												{
-													"type": "insetReadaloud",
-													"entries": [
-														"You whirl around to see... a young village girl peering at you from behind a tree, hair as red as a sunrise."
-													]
-												}
-											]
-										},
-										{
-											"type": "entries",
-											"name": "Turn 1",
-											"entries": [
-												"Regardless of whose turn is first, and regardless of their action, interrupt by having Hamelia say to the adventurers:",
-												{
-													"type": "insetReadaloud",
-													"entries": [
-														"Oh, didn't mean to startle you... My name is Hamelia.  And I hear you're headed inside this horrible house to look for a missing pair of twins. Well, I'm coming with you, and I'll not take \"no\" for an answer!  See, those two missing boys... those are my older brothers.  And I'll not rest until they're found--now, lead the way!  We haven't got all night!",
-														"The girl shrieks, as a chaotic flapping sound fills the air. Dozens of fanged bats begin to swarm around you!"
-													]
-												}
-											]
-										},
-										{
-											"type": "entries",
-											"name": "Restart the initiative order",
-											"entries": [
-												"Now, the actually combat begins. Add the Giant Bat and Swarm of Bats to the initiatve tracker, and start over at the top of the order."
-											]
-										}
-									]
-								}
+                                {
+                                    "type": "entries",
+                                    "name": "Encounter: Bats!",
+                                    "id": "encounter bats",
+                                    "entries": [
+                                        {
+                                            "type": "inset",
+                                            "name": "Encounter: Bats!",
+                                            "page": 2,
+                                            "id": "encounter block bats",
+                                            "entries": [
+                                                {
+                                                    "type": "list",
+                                                    "style": "list-no-bullets",
+                                                    "items": [
+                                                        "1 x {@creature Hamelia|HoE}",
+                                                        "2 x {@creature Giant Bat}",
+                                                        "2 x {@creature Swarm of Bats}",
+                                                        "{@note Adjusted XP: 300}",
+                                                        "<hr/>",
+                                                        "Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#%7B%22w%22%3A10%2C%22h%22%3A10%2C%22ctc%22%3Atrue%2C%22fs%22%3Afalse%2C%22lk%22%3Afalse%2C%22ps%22%3A%5B%7B%22x%22%3A0%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A9%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A9%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A0%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A51%2C%22s%22%3A%7B%7D%7D%2C%7B%22x%22%3A5%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A5%2C%22s%22%3A%7B%22s%22%3A%22NUMBER%22%2C%22d%22%3A%22DESC%22%2C%22ri%22%3Atrue%2C%22m%22%3Afalse%2C%22rg%22%3Afalse%2C%22rri%22%3Afalse%2C%22g%22%3Atrue%2C%22p%22%3Atrue%2C%22a%22%3Afalse%2C%22k%22%3Afalse%2C%22piHp%22%3Afalse%2C%22piHm%22%3Afalse%2C%22piV%22%3Atrue%2C%22piO%22%3Afalse%2C%22c%22%3A%5B%5D%2C%22cndc%22%3A%5B%5D%2C%22r%22%3A%5B%7B%22id%22%3A%2260d7e106-5d6a-46c3-ad7b-9d3a23e0ce49%22%2C%22n%22%3A%22Commoner%22%2C%22n_m%22%3A%22Hamelia%22%2C%22h%22%3A4%2C%22g%22%3A4%2C%22i%22%3A20%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2250d24b16-e4d7-4c94-86d5-f55ab92cd31e%22%2C%22n%22%3A%22Giant%20Bat%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A2%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%22d36107b8-e7c3-4cc4-914f-ed2a77e1cd3e%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2271fa036c-ecb6-448b-a005-5df0ed51a37b%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A2%2C%22k%22%3A%5B%5D%7D%5D%2C%22rdp%22%3A%5B%5D%2C%22n%22%3A1%7D%7D%5D%2C%22ex%22%3A%5B%5D%7D}"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "entries",
+                                            "name": "Turn 0",
+                                            "entries": [
+                                                "Before combat can begin (i.e. on \"Turn 0\"), read the following:",
+                                                {
+                                                    "type": "insetReadaloud",
+                                                    "entries": [
+                                                        "You whirl around to see... a young village girl peering at you from behind a tree, hair as red as a sunrise."
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "entries",
+                                            "name": "Turn 1",
+                                            "entries": [
+                                                "Regardless of whose turn is first, and regardless of their action, interrupt by having Hamelia say to the adventurers:",
+                                                {
+                                                    "type": "insetReadaloud",
+                                                    "entries": [
+                                                        "\"{@i Oh, didn't mean to startle you... My name is Hamelia.  And I hear you're headed inside this horrible house to look for a missing pair of twins. Well, I'm coming with you, and I'll not take \"no\" for an answer!  See, those two missing boys... those are my older brothers.  And I'll not rest until they're found--now, lead the way!  We haven't got all night!}\"",
+                                                        "The girl shrieks, as a chaotic flapping sound fills the air. Dozens of fanged bats begin to swarm around you!"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "entries",
+                                            "name": "Restart the initiative order",
+                                            "entries": [
+                                                "Now, the combat actually begins. Add (reveal) the Giant Bat and Swarm of Bats in the initiatve tracker, and start over at the top of the order."
+                                            ]
+                                        },
+                                        "After the encounter is over, procede to the next section: {@i Groundskeeper}."
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "Groundskeeper",
+                                    "id": "groundskeeper",
+                                    "entries": [
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You make your way up some stone steps to the house.",
+                                                "Ivy and ferns grew through the crevices of the old winding stone path, which lead directly to the colossal structure. The mansion looms proudly behind creaky iron gates, flanked by rows of skeletal tree, swaying gently to the cold autumn wind. At its threshold stands a delicate marble fountain, the soft gurgling of the clear water melodic as it resonates in the surrounding silence.",
+                                                "There's a chill in the air."
+                                            ]
+                                        },
+                                        "{@cue Ask a player to roll a perception check}",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You then hear a faint scraping sound from around the side of the manor.  It is slow, repetitive and brushy."
+                                            ]
+                                        },
+                                        "{@cue Ask a player to roll an investigation check}",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "As you approach the corner of the house, the faint scraping sound grows louder. A garden rake slowly emerges from around the corner, its rusty tines scraping over a brittle pile of dry leaves. Two gloved hands, pale and weathered, pull the rake methodically, dragging it back across the dead foliage. You inch closer and round the corner fully, revealing a bearded, elderly groundskeeper, his back hunched and his motions slow. His eyes, shadowed beneath the brim of an old, ragged hat, never meet yours as he continues to rake, the sound almost hypnotic in the silence.",
+                                                "You turn to inform your companions. But when you glance back, no one is there. A broken rake lies in the leaves, its handle splintered and cracked from years of neglect. The pile of leaves is undisturbed, the air around you unnervingly still.",
+                                                "Hamelia gulps. \"{@i Well then.  Shall we?}\""
+                                            ]
+                                        }
+                                    ]
+                                }
 							]
 						}
 					]
@@ -678,14 +679,302 @@
 					"name": "The Manor",
 					"id": "the manor",
 					"entries": [
-						{
-							"type": "insetReadaloud",
-							"entries": [
-								"You make your way up some stone steps to the house.",
-								"Ivy and ferns grew through the crevices of the old winding stone path, which lead directly to the colossal structure. The mansion looms proudly behind creaky iron gates, flanked by rows of skeletal tree, swaying gently to the cold autumn wind. At its threshold stands a delicate marble fountain, the soft gurgling of the clear water melodic as it resonates in the surrounding silence.",
-								"There's a chill in the air."
-							]
-						}
+                        "The Elazar Manor is a well-maintained, stately residence that feels unnervingly staged. Everything is in perfect order, but the house lacks any sign of true life or warmth. Despite its clean and polished appearance, the manor feels unused, as though it’s been prepared for guests that never arrive. The atmosphere is cold and formal, with an unsettling sense that something is off, as if the home is more of a display than a place where anyone actually lives.",
+                        "Each room in the manor is detailed below, its number corresponding to the numbered annotations on the provided map.",
+                        {
+                            "type": "entries",
+                            "name": "Ground Floor",
+                            "id": "ground floor",
+                            "entries": [
+                                {
+                                    "type": "entries",
+                                    "name": "11: Lobby",
+                                    "id": "11 lobby",
+                                    "entries": [
+                                        "This is the lobby.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a lobby."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "12: Toilet",
+                                    "id": "12 toilet",
+                                    "entries": [
+                                        "This is the toilet.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a toilet."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "13: Cloakroom",
+                                    "id": "13 cloakroom",
+                                    "entries": [
+                                        "This is the cloakroom.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a cloakroom."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "14: Secret Chamber",
+                                    "id": "14 secret chamber",
+                                    "entries": [
+                                        "This is the secret chamber.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a secret chamber."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "15: Trapdoor",
+                                    "id": "15 trapdoor",
+                                    "entries": [
+                                        "This is the trapdoor.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a trapdoor."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "16: Sitting Room",
+                                    "id": "16 sitting room",
+                                    "entries": [
+                                        "This is the sitting room.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a sitting room."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "17: Dining Room",
+                                    "id": "17 dining room",
+                                    "entries": [
+                                        "This is the dining room.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a dining room."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "18: Picture Gallery",
+                                    "id": "18 picture gallery",
+                                    "entries": [
+                                        "This is the picture gallery.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a picture gallery."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "19: Kitchen",
+                                    "id": "19 kitchen",
+                                    "entries": [
+                                        "This is the kitchen.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a kitchen."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "20: Pantry",
+                                    "id": "20 pantry",
+                                    "entries": [
+                                        "This is the pantry.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a pantry."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "21: Trapdoor",
+                                    "id": "21 trapdoor",
+                                    "entries": [
+                                        "This is the trapdoor.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a trapdoor."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "22: Conservatory",
+                                    "id": "22 conservatory",
+                                    "entries": [
+                                        "This is the conservatory.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a conservatory."
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "entries",
+                            "name": "Upper Floor",
+                            "id": "upper floor",
+                            "entries": [
+                                {
+                                    "type": "entries",
+                                    "name": "23: Landing",
+                                    "id": "23 landing",
+                                    "entries": [
+                                        "This is the landing.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a landing."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "24: Balcony",
+                                    "id": "24 balcony",
+                                    "entries": [
+                                        "This is the balcony.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a balcony."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "25: Guest Bedroom",
+                                    "id": "25 guest bedroom",
+                                    "entries": [
+                                        "This is the guest bedroom.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a guest bedroom."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "26: Master Bedroom",
+                                    "id": "26 master bedroom",
+                                    "entries": [
+                                        "This is the master bedroom.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a master bedroom."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "27: Children's Bedroom",
+                                    "id": "27 children's bedroom",
+                                    "entries": [
+                                        "This is the children's bedroom.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a children's bedroom."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "28: Toy Room",
+                                    "id": "28 toy room",
+                                    "entries": [
+                                        "This is the toy room.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a toy room."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "29: Library",
+                                    "id": "29 library",
+                                    "entries": [
+                                        "This is the library.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a library."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+                                    "name": "30: Study",
+                                    "id": "30 study",
+                                    "entries": [
+                                        "This is the study.",
+                                        {
+                                            "type": "insetReadaloud",
+                                            "entries": [
+                                                "You see before you, a study."
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }                        
 					]
 				},
 				{
@@ -705,8 +994,54 @@
 				},
 				{
 					"type": "section",
-					"name": "Appendix A: Monsters",
-					"page": 54,
+					"name": "Appendix A: Key NPCs",
+					"page": 3,
+					"entries": [
+                        "There are 2 key NPCs in this story: a young village girl named Hamliea Hamm, and the vampire antagonist, Emmanuel Elazar.",
+                        {
+                            "type": "inset",
+                            "name": "Hamelia",
+                            "page": 3,
+                            "id": "hamelia",
+                            "entries": [
+                                {
+                                    "type": "list",
+                                    "style": "list-no-bullets",
+                                    "items": [
+                                        "Name: Hamelia Hamm",
+                                        "Age: 11",
+                                        "Parents: John & Peggy Hamm",
+                                        "Two Brothers: Sam & George (the twins that were kidnapped)",
+                                        "Story: Hamelia is the one and only resident of the town who has stepped foot inside the Elazar House.  She did it on a dare, and when she made it inside, she found that, although it was incredibly creepy, there was not a soul to be found.  Inside, she found a false wall leading to a hatch in the floor, to which she is happy to lead the adventurers.  She does not know what's down the hatch, though."
+                                    ]
+                                }
+                            ]
+                        },
+                        "",
+                        {
+                            "type": "inset",
+                            "name": "Elazar",
+                            "page": 3,
+                            "id": "elazar",
+                            "entries": [
+                                {
+                                    "type": "list",
+                                    "style": "list-no-bullets",
+                                    "items": [
+                                        "Name: Emmanuel Elazar",
+                                        "Age: 53",
+                                        "Residence: The House Elazar - spooky manor on the hill outside of Hogsbottom",
+                                        "Story: Emmanuel Elazar is a reclusive vampire who hides away in his ancestral home, despising the blood curse he inherited. Desperate to rid himself of vampirism, he has devised a sinister ritual that requires the sacrifice of twin children. Though his goal is to end his own curse, his willingness to perform horrific acts reveals his lack of empathy for human life."
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+				},
+				{
+					"type": "section",
+					"name": "Appendix B: Monsters",
+					"page": 3,
 					"entries": [
 						"The monsters and NPCs appearing in the adventure are presented in this section in alphabetical order.",
 						{
@@ -732,7 +1067,7 @@
 						{
 							"type": "entries",
 							"entries": [
-								"Special thatnks to Kacie, Dayna, Joe, Some people from Thomas, Nathan, Jason, Adam, and Andrea for helping me playtest this {@i live}."
+								"Special thatnks to Kacie, Dayna, Joe, some people from Thomas, Nathan, Jason, Adam, and Andrea for helping me playtest this {@i live}."
 							]
 						}
 					]
