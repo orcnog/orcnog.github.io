@@ -327,6 +327,13 @@
 						"type": "chapter",
 						"identifier": 3
 					}
+				},
+				{
+					"name": "Monsters and NPCs",
+					"ordinal": {
+						"type": "appendix",
+						"identifier": "A"
+					}
 				}
 			]
 		}
@@ -369,7 +376,7 @@
 							"entries": [
 								"Hogsbottom is a quaint, pig-themed town nestled at the foot of Hogs Hill, known for its simple folk and odd local legends. While it seems like a peaceful, if not somewhat backward, rural town, a few  small-town mysteries add a dash of intrigue to daily life. At its center is The Swaggering Swine, a lively tavern run by the jovial Hampton J. Porkbelly, where villagers gather to celebrate and unwind. Nearby, Darathra Shendrel, the town's skilled blacksmith, crafts the finest weapons around.",
 								"Just beyond the cornfields lies Elazar Manor, home to the mysterious Emmanuel Elazar, a recluse who keeps to himself, leaving the townsfolk content to let him be. Higher up, atop Hogs Hill, stands Hogsbottom Manor, home to the miserly family of Lord Higby Hogbottom IV, the town's namesake.",
-								"Hogsbottom is a place where life moves at its own pace, steeped in tradition and local color. As a DM, you're free to adapt Hogsbottom's details\u2014whether swapping names or locations\u2014but its rustic charm and unique quirks provide a solid backdrop for any adventure."
+								"Hogsbottom is a place where life moves at its own pace, steeped in tradition and local color. As a DM, you're free to adapt Hogsbottom's details—whether swapping names or locations—but its rustic charm and unique quirks provide a solid backdrop for any adventure."
 							]
 						},
 						{
@@ -445,14 +452,14 @@
 							"page": 1,
 							"id": "running the adventure",
 							"entries": [
-								"You will need to prepare the adventure before running it with players.  First (and this is basic DM stuff for running {@i any} session), you'll need to decide if you'll be playing in-person vs. online, and with how many players.  This will inform whether you need to draw (or print) the maps for an in-person session, or if you'll need to load this adventure into an online VTT (Virtual Table Table) application or service, and whether or not to re-balance the encounters.  Once you've got a solid grasp on the play-through logistics, instruct your players (with several days' notice) to build a level 3 character.",
+                                "There are a few things you may want to take the time to familiarize yourself with before running this adventure in front of players.",
 								{
-									"type": "entries",
+                                    "type": "entries",
 									"name": "Map Information",
 									"page": 1,
 									"id": "map information",
 									"entries": [
-										"This adventure is written specifically to utlize the set of maps by Tom Cartos, packaged as \"The House of Elazar\". You can find these maps in high resolution on {@link Tom Cartos' Patreon|https://www.patreon.com/posts/house-of-elazar-42929701}.",
+                                        "This adventure is written specifically to utlize the set of maps by Tom Cartos, packaged as \"The House of Elazar\". You can find these maps in high resolution on {@link Tom Cartos' Patreon|https://www.patreon.com/posts/house-of-elazar-42929701}.",
 										{
 											"type": "list",
 											"style": "list-no-bullets",
@@ -464,103 +471,74 @@
 										}
 									]
 								},
-								{
-									"type": "entries",
-									"name": "Encounter Blocks",
+                                {
+                                    "type": "entries",
+									"name": "Prep",
 									"page": 1,
-									"id": "encounter blocks",
+									"id": "prep",
 									"entries": [
-										"Throughout the adventure text, you will see Encounter Blocks.  This is not a convention of D&D adventure texts, but rather my own method of streamlining combat encounters for DMs using 5eTools. Each encounter block will list out the enemies and link to an initiative tracker (leveraging the 5eTools DM Screen) to run during the combat itself. Do not read the encounter block information out loud to your players -- they for the DM's eyes only.",
-										"Hover over each line in the example Encounter Block below to see tips on how to read or use that information.",
-										{
-											"type": "inset",
-											"name": "Encounter: Example",
-											"page": 2,
-											"id": "encounter block example",
-											"entries": [
-												{
-													"type": "list",
-													"style": "list-no-bullets",
-													"items": [
-														"{@footnote 1 x|This shows you a creature type and the quantity of those creatures in this encounter. In this case, there's 1 bugbear. Hover over the actual creature name to see its statblock.|Quantity of Creature A} {@creature Bugbear||Example Creature A}",
-														"{@footnote 3 x|This shows you a creature type and the quantity of those creatures in this encounter. In this case there are 3 goblins. Hover over the actual creature name to see its statblock.|Quantity of Creature B} {@creature Goblin||Example Creature B}",
-														"{@footnote {@note Adjusted XP: 150}|This tells you the \"Adjusted XP\" of the encounter, which helps you estimate its difficulty and helps you balance the encounter against a party's \"{@footnote daily budget|A rough estimate of the adjusted XP value for encounters the party can handle before the characters will need to take a long rest.|Daily Budget}\", using the {@table The Adventuring Day; Adventuring Day XP|DMG|Adventuring Day XP} table in the {@book DMG}.|Encounter Difficulty}",
-														"<hr/>",
-														"{@footnote Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#%7B%22w%22%3A10%2C%22h%22%3A10%2C%22ctc%22%3Atrue%2C%22fs%22%3Afalse%2C%22lk%22%3Afalse%2C%22ps%22%3A%5B%7B%22x%22%3A0%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A9%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A9%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A0%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A51%2C%22s%22%3A%7B%7D%7D%2C%7B%22x%22%3A5%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A5%2C%22s%22%3A%7B%22s%22%3A%22NUMBER%22%2C%22d%22%3A%22DESC%22%2C%22ri%22%3Atrue%2C%22m%22%3Afalse%2C%22rg%22%3Afalse%2C%22rri%22%3Afalse%2C%22g%22%3Atrue%2C%22p%22%3Atrue%2C%22a%22%3Afalse%2C%22k%22%3Afalse%2C%22piHp%22%3Afalse%2C%22piHm%22%3Afalse%2C%22piV%22%3Atrue%2C%22piO%22%3Afalse%2C%22c%22%3A%5B%5D%2C%22cndc%22%3A%5B%5D%2C%22r%22%3A%5B%7B%22id%22%3A%22bb6ef15b-e29c-4413-874a-a076d531534f%22%2C%22n%22%3A%22Bugbear%22%2C%22h%22%3A27%2C%22g%22%3A27%2C%22i%22%3A2%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%223315949a-f18e-4556-a12c-d0e14fb38038%22%2C%22n%22%3A%22Goblin%22%2C%22h%22%3A7%2C%22g%22%3A7%2C%22i%22%3A1%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%22bb4f5e3d-879f-4433-9d56-e53aeb90dabf%22%2C%22n%22%3A%22Goblin%22%2C%22h%22%3A7%2C%22g%22%3A7%2C%22i%22%3A1%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A2%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%22ace81fd4-1b22-40f8-895f-8a5b45a41bd8%22%2C%22n%22%3A%22Goblin%22%2C%22h%22%3A7%2C%22g%22%3A7%2C%22i%22%3A1%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A3%2C%22k%22%3A%5B%5D%7D%5D%2C%22rdp%22%3A%5B%5D%2C%22n%22%3A1%7D%7D%5D%2C%22ex%22%3A%5B%5D%7D}|You would click this link to launch the initiative tracker for this encounter|Launch Encounter Initiative Tracker}"
-													]
-												}
-											]
-										}
-									]
-								},
-								{
-									"type": "entries",
-									"name": "Presentation Cues",
+                                        "You will need to prepare the adventure before running it with players. See the {@quickref Running an Adventure|ODMG|2|0} section of the {@book ODMG|ODMG|2|0}. Once you're prepped, with at least few days notice, instruct your players to build a {@b level 3 character}."
+                                    ]
+                                },
+                                {
+                                    "type": "entries",
+									"name": "In-Game",
 									"page": 1,
-									"id": "presentation cues",
+									"id": "in-game",
 									"entries": [
-										"You will come across optional presentation cues throughout the adventure text as well. They will look like this:",
-										"{@note {@b This is an example presentation cue.}}",
-										" "
-									]
-								},
-								{
-									"type": "entries",
-									"name": "DM Actions",
-									"page": 1,
-									"id": "dm actions",
-									"entries": [
-										"Throughout the adventure text, you will see cues intended to instruct the DM on what actions to take. These cues are not a convention of D&D adventure texts either, but rather my own method of meant of suggesting to the DM when to execute certain in-game actions to enhance the emmersion and story-telling.",
-										"Media actions, which represent presentation actions, such as playing a sound track or sound effect, showing an image to your players, or starting a combat initiative tracker, will be in yellow. They are completely optional, and will never be crucial to the adventure experience.  Furthermore, they will largely depend on what your \"presentation\" setup and capabilities are, for ex: you may not have a way to display an image to your players or play a sound effect in-person. Use at your own discretion, as always. Example media cue:",
-										"{@cue Show the spooky library image.|media}",
-										"Other DM Action cues will be in green. These will cue things like asking a player for an Investigation check, or describing a potential trap that the players might trigger.  Example DM cue:",
-										"{@cue Call for a group perception check (DC 12).}",
-										"In some rare cases, a DM action will be shown in red. This is just to emphasize its importance, or to just make double-sure that you don't somehow miss it, for instance if it instructs the DM to do something during a combat encounter on a specific trigger (this kind of thing is particularly easy to miss when you're focusing on what monster actions to take next, or responding to a player's question about whether their attack hit, helping to calculate damage, etc.). Example critical cue:",
-										"{@cue Round 2: The roof caves in!|critical}",
-										"Whatever their use case, cues are intended to function as the writer mudging you, the DM, directly about something you should be doing at that point in the adventure.",
-										"Sometimes the DM Actions need to be lengthier, contain multiple possible actions based on an initial condition, or even contain nested readalouds. In these cases, a DM Action Block may be used.",
-										{
-											"type": "insetDMAction",
-											"name": "DM Action",
-											"page": 1,
-											"id": "dm action",
-											"entries": [
-												"This is an example of a DM Action block. It can contain much more information that may just be much longer than a single {@cue cue}, or may indeed need to be visually organized into unique logical structure.",
-												{
-													"type": "entries",
-													"name": "Option 1",
-													"entries": [
-														"Do thing one."
-													]
-												},
-												{
-													"type": "entries",
-													"name": "Option 2",
-													"entries": [
-														"Do thing two."
-													]
-												}
-											]
-										}
-									]
-								},
-								{
-									"type": "entries",
-									"name": "Readalouds",
-									"page": 1,
-									"id": "readalouds",
-									"entries": [
-										"When you see an inset block like the following throughout this adventure, this text is meant to be read aloud to your players in-game.  (This {@i is} a convention of D&D adventure texts.)",
-										{
-											"type": "insetReadaloud",
-											"page": 1,
-											"entries": [
-												"This is an example readaloud text block."
-											]
-										},
-										"When you are ready to start the adventure, begin by reading the \"Open Read\" readaloud block to your players."
-									]
-								}
+										"This adventure text is written to be read and executed like a script.  It's very prescriptive, to the point of telling you when to call for a skill check, how to respond to a specific player action or quetsion, when to play a certain sound or playlist, and when/how to launch an encounter. If you start the adventure at the top of {@area Chapter 1|the approach|x}, you should be able to essentially read aloud through thre rest of the text, pausing only for player interaction (which is noted), or to execute the prescribed DM cues.",
+                                        "Familiarize yourself with the elements of this text, including my own enhancements, to make your in-game experience as efficient and seamless as you can. You'll see the following elements throughout the adventure text:",
+                                        {
+                                            "type": "list",
+                                            "items": [
+                                                {
+                                                    "type": "entries",
+                                                    "name": "Encounter Blocks",
+                                                    "page": 1,
+                                                    "id": "encounter blocks",
+                                                    "entries": [
+                                                        "See {@quickref Encounter Blocks|ODMG|1|0} section of the {@book ODMG|ODMG|1|0}"
+                                                    ]
+                                                },
+                                                {
+                                                    "type": "entries",
+                                                    "name": "DM Actions (Cues)",
+                                                    "page": 1,
+                                                    "id": "dm actions cues",
+                                                    "entries": [
+                                                        "See {@quickref DM Actions (Cues)|ODMG|1|1} section of the {@book ODMG|ODMG|1|1}"
+                                                    ]
+                                                },
+                                                {
+                                                    "type": "entries",
+                                                    "name": "DM Action Blocks",
+                                                    "page": 1,
+                                                    "id": "dm action blocks",
+                                                    "entries": [
+                                                        "See {@quickref DM Action Blocks|ODMG|1|2} section of the {@book ODMG|ODMG|1|2}"
+                                                    ]
+                                                },
+                                                {
+                                                    "type": "entries",
+                                                    "name": "Readalouds",
+                                                    "page": 1,
+                                                    "id": "readalouds",
+                                                    "entries": [
+                                                        "When you see an inset block like the following throughout this adventure, this text is meant to be read aloud to your players in-game.  (This {@i is} a convention of D&D adventure texts.)",
+                                                        {
+                                                            "type": "insetReadaloud",
+                                                            "page": 1,
+                                                            "entries": [
+                                                                "This is an example readaloud text block."
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "You're prepped. You're familiar with the adventure text and the tools within.  Once you are ready to start the adventure, begin by reading the \"Open Read\" readaloud block to your players..."
+                                    ]
+                                }
 							]
 						}
 					]
@@ -605,15 +583,7 @@
 										"Peering ahead, you finally spot the house.  The dark, intimidating manor, looms atop a small hill beyond the cornfield."
 									]
 								},
-								"{@note {@b Show: Spooky Manor image}}",
-								{
-									"type": "insetReadaloud",
-									"page": 1,
-									"entries": [
-										"A cold, menacing fog clings to the ground as you approach the gloomy manor.  The smell of mud and rotting flowers wafts past your nose.  A black bird caws from atop the 2-story house, then quickly turns its head to eye you, and flies off, flapping loudly. The air is thick and still, and you feel the slightest of chills run down your spine.  Suddenly, you hear a twig snap behind you...",
-										"{@b Roll for Initiative!}"
-									]
-								}
+								"{@note {@b Show: Spooky Manor image}}"
 							]
 						},
 						{
@@ -735,93 +705,22 @@
 				},
 				{
 					"type": "section",
-					"name": "Appendix A: Magic Items",
-					"page": 52,
-					"id": "199",
-					"entries": [
-						"A magic item is a wondrous treasure that adventurers find in a monster's hoard, in a trap-riddled dungeon, or in the possession of a slain foe. Every adventure holds the promise\u2014but not a guarantee\u2014of finding one or more magic items, and part of the fun of exploring a dungeon is the thrill of unearthing an item found nowhere else.",
-						{
-							"type": "section",
-							"name": "Using a Magic Item",
-							"page": 52,
-							"id": "19a",
-							"entries": [
-								"A magic item's description explains how the item works. Handling a magic item is enough to give a character a sense that something is extraordinary about the item. Casting the {@spell identify} spell on the item then reveals its properties. Alternatively, a character can concentrate on the item during a short rest, while being in physical contact with the item. At the end of the rest, the character learns the item's properties. Potions are an exception; a little taste is enough to tell the taster what the potion does.",
-								"Certain magic items require a user to {@b attune} to them before their magical properties can be used. Attuning to a magic item requires that you spend a short rest concentrating on it (this can't be the same short rest used to learn an item's properties). Depending on the nature of the item, this concentration can take the form of prayers, weapon practice, or meditation. In any case, the concentration period must be uninterrupted. Once you are attuned to an item, you can use its magical properties.",
-								"An item can be attuned to only one creature at a time. A creature can be attuned to no more than three magic items at any given time, and you can attune yourself to only one item during a short rest.",
-								"Your attunement to an item ends when the item has been more than 100 feet away from you for 24 hours and when you die. You can also voluntarily end your attunement to an item with another short rest."
-							]
-						},
-						{
-							"type": "section",
-							"name": "Item Descriptions",
-							"page": 52,
-							"id": "19b",
-							"entries": [
-								{
-									"type": "list",
-									"columns": 3,
-									"items": [
-										"{@item +1 Armor}",
-										"{@item +1 Weapon}",
-										"{@item Boots of Striding and Springing}",
-										"{@item Gauntlets of Ogre Power}",
-										"{@item Potion of Flying}",
-										"{@item Potion of Healing}",
-										"{@item Potion of Invisibility}",
-										"{@item Potion of Vitality}",
-										"{@item Ring of Protection}",
-										"{@item Spell Scroll}",
-										"{@item Spider Staff|LMoP}",
-										"{@item Staff of Defense|LMoP}",
-										"{@item Wand of Magic Missiles}"
-									]
-								}
-							]
-						}
-					]
-				},
-				{
-					"type": "section",
-					"name": "Appendix B: Monsters",
+					"name": "Appendix A: Monsters",
 					"page": 54,
-					"id": "1a9",
 					"entries": [
-						"The monsters appearing in the adventure are presented in this section in alphabetical order.",
+						"The monsters and NPCs appearing in the adventure are presented in this section in alphabetical order.",
 						{
 							"type": "list",
-							"columns": 3,
+							"columns": 2,
 							"items": [
-								"{@creature Ash Zombie|LMoP}",
-								"{@creature Bugbear}",
-								"{@creature Commoner}",
-								"{@creature Cultist}",
-								"{@creature Doppelganger}",
-								"{@creature Evil Mage|LMoP}",
-								"{@creature Flameskull}",
-								"{@creature Ghoul}",
-								"{@creature Giant Spider}",
-								"{@creature Goblin}",
-								"{@creature Grick}",
-								"{@creature Gundren Rockseeker|lmop}",
-								"{@creature Hobgoblin}",
-								"{@creature Mormesk the Wraith|LMoP}",
-								"{@creature Nezznar the Black Spider|LMoP}",
-								"{@creature Nothic}",
-								"{@creature Nundro Rockseeker|lmop}",
-								"{@creature Ochre Jelly}",
-								"{@creature Ogre}",
-								"{@creature Orc}",
-								"{@creature Owlbear}",
-								"{@creature Redbrand Ruffian|LMoP}",
-								"{@creature Sildar Hallwinter|LMoP}",
-								"{@creature Skeleton}",
-								"{@creature Spectator}",
-								"{@creature Stirge}",
-								"{@creature Twig Blight}",
-								"{@creature Wolf}",
-								"{@creature Young Green Dragon} ({@creature Venomfang|lmop})",
-								"{@creature Zombie}"
+								"{@creature Animated Armor}",
+								"{@creature Creepy Doll|HoE}",
+								"{@creature Giant Bat}",
+								"{@creature Shadow}",
+								"{@creature Swarm of Bats}",
+								"{@creature Flying Dagger|BGDIA|Crest Sword}",
+								"{@creature Vampire Spawn||Elazar}",
+								"{@creature Zombie||Thrall}"
 							]
 						}
 					]
@@ -832,14 +731,11 @@
 					"entries": [
 						{
 							"type": "entries",
-							"name": "Adventure Playtesters",
 							"entries": [
-								"Aaron Wampler, Alexander Mihalas, Ali Ryder, André Bégin, Andrew Balenko, Angi Lindsay, Bill Benham, Brandyn Whitaker, Chris Conner, Éric Leroux, James deMoss, James Row, Jay H Anderson, Joe Mauer, Josh Dillard, Kevin Grigsby, Krupal Desai, Kyle Turner, Manon Crevier, Manon Leroux, Mark Leftwich, Mark Meredith, Mélanie Côté, Michael Wibberley, Mike Hensley, Mike Mihalas, Nicholas Mihalas, Pam Lindsay, Patrick Simpson-Munday, Ricky Jacobsen, Rob Baldus, Ross Bagby, Sam Simpson, Scott Horn, Scott Rogers, Shawn Merwin, Travis Woodall, Will Straley, William Babbit, Yan Lacharité, Zoë Mihalas"
-							],
-							"id": "1a4"
+								"Special thatnks to Kacie, Dayna, Joe, Some people from Thomas, Nathan, Jason, Adam, and Andrea for helping me playtest this {@i live}."
+							]
 						}
-					],
-					"id": "1a3"
+					]
 				}
 			]
 		}
