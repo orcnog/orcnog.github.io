@@ -10,6 +10,10 @@
 
 * [ ] Update the "monster" icon in initiative tracker, which looks like a printer icon.
 
+* [x] Update Day mode adventure text to have parchment-colored bg. (update block bg's as needed to look okay with that change)
+
+* [x] Add `{@cue some text}` tag with pipe args for different color cues: `|dm` (default, green), `|media` (yellow), and `|critical` (red).
+
 ## Data Updates
 
 * [ ] **Group the _DoD_ adventures** (_DoDTTG_, _DoDAWH_, etc), much like the _Tales From the Yawning Portal_ books or the _MCDM: Where Evil Lives_ books are grouped.
@@ -48,12 +52,12 @@
 
 * [ ] Add a Print Statblocks option in the DM Screen or maybe a separate Print page, which styles statblocks a bit better (fonts closer to the WotC book standards), and allows for layout choices (vertical vs horizontal, # of columns inside the statblock itself).
 
+* [ ] Make an "encounter" an includable object inside an adventure, much like a statblock or a table. Develop its own default rendering and styling.
+
 ## Grand (maybe unrealistic) Enhancement Goals
 
-* [ ] Make an "encounter" an includable object inside an adventure, much like a statblock or a table
-  *  Develop its own default rendering and styling
-  *  (Even loftier goal!) allow it to be run/operated directly from the adventure text.
-  * Maybe ^ this looks like just adding the HP and condition trackers to already-includable statblocks? And tracking HPs of named NPCs globally (within the adventure text)?  Idunno... that is kinda half-baked.  A full-on initiative tracker inside the adventure would be superior, and possibly easier to implement.
+* [ ] Allow an includable encounter block to be run/operated directly from the adventure text.
+    * Maybe ^ this looks like just adding the HP and condition trackers to already-includable statblocks? And tracking HPs of named NPCs globally (within the adventure text)?  Idunno... that is kinda half-baked.  A full-on initiative tracker inside the adventure would be superior, and possibly easier to implement.
 
 * [ ] Automate the conversion of my OneNote articles into 5eTools adventure json??  Maybe OneNote -> Markdown -> json?  Maybe AI can help? (that's not really automating it, but it might speed me up)
 
