@@ -14,6 +14,8 @@
 
 * [x] Add `{@cue some text}` tag with pipe args for different color cues: `|dm` (default, green), `|media` (yellow), and `|critical` (red).
 
+* [x] Add `insetDMAction` block type. Shows like an inset, but with a greener bg. Meant to be instructions for the DM.
+
 ## Data Updates
 
 * [ ] **Group the _DoD_ adventures** (_DoDTTG_, _DoDAWH_, etc), much like the _Tales From the Yawning Portal_ books or the _MCDM: Where Evil Lives_ books are grouped.
