@@ -683,11 +683,12 @@
 									"name": "11: Lobby",
 									"id": "11 lobby",
 									"entries": [
-										"This is the lobby.",
+										" The staircases at the north end lead up to {@area 23|23 landing|x}.",
+										"{@cue Show: Spooky Manor Inside image|media}",
 										{
 											"type": "insetReadaloud",
 											"entries": [
-												"You see before you, a lobby."
+												"You stand in the grand lobby of the House of Elazar. Two carved hell hounds flank the entrance. Candelabras mounted to the walls flicker, creating an eerie dancing light throughout the hall.  You can see a Portrait of a gaunt, pale-skinned man on the north wall between two twin staircases leading to the second story. You can see two doors to the east, two doors to the south, and two doors to the west down a short hallway."
 											]
 										}
 									]
@@ -697,11 +698,10 @@
 									"name": "12: Toilet",
 									"id": "12 toilet",
 									"entries": [
-										"This is the toilet.",
 										{
 											"type": "insetReadaloud",
 											"entries": [
-												"You see before you, a toilet."
+												"This room appears to be very clean, almost unused.  You wonder just how many guests have ever called."
 											]
 										}
 									]
@@ -711,13 +711,13 @@
 									"name": "13: Cloakroom",
 									"id": "13 cloakroom",
 									"entries": [
-										"This is the cloakroom.",
 										{
 											"type": "insetReadaloud",
 											"entries": [
-												"You see before you, a cloakroom."
+												"This is an ordinary coat closet.  Several jackets and cloaks hang from a rack on the south wall of the closet."
 											]
-										}
+										},
+										"{@cue LOOT! - If the closet is searched, a DC 10 {@skill Investigation} check reveals a {@item Cloak of Protection} amongst the hanging clothes!}"
 									]
 								},
 								{
