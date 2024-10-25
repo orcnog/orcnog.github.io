@@ -432,6 +432,7 @@ globalThis.Renderer = function () {
 				case "tableGroup": this._renderTableGroup(entry, textStack, meta, options); break;
 				case "inset": this._renderInset(entry, textStack, meta, options); break;
 				case "insetReadaloud": this._renderInsetReadaloud(entry, textStack, meta, options); break;
+				case "insetDMAction": this._renderInsetDMAction(entry, textStack, meta, options); break;
 				case "variant": this._renderVariant(entry, textStack, meta, options); break;
 				case "variantInner": this._renderVariantInner(entry, textStack, meta, options); break;
 				case "variantSub": this._renderVariantSub(entry, textStack, meta, options); break;
@@ -1110,6 +1111,37 @@ globalThis.Renderer = function () {
 	this._renderInsetReadaloud = function (entry, textStack, meta, options) {
 		const dataString = this._renderEntriesSubtypes_getDataString(entry);
 		textStack[0] += `<${this.wrapperTag} class="rd__b-special rd__b-inset rd__b-inset--readaloud ${this._getMutatedStyleString(entry.style || "")}" ${dataString}>`;
+
+		const cachedLastDepthTrackerProps = MiscUtil.copyFast(this._lastDepthTrackerInheritedProps);
+		this._handleTrackDepth(entry, 1);
+
+		const pagePart = this._getPagePart(entry, true);
+		const partExpandCollapse = !this._isPartPageExpandCollapseDisabled ? this._getPtExpandCollapseSpecial() : "";
+		const partPageExpandCollapse = `<span class="ve-flex-vh-center">${[pagePart, partExpandCollapse].filter(Boolean).join("")}</span>`;
+
+		if (entry.name != null) {
+			if (Renderer.ENTRIES_WITH_ENUMERATED_TITLES_LOOKUP[entry.type]) this._handleTrackTitles(entry.name);
+			textStack[0] += `<span class="rd__h rd__h--2-inset" data-title-index="${this._headerIndex++}" ${this._getEnumeratedTitleRel(entry.name)}><h4 class="entry-title-inner">${entry.name}</h4>${this._getPagePart(entry, true)}</span>`;
+		} else {
+			textStack[0] += `<span class="rd__h rd__h--2-inset rd__h--2-inset-no-name">${partPageExpandCollapse}</span>`;
+		}
+
+		const len = entry.entries.length;
+		for (let i = 0; i < len; ++i) {
+			const cacheDepth = meta.depth;
+			meta.depth = 2;
+			this._recursiveRender(entry.entries[i], textStack, meta, {prefix: "<p>", suffix: "</p>"});
+			meta.depth = cacheDepth;
+		}
+		textStack[0] += `<div class="float-clear"></div>`;
+		textStack[0] += `</${this.wrapperTag}>`;
+
+		this._lastDepthTrackerInheritedProps = cachedLastDepthTrackerProps;
+	};
+
+	this._renderInsetDMAction = function (entry, textStack, meta, options) {
+		const dataString = this._renderEntriesSubtypes_getDataString(entry);
+		textStack[0] += `<${this.wrapperTag} class="rd__b-special rd__b-inset rd__b-inset--dmaction ${this._getMutatedStyleString(entry.style || "")}" ${dataString}>`;
 
 		const cachedLastDepthTrackerProps = MiscUtil.copyFast(this._lastDepthTrackerInheritedProps);
 		this._handleTrackDepth(entry, 1);
@@ -1851,6 +1883,13 @@ globalThis.Renderer = function () {
 				this._recursiveRender(text, textStack, meta);
 				textStack[0] += `</i>`;
 				break;
+            case "@cue":
+                const [toDisplay, color] = Renderer.splitTagByPipe(text);
+                const ptColor = this._renderString_renderTag_getCueColorPart(color);
+                textStack[0] += `<i class="ve-dm-action" style="color: ${ptColor}">`;
+                this._recursiveRender(toDisplay, textStack, meta);
+                textStack[0] += `</i>`;
+                break;
 			case "@tip": {
 				const [displayText, titielText] = Renderer.splitTagByPipe(text);
 				textStack[0] += `<span title="${titielText.qq()}">`;
@@ -2193,6 +2232,30 @@ globalThis.Renderer = function () {
 		if (!color) return "";
 		const scrubbedColor = BrewUtilShared.getValidColor(color, {isExtended: true});
 		return scrubbedColor.startsWith("--") ? `var(${scrubbedColor})` : `#${scrubbedColor}`;
+	};
+
+	this._renderString_renderTag_getCueColorPart = function (color) {
+		if (!color) return "";
+        switch (color) {
+            case `dm`:
+            case `dm-action`:
+                color = `--rgb-dm-action`;
+                break;
+            case `media`:
+            case `media-action`:
+                color = `--rgb-media-action`;
+                break;
+            case `critical`:
+            case `critical-action`:
+                color = `--rgb-critical-action`;
+                break;
+            case `success`:
+            case `info`:
+            case `warning`:
+            case `danger`:
+                color = `--rgb-${color}`;
+        }
+		return this._renderString_renderTag_getBrewColorPart(color);
 	};
 
 	this._renderString_renderTag_hitYourSpellAttack = function (textStack, meta, options, tag, text) {
