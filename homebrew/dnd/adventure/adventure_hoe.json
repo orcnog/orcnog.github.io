@@ -644,7 +644,16 @@
 							"page": 2,
 							"id": "opening read",
 							"entries": [
-								"{@cue Show: Spooky Hogsbottom image|media}",
+                                {
+                                    "type": "image",
+                                    "href": {
+                                        "type": "external",
+                                        "url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky hogsbottom2.webp"
+                                    },
+                                    "title": "Hogsbottom",
+                                    "credit": "Credit: orcnog & ChatGPT"
+                                },
+                                "{@cue Show: Spooky Hogsbottom image|media}",
 								"Read the following aloud to your players:",
 								{
 									"type": "insetReadaloud",
