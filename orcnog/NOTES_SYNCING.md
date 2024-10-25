@@ -40,3 +40,4 @@ It may not be the most elegant, but here's the architecture:
 8. Re-run `npm run build`
 9. Test out the site: `npm run serve:dev`
 10. If satisfied, pull `staging` into `main` and push both up.
+11. DON'T run any of the github actions (yml scripts). At this time, they aren't nec for my ver of the site.
