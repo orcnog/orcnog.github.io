@@ -22,7 +22,7 @@
 		"dateAdded": 1729028448,
 		"dateLastModified": 1729028448
 	},
-    "item": [
+	"item": [
 		{
 			"name": "Potion of Mana",
 			"source": "HoE",
@@ -33,7 +33,7 @@
 				"As an action, you can drink this potion to regain one spell slot of 1st or 2nd level. The potion bottle swirls with an irredescent, rainbowy sheen as you tumble it back and forth."
 			]
 		},
-        {
+		{
 			"name": "The Vampiric Rite of Sepins",
 			"source": "HoE",
 			"page": 1,
@@ -42,8 +42,8 @@
 			"entries": [
 				"This an old tome with a bookmark ribbon marking page 313.  The marked chapter depicts an ancient blood rite that can be performed to remove Vampirism.  The blood rite involves the sacrifice of two prepubescent male twins."
 			]
-        },
-        {
+		},
+		{
 			"name": "Elazar's Violin",
 			"source": "HoE",
 			"page": 1,
@@ -51,10 +51,10 @@
 			"wondrous": true,
 			"entries": [
 				"The violin of Emmanuel Elazar has magical properties. The instrument has one charge, which can be expended by playing it with a successful DC 10 {@skill Performance} check. On a success, the performance roll determines the number of hit points in a pool that the performer character can immediately give out to players.",
-                "The instrument regains 1 charge daily at dawn."
+				"The instrument regains 1 charge daily at dawn."
 			]
-        }
-    ],
+		}
+	],
 	"monster": [
 		{
 			"name": "Creepy Doll",
@@ -220,7 +220,7 @@
 			}
 		}
 	],
-    "trap": [
+	"trap": [
 		{
 			"name": "Mirror Trap",
 			"source": "HoE",
@@ -230,19 +230,19 @@
 			"threat": "moderate",
 			"effect": [
 				"Roll a {@dc 15} Wisdom saving throw. On a failed save, the character takes {@dice 2d6} psychic damage as their mind is pierced with painfully dissonant voices and they are also driven temporarily {@condition insane} for 1 minute. An insane creature can't take actions or reactions, can't understand what other creatures say, can't read, and speaks only in gibberish. You control the creature's movement, which is erratic. On a successful save, the character hears the whispers of former spirits that inhabited this home and gains an insight into what's going on here. The character either gains inspiration or hears a secret about their surroundings (their choice).",
-                {
-                    "type": "list",
-                    "name": "Secret Whispers",
-                    "items": [
-                        "{@i Look!  Human visitors!  Oh what fun this will be.  How shall we play with them?}",
-                        "{@i They mustn't find the secret passage in the kitchen. They are far too stupid to discover it.}",
-                        "{@i They will never learn the page number if we keep them out of the library! The book of blood rites should stay hidden!}",
-                        "{@i The girl!  The girl has been here before!  Kill her before she tells them what she knows!}",
-                        "IN THE LIBRARY: {@i Not the torch!  Stop them from replacing the torch!}",
-                        "IN THE LIBRARY: {@i But why would Elazar want to perform the Twinblood Covenant? Does he not enjoy immortality? Ungrateful fleshling.}",
-                        "IN THE LIBRARY: {@i The Thralls will finish them off.  Yes, the thralls must be awakened. Lead the humans down into the lair to meet their end!}"                
-                    ]
-                }
+				{
+					"type": "list",
+					"name": "Secret Whispers",
+					"items": [
+						"{@i Look!  Human visitors!  Oh what fun this will be.  How shall we play with them?}",
+						"{@i They mustn't find the secret passage in the kitchen. They are far too stupid to discover it.}",
+						"{@i They will never learn the page number if we keep them out of the library! The book of blood rites should stay hidden!}",
+						"{@i The girl!  The girl has been here before!  Kill her before she tells them what she knows!}",
+						"IN THE LIBRARY: {@i Not the torch!  Stop them from replacing the torch!}",
+						"IN THE LIBRARY: {@i But why would Elazar want to perform the Twinblood Covenant? Does he not enjoy immortality? Ungrateful fleshling.}",
+						"IN THE LIBRARY: {@i The Thralls will finish them off.  Yes, the thralls must be awakened. Lead the humans down into the lair to meet their end!}"
+					]
+				}
 			],
 			"trigger": [
 				"Any mirror in the House of Elazar is gazed into."
@@ -254,7 +254,7 @@
 				"You gaze into the ornately-framed mirror, and suddenly the world around you begins to distort as you feel your mind being probed by some mysterious energy."
 			]
 		}
-    ],
+	],
 	"adventure": [
 		{
 			"name": "The House of Elazar",
@@ -396,47 +396,47 @@
 					"name": "The Lair",
 					"headers": [
 						"Basement 1: The Chapel",
-                        {
-                            "depth": 1,
-                            "header": "04: Stairs down to 01"
-                        },
-                        {
-                            "depth": 1,
-                            "header": "05: Corridor"
-                        },
-                        {
-                            "depth": 1,
-                            "header": "06: Chapel"
-                        },
-                        {
-                            "depth": 1,
-                            "header": "07: Ladder up to 15"
-                        },
-                        {
-                            "depth": 1,
-                            "header": "08: Cells"
-                        },
-                        {
-                            "depth": 1,
-                            "header": "09: Torture Chamber"
-                        },
-                        {
-                            "depth": 1,
-                            "header": "10: Ladder up to 21"
-                        },
-                        "Basement 2: The Lair",
-                        {
-                            "depth": 1,
-                            "header": "01: Stairs up to 04"
-                        },
-                        {
-                            "depth": 1,
-                            "header": "02: Thrall's Chambers"
-                        },
-                        {
-                            "depth": 1,
-                            "header": "03: Ritual Chamber"
-                        }
+						{
+							"depth": 1,
+							"header": "04: Stairs down to 01"
+						},
+						{
+							"depth": 1,
+							"header": "05: Corridor"
+						},
+						{
+							"depth": 1,
+							"header": "06: Chapel"
+						},
+						{
+							"depth": 1,
+							"header": "07: Ladder up to 15"
+						},
+						{
+							"depth": 1,
+							"header": "08: Cells"
+						},
+						{
+							"depth": 1,
+							"header": "09: Torture Chamber"
+						},
+						{
+							"depth": 1,
+							"header": "10: Ladder up to 21"
+						},
+						"Basement 2: The Lair",
+						{
+							"depth": 1,
+							"header": "01: Stairs up to 04"
+						},
+						{
+							"depth": 1,
+							"header": "02: Thrall's Chambers"
+						},
+						{
+							"depth": 1,
+							"header": "03: Ritual Chamber"
+						}
 					],
 					"ordinal": {
 						"type": "chapter",
@@ -644,16 +644,16 @@
 							"page": 2,
 							"id": "opening read",
 							"entries": [
-                                {
-                                    "type": "image",
-                                    "href": {
-                                        "type": "external",
-                                        "url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky hogsbottom2.webp"
-                                    },
-                                    "title": "Hogsbottom",
-                                    "credit": "Credit: orcnog & ChatGPT"
-                                },
-                                "{@cue Show: Spooky Hogsbottom image|media}",
+								{
+									"type": "image",
+									"href": {
+										"type": "external",
+										"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky hogsbottom2.webp"
+									},
+									"title": "Hogsbottom",
+									"credit": "Credit: orcnog & chatgpt"
+								},
+								"{@cue Show: Spooky Hogsbottom image|media}",
 								"Read the following aloud to your players:",
 								{
 									"type": "insetReadaloud",
@@ -663,6 +663,15 @@
 										"Rarely seen outside his home, rumors of his true nature have swirled for decades.  Some say \"hermit\", others \"mad scientist\", some even say \"vampire\", and some even think he died years ago and he now wanders his grounds at night as a spirit, as if he didn't know he was dead.  But for as long as any of the locals could remember, he never bothered anyone in town.  So, they just let him and his spooky mansion be.  Live and let live... or so they hoped."
 									]
 								},
+								{
+									"type": "image",
+									"href": {
+										"type": "external",
+										"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky missing children.webp"
+									},
+									"title": "Hogsbottom",
+									"credit": "Credit: orcnog & chatgpt"
+								},
 								"{@cue Show: Missing Children image|media}",
 								{
 									"type": "insetReadaloud",
@@ -670,6 +679,15 @@
 									"entries": [
 										"A week ago, two young boys from the town went missing.  Twins, in fact, hair as red as a sunrise.  Their parents came to their room to wake them one morning, and they were nowhere to be found.  No sign of struggle... no one saw them leave... they had just... vanished.  So, the good townsfolk of Hogsbottom hired themselves a group of travelling adventurers to find the missing boys, and they have a pretty good idea where those adventurers should start looking..."
 									]
+								},
+								{
+									"type": "image",
+									"href": {
+										"type": "external",
+										"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky cornfield1.webp"
+									},
+									"title": "Hogsbottom",
+									"credit": "Credit: orcnog & chatgpt"
 								},
 								"{@cue Show: Creepy Cornfield image|media}",
 								{
@@ -680,6 +698,15 @@
 										"As you traverse the cornfields, you can see your breath in the cold, heavy air.  Dead corn husks crunch under your feet.  A tattered scarecrow creaks as it turns in the wind, seeming to face you... as if watching you... or maybe warning you.",
 										"Peering ahead, you finally spot the house.  The dark, intimidating manor, looms atop a small hill beyond the cornfield."
 									]
+								},
+								{
+									"type": "image",
+									"href": {
+										"type": "external",
+										"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky manor2.webp"
+									},
+									"title": "Hogsbottom",
+									"credit": "Credit: orcnog & chatgpt"
 								},
 								"{@cue Show: Spooky Manor image|media}"
 							]
@@ -815,6 +842,15 @@
 									"id": "11 lobby",
 									"entries": [
 										" The staircases at the north end lead up to {@area a landing|23 landing|x} on the upper floor.",
+										{
+											"type": "image",
+											"href": {
+												"type": "external",
+												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky manor inside.webp"
+											},
+											"title": "Hogsbottom",
+											"credit": "Credit: orcnog & chatgpt"
+										},
 										"{@cue Show: Spooky Manor Inside image|media}",
 										{
 											"type": "insetReadaloud",
@@ -873,143 +909,161 @@
 									]
 								},
 								{
-                                    "type": "entries",
-                                    "name": "16: Sitting Room",
-                                    "id": "16 sitting room",
-                                    "entries": [
-                                        "The sitting room is clean and tidy but barely used. There's an unsettlingly gloomy atmosphere.",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "You open the door to a Sitting Room: clean and tidy, but barely used. You feel a prickle on your arm, a slight draft of cold air, perchance a window was left open. Looking around, you are beset by the bewildering influence of the gloomy furniture of the room—of the dark and heavy draperies, which, tortured into motion by the breath of a rising tempest, sway fitfully to and fro upon the walls, and rustle uneasily about the decorations on the mantle of an unused fireplace."
-                                            ]
-                                        },
-                                        "{@cue LOOT! - If a player investigates the fireplace, a DC 15 {@skill Investigation} check...}",
-                                        "An investigation of the fireplace reveals a hidden compartment containing a {@item Dark Shard Amulet|XGE}."
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "17: Dining Room",
-                                    "id": "17 dining room",
-                                    "entries": [
-                                        "The dining room appears untouched, except for a faint musical plinking of piano keys that stops as soon as the party approaches. The room contains a grand piano and a dining table with goblets of red liquid.",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "As you approach the doorway to the dining room, you hear the soft musical plink of piano keys... rounding the corner the plinking stops, making you wonder if you imagined it. Looking around, indeed a grand piano dominates the parlor, a large dining table fills the alcove to the southwest, and you can see goblets on the table, a couple of them filled with a red liquid. Otherwise, the room seems tidy but unused."
-                                            ]
-                                        },
-                                        "{@cue TRAP! - It's blood! If a character drinks the red liquid...}",
-                                        "If a character drinks one of the goblets, make a DC 10 Constitution save or take {@dice 1d6} psychic damage.",
-                                        "{@cue LOOT! - If the piano is played or investigated with a DC 5 {@skill Performance} / DC 10 {@skill History} / DC 10 {@skill Investigation} check...}",
-                                        "An investigation reveals that there's one extra piano key at the very low end of the keyboard that shouldn't exist. If pressed, a drawer pops open on the buffet, containing a {@item Potion of Mana|HoE} - regain one spell slot (up to level 2)."
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "18: Picture Gallery",
-                                    "id": "18 picture gallery",
-                                    "entries": [
-                                        "The picture gallery is lined with portraits and busts of Elazar family ancestors, dominated by a statue of a woman with wings in the northern alcove. Shadows in the room seem to behave unnaturally, almost as if they're alive.",
-                                        "{@cue Show: Spooky Picture Gallery image|media}",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "Portraits and busts of previous members of the Elazar family line the room. A statue of a woman with wings dominates the northern alcove. There's a placard under the statue that you cannot read from here."
-                                            ]
-                                        },
-                                        "{@cue PLOT / INVESTIGATION: If they enter the room or investigate the statue…}",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "As you pass through the busts of the Elazar ancestors, you see that they cast unusually long creepy shadows that almost seem to move in unnatural ways. The placard under the statue reads, 'Mother'. And etched underneath that word are some runes in a cryptic language (Infernal: 'The first vampiric member of the Elazar house.') The room is unused and untouched, dust covers the floor and cobwebs cover everything else. Just then, the shadows don't just SEEM to move, they deliberately begin to close in on you!",
-                                                "{@b Roll for Initiative!}"
-                                            ]
-                                        },
-                                        {
-                                            "type": "entries",
-                                            "name": "Encounter: Shadows!",
-                                            "entries": [
-                                                {
-                                                    "type": "inset",
-                                                    "name": "Encounter: Shadows!",
-                                                    "id": "encounter shadows",
-                                                    "collapsed": true,
-                                                    "entries": [
-                                                        {
-                                                            "type": "list",
-                                                            "style": "list-no-bullets",
-                                                            "items": [
-                                                                "3 x {@creature Shadow}",
-                                                                "{@note Adjusted XP: 600}",
-                                                                "<hr/>",
-                                                                "Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#}"
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            ]        
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "19: Kitchen",
-                                    "id": "19 kitchen",
-                                    "entries": [
-                                        "The kitchen looks as though it hasn't seen a meal prepared in years. There is no food, and the equipment is sparse and unused. A single door leads to a more frequently used pantry.",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "The kitchen looks as though it hasn't seen a meal prepared in years—amongst the sparse, clearly unused equipment, not a scrap of food can be found. A single door leads to what must be a pantry, its handle worn as though used more often than the rest of the room."
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "20: Pantry",
-                                    "id": "20 pantry",
-                                    "entries": [
-                                        "The pantry contains fresh racks of suspicious meat and is kept magically cold. There is blood on the floor leading to a set of shelves. A hidden passage behind the shelves leads to a secret area.",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "Fresh racks of suspicious-looking meat are on the shelves and in a cabinet that seems to be kept icy cold with magic. The blood on the floor seems to be fresh. Red streaks seem to terminate at the foot of a set of shelves."
-                                            ]
-                                        },
-                                        "{@cue SECRET! - If the room is searched, a DC 10 {@skill Investigation} or {@skill Survival} check reveals a SECRET PANEL behind the shelves leads to {@area 21|21 trapdoor down to 10}.}",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "As you run your fingers along the dusty kitchen shelves, a faint click echoes in the silence. A panel slides aside with a creak, revealing a hidden passage."
-                                            ]
-                                        },
-                                        "{@cue Show: Spooky Secret Passage image|media}",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "A dark shaft looms before you, with a narrow trapdoor leading downward into shadow, and a ladder whose metal rungs seem to disappear into the ceiling above. However, the faint shimmer of an arcane barrier hums around the edges of the opening to the shaft, sealing the way forward. You stare up the ladder, wondering if an alternate entrance might bypass the barrier altogether, somewhere higher in the house."
-                                            ]
-                                        },
-                                        "{@cue ARCANA: A DC 10 Arcana check reveals the hint: 'Page'}",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "You scour the magic barrier with a trained mage's eye for arcane details which might possibly help explain how to unlock it… and you observe that a very small word is displayed ethereally upon the magic barrier: 'Page', which is then followed by 3 empty circles. 'OOO' - it feels something like a password entry."
-                                            ]
-                                        },
-                                        "{@cue TRAP!: If a player enters the wrong page number…}",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "You trace the numerals in the air upon the arcane barrier and watch as the numbers appear in the empty circles. As you complete the final numeral, the barrier glows red, and charges up with menacing energy before exploding a wave of necrotic force outward.",
-                                                "[Any player within 10 feet takes 1d6 Necrotic dmg and 1d6 Force dmg.]"
-                                            ]
-                                        }
-                                    ]
-                                },
+									"type": "entries",
+									"name": "16: Sitting Room",
+									"id": "16 sitting room",
+									"entries": [
+										"The sitting room is clean and tidy but barely used. There's an unsettlingly gloomy atmosphere.",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"You open the door to a Sitting Room: clean and tidy, but barely used. You feel a prickle on your arm, a slight draft of cold air, perchance a window was left open. Looking around, you are beset by the bewildering influence of the gloomy furniture of the room\u2014of the dark and heavy draperies, which, tortured into motion by the breath of a rising tempest, sway fitfully to and fro upon the walls, and rustle uneasily about the decorations on the mantle of an unused fireplace."
+											]
+										},
+										"{@cue LOOT! - If a player investigates the fireplace, a DC 15 {@skill Investigation} check...}",
+										"An investigation of the fireplace reveals a hidden compartment containing a {@item Dark Shard Amulet|XGE}."
+									]
+								},
+								{
+									"type": "entries",
+									"name": "17: Dining Room",
+									"id": "17 dining room",
+									"entries": [
+										"The dining room appears untouched, except for a faint musical plinking of piano keys that stops as soon as the party approaches. The room contains a grand piano and a dining table with goblets of red liquid.",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"As you approach the doorway to the dining room, you hear the soft musical plink of piano keys... rounding the corner the plinking stops, making you wonder if you imagined it. Looking around, indeed a grand piano dominates the parlor, a large dining table fills the alcove to the southwest, and you can see goblets on the table, a couple of them filled with a red liquid. Otherwise, the room seems tidy but unused."
+											]
+										},
+										"{@cue TRAP! - It's blood! If a character drinks the red liquid...}",
+										"If a character drinks one of the goblets, make a DC 10 Constitution save or take {@dice 1d6} psychic damage.",
+										"{@cue LOOT! - If the piano is played or investigated with a DC 5 {@skill Performance} / DC 10 {@skill History} / DC 10 {@skill Investigation} check...}",
+										"An investigation reveals that there's one extra piano key at the very low end of the keyboard that shouldn't exist. If pressed, a drawer pops open on the buffet, containing a {@item Potion of Mana|HoE} - regain one spell slot (up to level 2)."
+									]
+								},
+								{
+									"type": "entries",
+									"name": "18: Picture Gallery",
+									"id": "18 picture gallery",
+									"entries": [
+										"The picture gallery is lined with portraits and busts of Elazar family ancestors, dominated by a statue of a woman with wings in the northern alcove. Shadows in the room seem to behave unnaturally, almost as if they're alive.",
+										{
+											"type": "image",
+											"href": {
+												"type": "external",
+												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky picture gallery2.webp"
+											},
+											"title": "Hogsbottom",
+											"credit": "Credit: orcnog & chatgpt"
+										},
+										"{@cue Show: Spooky Picture Gallery image|media}",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"Portraits and busts of previous members of the Elazar family line the room. A statue of a woman with wings dominates the northern alcove. There's a placard under the statue that you cannot read from here."
+											]
+										},
+										"{@cue PLOT / INVESTIGATION: If they enter the room or investigate the statue...}",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"As you pass through the busts of the Elazar ancestors, you see that they cast unusually long creepy shadows that almost seem to move in unnatural ways. The placard under the statue reads, 'Mother'. And etched underneath that word are some runes in a cryptic language (Infernal: 'The first vampiric member of the Elazar house.') The room is unused and untouched, dust covers the floor and cobwebs cover everything else. Just then, the shadows don't just SEEM to move, they deliberately begin to close in on you!",
+												"{@b Roll for Initiative!}"
+											]
+										},
+										{
+											"type": "entries",
+											"name": "Encounter: Shadows!",
+											"entries": [
+												{
+													"type": "inset",
+													"name": "Encounter: Shadows!",
+													"id": "encounter shadows",
+													"collapsed": true,
+													"entries": [
+														{
+															"type": "list",
+															"style": "list-no-bullets",
+															"items": [
+																"3 x {@creature Shadow}",
+																"{@note Adjusted XP: 600}",
+																"<hr/>",
+																"Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#}"
+															]
+														}
+													]
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "19: Kitchen",
+									"id": "19 kitchen",
+									"entries": [
+										"The kitchen looks as though it hasn't seen a meal prepared in years. There is no food, and the equipment is sparse and unused. A single door leads to a more frequently used pantry.",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"The kitchen looks as though it hasn't seen a meal prepared in years\u2014amongst the sparse, clearly unused equipment, not a scrap of food can be found. A single door leads to what must be a pantry, its handle worn as though used more often than the rest of the room."
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "20: Pantry",
+									"id": "20 pantry",
+									"entries": [
+										"The pantry contains fresh racks of suspicious meat and is kept magically cold. There is blood on the floor leading to a set of shelves. A hidden passage behind the shelves leads to a secret area.",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"Fresh racks of suspicious-looking meat are on the shelves and in a cabinet that seems to be kept icy cold with magic. The blood on the floor seems to be fresh. Red streaks seem to terminate at the foot of a set of shelves."
+											]
+										},
+										"{@cue SECRET! - If the room is searched, a DC 10 {@skill Investigation} or {@skill Survival} check reveals a SECRET PANEL behind the shelves leads to {@area 21|21 trapdoor down to 10}.}",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"As you run your fingers along the dusty kitchen shelves, a faint click echoes in the silence. A panel slides aside with a creak, revealing a hidden passage."
+											]
+										},
+										{
+											"type": "image",
+											"href": {
+												"type": "external",
+												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky secret passage.webp"
+											},
+											"title": "Hogsbottom",
+											"credit": "Credit: orcnog & chatgpt"
+										},
+										"{@cue Show: Spooky Secret Passage image|media}",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"A dark shaft looms before you, with a narrow trapdoor leading downward into shadow, and a ladder whose metal rungs seem to disappear into the ceiling above. However, the faint shimmer of an arcane barrier hums around the edges of the opening to the shaft, sealing the way forward. You stare up the ladder, wondering if an alternate entrance might bypass the barrier altogether, somewhere higher in the house."
+											]
+										},
+										"{@cue ARCANA: A DC 10 Arcana check reveals the hint: 'Page'}",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"You scour the magic barrier with a trained mage's eye for arcane details which might possibly help explain how to unlock it... and you observe that a very small word is displayed ethereally upon the magic barrier: 'Page', which is then followed by 3 empty circles. 'OOO' - it feels something like a password entry."
+											]
+										},
+										"{@cue TRAP!: If a player enters the wrong page number...}",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"You trace the numerals in the air upon the arcane barrier and watch as the numbers appear in the empty circles. As you complete the final numeral, the barrier glows red, and charges up with menacing energy before exploding a wave of necrotic force outward.",
+												"[Any player within 10 feet takes 1d6 Necrotic dmg and 1d6 Force dmg.]"
+											]
+										}
+									]
+								},
 								{
 									"type": "entries",
 									"name": "21: Trapdoor Down to 10",
@@ -1033,192 +1087,228 @@
 							"name": "Upper Floor",
 							"id": "upper floor",
 							"entries": [
-                                    {
-                                        "type": "entries",
-                                        "name": "23: Landing",
-                                        "id": "23 landing",
-                                        "entries": [
-                                            "Stairs down to {@area The Lobby|11 lobby|x}.",
-                                            {
-                                                "type": "insetReadaloud",
-                                                "entries": [
-                                                    "At the top of the stairs, two ancient suits of armor stand vigil, their hollow gazes fixed upon you, as if waiting for something... The double doors to the north rest between two grimy windows. A weapon rack lines the east wall, next to a door that seems to fade into the shadows. To the west are two doors, the north door hanging slightly ajar, revealing only darkness beyond. And most prominently, two sets of double doors to the south dominate the landing. From beneath them, a faint flicker of torchlight dances, casting eerie, shifting shadows across the red-carpeted floor."
-                                                ]
-                                            },
-                                            "{@cue The moment a player reaches for the double doors to the library... or reaches for the weapons rack...}",
-                                            {
-                                                "type": "inset",
-                                                "name": "Encounter: Animated Armors",
-                                                "entries": [
-                                                    {
-                                                        "type": "list",
-                                                        "style": "list-no-bullets",
-                                                        "items": [
-                                                            "2 x {@creature Animated Armor}",
-                                                            "{@note Adjusted XP: 600}",
-                                                            "<hr/>",
-                                                            "Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#}"
-                                                        ]
-                                                    }
-                                                ]
-                                            },
-                                            "{@cue LOOT! - The weapon rack contains a +1 melee weapon (something a PC wields)}"
-                                        ]
-                                    },
-                                    {
-                                        "type": "entries",
-                                        "name": "24: Balcony",
-                                        "id": "24 balcony",
-                                        "entries": [
-                                            "This balcony overlooks the Elazar grounds behind the mansion.",
-                                            {
-                                                "type": "insetReadaloud",
-                                                "entries": [
-                                                    "This balcony overlooks the Elazar grounds behind the mansion. Though, you cannot see farther than a few feet in this dense fog. Below the balcony, you can see the glass roof of the conservatory."
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "entries",
-                                        "name": "25: Guest Bedroom",
-                                        "id": "25 guest bedroom",
-                                        "entries": [
-                                            "The tidy, unused room has a slightly open window allowing a cold draft to move the curtains and play tricks on the characters' eyes. There's a large out-of-place looking gold mirror.",
-                                            {
-                                                "type": "insetReadaloud",
-                                                "entries": [
-                                                    "This guest bedroom seems tidy but unused. The window is slightly ajar, letting in a cold draft which gently blows the window curtain every so often, casting a long, waving shadow across the floor. Gazing around, you notice that the large gold mirror looks out of place. Glancing back at the curtain's shadow, you see a new shadow emerge... the figure of a woman... she's holding a baby and appears to be shushing it. As the curtain gently falls back toward the window, its receding shadow erases the eerie shadow of the woman and her baby from the room."
-                                                ]
-                                            },
-                                            "{@cue TRAP! - If anyone looks at their reflection in the mirror, use the {@trap Mirror Trap|HoE}.}",
-                                            "{@cue LOOT! - If the armoire is searched, a DC 10 {@skill Investigation} check reveals a hidden compartment with a {@item Ring of X-ray Vision}.}"
-                                        ]
-                                    },
-                                    {
-                                        "type": "entries",
-                                        "name": "26: Master Bedroom",
-                                        "id": "26 master bedroom",
-                                        "entries": [
-                                            "The master bedroom seems to be occasionally used, but the bed has not been slept in.",
-                                            "{@cue Show: Spooky Bedroom image|media}",
-                                            {
-                                                "type": "insetReadaloud",
-                                                "entries": [
-                                                    "The master bedroom seems to be used occasionally, but the bed has clearly not been slept in. A violin looks like it played often. There seem to be a lot of mirrors for some reason. Everything in the room is impeccably tidy except for a haphazard pile of suitcases and boxes near the vanity. Their clumsy orientation stands out in the otherwise orderly room."
-                                                ]
-                                            },
-                                            "{@cue PLOT / INVESTIGATION: Trapdoor down to {@area 21|21 trapdoor down to 10} is hidden beneath a pile of suitcases and boxes.}",
-                                            "{@cue TRAP! - If anyone looks at their reflection in the mirror on the wall, use the {@trap Mirror Trap|HoE}.}",
-                                            "{@cue LOOT! - The violin has magical properties. See {@item Elazar's Violin|HoE}.}"
-                                        ]
-                                    },
-                                    {
-                                        "type": "entries",
-                                        "name": "27: Children's Bedroom",
-                                        "id": "27 children's bedroom",
-                                        "entries": [
-                                            "The door is locked. This is the room in which Elazar held the two kidnapped boys. If the players manage to break into the room with a successful DC 10 {@skill Athletics} or {@item thieves' tools|phb} check, or by using a reasonable spell or some other clever trick, read the following.",
-                                            {
-                                                "type": "insetReadaloud",
-                                                "entries": [
-                                                    "This is a children's bedroom. The beds are both unmade, and slept-in. Drawings in red ink (?) in a childish hand seem to depict a scary man, dead bodies, and lots of blood."
-                                                ]
-                                            },
-                                            "{@cue LOOT! - If the room is searched, a DC 10 {@skill Investigation} check reveals a Scroll of {@spell Dispel Evil and Good}.}"
-                                        ]
-                                    },
-                                    {
-                                        "type": "entries",
-                                        "name": "28: Toy Room",
-                                        "id": "28 toy room",
-                                        "entries": [
-                                            "The toy room contains a collection of abandoned children's toys scattered across the floor, with a rocking horse in the corner and a doll in a wooden cradle. The room appears unused, but the creepy doll may animate and attack the players.",
-                                            "{@cue Show: Spooky Toy Room image|media}",
-                                            {
-                                                "type": "insetReadaloud",
-                                                "entries": [
-                                                    "As you step into the dimly lit toy room, the faint scent of aged wood fills your lungs. The polished hardwood floor creaks underfoot, and a delicate, ornate rug centers the space, framing a low table cluttered with children's toys. Small, colorful blocks are scattered across the floor, seemingly abandoned by some unseen hand.",
-                                                    "In the corner, a rocking horse, weathered by time, sits motionless. A doll, its glassy eyes staring ahead, rests eerily in an old wooden cradle. The room is seemingly innocent, but you would swear the toys change position when you look away...",
-                                                    "In the silence, the only sound is the occasional squeak of the old, worn rocking chair in the far corner, gently swaying back and forth, despite the lack of a breeze."
-                                                ]
-                                            },
-                                            "{@cue Whatever the players do next...}",
-                                            {
-                                                "type": "inset",
-                                                "name": "Encounter: Creepy Doll",
-                                                "entries": [
-                                                    {
-                                                        "type": "list",
-                                                        "style": "list-no-bullets",
-                                                        "items": [
-                                                            "1 x {@creature Creepy Doll|HoE}",
-                                                            "{@note Adjusted XP: 450}",
-                                                            "<hr/>",
-                                                            "Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#}"
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "entries",
-                                        "name": "29: Library",
-                                        "id": "29 library",
-                                        "entries": [
-                                            "The library contains books, alchemical equipment, and five large mirrors positioned around a central rug. Two of the mirrors are broken, and a sixth is missing. A torch sconce without a torch is present on one wall. A puzzle involving the mirrors and sconce must be solved to reveal further clues.",
-                                            "{@cue Show: Spooky Library image|media}",
-                                            {
-                                                "type": "insetReadaloud",
-                                                "entries": [
-                                                    "The shelves in this library are filled with dusty books and alchemical equipment, much of it stained with a strange, sticky red substance. Five tall mirrors are arranged in a circle around an ornate rug. A sixth mirror lay on the floor, shattered, its jagged edges catching the dim light. A cold draft from the darkened corners of the room carries the faint scent of decay. On the far wall, a torch sconce sits conspicuously empty. The room feels off, as if it's waiting for something to be set in motion."
-                                                ]
-                                            },
-                                            "{@cue PLOT / SECRET: If a character does something clever, like putting a lit torch in the holster, minor illustioning a mirror to replace the missing one, etc., the torchlight reflects and refracts between all the mirrors to form a focused point of light on one book on the shelf: {@item The Vampiric Rite of Sepins|HoE}.}",
-                                            "{@cue TRAP! - If anyone looks at their reflection in the mirror on the floor, use the {@trap Mirror Trap|HoE}.}",
-                                            "{@cue LOOT! - If the bookshelves are searched, a spellcaster character can find one of the following:}",
-                                            {
-                                                "type": "list",
-                                                "items": [
-                                                    "a Scroll of {@spell Dispel Magic}",
-                                                    "a Scroll of {@spell Protection from Energy}",
-                                                    "a Scroll of {@spell Passwall}",
-                                                    "a Scroll of {@spell Thunder Step|XGE}"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "entries",
-                                        "name": "30: Study",
-                                        "id": "30 study",
-                                        "entries": [
-                                            "The study contains a large desk with alchemical equipment, glass beakers, and vials of dark fluids. Frantic handwritten notes suggest blood testing, with dried blood droplets still visible.",
-                                            "{@cue Show: Spooky Study image|media}",
-                                            {
-                                                "type": "insetReadaloud",
-                                                "entries": [
-                                                    "As you step into the room, the stale scent of parchment hits you. A large desk, strewn with various alchemical equipment, takes up the north end of the room. The glass beakers and vials are filled with strange, dark fluids, and beside them are scattered sheets of parchment, all covered in frantic handwriting. The writings suggest that someone has been testing their own blood—dark, viscous droplets still dot the edges of the paper."
-                                                ]
-                                            },
-                                            "{@cue PLOT / INVESTIGATION: If any character investigates/searches the room with a DC 10 {@skill Investigation} check, read the following}",
-                                            {
-                                                "type": "insetReadaloud",
-                                                "entries": [
-                                                    "As you search through the scattered notes on the desk, one stands out. It references a particular tome: {@item The Vampiric Rite of Sepins|HoE}. A note jotted in the margin reads: \"replace the torch\"."
-                                                ]
-                                            },
-                                            "{@cue What did you roll? Okay...}",
-                                            {
-                                                "type": "insetReadaloud",
-                                                "entries": [
-                                                    "But your eyes are drawn to something else—a crumpled, nearly hidden scrap of parchment beneath a beaker, slightly stained with blood. It describes servants, bound to the will of their master, their loyalty not broken by death. One sentence is underlined, 'Even in the dark, they rise from their rest when summoned, beneath the ground, beneath the veil of life.' A drawing of a crude coffin, half-buried in dirt, lingers ominously at the bottom of the page."
-                                                ]
-                                            },
-                                            "{@cue LOOT! - If anything SPECIFIC in the room is searched, a DC 10 {@skill Investigation} check reveals a {@item Potion of Healing} amongst the clutter.}"
-                                        ]
-                                }                                
+								{
+									"type": "entries",
+									"name": "23: Landing",
+									"id": "23 landing",
+									"entries": [
+										"Stairs down to {@area The Lobby|11 lobby|x}.",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"At the top of the stairs, two ancient suits of armor stand vigil, their hollow gazes fixed upon you, as if waiting for something... The double doors to the north rest between two grimy windows. A weapon rack lines the east wall, next to a door that seems to fade into the shadows. To the west are two doors, the north door hanging slightly ajar, revealing only darkness beyond. And most prominently, two sets of double doors to the south dominate the landing. From beneath them, a faint flicker of torchlight dances, casting eerie, shifting shadows across the red-carpeted floor."
+											]
+										},
+										"{@cue The moment a player reaches for the double doors to the library... or reaches for the weapons rack...}",
+										{
+											"type": "inset",
+											"name": "Encounter: Animated Armors",
+											"entries": [
+												{
+													"type": "list",
+													"style": "list-no-bullets",
+													"items": [
+														"2 x {@creature Animated Armor}",
+														"{@note Adjusted XP: 600}",
+														"<hr/>",
+														"Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#}"
+													]
+												}
+											]
+										},
+										"{@cue LOOT! - The weapon rack contains a +1 melee weapon (something a PC wields)}"
+									]
+								},
+								{
+									"type": "entries",
+									"name": "24: Balcony",
+									"id": "24 balcony",
+									"entries": [
+										"This balcony overlooks the Elazar grounds behind the mansion.",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"This balcony overlooks the Elazar grounds behind the mansion. Though, you cannot see farther than a few feet in this dense fog. Below the balcony, you can see the glass roof of the conservatory."
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "25: Guest Bedroom",
+									"id": "25 guest bedroom",
+									"entries": [
+										"The tidy, unused room has a slightly open window allowing a cold draft to move the curtains and play tricks on the characters' eyes. There's a large out-of-place looking gold mirror.",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"This guest bedroom seems tidy but unused. The window is slightly ajar, letting in a cold draft which gently blows the window curtain every so often, casting a long, waving shadow across the floor. Gazing around, you notice that the large gold mirror looks out of place. Glancing back at the curtain's shadow, you see a new shadow emerge... the figure of a woman... she's holding a baby and appears to be shushing it. As the curtain gently falls back toward the window, its receding shadow erases the eerie shadow of the woman and her baby from the room."
+											]
+										},
+										"{@cue TRAP! - If anyone looks at their reflection in the mirror, use the {@trap Mirror Trap|HoE}.}",
+										"{@cue LOOT! - If the armoire is searched, a DC 10 {@skill Investigation} check reveals a hidden compartment with a {@item Ring of X-ray Vision}.}"
+									]
+								},
+								{
+									"type": "entries",
+									"name": "26: Master Bedroom",
+									"id": "26 master bedroom",
+									"entries": [
+										"The master bedroom seems to be occasionally used, but the bed has not been slept in.",
+										{
+											"type": "image",
+											"href": {
+												"type": "external",
+												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky bedroom.jpg"
+											},
+											"title": "Master Bedroom",
+											"credit": "Credit: orcnog & chatgpt"
+										},
+										"{@cue Show: Spooky Bedroom image|media}",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"The master bedroom seems to be used occasionally, but the bed has clearly not been slept in. A violin looks like it played often. There seem to be a lot of mirrors for some reason. Everything in the room is impeccably tidy except for a haphazard pile of suitcases and boxes near the vanity. Their clumsy orientation stands out in the otherwise orderly room."
+											]
+										},
+										"{@cue PLOT / INVESTIGATION: Trapdoor down to {@area 21|21 trapdoor down to 10} is hidden beneath a pile of suitcases and boxes.}",
+										"{@cue TRAP! - If anyone looks at their reflection in the mirror on the wall, use the {@trap Mirror Trap|HoE}.}",
+										"{@cue LOOT! - The violin has magical properties. See {@item Elazar's Violin|HoE}.}"
+									]
+								},
+								{
+									"type": "entries",
+									"name": "27: Children's Bedroom",
+									"id": "27 children's bedroom",
+									"entries": [
+										"The door is locked. This is the room in which Elazar held the two kidnapped boys. If the players manage to break into the room with a successful DC 10 {@skill Athletics} or {@item thieves' tools|phb} check, or by using a reasonable spell or some other clever trick, read the following.",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"This is a children's bedroom. The beds are both unmade, and slept-in. Drawings in red ink (?) in a childish hand seem to depict a scary man, dead bodies, and lots of blood."
+											]
+										},
+										"{@cue LOOT! - If the room is searched, a DC 10 {@skill Investigation} check reveals a Scroll of {@spell Dispel Evil and Good}.}"
+									]
+								},
+								{
+									"type": "entries",
+									"name": "28: Toy Room",
+									"id": "28 toy room",
+									"entries": [
+										"The toy room contains a collection of abandoned children's toys scattered across the floor, with a rocking horse in the corner and a doll in a wooden cradle. The room appears unused, but the creepy doll may animate and attack the players.",
+										{
+											"type": "image",
+											"href": {
+												"type": "external",
+												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky toy room.webp"
+											},
+											"title": "Toy Room",
+											"credit": "Credit: orcnog & chatgpt"
+										},
+										"{@cue Show: Spooky Toy Room image|media}",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"As you step into the dimly lit toy room, the faint scent of aged wood fills your lungs. The polished hardwood floor creaks underfoot, and a delicate, ornate rug centers the space, framing a low table cluttered with children's toys. Small, colorful blocks are scattered across the floor, seemingly abandoned by some unseen hand.",
+												"In the corner, a rocking horse, weathered by time, sits motionless. A doll, its glassy eyes staring ahead, rests eerily in an old wooden cradle. The room is seemingly innocent, but you would swear the toys change position when you look away...",
+												"In the silence, the only sound is the occasional squeak of the old, worn rocking chair in the far corner, gently swaying back and forth, despite the lack of a breeze."
+											]
+										},
+										"{@cue Whatever the players do next...}",
+										{
+											"type": "inset",
+											"name": "Encounter: Creepy Doll",
+											"entries": [
+												{
+													"type": "list",
+													"style": "list-no-bullets",
+													"items": [
+														"1 x {@creature Creepy Doll|HoE}",
+														"{@note Adjusted XP: 450}",
+														"<hr/>",
+														"Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#}"
+													]
+												}
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "29: Library",
+									"id": "29 library",
+									"entries": [
+										"The library contains books, alchemical equipment, and five large mirrors positioned around a central rug. Two of the mirrors are broken, and a sixth is missing. A torch sconce without a torch is present on one wall. A puzzle involving the mirrors and sconce must be solved to reveal further clues.",
+										{
+											"type": "image",
+											"href": {
+												"type": "external",
+												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky library.webp"
+											},
+											"title": "The Library",
+											"credit": "Credit: orcnog & chatgpt"
+										},
+										"{@cue Show: Spooky Library image|media}",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"The shelves in this library are filled with dusty books and alchemical equipment, much of it stained with a strange, sticky red substance. Five tall mirrors are arranged in a circle around an ornate rug. A sixth mirror lay on the floor, shattered, its jagged edges catching the dim light. A cold draft from the darkened corners of the room carries the faint scent of decay. On the far wall, a torch sconce sits conspicuously empty. The room feels off, as if it's waiting for something to be set in motion."
+											]
+										},
+										"{@cue PLOT / SECRET: If a character does something clever, like putting a lit torch in the holster, minor illustioning a mirror to replace the missing one, etc., the torchlight reflects and refracts between all the mirrors to form a focused point of light on one book on the shelf: {@item The Vampiric Rite of Sepins|HoE}.}",
+										"{@cue TRAP! - If anyone looks at their reflection in the mirror on the floor, use the {@trap Mirror Trap|HoE}.}",
+										"{@cue LOOT! - If the bookshelves are searched, a spellcaster character can find one of the following:}",
+										{
+											"type": "list",
+											"items": [
+												"a Scroll of {@spell Dispel Magic}",
+												"a Scroll of {@spell Protection from Energy}",
+												"a Scroll of {@spell Passwall}",
+												"a Scroll of {@spell Thunder Step|XGE}"
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "30: Study",
+									"id": "30 study",
+									"entries": [
+										"The study contains a large desk with alchemical equipment, glass beakers, and vials of dark fluids. Frantic handwritten notes suggest blood testing, with dried blood droplets still visible.",
+										{
+											"type": "image",
+											"href": {
+												"type": "external",
+												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky study1.webp"
+											},
+											"title": "The Study",
+											"credit": "Credit: orcnog & chatgpt"
+										},
+										"{@cue Show: Spooky Study image|media}",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"As you step into the room, the stale scent of parchment hits you. A large desk, strewn with various alchemical equipment, takes up the north end of the room. The glass beakers and vials are filled with strange, dark fluids, and beside them are scattered sheets of parchment, all covered in frantic handwriting. The writings suggest that someone has been testing their own blood\u2014dark, viscous droplets still dot the edges of the paper."
+											]
+										},
+										"{@cue PLOT / INVESTIGATION: If any character investigates/searches the room with a DC 10 {@skill Investigation} check, read the following}",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"As you search through the scattered notes on the desk, one stands out. It references a particular tome: {@item The Vampiric Rite of Sepins|HoE}. A note jotted in the margin reads: \"replace the torch\"."
+											]
+										},
+										"{@cue What did you roll? Okay...}",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"But your eyes are drawn to something else\u2014a crumpled, nearly hidden scrap of parchment beneath a beaker, slightly stained with blood. It describes servants, bound to the will of their master, their loyalty not broken by death. One sentence is underlined, 'Even in the dark, they rise from their rest when summoned, beneath the ground, beneath the veil of life.' A drawing of a crude coffin, half-buried in dirt, lingers ominously at the bottom of the page."
+											]
+										},
+										"{@cue LOOT! - If anything SPECIFIC in the room is searched, a DC 10 {@skill Investigation} check reveals a {@item Potion of Healing} amongst the clutter.}"
+									]
+								}
 							]
 						}
 					]
@@ -1230,169 +1320,179 @@
 					"entries": [
 						{
 							"type": "entries",
-                            "name": "Basement 1: The Chapel",
-                            "id": "basement 1 the chapel",
+							"name": "Basement 1: The Chapel",
+							"id": "basement 1 the chapel",
 							"entries": [
 								{
-                                    "type": "entries",
-                                    "name": "04: Stairs down to 01",
-                                    "id": "04 stairs down to 01",
-                                    "entries": [
-                                        "These stairs lead down to the {@area 01|01 stairs up to 04}, and should be presented as a simple transition between floors, with no specific atmosphere other than the general sense of descending further into the unknown.",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "The stairs lead down to a dimly lit area below."
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "05: Corridor",
-                                    "id": "05 corridor",
-                                    "entries": [
-                                        "The corridor is where the sense of precision and coldness intensifies. Everything here is meant to feel unnervingly perfect, with an oppressive symmetry and lifelike grotesque carvings that unsettle the players as they progress.",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "Stepping into the corridor, the sense of cold precision intensifies. The floor and walls are formed of immaculate, polished stone, with intricate, angular carvings that stretch from floor to ceiling. The hallway's symmetry is almost oppressive, its sharp lines conveying a sense of meticulous design. The air is thick with the scent of damp stone and something faintly metallic. At the far end, a large fountain gurgles with a thick, dark liquid, the sound echoing eerily through the space. Blood pours endlessly from the mouth of a stone figure, pooling at its base. Alcoves along each side of the hall are home to grotesque carvings—twisted demonic creatures frozen in expressions of agony, their bodies contorted in unnatural ways. Their pained faces seem to follow you as you pass, the stone almost lifelike in the dim light. The chill of the space clings to your skin, seeping into your bones as you move deeper into the hall."
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "06: Chapel",
-                                    "id": "06 chapel",
-                                    "entries": [
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "Music plays eerily from the organ at one end. Rows of red marble benches face a raised dais upon which sits a large wooden altar. Behind the altar is a statue of a fallen angel."
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "07: Ladder up to 15",
-                                    "id": "07 ladder up to 15",
-                                    "entries": [
-                                        "This ladder connects to {@area 15|15 trapdoor down to 07} in the upper levels.",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "The ladder leads up to another area above."
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "08: Cells",
-                                    "id": "08 cells",
-                                    "entries": [
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "When the house was occupied by a greater number of vampires, human cattle was stored here for a consistent supply of blood and occasional sacrifice in the chapel."
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "09: Torture Chamber",
-                                    "id": "09 torture chamber",
-                                    "entries": [
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "An ornate throne next to two small tables supporting large golden goblets are arranged in front of a spiked iron cage suspended above deep pits. Possibly a twisted form of entertainment? You hear a scream… no, an echo of a scream… or perhaps just the memory of an echo… it's gone now. Perhaps you imagined it."
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "10: Ladder up to 21",
-                                    "id": "10 ladder up to 21",
-                                    "entries": [
-                                        "This ladder leads up to {@area 21|21 trapdoor down to 10} in the manor above.",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "As you descend the ladder, you feel an immediate shift in atmosphere. The opulence of the Baroque manor above gives way to something much colder, both physically and emotionally. The walls here are made of smooth, finely cut stone, devoid of the rich ornamentation you've grown accustomed to. Instead, the stone is sleek, clean, and sterile, with hard lines that give the space an air of calculated precision. The temperature drops sharply by at least ten degrees, and your breath mists slightly in the cold air. The quiet here is absolute—no creaks of aged wood, no murmurs of life, just the unsettling silence of a tomb."
-                                            ]
-                                        }
-                                    ]
-                                }      
+									"type": "entries",
+									"name": "04: Stairs down to 01",
+									"id": "04 stairs down to 01",
+									"entries": [
+										"These stairs lead down to the {@area 01|01 stairs up to 04}, and should be presented as a simple transition between floors, with no specific atmosphere other than the general sense of descending further into the unknown.",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"The stairs lead down to a dimly lit area below."
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "05: Corridor",
+									"id": "05 corridor",
+									"entries": [
+										"The corridor is where the sense of precision and coldness intensifies. Everything here is meant to feel unnervingly perfect, with an oppressive symmetry and lifelike grotesque carvings that unsettle the players as they progress.",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"Stepping into the corridor, the sense of cold precision intensifies. The floor and walls are formed of immaculate, polished stone, with intricate, angular carvings that stretch from floor to ceiling. The hallway's symmetry is almost oppressive, its sharp lines conveying a sense of meticulous design. The air is thick with the scent of damp stone and something faintly metallic. At the far end, a large fountain gurgles with a thick, dark liquid, the sound echoing eerily through the space. Blood pours endlessly from the mouth of a stone figure, pooling at its base. Alcoves along each side of the hall are home to grotesque carvings\u2014twisted demonic creatures frozen in expressions of agony, their bodies contorted in unnatural ways. Their pained faces seem to follow you as you pass, the stone almost lifelike in the dim light. The chill of the space clings to your skin, seeping into your bones as you move deeper into the hall."
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "06: Chapel",
+									"id": "06 chapel",
+									"entries": [
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"Music plays eerily from the organ at one end. Rows of red marble benches face a raised dais upon which sits a large wooden altar. Behind the altar is a statue of a fallen angel."
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "07: Ladder up to 15",
+									"id": "07 ladder up to 15",
+									"entries": [
+										"This ladder connects to {@area 15|15 trapdoor down to 07} in the upper levels.",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"The ladder leads up to another area above."
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "08: Cells",
+									"id": "08 cells",
+									"entries": [
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"When the house was occupied by a greater number of vampires, human cattle was stored here for a consistent supply of blood and occasional sacrifice in the chapel."
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "09: Torture Chamber",
+									"id": "09 torture chamber",
+									"entries": [
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"An ornate throne next to two small tables supporting large golden goblets are arranged in front of a spiked iron cage suspended above deep pits. Possibly a twisted form of entertainment? You hear a scream... no, an echo of a scream... or perhaps just the memory of an echo... it's gone now. Perhaps you imagined it."
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "10: Ladder up to 21",
+									"id": "10 ladder up to 21",
+									"entries": [
+										"This ladder leads up to {@area 21|21 trapdoor down to 10} in the manor above.",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"As you descend the ladder, you feel an immediate shift in atmosphere. The opulence of the Baroque manor above gives way to something much colder, both physically and emotionally. The walls here are made of smooth, finely cut stone, devoid of the rich ornamentation you've grown accustomed to. Instead, the stone is sleek, clean, and sterile, with hard lines that give the space an air of calculated precision. The temperature drops sharply by at least ten degrees, and your breath mists slightly in the cold air. The quiet here is absolute\u2014no creaks of aged wood, no murmurs of life, just the unsettling silence of a tomb."
+											]
+										}
+									]
+								}
 							]
 						},
-                        {
-                            "type": "entries",
-                            "name": "Basement 2: The Lair",
-                            "id": "basement 2 the lair",
-                            "entries": [
-                                {
-                                    "type": "entries",
-                                    "name": "01: Stairs up to 04",
-                                    "id": "01 stairs up to 04",
-                                    "entries": [
-                                        "These stairs lead up to {@area 04|04 stairs down to 01}.",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "The stairs lead up to another level of the manor."
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "02: Thrall's Chambers",
-                                    "id": "02 thrall's chambers",
-                                    "entries": [
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "The air grows heavier as you push open the doors to these cramped, suffocating chambers. Stale, cold air greets you—tinged with the scent of decay. The small rooms are crowded with ancient wooden coffins, their surfaces marred by age. Each coffin bears the same grotesque, hand-carved emblem—a symbol of allegiance to something far older and darker. The coffins are packed tightly together, and the room feels still, there's an unsettling weight in the air, as though these lifeless things hold more than just dust. You note that, amongst the intricate stonework of this underground lair, these seem to be the only things made of wood at all."
-                                            ]
-                                        },
-                                        "{@cue If the players opt to BREAK OPEN a coffin...}",
-                                        "They are probably just trying to harvest a wooden stake. Let them find an empty coffin, whose lid is lying splintered on the stone ground.",
-                                        "{@cue If the players open another coffin...}",
-                                        "They see a thrall, which just looks like a decaying corpse. (it doesn't wake up.)",
-                                        "{@cue If the players opt to attack the thralls...}",
-                                        "They all wake up and begin to attack the players. All 8 of them. *shrug*"
-                                    ]
-                                },
-                                {
-                                    "type": "entries",
-                                    "name": "03: Ritual Chamber",
-                                    "id": "03 ritual chamber",
-                                    "entries": [
-                                        "This is the ritual chamber where Elazar's final ritual is performed. When the players set foot in this chamber, there should be no doubt that they are embarking on the final boss battle.",
-                                        "{@cue Show: Spooky Ritual Chamber image|media}",
-                                        "{@cue Play: Boss fight music (with pipe organ)|media}",
-                                        {
-                                            "type": "insetReadaloud",
-                                            "entries": [
-                                                "Streams of blood flow from sacrificed victims to the pool at the center of the room from elevated plinths on each side. An ornate coffin rests on the far plinth flanked by Gargoyles. Two swords, heirlooms of his house, are displayed. Floating crimson orbs provide the only light. This is where the ritual is being performed. You can see two young boys, one on each side of the large chamber, bound and gagged on the raised plinths. But they appear to be the only ones in the room."
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }                                
+						{
+							"type": "entries",
+							"name": "Basement 2: The Lair",
+							"id": "basement 2 the lair",
+							"entries": [
+								{
+									"type": "entries",
+									"name": "01: Stairs up to 04",
+									"id": "01 stairs up to 04",
+									"entries": [
+										"These stairs lead up to {@area 04|04 stairs down to 01}.",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"The stairs lead up to another level of the manor."
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "02: Thrall's Chambers",
+									"id": "02 thrall's chambers",
+									"entries": [
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"The air grows heavier as you push open the doors to these cramped, suffocating chambers. Stale, cold air greets you\u2014tinged with the scent of decay. The small rooms are crowded with ancient wooden coffins, their surfaces marred by age. Each coffin bears the same grotesque, hand-carved emblem\u2014a symbol of allegiance to something far older and darker. The coffins are packed tightly together, and the room feels still, there's an unsettling weight in the air, as though these lifeless things hold more than just dust. You note that, amongst the intricate stonework of this underground lair, these seem to be the only things made of wood at all."
+											]
+										},
+										"{@cue If the players opt to BREAK OPEN a coffin...}",
+										"They are probably just trying to harvest a wooden stake. Let them find an empty coffin, whose lid is lying splintered on the stone ground.",
+										"{@cue If the players open another coffin...}",
+										"They see a thrall, which just looks like a decaying corpse. (it doesn't wake up.)",
+										"{@cue If the players opt to attack the thralls...}",
+										"They all wake up and begin to attack the players. All 8 of them. *shrug*"
+									]
+								},
+								{
+									"type": "entries",
+									"name": "03: Ritual Chamber",
+									"id": "03 ritual chamber",
+									"entries": [
+										"This is the ritual chamber where Elazar's final ritual is performed. When the players set foot in this chamber, there should be no doubt that they are embarking on the final boss battle.",
+										{
+											"type": "image",
+											"href": {
+												"type": "external",
+												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky ritual chamber.jpg"
+											},
+											"title": "Ritual Chamber",
+											"credit": "Credit: Tom Cartos",
+											"altText": "See: https://www.tomcartos.com/house-of-elazar-vampire-lair"
+										},
+										"{@cue Show: Spooky Ritual Chamber image|media}",
+										"{@cue Play: Boss fight music (with pipe organ)|media}",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"Streams of blood flow from sacrificed victims to the pool at the center of the room from elevated plinths on each side. An ornate coffin rests on the far plinth flanked by Gargoyles. Two swords, heirlooms of his house, are displayed. Floating crimson orbs provide the only light. This is where the ritual is being performed. You can see two young boys, one on each side of the large chamber, bound and gagged on the raised plinths. But they appear to be the only ones in the room."
+											]
+										}
+									]
+								}
+							]
+						}
 					]
 				},
 				{
 					"type": "section",
 					"name": "Appendix A: Key NPCs",
 					"page": 3,
-                    "id": "appendix a",
+					"id": "appendix a",
 					"entries": [
 						"There are 2 key NPCs in this story: a young village girl named Hamliea Hamm, and the vampire antagonist, Emmanuel Elazar.",
 						{
@@ -1435,32 +1535,32 @@
 						}
 					]
 				},
-                {
-                    "type": "section",
-                    "name": "Appendix B: Items",
-                    "page": 3,
-                    "id": "appendix b",
-                    "entries": [
-                        "The important items found in this adventure are presented in this section in alphabetical order.",
-                        {
-                            "type": "list",
-                            "columns": 1,
-                            "items": [
-                                "{@item Cloak of Protection}",
-                                "{@item Dark Shard Amulet|XGE}",
-                                "{@item Potion of Healing}",
-                                "{@item Potion of Mana|HoE}",
-                                "{@item Ring of X-ray Vision}",
-                                "{@item The Vampiric Rite of Sepins|HoE}"
-                            ]
-                        }
-                    ]
-                },
 				{
-                    "type": "section",
+					"type": "section",
+					"name": "Appendix B: Items",
+					"page": 3,
+					"id": "appendix b",
+					"entries": [
+						"The important items found in this adventure are presented in this section in alphabetical order.",
+						{
+							"type": "list",
+							"columns": 1,
+							"items": [
+								"{@item Cloak of Protection}",
+								"{@item Dark Shard Amulet|XGE}",
+								"{@item Potion of Healing}",
+								"{@item Potion of Mana|HoE}",
+								"{@item Ring of X-ray Vision}",
+								"{@item The Vampiric Rite of Sepins|HoE}"
+							]
+						}
+					]
+				},
+				{
+					"type": "section",
 					"name": "Appendix C: Monsters",
 					"page": 3,
-                    "id": "appendix c",
+					"id": "appendix c",
 					"entries": [
 						"The monsters and NPCs appearing in the adventure are presented in this section in alphabetical order.",
 						{
@@ -1480,10 +1580,10 @@
 					]
 				},
 				{
-                    "type": "section",
+					"type": "section",
 					"name": "Appendix D: Traps",
 					"page": 3,
-                    "id": "appendix d",
+					"id": "appendix d",
 					"entries": [
 						"Traps appearing in the adventure are presented in this section.",
 						{
