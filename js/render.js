@@ -433,6 +433,7 @@ globalThis.Renderer = function () {
 				case "inset": this._renderInset(entry, textStack, meta, options); break;
 				case "insetReadaloud": this._renderInsetReadaloud(entry, textStack, meta, options); break;
 				case "insetDMAction": this._renderInsetDMAction(entry, textStack, meta, options); break;
+				case "encounter": this._renderEncounterBlock(entry, textStack, meta, options); break;
 				case "variant": this._renderVariant(entry, textStack, meta, options); break;
 				case "variantInner": this._renderVariantInner(entry, textStack, meta, options); break;
 				case "variantSub": this._renderVariantSub(entry, textStack, meta, options); break;
@@ -1170,6 +1171,144 @@ globalThis.Renderer = function () {
 		this._lastDepthTrackerInheritedProps = cachedLastDepthTrackerProps;
 	};
 
+	this._renderEncounterBlock = async function (entry, textStack, meta, options) {
+		if (entry?.combatants?.length <= 0) return;
+
+        const _this = this;
+        const id = CryptUtil.uid();
+		const creatures = entry.combatants;
+        let adjXp = entry.adjxp || 0;
+        let totalXp = 0;
+        let totalNumOfMonsters = 0;
+
+        if (adjXp === 0) {
+            calculateStuffAndUpdateDOM(creatures);
+        }
+
+		const dataString = this._renderEntriesSubtypes_getDataString(entry);
+        
+		textStack[0] += `<${this.wrapperTag} id="${id}" class="rd__b-special rd__b-inset rd__b-inset--encounter ${this._getMutatedStyleString(entry.style || "")}" ${dataString}>`;
+
+		const cachedLastDepthTrackerProps = MiscUtil.copyFast(this._lastDepthTrackerInheritedProps);
+		this._handleTrackDepth(entry, 1);
+
+		const pagePart = this._getPagePart(entry, true);
+		const partExpandCollapse = !this._isPartPageExpandCollapseDisabled ? this._getPtExpandCollapseSpecial() : "";
+		const partPageExpandCollapse = `<span class="ve-flex-vh-center">${[pagePart, partExpandCollapse].filter(Boolean).join("")}</span>`;
+		
+		textStack[0] += `<${this.wrapperTag} class="encounter-title">`;
+		if (entry.name != null) {
+			if (Renderer.ENTRIES_WITH_ENUMERATED_TITLES_LOOKUP[entry.type]) this._handleTrackTitles(entry.name);
+			textStack[0] += `<span class="rd__h rd__h--2-inset" data-title-index="${this._headerIndex++}" ${this._getEnumeratedTitleRel(entry.name)}><h4 class="entry-title-inner">${entry.name}</h4>${this._getPagePart(entry, true)}</span>`;
+		} else {
+			textStack[0] += `<span class="rd__h rd__h--2-inset rd__h--2-inset-no-name">${partPageExpandCollapse}</span>`;
+		}
+		
+		textStack[0] += `<p class="encounter-adj-xp">`;
+		this._recursiveRender(`{@footnote Adjusted XP: <span class="adj-xp-value">${adjXp}</span>|This tells you the \"Adjusted XP\" of the encounter, which helps you estimate its difficulty and helps you balance the encounter against a party's \"{@footnote daily budget|A rough estimate of the adjusted XP value for encounters the party can handle before the characters will need to take a long rest.|Daily Budget}\", using the {@table The Adventuring Day; Adventuring Day XP|DMG|Adventuring Day XP} table in the {@book DMG}.|Encounter Difficulty},`, textStack, meta);
+		textStack[0] += `</p>`;
+		
+		textStack[0] += `</${this.wrapperTag}>`;
+
+		const fauxEntry = {
+			type: "list",
+			style: "list-no-bullets",
+			items: entry.combatants.map(ent => {
+				if (typeof ent === "string") return ent;
+				if (ent.type === "item") return ent;
+
+				const out = {...ent, type: "item"};
+				
+				if (ent.creature) {
+					const qty = ent.quantity || 1; // Default to 1 if quantity is not provided
+					const creature = ent.creature;
+					out.entry =  `${qty} x ${creature}`;
+				}
+				return out;
+			}),
+		};
+		this._renderList(fauxEntry, textStack, meta, options);
+
+		const len = entry.notes?.length || 0;
+		if (len > 0) {
+			textStack[0] += `<i class="ve-muted">`
+			entry.notes[0] = `<b>Notes: </b>` + entry.notes[0];
+			for (let i = 0; i < len; ++i) {
+				const cacheDepth = meta.depth;
+				meta.depth = 2;
+				this._recursiveRender(entry.notes[i], textStack, meta, {prefix: "<p>", suffix: "</p>"});
+				meta.depth = cacheDepth;
+			}
+			textStack[0] += `</i>`
+		}
+		textStack[0] += `<hr/>`;
+		textStack[0] += `<${this.wrapperTag}>Run: <a class="initiative-tracker-link" data-encounter=''>Initiative Tracker</a></${this.wrapperTag}>`;
+		textStack[0] += `<div class="float-clear"></div>`;
+		textStack[0] += `</${this.wrapperTag}>`;
+
+		this._lastDepthTrackerInheritedProps = cachedLastDepthTrackerProps;
+
+        // Calculate Adjusted XP (UNFINISHED! See: encounterbuilder-models.js > getEncounterXpInfo... I think I need to build out a faux EncounterBuilderCreatureMeta obj)
+        // TODO: this forEach loop is async, which makes it not really update the vars in this _renderEncounterBlock function in time to use them.  Need to make the whole thing async?? or rewrite parts of DOM after this stuff finishes.
+        async function calculateStuffAndUpdateDOM (creatures) {
+            let adjXp = 0;
+            
+            const encounterData = {
+                "name": entry.name || null,
+                "adjxp": adjXp,
+                "creatures": (() => {
+                    const retArray = [];
+                    creatures.forEach((c) => {
+                        const [tag, text] = Renderer.splitFirstSpace(c.creature.slice(1, -1));
+                        const mon = Renderer.utils.getTagMeta(tag, text);
+                        const {hash, name} = mon;
+                        const obj = {
+                            name: name,
+                            hash: hash,
+                            tag: (() => {
+                                let thisTextStack = [""];
+                                _this._renderString_renderTag(thisTextStack, meta, options, tag, text)
+                                return thisTextStack[0];
+                            })(),
+                            // tag: Renderer.utils._getTagMeta_generic(tag, text)
+                            qty: c.quantity || 1
+                        };
+                        retArray.push(obj);
+                    })
+                    return retArray;
+                })()
+            }
+            creatures.forEach(async function (c) {
+                if (!c.hasOwnProperty('creature')) return;
+                const qty = c.quantity || 1;
+
+                // Get custom hash for this creature
+                const [tag, text] = Renderer.splitFirstSpace(c.creature.slice(1, -1));
+                const {hash, name} = Renderer.utils.getTagMeta(tag, text)
+                // const hash = Renderer.monster.getCustomHashId({name: creatureTag.name, source: creatureTag.source}); // , _isScaledCr: true, _scaledCr: targetCrNum});
+                const mon = await DataLoader.pCacheAndGetHash(
+                    UrlUtil.PG_BESTIARY,
+                    hash,
+                );
+        
+                const initBonus = Math.floor((mon.dex - 10) / 2);
+                const baseCr = mon.cr.cr || mon.cr;
+                // totalCr += Parser.crToNumber(baseCr) * qty;
+                totalXp += Parser.crToXpNumber(baseCr) * qty;
+                totalNumOfMonsters += qty;
+
+                // creatureMetas.push(new EncounterBuilderCreatureMeta({ creature: mon, count: qty}))
+            })
+            const multiplier = Parser.numMonstersToXpMult(totalNumOfMonsters);
+            adjXp = (multiplier || 1) * totalXp;
+            
+            // UPDATE THE DOM
+            const test = $(`#${id} .adj-xp-value`).length;
+            $(`#${id} .adj-xp-value`).text(adjXp);
+            $(`#${id} .initiative-tracker-link`).attr('encounter', JSON.stringify(encounterData));
+        }
+	};
+
 	this._renderVariant = function (entry, textStack, meta, options) {
 		const dataString = this._renderEntriesSubtypes_getDataString(entry);
 
@@ -1883,13 +2022,13 @@ globalThis.Renderer = function () {
 				this._recursiveRender(text, textStack, meta);
 				textStack[0] += `</i>`;
 				break;
-            case "@cue":
-                const [toDisplay, color] = Renderer.splitTagByPipe(text);
-                const ptColor = this._renderString_renderTag_getCueColorPart(color);
-                textStack[0] += `<i class="ve-dm-action" style="color: ${ptColor}">`;
-                this._recursiveRender(toDisplay, textStack, meta);
-                textStack[0] += `</i>`;
-                break;
+			case "@cue":
+				const [toDisplay, color] = Renderer.splitTagByPipe(text);
+				const ptColor = this._renderString_renderTag_getCueColorPart(color);
+				textStack[0] += `<i class="ve-dm-action" style="color: ${ptColor}">`;
+				this._recursiveRender(toDisplay, textStack, meta);
+				textStack[0] += `</i>`;
+				break;
 			case "@tip": {
 				const [displayText, titielText] = Renderer.splitTagByPipe(text);
 				textStack[0] += `<span title="${titielText.qq()}">`;
@@ -2236,25 +2375,25 @@ globalThis.Renderer = function () {
 
 	this._renderString_renderTag_getCueColorPart = function (color) {
 		if (!color) return "";
-        switch (color) {
-            case `dm`:
-            case `dm-action`:
-                color = `--rgb-dm-action`;
-                break;
-            case `media`:
-            case `media-action`:
-                color = `--rgb-media-action`;
-                break;
-            case `critical`:
-            case `critical-action`:
-                color = `--rgb-critical-action`;
-                break;
-            case `success`:
-            case `info`:
-            case `warning`:
-            case `danger`:
-                color = `--rgb-${color}`;
-        }
+		switch (color) {
+			case `dm`:
+			case `dm-action`:
+				color = `--rgb-dm-action`;
+				break;
+			case `media`:
+			case `media-action`:
+				color = `--rgb-media-action`;
+				break;
+			case `critical`:
+			case `critical-action`:
+				color = `--rgb-critical-action`;
+				break;
+			case `success`:
+			case `info`:
+			case `warning`:
+			case `danger`:
+				color = `--rgb-${color}`;
+		}
 		return this._renderString_renderTag_getBrewColorPart(color);
 	};
 

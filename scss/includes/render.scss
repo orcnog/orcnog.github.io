@@ -444,6 +444,20 @@ $rgb-inset-border: #656565;
                 background-color: #e2f2f3;
             }
 
+            &--encounter {
+                .encounter-title {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+                .encounter-adj-xp {
+                    margin-bottom: var(--h-mb-p);
+                    margin-top: var(--h-mb-p);
+                    font-style: italic;
+                    color: vars.$rgb-font--muted;
+                }
+            }
+
 			&-inner {
 				margin-top: 10px;
 			}

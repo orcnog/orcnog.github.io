@@ -44,6 +44,12 @@
 			&--dmaction {
 				background-color: #1C2D26;
 			}
+
+            &--encounter {
+                .encounter-adj-xp {
+                    color: vars-night.$rgb-font--muted-night;
+                }
+            }
 		}
 
 		&b-data {

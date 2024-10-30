@@ -655,6 +655,28 @@
 								},
 								"{@cue Show: Spooky Hogsbottom image|media}",
 								"Read the following aloud to your players:",
+                                {
+                                    "type": "encounter",
+                                    "name": "Encounter: TEST!",
+                                    "id": "encounter block test",
+                                    "combatants": [
+                                        {
+                                            "creature": "{@creature Hamelia|HoE}",
+                                            "quantity": 1
+                                        },
+                                        {
+                                            "creature": "{@creature Giant Bat|||scaled=2}",
+                                            "quantity": 1
+                                        },
+                                        {
+                                            "creature": "{@creature Swarm of Bats}",
+                                            "quantity": 1
+                                        }
+                                    ],
+                                    "notes": [
+                                        "Click the link below to launch the Voice Initiative controller screen for this encounter!"
+                                    ]
+                                },
 								{
 									"type": "insetReadaloud",
 									"page": 1,
