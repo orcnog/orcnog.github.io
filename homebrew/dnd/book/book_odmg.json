@@ -61,7 +61,7 @@
 					"name": "Introduction",
 					"page": 4,
 					"entries": [
-						"If you're reading this, you may be a seasoned Dungeons and Dragons Fifth Edition player, you may be a seasoned Dungeon Master [fist-bump], you may have used 5eTools before, or you may be a total noob to both!  This guide will try to guide you no matter where you're coming from, so if you already understand a concept, please be patient or just skip it.  I hope this helps you navigate my own customized version of the 5eTools toolset, and sets you up for success running one of my lovingly hand-crafted (or lovingly hand-converted) adventures!",
+						"If you're reading this, you may be a seasoned 5th Edition Dungeons & Dragons player, you may be a seasoned Dungeon Master [fist-bump], you may have used 5eTools before, or you may be a total noob to all of these things!  Not a problem.  This guide will try to meet you where you are.  I hope this helps you navigate my own customized version of the truly magnificent 5eTools toolset, and sets you up for success running one of my lovingly hand-crafted (or lovingly hand-converted) adventures!",
 						"What follows are guides on how to use general 5eTools features as well as how to leverage the custom tools I've added.",
 						{
 							"type": "entries",
@@ -137,7 +137,7 @@
 								"{@cue Call for a group perception check (DC 12).}",
 								"In some rare cases, a DM action will be shown in red. This is just to emphasize its importance, or to just make double-sure that you don't somehow miss it, for instance if it instructs the DM to do something during a combat encounter on a specific trigger (this kind of thing is particularly easy to miss when you're focusing on what monster actions to take next, or responding to a player's question about whether their attack hit, helping to calculate damage, etc.). Example critical cue:",
 								"{@cue Round 2: The roof caves in!|critical}",
-								"Whatever their use case, cues are intended to function as the writer mudging you, the DM, directly about something you should be doing at that point in the adventure."
+								"Whatever their use case, cues are intended to function as the writer nudging you, the DM, directly about something you should be doing at that point in the adventure."
 							]
 						},
 						{
