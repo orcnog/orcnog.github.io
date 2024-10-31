@@ -351,6 +351,7 @@ globalThis.Renderer = function () {
 			for (const pt of pluginTypes) this.removePlugin(pt, fnPlugin);
 		}
 	};
+
 	// endregion
 
 	this.getLineBreak = function () { return "<br>"; };
@@ -1174,12 +1175,8 @@ globalThis.Renderer = function () {
 	this._renderEncounterBlock = async function (entry, textStack, meta, options) {
 		if (entry?.combatants?.length <= 0) return;
 
-		const _this = this;
 		const id = CryptUtil.uid();
-		const creatures = entry.combatants;
 		let adjXp = entry.adjxp || 0;
-		let totalXp = 0;
-		let totalNumOfMonsters = 0;
 
 		const dataString = this._renderEntriesSubtypes_getDataString(entry);
 
@@ -1216,7 +1213,7 @@ globalThis.Renderer = function () {
 				const out = {...ent, type: "item"};
 
 				if (ent.creature) {
-					const qty = ent.quantity || 1; // Default to 1 if quantity is not provided
+					const qty = ent.quantity || 1;
 					const creature = ent.creature;
 					out.entry = `${qty} x ${creature}`;
 				}
@@ -1244,79 +1241,115 @@ globalThis.Renderer = function () {
 
 		this._lastDepthTrackerInheritedProps = cachedLastDepthTrackerProps;
 
-		// Calculate Adjusted XP (UNFINISHED! See: encounterbuilder-models.js > getEncounterXpInfo... I think I need to build out a faux EncounterBuilderCreatureMeta obj)
-		// TODO: this forEach loop is async, which makes it not really update the vars in this _renderEncounterBlock function in time to use them.  Need to make the whole thing async?? or rewrite parts of DOM after this stuff finishes.
-
-		// async function calculateStuffAndUpdateDOM (creatures) {
-		this._registerEncounterForPostProcessing = function (id, entry) {
-			this.addPlugin("postProcess_encounter", async (commonArgs, pluginArgs) => {
-				try {
-					const creatures = entry.combatants;
-					let adjXp = 0;
-
-					const encounterData = {
-						"name": entry.name || null,
-						"adjxp": adjXp,
-						"creatures": (() => {
-							const retArray = [];
-							creatures.forEach((c) => {
-								const [tag, text] = Renderer.splitFirstSpace(c.creature.slice(1, -1));
-								const mon = Renderer.utils.getTagMeta(tag, text);
-								const {hash, name} = mon;
-								const obj = {
-									name: name,
-									hash: hash,
-									tag: (() => {
-										let thisTextStack = [""];
-										_this._renderString_renderTag(thisTextStack, meta, options, tag, text);
-										return thisTextStack[0];
-									})(),
-									// tag: Renderer.utils._getTagMeta_generic(tag, text)
-									qty: c.quantity || 1,
-								};
-								retArray.push(obj);
-							});
-							return retArray;
-						})(),
-					};
-					creatures.forEach(async function (c) {
-						if (!c.hasOwnProperty("creature")) return;
-						const qty = c.quantity || 1;
-
-						// Get custom hash for this creature
-						const [tag, text] = Renderer.splitFirstSpace(c.creature.slice(1, -1));
-						const {hash, name} = Renderer.utils.getTagMeta(tag, text);
-						// const hash = Renderer.monster.getCustomHashId({name: creatureTag.name, source: creatureTag.source}); // , _isScaledCr: true, _scaledCr: targetCrNum});
-						const mon = await DataLoader.pCacheAndGetHash(
-							UrlUtil.PG_BESTIARY,
-							hash,
-						);
-
-						const initBonus = Math.floor((mon.dex - 10) / 2);
-						const baseCr = mon.cr.cr || mon.cr;
-						// totalCr += Parser.crToNumber(baseCr) * qty;
-						totalXp += Parser.crToXpNumber(baseCr) * qty;
-						totalNumOfMonsters += qty;
-
-						// creatureMetas.push(new EncounterBuilderCreatureMeta({ creature: mon, count: qty}))
-					});
-					const multiplier = Parser.numMonstersToXpMult(totalNumOfMonsters);
-					adjXp = (multiplier || 1) * totalXp;
-
-					// UPDATE THE DOM
-					const test = $(`#${id} .adj-xp-value`).length;
-					$(`#${id} .adj-xp-value`).text(adjXp);
-					$(`#${id} .initiative-tracker-link`).attr("encounter", JSON.stringify(encounterData));
-				} catch (e) {
-					$(`#${id} .adj-xp-value`).html(`<span class="text-ganer">Error : ${e.message}</span>`);
-					$(`#${id} .initiative-tracker-link`).html(`<span class="text-ganer">Error : ${e.message}</span>`);
-				}
-			});
-		};
-
 		if (adjXp === 0) {
-			this._registerEncounterForPostProcessing(id, entry);
-			// calculateStuffAndUpdateDOM(creatures);
+			// Register the async work in the cache
+			Renderer._cache.encounter = Renderer._cache.encounter || {};
+
+			Renderer._cache.encounter[id] = {
+				pFn: async (ele) => {
+					const creatures = entry?.combatants;
+					if (!creatures) return;
+
+					const $ele = $(`#${id}`);
+					if (!$ele.length) return;
+
+					// Capture the renderer's 'this' context
+					const _renderer = this;
+
+					try {
+						let totalXp = 0;
+						let totalNumOfMonsters = 0;
+						const processedCreatures = [];
+						const page = UrlUtil.PG_BESTIARY;
+
+						await Promise.all(creatures.map(async function (c) {
+							if (!c.hasOwnProperty("creature")) return null;
+							const qty = c.quantity || 1;
+
+							// Get custom hash for this creature
+							const [tagName, textArgs] = Renderer.splitFirstSpace(c.creature.slice(1, -1));
+							let example = {
+								"name": "Giant Bat",
+								"displayText": "",
+								"others": [
+									"scaled=2",
+								],
+								"page": "bestiary.html",
+								"source": "MM",
+								"hash": "giant%20bat_mm",
+								"preloadId": "giant bat__mm__2____",
+								"subhashes": [
+									{
+										"key": "scaled",
+										"value": 2,
+									},
+								],
+								"linkText": "Giant Bat (CR 2)",
+								"hashPreEncoded": true,
+							};
+							const {name, source, hash, subhashes} = Renderer.utils.getTagMeta(tagName, textArgs);
+							const baseMon = await DataLoader.pCacheAndGetHash(
+								page,
+								hash,
+							);
+							if (!baseMon || !baseMon.name) throw Error({message: `Error retrieving monster`});
+							const scaledCr = subhashes?.find(item => item.key === "scaled")?.value;
+							const mon = typeof scaledCr !== "undefined" ? await ScaleCreature.scale(baseMon, scaledCr) : baseMon;
+
+							const hpMin = Renderer.dice.parseRandomise2(`dmin(${mon.hp.formula})`);
+							const hpMax = Renderer.dice.parseRandomise2(`dmax(${mon.hp.formula})`);
+							const hp = {...mon.hp, "max": hpMax, "min": hpMin};
+							const initiativeBonus = Math.floor((mon.dex - 10) / 2);
+							// Only add to XP totals if not an NPC
+							if (!mon.isNpc) {
+								const baseCr = mon.cr.cr || mon.cr;
+								totalXp += Parser.crToXpNumber(baseCr) * qty;
+								totalNumOfMonsters += qty;
+							}
+
+							// Return the creature data
+							// Add multiple entries for creatures with qty > 1
+							for (let i = 0; i < qty; i++) {
+								processedCreatures.push({
+									name: name,
+									page: page,
+									source: source,
+									hash: hash,
+									scaledCr: scaledCr,
+									hp: hp,
+									initBonus: initiativeBonus,
+									// tag: (() => {
+									// 	let thisTextStack = [""];
+									// 	_renderer._renderString_renderTag(thisTextStack, meta, options, tag, text);
+									// 	return thisTextStack[0];
+									// })(),
+								});
+							}
+						})).then(creatures => creatures.filter(Boolean));
+
+						// Calculate final XP
+						const multiplier = Parser.numMonstersToXpMult(totalNumOfMonsters);
+						const adjXp = (multiplier || 1) * totalXp;
+
+						// Create encounter data object
+						const encounterData = {
+							name: entry.name || null,
+							adjxp: adjXp,
+							creatures: processedCreatures,
+						};
+
+						// UPDATE THE DOM
+						$ele.find(".adj-xp-value").text(adjXp);
+						$ele.find(".initiative-tracker-link").attr("data-encounter", JSON.stringify(encounterData));
+					} catch (e) {
+						$ele.find(".adj-xp-value").html(`<span class="text-danger">Error</span>`);
+						$ele.find(".initiative-tracker-link").html(`<span class="text-danger">Error: ${e.message}</span>`);
+					}
+				},
+			};
+
+			// Add the trigger element
+			textStack[0] += `<style data-rd-cache-id="${id}" data-rd-cache="encounter" onload="Renderer._cache.pRunFromEle(this)"></style>`;
 		}
 	};
 
