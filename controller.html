@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="css/fontawesome.css">
 	<link rel="stylesheet" href="css/main.css">
 
-	<link rel="stylesheet" type="text/css" href="https://d20.orcnog.com/styles/controller.css" />
+	<link rel="stylesheet" type="text/css" href="css/controller.css" />
 
 	<!--5ETOOLS_CMP-->
 	<!--5ETOOLS_ANALYTICS-->
@@ -67,18 +67,11 @@
 <body>
 	<div class="overlay-noise no-print"></div>
 
-	<div class="cancer__wrp-leaderboard cancer__anchor">
-		<div class="cancer__disp-cancer"></div>
-		<div class="cancer__wrp-leaderboard-inner">
-			<!--5ETOOLS_AD_LEADERBOARD-->
-		</div>
-	</div>
-
 	<header class="hidden-xs hidden-sm page__header">
 		<div class="container ve-flex-v-baseline">
 			<h1 class="page__title no-wrap my-0" id="page__title">Voice Initiative Controller</h1>
 			<p class="page__subtitle no-wrap my-0" id="page__subtitle">Control an initiative board running on
-				d20.orcnog.com by connecting with p2p.</p>
+				192.168.1.151:8913 by connecting with p2p.</p>
 		</div>
 	</header>
 
@@ -86,7 +79,7 @@
 		<ul class="nav nav-pills page__nav-inner" id="navbar"></ul>
 	</nav>
 
-	<div class="container view-col-wrapper">
+    <div class="container view-col-wrapper">
 		<div class="view-col" id="listcontainer">
 
 			<div class="control-container">
@@ -318,7 +311,7 @@
 	</div>
 
 	<script src="https://unpkg.com/peerjs@1.5.0/dist/peerjs.min.js"></script>
-	<script src="https://d20.orcnog.com/scripts/controller.js"></script>
+	<script type="text/javascript" src="js/controller.js"></script>
 
 	<!-- standard 5etools scripts -->
 	<script type="text/javascript" defer src="lib/jquery.js"></script>
