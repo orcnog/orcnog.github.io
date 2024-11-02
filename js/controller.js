@@ -368,7 +368,7 @@ let signal;
 		players.forEach(player => {
 			const row = document.createElement("tr");
 			// add data-attributes for each of the following, if they exist in the incoming player obj
-			["id", "name", "spoken", "source", "hash", "page", "scaledCr"].forEach(prop => {
+			["id", "name", "spoken", "fromapp", "source", "hash", "page", "scaledCr"].forEach(prop => {
 				if (player[prop] != null) row.dataset[prop] = player[prop];
 			});
 			if (player.bloodied) row.classList.add("bloodied");
