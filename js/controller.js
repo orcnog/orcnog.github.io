@@ -1,11 +1,10 @@
 // TODO:
 // 1. Fix recurring error!: controller.js:841 Player ID not found in the row.
-// 2. when a statblock is assigned to a player, retain their previous cookied HP (but maybe not maxHp?)
+// 2. when a statblock is assigned to a player, retain their previous Name, Order, health status, and HP (but maybe not maxHp?)
 // 3. "Assign a creature" button needs to exist statically (not only on hover of non-statblocked player)
-// 4. On statblock assign, trigger blur on omnibox (or something to force it to close).
-// 5. make hp cell adder more reusable for other "cookied" cell values
-// 6. make max hp changeable... maybe click once to use max rollable hp, click again to use min, click again to "roll"? (cookied)
-// 7. make CR adjustable per row (cookied)
+// 4. make hp cell adder more reusable for other "cookied" cell values
+// 5. make max hp changeable... maybe click once to use max rollable hp, click again to use min, click again to "roll"? (cookied)
+// 6. make CR adjustable per row (cookied)
 
 const PATH = "https://192.168.1.151:8913/";
 
@@ -502,6 +501,7 @@ let signal;
 				mon.name = player.name;
 				const playerObjToUpdate = getPlayerObjFromMon(mon);
 				signal(`update_player:${JSON.stringify(playerObjToUpdate)}`);
+                $("body").trigger("click"); // close the omnibox
 				displayStatblock(page, source, hash);
 				highlightRow(row);
 			});
