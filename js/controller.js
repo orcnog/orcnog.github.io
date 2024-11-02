@@ -1,5 +1,5 @@
 // TODO:
-// 1. on 5et encounter broadcast, provide option to remove ONLY monsters, and leave non-statblock players.
+// 1. Fix recurring error!: controller.js:841 Player ID not found in the row.
 // 2. when a statblock is assigned to a player, retain their previous cookied HP (but maybe not maxHp?)
 // 3. "Assign a creature" button needs to exist statically (not only on hover of non-statblocked player)
 // 4. On statblock assign, trigger blur on omnibox (or something to force it to close).
@@ -25,6 +25,7 @@ let signal;
 	let clearMsgsButton = document.getElementById("clearMsgsButton");
 	let connectButton = document.getElementById("connect-button");
 	let cueString = "<span class=\"cueMsg\">Cue: </span>";
+    let activeAlerts = [];
 
 	const themes = await fetchJSON(`${PATH}/../styles/themes/themes.json`);
 	const slideshows = await fetchJSON(`${PATH}/../slideshow/slideshow-config.json`);
@@ -367,12 +368,10 @@ let signal;
 		// Loop through each player and create a row
 		players.forEach(player => {
 			const row = document.createElement("tr");
-			row.dataset.id = player.id;
-			row.dataset.name = player.name;
-			row.dataset.source = player.source;
-			row.dataset.hash = player.hash;
-			row.dataset.page = player.page;
-			row.dataset.scaledCr = player.scaledCr;
+            // add data-attributes for each of the following, if they exist in the incoming player obj
+            ["id", "name", "spoken", "source", "hash", "page", "scaledCr"].forEach(prop => {
+                if (player[prop] != null) row.dataset[prop] = player[prop];
+            });
 			if (player.bloodied) row.classList.add("bloodied");
 			if (player.dead) row.classList.add("dead");
 
@@ -705,11 +704,14 @@ let signal;
 	}
 
 	function showAlert (title, $modalContent) {
+        if (activeAlerts.includes($modalContent)) return // if $modalContent is already in our array of active alerts, don't show a duplicate
 		const {$modalInner} = UiUtil.getShowModal({
 			title: title || "Alert",
 			isMinHeight0: true,
+            cbClose: () => { activeAlerts.splice(activeAlerts.indexOf($modalContent), 1); }, // remove $modalContent from our array of active alerts
 		});
 		$modalInner.append($modalContent);
+        activeAlerts.push($modalContent);
 	}
 
 	function showModal (title, $modalContent) {
@@ -719,9 +721,67 @@ let signal;
 		$modalInner.append($modalContent);
 	}
 
-	async function clearAll (force = false) {
-		if (!force && !await InputUiUtil.pGetUserBoolean({title: "Clear Everything?", textYes: "Confirm", textNo: "Cancel"})) return;
+    async function clearEncounterConfirmAndDo (title, htmlDescription) {
+        
+        // Ask user if they want to clear everything, or just the monsters?
+        const userVal = await InputUiUtil.pGetUserGenericButton({
+            title: title || "Clear Creatures",
+            buttons: [
+                new InputUiUtil.GenericButtonInfo({
+                    text: "Clear Everything",
+                    clazzIcon: "glyphicon glyphicon-ok",
+                    value: "everything",
+                }),
+                new InputUiUtil.GenericButtonInfo({
+                    text: "Clear Monsters",
+                    clazzIcon: "glyphicon glyphicon-remove",
+                    isPrimary: true,
+                    value: "monsters",
+                }),
+                new InputUiUtil.GenericButtonInfo({
+                    text: "Cancel",
+                    clazzIcon: "glyphicon glyphicon-stop",
+                    isSmall: true,
+                    value: "cancel",
+                }),
+            ],
+            htmlDescription: htmlDescription || `<p>Do you want to clear everything from the encounter?  Or, clear only the monsters (those with assigned statblocks)?</p>`,
+        });
+        
+        // handle user response...
+        switch (userVal) {
+            case "everything": {
+                clearAll();
+                return true;
+            }
 
+            case "monsters": {
+                clearMonsters();
+                return true;
+            }
+
+            case null:
+            case "cancel": {
+                return false;
+            }
+
+            default: throw new Error(`Unexpected value "${userVal}"`);
+        }
+    }
+
+    function clearMonsters () {
+        // clear out only the rows that are mapped to statblocks
+        $('.initiative-tracker tr').each((i, el) => {
+            const $el = $(el);
+            if ($(el).is("[data-source]")) {
+                const playerId = $(el).data("id");
+                signal(`update_player:{"id":"${playerId}","name":""}`);
+                document.cookie = `${playerId}__hp=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`; // delete the HP cookie
+            }
+        });
+    }
+
+	async function clearAll () {
 		signal(`clear_initiative`);
 		$("#initiative-statblock-display").html("");
 
@@ -913,7 +973,7 @@ let signal;
 			signal(`add_player:{"name":"${name}","order":"${number}"}`);
 		});
 
-		document.getElementById("clear_initiative").addEventListener("click", () => { clearAll(); });
+		document.getElementById("clear_initiative").addEventListener("click", async () => { await clearEncounterConfirmAndDo(); });
 	}
 
 	function initTab2Tab () {
@@ -924,13 +984,10 @@ let signal;
 			if (p2pconnected) {
 				if (event?.data?.hasOwnProperty("new_initiative_board")) {
 					const newInitObj = event.data.new_initiative_board;
-					if (!await InputUiUtil.pGetUserBoolean({
-						title: `Do you want to reset the initiative order with this new encounter data?`,
-						htmlDescription: `<div class="mt-4"><p>${newInitObj?.players?.map(player => player.name).join("</p><p>")}</p></div>`,
-						textYes: "Confirm",
-						textNo: "Cancel",
-					})) return;
-					clearAll(true);
+					if (!await clearEncounterConfirmAndDo(
+                        `Do you want to reset the initiative order with this new encounter data?`,
+                         `<div class="mt-4"><p>${newInitObj?.players?.map(player => player.name).join("</p><p>")}</p></div>`
+                    )) return;
 					newInitObj?.players?.forEach((player) => {
 						const id = generatePlayerID();
 						const playerObjToAdd = getPlayerObjFromMon(player);
