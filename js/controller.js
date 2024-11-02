@@ -624,62 +624,21 @@ let signal;
             const scrollTop = window.scrollY;
             $('#initiative-statblock-display').html('').append(statblock)
             window.scrollTo(0, scrollTop);
-        } else {
-            // Add an option to assign a monster statblock
-            // const $addMonsterButton = $(`<table><tr><td>Assign a monster...</td></tr></table>`)
-            // $addMonsterButton.on('click', async () => {
-            //     // nothing yet
-            // })
-            
-            const $btnAddMonster = $(`<button id="orcnog_initiative_tracker_add_monster" title="Add Creature">Add Creature</button>`)
+        } else {     
+            const $btnAddMonster = $(`<button id="orcnog_initiative_tracker_add_monster" title="Assign a creature...">Assign a creature...</button>`)
             .on("click", async () => {
-                // if (this._state.isLocked) return;
-
-                // const [isDataEntered, monstersToLoad] = await new InitiativeTrackerMonsterAdd({board: this._board, isRollHp: this._state.isRollHp})
-                const [isDataEntered, monstersToLoad] = await new InitiativeTrackerMonsterAdd({board: {}, isRollHp: false})
-                    .pGetShowModalResults();
-                if (!isDataEntered) return;
-
-                // this._state.isRollHp = monstersToLoad.isRollHp;
-                this._state.isRollHp = false;
-
-                // const isGroupRollEval = monstersToLoad.count > 1 && this._state.isRollGroups;
-                const isGroupRollEval = false;
-
-                const mon = isGroupRollEval
-                    ? await DmScreenUtil.pGetScaledCreature({
-                        name: monstersToLoad.name,
-                        source: monstersToLoad.source,
-                        scaledCr: monstersToLoad.scaledCr,
-                        scaledSummonSpellLevel: monstersToLoad.scaledSummonSpellLevel,
-                        scaledSummonClassLevel: monstersToLoad.scaledSummonClassLevel,
-                    })
-                    : null;
-
-                const initiative = isGroupRollEval
-                    ? await this._roller.pGetRollInitiative({mon})
-                    : null;
-
-                const rowsNxt = [...this._state.rows];
-
-                (await [...new Array(monstersToLoad.count)]
-                    .pSerialAwaitMap(async () => {
-                        const rowNxt = await this._rowStateBuilderActive.pGetNewRowState({
-                            name: monstersToLoad.name,
-                            source: monstersToLoad.source,
-                            initiative,
-                            rows: rowsNxt,
-                            displayName: monstersToLoad.displayName,
-                            customName: monstersToLoad.customName,
-                            scaledCr: monstersToLoad.scaledCr,
-                            scaledSummonSpellLevel: monstersToLoad.scaledSummonSpellLevel,
-                            scaledSummonClassLevel: monstersToLoad.scaledSummonClassLevel,
-                        });
-                        if (!rowNxt) return;
-                        rowsNxt.push(rowNxt);
-                    }));
-
-                this._state.rows = rowsNxt;
+                const dismissedNotice = getCookie('assign_monster_notice_dismissed') === 'true'
+                if (!dismissedNotice) {
+                    if (await InputUiUtil.pGetUserBoolean({title: 'How to Assign a Creature', htmlDescription: `<ol><li>Search for a creature in the global search box.</li><li>Drag and drop that creature's name onto a combatant name in the initiative tracker.</li></ol>`, textYes: 'Do not show this again', textNo: 'Okay'})) {
+                        setCookie('assign_monster_notice_dismissed', 'true')
+                    }
+                    openOmniboxAndFocus();
+                } else {
+                    openOmniboxAndFocus();
+                }
+                function openOmniboxAndFocus () {
+                    $('.omni__input').val('in:bestiary ').trigger('click').focus()
+                }
             });
             $('#initiative-statblock-display').html('').append($btnAddMonster)
         }
