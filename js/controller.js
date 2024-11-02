@@ -24,7 +24,7 @@ let signal;
 	let clearMsgsButton = document.getElementById("clearMsgsButton");
 	let connectButton = document.getElementById("connect-button");
 	let cueString = "<span class=\"cueMsg\">Cue: </span>";
-    let activeAlerts = [];
+	let activeAlerts = [];
 
 	const themes = await fetchJSON(`${PATH}/../styles/themes/themes.json`);
 	const slideshows = await fetchJSON(`${PATH}/../slideshow/slideshow-config.json`);
@@ -367,10 +367,10 @@ let signal;
 		// Loop through each player and create a row
 		players.forEach(player => {
 			const row = document.createElement("tr");
-            // add data-attributes for each of the following, if they exist in the incoming player obj
-            ["id", "name", "spoken", "source", "hash", "page", "scaledCr"].forEach(prop => {
-                if (player[prop] != null) row.dataset[prop] = player[prop];
-            });
+			// add data-attributes for each of the following, if they exist in the incoming player obj
+			["id", "name", "spoken", "source", "hash", "page", "scaledCr"].forEach(prop => {
+				if (player[prop] != null) row.dataset[prop] = player[prop];
+			});
 			if (player.bloodied) row.classList.add("bloodied");
 			if (player.dead) row.classList.add("dead");
 
@@ -501,7 +501,7 @@ let signal;
 				mon.name = player.name;
 				const playerObjToUpdate = getPlayerObjFromMon(mon);
 				signal(`update_player:${JSON.stringify(playerObjToUpdate)}`);
-                $("body").trigger("click"); // close the omnibox
+				$("body").trigger("click"); // close the omnibox
 				displayStatblock(page, source, hash);
 				highlightRow(row);
 			});
@@ -704,14 +704,14 @@ let signal;
 	}
 
 	function showAlert (title, $modalContent) {
-        if (activeAlerts.includes($modalContent)) return // if $modalContent is already in our array of active alerts, don't show a duplicate
+		if (activeAlerts.includes($modalContent)) return; // if $modalContent is already in our array of active alerts, don't show a duplicate
 		const {$modalInner} = UiUtil.getShowModal({
 			title: title || "Alert",
 			isMinHeight0: true,
-            cbClose: () => { activeAlerts.splice(activeAlerts.indexOf($modalContent), 1); }, // remove $modalContent from our array of active alerts
+			cbClose: () => { activeAlerts.splice(activeAlerts.indexOf($modalContent), 1); }, // remove $modalContent from our array of active alerts
 		});
 		$modalInner.append($modalContent);
-        activeAlerts.push($modalContent);
+		activeAlerts.push($modalContent);
 	}
 
 	function showModal (title, $modalContent) {
@@ -721,65 +721,64 @@ let signal;
 		$modalInner.append($modalContent);
 	}
 
-    async function clearEncounterConfirmAndDo (title, htmlDescription) {
-        
-        // Ask user if they want to clear everything, or just the monsters?
-        const userVal = await InputUiUtil.pGetUserGenericButton({
-            title: title || "Clear Creatures",
-            buttons: [
-                new InputUiUtil.GenericButtonInfo({
-                    text: "Clear Everything",
-                    clazzIcon: "glyphicon glyphicon-ok",
-                    value: "everything",
-                }),
-                new InputUiUtil.GenericButtonInfo({
-                    text: "Clear Monsters",
-                    clazzIcon: "glyphicon glyphicon-remove",
-                    isPrimary: true,
-                    value: "monsters",
-                }),
-                new InputUiUtil.GenericButtonInfo({
-                    text: "Cancel",
-                    clazzIcon: "glyphicon glyphicon-stop",
-                    isSmall: true,
-                    value: "cancel",
-                }),
-            ],
-            htmlDescription: htmlDescription || `<p>Do you want to clear everything from the encounter?  Or, clear only the monsters (those with assigned statblocks)?</p>`,
-        });
-        
-        // handle user response...
-        switch (userVal) {
-            case "everything": {
-                clearAll();
-                return true;
-            }
+	async function clearEncounterConfirmAndDo (title, htmlDescription) {
+		// Ask user if they want to clear everything, or just the monsters?
+		const userVal = await InputUiUtil.pGetUserGenericButton({
+			title: title || "Clear Creatures",
+			buttons: [
+				new InputUiUtil.GenericButtonInfo({
+					text: "Clear Everything",
+					clazzIcon: "glyphicon glyphicon-ok",
+					value: "everything",
+				}),
+				new InputUiUtil.GenericButtonInfo({
+					text: "Clear Monsters",
+					clazzIcon: "glyphicon glyphicon-remove",
+					isPrimary: true,
+					value: "monsters",
+				}),
+				new InputUiUtil.GenericButtonInfo({
+					text: "Cancel",
+					clazzIcon: "glyphicon glyphicon-stop",
+					isSmall: true,
+					value: "cancel",
+				}),
+			],
+			htmlDescription: htmlDescription || `<p>Do you want to clear everything from the encounter?  Or, clear only the monsters (those with assigned statblocks)?</p>`,
+		});
 
-            case "monsters": {
-                clearMonsters();
-                return true;
-            }
+		// handle user response...
+		switch (userVal) {
+			case "everything": {
+				clearAll();
+				return true;
+			}
 
-            case null:
-            case "cancel": {
-                return false;
-            }
+			case "monsters": {
+				clearMonsters();
+				return true;
+			}
 
-            default: throw new Error(`Unexpected value "${userVal}"`);
-        }
-    }
+			case null:
+			case "cancel": {
+				return false;
+			}
 
-    function clearMonsters () {
-        // clear out only the rows that are mapped to statblocks
-        $('.initiative-tracker tr').each((i, el) => {
-            const $el = $(el);
-            if ($(el).is("[data-source]")) {
-                const playerId = $(el).data("id");
-                signal(`update_player:{"id":"${playerId}","name":""}`);
-                document.cookie = `${playerId}__hp=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`; // delete the HP cookie
-            }
-        });
-    }
+			default: throw new Error(`Unexpected value "${userVal}"`);
+		}
+	}
+
+	function clearMonsters () {
+		// clear out only the rows that are mapped to statblocks
+		$(".initiative-tracker tr").each((i, el) => {
+			const $el = $(el);
+			if ($(el).is("[data-source]")) {
+				const playerId = $(el).data("id");
+				signal(`update_player:{"id":"${playerId}","name":""}`);
+				document.cookie = `${playerId}__hp=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`; // delete the HP cookie
+			}
+		});
+	}
 
 	async function clearAll () {
 		signal(`clear_initiative`);
@@ -985,9 +984,9 @@ let signal;
 				if (event?.data?.hasOwnProperty("new_initiative_board")) {
 					const newInitObj = event.data.new_initiative_board;
 					if (!await clearEncounterConfirmAndDo(
-                        `Do you want to reset the initiative order with this new encounter data?`,
-                         `<div class="mt-4"><p>${newInitObj?.players?.map(player => player.name).join("</p><p>")}</p></div>`
-                    )) return;
+						`Do you want to reset the initiative order with this new encounter data?`,
+						`<div class="mt-4"><p>${newInitObj?.players?.map(player => player.name).join("</p><p>")}</p></div>`,
+					)) return;
 					newInitObj?.players?.forEach((player) => {
 						const id = generatePlayerID();
 						const playerObjToAdd = getPlayerObjFromMon(player);
