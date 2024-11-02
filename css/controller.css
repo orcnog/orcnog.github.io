@@ -357,6 +357,17 @@ div#initiative_order {
     text-decoration: line-through;
     text-decoration-color: var(--tracker-dead-strikethru-color);
 }
+.initiative-tracker tr.statblock-highlight,
+.initiative-tracker tr.statblock-highlight input {
+    background-color: rgba(65, 50, 0);
+}
+.initiative-tracker tr.drop-highlight,
+.initiative-tracker tr.drop-highlight input {
+    background-color: rgba(185, 135, 0);
+}
+.initiative-tracker tr.drop-highlight input {
+    pointer-events: none;
+}
 
 .initiative-tracker td {
     padding: 0.4rem;
@@ -589,11 +600,12 @@ div#initiative_order {
     position: relative;
     display: grid;
     grid-template-columns: 1fr;
+    column-gap: 10px;
 }
 
 @media screen and (min-width: 992px) {
     .control-panel {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 50% 50%;
     }
 }
 

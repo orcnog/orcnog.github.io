@@ -1268,25 +1268,25 @@ globalThis.Renderer = function () {
 
 							// Get custom hash for this creature
 							const [tagName, textArgs] = Renderer.splitFirstSpace(c.creature.slice(1, -1));
-							let example = {
-								"name": "Giant Bat",
-								"displayText": "",
-								"others": [
-									"scaled=2",
-								],
-								"page": "bestiary.html",
-								"source": "MM",
-								"hash": "giant%20bat_mm",
-								"preloadId": "giant bat__mm__2____",
-								"subhashes": [
-									{
-										"key": "scaled",
-										"value": 2,
-									},
-								],
-								"linkText": "Giant Bat (CR 2)",
-								"hashPreEncoded": true,
-							};
+							// let example = {
+							// 	"name": "Giant Bat",
+							// 	"displayText": "",
+							// 	"others": [
+							// 		"scaled=2",
+							// 	],
+							// 	"page": "bestiary.html",
+							// 	"source": "MM",
+							// 	"hash": "giant%20bat_mm",
+							// 	"preloadId": "giant bat__mm__2____",
+							// 	"subhashes": [
+							// 		{
+							// 			"key": "scaled",
+							// 			"value": 2,
+							// 		},
+							// 	],
+							// 	"linkText": "Giant Bat (CR 2)",
+							// 	"hashPreEncoded": true,
+							// };
 							const {name, source, hash, subhashes} = Renderer.utils.getTagMeta(tagName, textArgs);
 							const baseMon = await DataLoader.pCacheAndGetHash(
 								page,
@@ -1296,10 +1296,6 @@ globalThis.Renderer = function () {
 							const scaledCr = subhashes?.find(item => item.key === "scaled")?.value;
 							const mon = typeof scaledCr !== "undefined" ? await ScaleCreature.scale(baseMon, scaledCr) : baseMon;
 
-							const hpMin = Renderer.dice.parseRandomise2(`dmin(${mon.hp.formula})`);
-							const hpMax = Renderer.dice.parseRandomise2(`dmax(${mon.hp.formula})`);
-							const hp = {...mon.hp, "max": hpMax, "min": hpMin};
-							const initiativeBonus = Math.floor((mon.dex - 10) / 2);
 							// Only add to XP totals if not an NPC
 							if (!mon.isNpc) {
 								const baseCr = mon.cr.cr || mon.cr;
@@ -1310,20 +1306,8 @@ globalThis.Renderer = function () {
 							// Return the creature data
 							// Add multiple entries for creatures with qty > 1
 							for (let i = 0; i < qty; i++) {
-								processedCreatures.push({
-									name: name,
-									page: page,
-									source: source,
-									hash: hash,
-									scaledCr: scaledCr,
-									hp: hp,
-									initBonus: initiativeBonus,
-									// tag: (() => {
-									// 	let thisTextStack = [""];
-									// 	_renderer._renderString_renderTag(thisTextStack, meta, options, tag, text);
-									// 	return thisTextStack[0];
-									// })(),
-								});
+								mon.hash = hash;
+								processedCreatures.push(mon);
 							}
 						})).then(creatures => creatures.filter(Boolean));
 

@@ -1,4 +1,13 @@
-const PATH = 'https://192.168.1.151:8913/'
+// TODO:
+// 1. on 5et encounter broadcast, provide option to remove ONLY monsters, and leave non-statblock players.
+// 2. when a statblock is assigned to a player, retain their previous cookied HP (but maybe not maxHp?)
+// 3. "Assign a creature" button needs to exist statically (not only on hover of non-statblocked player)
+// 4. On statblock assign, trigger blur on omnibox (or something to force it to close).
+// 5. make hp cell adder more reusable for other "cookied" cell values
+// 6. make max hp changeable... maybe click once to use max rollable hp, click again to use min, click again to "roll"? (cookied)
+// 7. make CR adjustable per row (cookied)
+
+const PATH = "https://192.168.1.151:8913/";
 
 let send;
 let signal;
@@ -30,18 +39,18 @@ let signal;
 			} else {
 				lastPeerId = peer.id;
 			}
-			console.log(`peer.on('open')`);
+			console.debug(`peer.on('open')`);
 			checkForKeyAndJoin();
 		});
 		peer.on("connection", function (c) {
-			console.log(`peer.on('connection')`);
+			console.debug(`peer.on('connection')`);
 			c.on("open", function () {
 				c.send("Sender does not accept incoming connections");
 				setTimeout(function () { c.close(); }, 500);
 			});
 		});
 		peer.on("disconnected", function () {
-			console.log(`peer.on('disconnected')`);
+			console.debug(`peer.on('disconnected')`);
 			p2pconnected = false;
 			status.innerHTML = "<span class=\"red\">Connection lost. Please reconnect</span>";
 			document.querySelectorAll(".control-panel").forEach(c => { c.classList.add("closed"); });
@@ -50,7 +59,7 @@ let signal;
 			peer.reconnect();
 		});
 		peer.on("close", function () {
-			console.log(`peer.on('close')`);
+			console.debug(`peer.on('close')`);
 			p2pconnected = false;
 			conn = null;
 			status.innerHTML = "<span class=\"red\">Connection destroyed. Please refresh</span>";
@@ -362,6 +371,7 @@ let signal;
 			row.dataset.name = player.name;
 			row.dataset.source = player.source;
 			row.dataset.hash = player.hash;
+			row.dataset.page = player.page;
 			row.dataset.scaledCr = player.scaledCr;
 			if (player.bloodied) row.classList.add("bloodied");
 			if (player.dead) row.classList.add("dead");
@@ -456,7 +466,46 @@ let signal;
 			row.appendChild(badgeCell);
 
 			// If it's a monster, add the statblock display on hover
-			row.addEventListener("mouseover", () => { insertStatblock(player.page, player.source, player.hash, player.scaledCr); });
+			row.addEventListener("mouseover", (e) => {
+				const tr = e.target.closest("tr");
+				const { page, source, hash, scaledCr } = tr.dataset;
+				displayStatblock(page, source, hash, scaledCr);
+				highlightRow(tr);
+			});
+
+			// Add a dragover event handler to allow dropping
+			row.addEventListener("dragover", (evt) => {
+				evt.preventDefault(); // Prevent default to allow drop
+				evt.stopPropagation(); // Stop the event from bubbling up
+			});
+			row.addEventListener("dragenter", (evt) => {
+				evt.target.closest("tr").classList.add("drop-highlight");
+			});
+			row.addEventListener("dragleave", (evt) => {
+				evt.target.closest("tr").classList.remove("drop-highlight");
+			});
+			// Add a drop event handler to the row
+			row.addEventListener("drop", async (evt) => {
+				evt.preventDefault(); // Prevent default behavior
+				evt.stopPropagation(); // Stop the event from bubbling up
+				evt.target.closest("tr").classList.remove("drop-highlight");
+
+				// Log the dataTransfer object to see what is received
+				const hash = evt.dataTransfer.getData("text/plain").split("#")?.[1];
+				const source = hash?.split("_")?.[1];
+				const page = UrlUtil.PG_BESTIARY;
+				row.dataset.page = page;
+				row.dataset.source = source;
+				row.dataset.hash = hash;
+				const mon = await DataLoader.pCacheAndGetHash(page, hash);
+				mon.hash = hash;
+				mon.id = player.id;
+				mon.name = player.name;
+				const playerObjToUpdate = getPlayerObjFromMon(mon);
+				signal(`update_player:${JSON.stringify(playerObjToUpdate)}`);
+				displayStatblock(page, source, hash);
+				highlightRow(row);
+			});
 
 			// Append the row to the table
 			table.appendChild(row);
@@ -593,6 +642,10 @@ let signal;
 		return response.json();
 	}
 
+	function getDataOrNull (value) {
+		return (value === undefined || value === null || value === "null" || value === "undefined" || value === "") ? null : value;
+	}
+
 	function generatePlayerID () {
 		const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 		const idLength = 6;
@@ -611,18 +664,28 @@ let signal;
 		return newID;
 	}
 
-	async function insertStatblock (page, source, hash, scaledCr) {
+	function highlightRow (tr, clazz = "statblock") {
+		[...tr.parentNode.children].forEach(sibling => sibling !== tr && sibling.classList.remove(`${clazz}-highlight`));
+		tr.classList.add(`${clazz}-highlight`);
+	}
+
+	async function displayStatblock (page, source, hash, scaledCr) {
+		page = getDataOrNull(page);
+		source = getDataOrNull(source);
+		hash = getDataOrNull(hash);
+		scaledCr = getDataOrNull(scaledCr);
+
 		// If it's got page, source, and hash, it's a... it's a MONSTER!!
 		if (page && source && hash) {
 			// Add a statblock display on mouseover
 			const baseMon = await DataLoader.pCacheAndGet(page, source, hash);
-			const mon = scaledCr !== null ? await ScaleCreature.scale(baseMon, scaledCr) : baseMon;
+			const mon = (scaledCr !== undefined && scaledCr !== null && scaledCr !== "null") ? await ScaleCreature.scale(baseMon, scaledCr) : baseMon;
 			const statblock = Renderer.hover.$getHoverContent_stats(page, mon);
 			const scrollTop = window.scrollY;
 			$("#initiative-statblock-display").html("").append(statblock);
 			window.scrollTo(0, scrollTop);
 		} else {
-			const $btnAddMonster = $(`<button id="orcnog_initiative_tracker_add_monster" title="Assign a creature...">Assign a creature...</button>`)
+			const $btnAddMonster = $(`<button class="add-monster" title="Assign a creature...">Assign a creature...</button>`)
 				.on("click", async () => {
 					const dismissedNotice = getCookie("assign_monster_notice_dismissed") === "true";
 					if (!dismissedNotice) {
@@ -634,7 +697,7 @@ let signal;
 						openOmniboxAndFocus();
 					}
 					function openOmniboxAndFocus () {
-						$(".omni__input").val("in:bestiary ").trigger("click").focus();
+						$(".omni__input").val("in:bestiary ").focus().trigger("click").focus();
 					}
 				});
 			$("#initiative-statblock-display").html("").append($btnAddMonster);
@@ -673,6 +736,24 @@ let signal;
 		});
 	}
 
+	function getPlayerObjFromMon (mon) {
+		if (!mon) return;
+		const hpMin = Renderer.dice.parseRandomise2(`dmin(${mon.hp.formula})`);
+		const hpMax = Renderer.dice.parseRandomise2(`dmax(${mon.hp.formula})`);
+		const hp = {...mon.hp, "max": hpMax, "min": hpMin};
+		const initiativeBonus = Math.floor((mon.dex - 10) / 2);
+		return {
+			"name": mon.name,
+			"order": initiativeBonus,
+			"hp": hp,
+			"id": mon.id, // custom
+			"initBonus": initiativeBonus,
+			"page": UrlUtil.PG_BESTIARY,
+			"source": mon.source,
+			"hash": mon.hash, // custom
+			"scaledCr": mon._isScaledCr ? mon._scaledCr : null,
+		};
+	}
 	function getPlayerInitiativeRoll (player) {
 		return Number(player.initBonus) + 10;
 	}
@@ -851,24 +932,15 @@ let signal;
 					})) return;
 					clearAll(true);
 					newInitObj?.players?.forEach((player) => {
-						const initiativeOrder = getPlayerInitiativeRoll(player);
 						const id = generatePlayerID();
-						player.id = id;
-						signal({
-							"add_player": {
-								"name": player.name,
-								"order": initiativeOrder,
-								"id": id,
-								"hp": player.hp,
-								"initBonus": player.initBonus,
-								"page": player.page,
-								"source": player.source,
-								"hash": player.hash,
-								"scaledCr": player.scaledCr,
-							},
-						});
+						const playerObjToAdd = getPlayerObjFromMon(player);
+						playerObjToAdd.id = id;
+						signal({ "add_player": playerObjToAdd });
 					});
 					handleDataObject({"controllerData": newInitObj});
+					const activeRow = document.querySelector(".initiative-tracker tr.active");
+					displayStatblock(activeRow.dataset.page, activeRow.dataset.source, activeRow.dataset.hash);
+					highlightRow(activeRow);
 				}
 			}
 		};
