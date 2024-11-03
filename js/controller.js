@@ -25,6 +25,7 @@ let signal;
 	let connectButton = document.getElementById("connect-button");
 	let cueString = "<span class=\"cueMsg\">Cue: </span>";
 	let activeAlerts = [];
+	let isRowHoverEnabled = true;
 
 	const themes = await fetchJSON(`${PATH}/../styles/themes/themes.json`);
 	const slideshows = await fetchJSON(`${PATH}/../slideshow/slideshow-config.json`);
@@ -368,7 +369,7 @@ let signal;
 		players.forEach(player => {
 			const row = document.createElement("tr");
 			// add data-attributes for each of the following, if they exist in the incoming player obj
-			["id", "name", "spoken", "fromapp", "source", "hash", "page", "scaledCr"].forEach(prop => {
+			["id", "name", "spoken", "fromapp", "source", "hash", "page", "isNpc", "scaledCr"].forEach(prop => {
 				if (player[prop] != null) row.dataset[prop] = player[prop];
 			});
 			if (player.bloodied) row.classList.add("bloodied");
@@ -398,7 +399,7 @@ let signal;
 				input.style.width = `${Math.max(input.value.length, 1) + 2}ch`;
 			}
 
-			nameCell.addEventListener("click", () => { nameInput.focus(); });
+			nameInput.addEventListener("click", () => { nameInput.focus(); });
 			nameInput.addEventListener("focus", () => { nameInput.select(); });
 			nameInput.addEventListener("change", () => {
 				adjustInputWidth(nameInput);
@@ -463,14 +464,26 @@ let signal;
 			});
 			row.appendChild(badgeCell);
 
-			// If it's a monster, add the statblock display on hover
-			row.addEventListener("mouseover", (e) => {
+			const showStatblockOnEvent = (e) => {
 				const tr = e.target.closest("tr");
 				const { page, source, hash, scaledCr } = tr.dataset;
 				displayStatblock(page, source, hash, scaledCr);
 				highlightRow(tr);
-			});
+			};
 
+			// If it's a monster, add the statblock display on hover
+			row.addEventListener("mouseover", (e) => {
+				if (isRowHoverEnabled) showStatblockOnEvent(e);
+			});
+			nameCell.addEventListener("click", (e) => {
+				showStatblockOnEvent(e);
+				isRowHoverEnabled = false;
+			});
+			table.addEventListener("mouseleave", () => {
+				if (!table.contains(e.target)) {
+					isRowHoverEnabled = true;
+				}
+			});
 			// Add a dragover event handler to allow dropping
 			row.addEventListener("dragover", (evt) => {
 				evt.preventDefault(); // Prevent default to allow drop
@@ -684,21 +697,7 @@ let signal;
 			$("#initiative-statblock-display").html("").append(statblock);
 			window.scrollTo(0, scrollTop);
 		} else {
-			const $btnAddMonster = $(`<button class="add-monster" title="Assign a creature...">Assign a creature...</button>`)
-				.on("click", async () => {
-					const dismissedNotice = getCookie("assign_monster_notice_dismissed") === "true";
-					if (!dismissedNotice) {
-						if (await InputUiUtil.pGetUserBoolean({title: "How to Assign a Creature", htmlDescription: `<ol><li>Search for a creature in the global search box.</li><li>Drag and drop that creature's name onto a combatant name in the initiative tracker.</li></ol>`, textYes: "Do not show this again", textNo: "Okay"})) {
-							setCookie("assign_monster_notice_dismissed", "true");
-						}
-						openOmniboxAndFocus();
-					} else {
-						openOmniboxAndFocus();
-					}
-					function openOmniboxAndFocus () {
-						$(".omni__input").val("in:bestiary ").focus().trigger("click").focus();
-					}
-				});
+			const $btnAddMonster = $(`<button class="assign-a-monster" title="Assign a creature...">Assign a creature...</button>`);
 			$("#initiative-statblock-display").html("").append($btnAddMonster);
 		}
 	}
@@ -810,6 +809,7 @@ let signal;
 			"page": UrlUtil.PG_BESTIARY,
 			"source": mon.source,
 			"hash": mon.hash, // custom
+			"isNpc": mon.isNpc ? mon.isNpc : null,
 			"scaledCr": mon._isScaledCr ? mon._scaledCr : null,
 		};
 	}
@@ -970,6 +970,18 @@ let signal;
 			const number = document.getElementById("new_player_roll_master").value;
 
 			signal(`add_player:{"name":"${name}","order":"${number}"}`);
+		});
+
+		document.body.addEventListener("click", async (e) => {
+			if (e.target.classList.contains("assign-a-monster")) {
+				const dismissedNotice = getCookie("assign_monster_notice_dismissed") === "true";
+				if (!dismissedNotice) {
+					if (await InputUiUtil.pGetUserBoolean({title: "How to Assign a Creature", htmlDescription: `<ol><li>Search for a creature in the global search box.</li><li>Drag and drop that creature's name onto a combatant name in the initiative tracker.</li></ol>`, textYes: "Do not show this again", textNo: "Okay"})) {
+						setCookie("assign_monster_notice_dismissed", "true");
+					}
+				}
+				$(".omni__input").val("in:bestiary ").focus().trigger("click").focus();
+			}
 		});
 
 		document.getElementById("clear_initiative").addEventListener("click", async () => { await clearEncounterConfirmAndDo(); });

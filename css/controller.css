@@ -75,7 +75,6 @@ hr {
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 0 1em;
     padding: 0.25em 0.75em;
     border-radius: 1em;
     width: 15rem;
@@ -198,6 +197,7 @@ form#new_player_master {
 }
 
 .menu-expandable {
+    margin-top: 1rem;
     max-height: 12em;
     opacity: 1;
     overflow: hidden;
@@ -205,6 +205,7 @@ form#new_player_master {
 }
 
 .menu-expandable.closed {
+    margin-top: 0;
     max-height: 0;
     opacity: 0;
 }
@@ -212,7 +213,7 @@ form#new_player_master {
 .sender-btns-wrapper {
     display: flex;
     column-gap: 0.5rem;
-    margin-bottom: 1em;
+    margin: 1em 0;
 }
 
 .sender-btns-wrapper.column {
@@ -289,7 +290,7 @@ div#initiative_order {
     display: flex;
     flex-flow: row wrap;
     column-gap: 0.6rem;
-    margin: 3rem 0;
+    margin: 1rem 0 3rem;
     border-radius: 1rem;
     padding: 0.5rem;
     background: #2a2a2a;
