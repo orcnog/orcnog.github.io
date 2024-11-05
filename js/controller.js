@@ -365,6 +365,33 @@ let signal;
 		// Clear the table before inserting new rows
 		table.innerHTML = "";
 
+		// // Create the table header
+		// const thead = document.createElement("thead");
+		// const headerRow = document.createElement("tr");
+
+		// // Create and append the header cells
+		// const headers = [
+		// 	{ text: "Init", style: "" },
+		// 	{ text: "Name", style: "" },
+		// 	{ text: "", style: "" }, // Empty cell
+		// 	{ text: "HP /", style: "text-align: center;" },
+		// 	{ text: "Max", style: "text-align: center; margin-left: -3rem;" },
+		// 	{ text: "Status", style: "text-align: center;" },
+		// ];
+
+		// headers.forEach(header => {
+		// 	const th = document.createElement("td");
+		// 	th.textContent = header.text;
+		// 	if (header.style) {
+		// 		th.setAttribute("style", header.style);
+		// 	}
+		// 	headerRow.appendChild(th);
+		// });
+
+		// // Append the header row to the thead
+		// thead.appendChild(headerRow);
+		// table.appendChild(thead);
+
 		// Loop through each player and create a row
 		players.forEach(player => {
 			const row = document.createElement("tr");
@@ -410,13 +437,21 @@ let signal;
 			nameCell.appendChild(nameInput); // Append the input to the table cell and the cell to the row
 			row.appendChild(nameCell);
 
+			// Create and append the "statblock-lock-status" cell
+			const lockCell = document.createElement("td");
+			const lockSpan = document.createElement("span");
+			lockSpan.classList.add("statblock-lock-status");
+			lockCell.appendChild(lockSpan);
+			row.appendChild(lockCell);
+
+			// Create and append the "hp" and "maxhp" cells
 			const hp = getPlayerHp(player);
 			if (hp) {
 				// Create and append the "hp" cell
 				const hpCell = document.createElement("td");
 				const hpInput = document.createElement("input");
 				hpInput.type = "text";
-				hpInput.setAttribute("pattern", "^[+-]?\\d*$");
+				hpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
 				hpInput.className = "player-hp";
 				hpInput.addEventListener("focus", () => {
 					hpInput.select();
@@ -446,14 +481,18 @@ let signal;
 
 			// Create and append the "badge" cell (if it exists)
 			const badgeCell = document.createElement("td");
+			const badgeInput = document.createElement("input");
+			badgeInput.type = "text";
+			badgeInput.className = "player-badge";
 			if (player.dead) {
-				badgeCell.textContent = "Dead";
+				badgeInput.value = "Dead";
 			} else if (player.bloodied) {
-				badgeCell.textContent = "Bloodied";
+				badgeInput.value = "Bloodied";
 			} else {
-				badgeCell.textContent = "Healthy";
+				badgeInput.value = "Healthy";
 			}
-			badgeCell.addEventListener("click", () => {
+			badgeInput.addEventListener("click", (e) => {
+				e.preventDefault();
 				if (player.dead) {
 					signal(`update_player:{"id":"${player.id}","dead":false,"bloodied":false}`); // cycle back to healthy
 				} else if (player.bloodied) {
@@ -462,44 +501,83 @@ let signal;
 					signal(`update_player:{"id":"${player.id}","dead":false,"bloodied":true}`); // from healthy to bloodied
 				}
 			});
+			badgeCell.appendChild(badgeInput);
 			row.appendChild(badgeCell);
 
 			const showStatblockOnEvent = (e) => {
 				const tr = e.target.closest("tr");
-				const { page, source, hash, scaledCr } = tr.dataset;
-				displayStatblock(page, source, hash, scaledCr);
+				const { name, page, source, hash, scaledCr } = tr.dataset;
+				displayStatblock(name, page, source, hash, scaledCr);
 				highlightRow(tr);
 			};
 
 			// If it's a monster, add the statblock display on hover
 			row.addEventListener("mouseover", (e) => {
-				if (isRowHoverEnabled) showStatblockOnEvent(e);
-			});
-			nameCell.addEventListener("click", (e) => {
-				showStatblockOnEvent(e);
-				isRowHoverEnabled = false;
-			});
-			table.addEventListener("mouseleave", () => {
-				if (!table.contains(e.target)) {
-					isRowHoverEnabled = true;
+				// If hover is enabled, show the statblock
+				if (isRowHoverEnabled) {
+					showStatblockOnEvent(e);
+
+					// Bind the keydown event to the document
+					const keydownHandler = (event) => {
+						if (event.shiftKey) {
+							isRowHoverEnabled = false; // Disable hover on Shift key press
+							document.removeEventListener("keydown", keydownHandler); // Unbind the keydown event
+						}
+					};
+
+					// Add the keydown event listener to the document
+					document.addEventListener("keydown", keydownHandler);
 				}
 			});
+
+			table.addEventListener("mouseleave", (e) => {
+				if (!table.contains(e.relatedTarget)) {
+					if (!document.querySelector(".statblock-lock-status.locked")) {
+						isRowHoverEnabled = true;
+					}
+				}
+			});
+
+			row.addEventListener("click", (e) => {
+				if (e.target.tagName === "INPUT") return;
+
+				showStatblockOnEvent(e);
+
+				// Get the clicked row's statblock-lock-status
+				const statBlockLockCell = e.target?.closest("tr")?.querySelector(".statblock-lock-status");
+
+				if (statBlockLockCell) {
+					// Check if the row is currently locked
+					if (statBlockLockCell.classList.contains("locked")) {
+						// If locked, remove the class and enable row hover
+						statBlockLockCell.classList.remove("locked");
+						isRowHoverEnabled = true;
+					} else {
+						// If not locked, add the class and disable row hover
+						document.querySelectorAll(".statblock-lock-status.locked").forEach((c) => c.classList.remove("locked"));
+						statBlockLockCell.classList.add("locked");
+						isRowHoverEnabled = false;
+					}
+				}
+			});
+
 			// Add a dragover event handler to allow dropping
 			row.addEventListener("dragover", (evt) => {
 				evt.preventDefault(); // Prevent default to allow drop
 				evt.stopPropagation(); // Stop the event from bubbling up
 			});
 			row.addEventListener("dragenter", (evt) => {
-				evt.target.closest("tr").classList.add("drop-highlight");
+				evt.target.closest("tr")?.classList.add("drop-highlight");
 			});
 			row.addEventListener("dragleave", (evt) => {
-				evt.target.closest("tr").classList.remove("drop-highlight");
+				if (row.contains(evt.relatedTarget)) return;
+				evt.target.closest("tr")?.classList.remove("drop-highlight");
 			});
 			// Add a drop event handler to the row
 			row.addEventListener("drop", async (evt) => {
 				evt.preventDefault(); // Prevent default behavior
 				evt.stopPropagation(); // Stop the event from bubbling up
-				evt.target.closest("tr").classList.remove("drop-highlight");
+				evt.target.closest("tr")?.classList.remove("drop-highlight");
 
 				// Log the dataTransfer object to see what is received
 				const hash = evt.dataTransfer.getData("text/plain").split("#")?.[1];
@@ -509,13 +587,10 @@ let signal;
 				row.dataset.source = source;
 				row.dataset.hash = hash;
 				const mon = await DataLoader.pCacheAndGetHash(page, hash);
-				mon.hash = hash;
-				mon.id = player.id;
-				mon.name = player.name;
-				const playerObjToUpdate = getPlayerObjFromMon(mon);
+				const playerObjToUpdate = getPlayerObjFromMon({name: player.name, pid: player.id, hash, mon});
 				signal(`update_player:${JSON.stringify(playerObjToUpdate)}`);
 				$("body").trigger("click"); // close the omnibox
-				displayStatblock(page, source, hash);
+				displayStatblock(player.name, page, source, hash);
 				highlightRow(row);
 			});
 
@@ -681,7 +756,8 @@ let signal;
 		tr.classList.add(`${clazz}-highlight`);
 	}
 
-	async function displayStatblock (page, source, hash, scaledCr) {
+	async function displayStatblock (name, page, source, hash, scaledCr) {
+		name = getDataOrNull(name);
 		page = getDataOrNull(page);
 		source = getDataOrNull(source);
 		hash = getDataOrNull(hash);
@@ -695,6 +771,8 @@ let signal;
 			const statblock = Renderer.hover.$getHoverContent_stats(page, mon);
 			const scrollTop = window.scrollY;
 			$("#initiative-statblock-display").html("").append(statblock);
+			// Update display name, if name was provided.
+			if (name && name !== mon.name) document.getElementById("initiative-statblock-display").querySelector("h1").textContent = `${name} [${mon.name}]`;
 			window.scrollTo(0, scrollTop);
 		} else {
 			const $btnAddMonster = $(`<button class="assign-a-monster" title="Assign a creature...">Assign a creature...</button>`);
@@ -794,21 +872,22 @@ let signal;
 		});
 	}
 
-	function getPlayerObjFromMon (mon) {
-		if (!mon) return;
+	function getPlayerObjFromMon ({ name, pid, hash, mon }) {
+		if (!pid || !hash || !mon) return;
+		const displayName = name || mon.name;
 		const hpMin = Renderer.dice.parseRandomise2(`dmin(${mon.hp.formula})`);
 		const hpMax = Renderer.dice.parseRandomise2(`dmax(${mon.hp.formula})`);
 		const hp = {...mon.hp, "max": hpMax, "min": hpMin};
 		const initiativeBonus = Math.floor((mon.dex - 10) / 2);
 		return {
-			"name": mon.name,
+			"name": displayName,
 			"order": initiativeBonus,
 			"hp": hp,
-			"id": mon.id, // custom
+			"id": pid, // custom
 			"initBonus": initiativeBonus,
 			"page": UrlUtil.PG_BESTIARY,
 			"source": mon.source,
-			"hash": mon.hash, // custom
+			"hash": hash, // custom
 			"isNpc": mon.isNpc ? mon.isNpc : null,
 			"scaledCr": mon._isScaledCr ? mon._scaledCr : null,
 		};
@@ -1001,13 +1080,13 @@ let signal;
 					)) return;
 					newInitObj?.players?.forEach((player) => {
 						const id = generatePlayerID();
-						const playerObjToAdd = getPlayerObjFromMon(player);
+						const playerObjToAdd = getPlayerObjFromMon({name: player.name, pid: id, hash: player.hash, mon: player});
 						playerObjToAdd.id = id;
 						signal({ "add_player": playerObjToAdd });
 					});
 					handleDataObject({"controllerData": newInitObj});
 					const activeRow = document.querySelector(".initiative-tracker tr.active");
-					displayStatblock(activeRow.dataset.page, activeRow.dataset.source, activeRow.dataset.hash);
+					displayStatblock(activeRow.dataset.name, activeRow.dataset.page, activeRow.dataset.source, activeRow.dataset.hash);
 					highlightRow(activeRow);
 				}
 			}
