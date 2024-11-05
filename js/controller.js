@@ -1,5 +1,5 @@
 // TODO:
-// 1. Fix recurring error!: controller.js:841 Player ID not found in the row.
+// 1. BUG! I messed up custom CR adjusting, and was about to mess up MaxHP adjusting... CR saves new value to a cookie, but it doesn't update any "stored statblock" or even hash. The event handling and data attrs that were defined on original element creation are still slways based on original stats.
 // 2. when a statblock is assigned to a player, retain their previous Name, Order, health status, and HP (but maybe not maxHp?)
 // 3. make hp cell adder more reusable for other "cookied" cell values
 // 4. make max hp changeable... maybe click once to use max rollable hp, click again to use min, click again to "roll"? (cookied)
@@ -421,32 +421,34 @@ let signal;
 			row.appendChild(lockCell);
 
 			// Create and append the "hp" and "maxhp" cells
-			const hp = getPlayerHp(player);
+			const hp = getCookie(`${player.id}__hp`) || player.hp.average; // getPlayerHp(player, "__hp", 0);
 			if (hp) {
 				// Create and append the "hp" cell
 				const hpCell = document.createElement("td");
 				const hpInput = document.createElement("input");
+				const cookieSuffix = "__hp";
 				hpInput.type = "text";
 				hpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
 				hpInput.className = "player-hp";
-				hpInput.addEventListener("focus", () => {
-					hpInput.select();
-				});
-				setPlayerHp(hpInput, hp);
+				hpInput.dataset.cookie = cookieSuffix;
+				setPlayerHp(hpInput, hp, cookieSuffix);
+				hpInput.addEventListener("focus", handleHpFocus);
 				hpInput.addEventListener("change", handleHpChange);
 				hpInput.addEventListener("keydown", handleHpKeydown);
-				hpCell.addEventListener("click", () => {
-					hpInput.focus();
-				});
+				hpCell.addEventListener("click", handleHpClick);
 				hpCell.appendChild(hpInput);
 				row.appendChild(hpCell);
 
 				// Create and append the "maxhp" cell
 				const maxhpCell = document.createElement("td");
 				const maxhpInput = document.createElement("span");
-				const maxhp = player.hp?.average;
+				const maxhp = getCookie(`${player.id}__hpmax`) || player.hp.average;
 				maxhpInput.className = "player-maxhp";
 				maxhpInput.textContent = `/ ${maxhp}`;
+				maxhpInput.addEventListener("click", async (e) => {
+					const selectedHpType = await chooseCreatureMaxHP();
+					console.log(calculateNewHp(player.hp?.formula, selectedHpType));
+				});
 				maxhpCell.appendChild(maxhpInput);
 				row.appendChild(maxhpCell);
 			} else {
@@ -855,17 +857,49 @@ let signal;
 			}
 		});
 	}
+	async function chooseCreatureMaxHP () {
+		// Ask user what kinda max HP to set: average, maximum, minimum, or rolled.
+		const userVal = await InputUiUtil.pGetUserGenericButton({
+			title: "Choose Max HP Type",
+			buttons: [
+				new InputUiUtil.GenericButtonInfo({
+					text: "Average HP",
+					isPrimary: true,
+					isSmall: true,
+					value: 0,
+				}),
+				new InputUiUtil.GenericButtonInfo({
+					text: "Maximum Rollable HP",
+					isSmall: true,
+					value: 1,
+				}),
+				new InputUiUtil.GenericButtonInfo({
+					text: "Minimum Rollable HP",
+					isSmall: true,
+					value: 2,
+				}),
+				new InputUiUtil.GenericButtonInfo({
+					text: "Roll for HP!",
+					isSmall: true,
+					value: 3,
+				}),
+			],
+			htmlDescription: `<p>Select which fixed HP value you would like to assign to this creature, or roll for a random HP value.</p>`,
+		});
+		return userVal;
+	}
 
 	function getPlayerObjFromMon ({ name, pid, hash, mon }) {
 		if (!pid || !hash || !mon) return;
 		const displayName = name || mon.name;
 		const hpMin = Renderer.dice.parseRandomise2(`dmin(${mon.hp.formula})`);
 		const hpMax = Renderer.dice.parseRandomise2(`dmax(${mon.hp.formula})`);
-		const hp = {...mon.hp, "max": hpMax, "min": hpMin};
+		const hpRandom = Renderer.dice.parseRandomise2(mon.hp.formula);
+		const hp = {...mon.hp, "max": hpMax, "min": hpMin, "rnd": hpRandom};
 		const initiativeBonus = Math.floor((mon.dex - 10) / 2);
 		return {
 			"name": displayName,
-			"order": initiativeBonus,
+			"order": initiativeBonus + 10,
 			"hp": hp,
 			"id": pid, // custom
 			"initBonus": initiativeBonus,
@@ -876,16 +910,54 @@ let signal;
 			"scaledCr": mon._isScaledCr ? mon._scaledCr : null,
 		};
 	}
+
 	function getPlayerInitiativeRoll (player) {
 		return Number(player.initBonus) + 10;
 	}
 
-	function getPlayerHp (player, cookieSuffix) {
-		const cookieHp = getCookie(`${player.id}__hp${cookieSuffix}`);
-		const averageHp = Number(player?.hp?.average);
-		const minHp = Number(player?.hp?.min);
-		const maxHp = Number(player?.hp?.max);
-		return cookieHp !== undefined ? cookieHp : averageHp;
+	function getPlayerHp (player, cookieSuffix, forceHpType) {
+		if (!player) {
+			console.error("`player` must be defined");
+			return;
+		}
+		let hpValue;
+		if (forceHpType !== null) {
+			hpValue = calculateNewHp(player.hp.formula, forceHpType);
+		}
+		const cookieHp = getCookie(`${player.id}${cookieSuffix}`);
+		if (cookieHp) {
+			hpValue = cookieHp;
+		} else {
+			hpValue = calculateNewHp(player.hp.formula, 0); // type 0 gives us Average HP
+		}
+		return hpValue;
+	}
+
+	/**
+	 * @param {*} formula string like "5d8"
+	 * @param {*} hpType 0 = average HP, 1 = max HP, 2 = min HP, 3 = roll HP
+	 * @returns {Number} HP
+	 */
+	function calculateNewHp (formula, hpType) {
+		if (!formula) {
+			console.error("`formula` must be defined");
+			return;
+		}
+		if (hpType === 1) {
+			const hpMaximum = Renderer.dice.parseRandomise2(`dmax(${formula})`);
+			return hpMaximum;
+		}
+		if (hpType === 2) {
+			const hpMinimum = Renderer.dice.parseRandomise2(`dmin(${formula})`);
+			return hpMinimum;
+		}
+		if (hpType === 3) {
+			const hpRandom = Renderer.dice.parseRandomise2(formula);
+			return hpRandom;
+		}
+		// Default or hpType === 0
+		const hpAverage = Renderer.dice.parseAverage(formula);
+		return hpAverage;
 	}
 
 	function setPlayerHp (ele, hp, cookieSuffix) {
@@ -894,14 +966,27 @@ let signal;
 		hpInput.dataset.lastHp = hp; // Update the last HP value in the dataset
 
 		// Find the parent row and get the player ID from the data-id attribute
-		const playerRow = hpInput.closest("tr"); // Get the closest parent <tr> element
-		const playerId = playerRow ? playerRow.dataset.id : null; // Get the data-id attribute
-
-		if (playerId) {
-			setCookie(`${playerId}__hp${cookieSuffix}`, hp); // Save the new HP value in a cookie
-		} else {
-			console.error("Player ID not found in the row.");
+		const playerRow = hpInput?.closest("tr");
+		if (playerRow) {
+			const playerId = playerRow.dataset?.id;
+			if (playerId) {
+				setCookie(`${playerId}${cookieSuffix}`, hp); // Save the new HP value in a cookie
+			} else {
+				console.error("Player ID not found in the row.");
+			}
 		}
+	}
+
+	// Function to handle HP input click
+	function handleHpClick (e) {
+		const hpInput = e.target;
+		hpInput.select();
+	}
+
+	// Function to handle HP input focus
+	function handleHpFocus (e) {
+		const hpInput = e.target;
+		hpInput.select();
 	}
 
 	// Function to handle HP value changes
@@ -909,6 +994,7 @@ let signal;
 		const hpInput = e.target;
 		const raw = hpInput.value.trim();
 		const cur = Number(hpInput.dataset.lastHp); // Ensure cur is a number
+		const cookieSuffix = getDataOrNull(hpInput.dataset.cookie) || "__hp";
 
 		let result; // Variable to hold the new HP value
 
@@ -929,23 +1015,39 @@ let signal;
 		}
 
 		// Lock in the value, save it
-		setPlayerHp(hpInput, result);
+		setPlayerHp(hpInput, result, cookieSuffix);
 	}
 
 	function handleHpKeydown (e) {
 		const hpInput = e.target;
 		const cur = Number(hpInput.dataset.lastHp); // Get the current HP as a number
+		const cookieSuffix = getDataOrNull(hpInput.dataset.cookie) || "__hp";
+		let result;
 
 		if (e.key === "ArrowUp") {
 			e.preventDefault(); // Prevent the default action (scrolling)
-			const result = Number(cur) + 1; // Increment HP by 1
-			setPlayerHp(hpInput, result);
+			if (e.shiftKey) {
+				result = Number(cur) + 10; // Increment HP by 10
+			} else {
+				result = Number(cur) + 1; // Increment HP by 1
+			}
+			setPlayerHp(hpInput, result, cookieSuffix);
 		} else if (e.key === "ArrowDown") {
 			e.preventDefault(); // Prevent the default action (scrolling)
-			const result = Number(cur) - 1; // Decrement HP by 1
-			setPlayerHp(hpInput, result);
+			if (e.shiftKey) {
+				result = Number(cur) - 10; // Decrement HP by 10
+			} else {
+				result = Number(cur) - 1; // Decrement HP by 1
+			}
+			setPlayerHp(hpInput, result, cookieSuffix);
+		} else if (e.key === ".") {
+			e.preventDefault();
+		} else if (e.key === "Enter") {
+			e.preventDefault();
+			e.target.blur();
 		}
 	}
+
 	/**
 	 * Cookie Management
 	 */
