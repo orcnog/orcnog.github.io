@@ -359,45 +359,22 @@ let signal;
 	function handleCurrentPlayersData (obj) {
 		const players = obj.currentPlayers;
 
-		const table = document.getElementById("initiative_order").querySelector("table");
+		const table = document.getElementById("initiative_order").querySelector("tbody");
 
 		// Clear the table before inserting new rows
 		table.innerHTML = "";
 
-		// // Create the table header
-		// const thead = document.createElement("thead");
-		// const headerRow = document.createElement("tr");
-
-		// // Create and append the header cells
-		// const headers = [
-		// 	{ text: "Init", style: "" },
-		// 	{ text: "Name", style: "" },
-		// 	{ text: "", style: "" }, // Empty cell
-		// 	{ text: "HP /", style: "text-align: center;" },
-		// 	{ text: "Max", style: "text-align: center; margin-left: -3rem;" },
-		// 	{ text: "Status", style: "text-align: center;" },
-		// ];
-
-		// headers.forEach(header => {
-		// 	const th = document.createElement("td");
-		// 	th.textContent = header.text;
-		// 	if (header.style) {
-		// 		th.setAttribute("style", header.style);
-		// 	}
-		// 	headerRow.appendChild(th);
-		// });
-
-		// // Append the header row to the thead
-		// thead.appendChild(headerRow);
-		// table.appendChild(thead);
-
 		// Loop through each player and create a row
 		players.forEach(player => {
 			const row = document.createElement("tr");
+
 			// add data-attributes for each of the following, if they exist in the incoming player obj
 			["id", "name", "spoken", "fromapp", "source", "hash", "page", "isNpc", "scaledCr"].forEach(prop => {
 				if (player[prop] != null) row.dataset[prop] = player[prop];
 			});
+			// grab the adjusted CR from cookie (if it was adjusted here)
+			cookieCr = getCookie(`${player.id}__cr`);
+			if (cookieCr) row.dataset.scaledCr = cookieCr;
 			if (player.bloodied) row.classList.add("bloodied");
 			if (player.dead) row.classList.add("dead");
 
@@ -505,8 +482,8 @@ let signal;
 
 			const showStatblockOnEvent = (e) => {
 				const tr = e.target.closest("tr");
-				const { name, page, source, hash, scaledCr } = tr.dataset;
-				displayStatblock(name, page, source, hash, scaledCr);
+				const { name, id, page, source, hash, scaledCr } = tr.dataset;
+				displayStatblock(name, id, page, source, hash, scaledCr);
 				highlightRow(tr);
 			};
 
@@ -589,7 +566,7 @@ let signal;
 				const playerObjToUpdate = getPlayerObjFromMon({name: player.name, pid: player.id, hash, mon});
 				signal(`update_player:${JSON.stringify(playerObjToUpdate)}`);
 				$("body").trigger("click"); // close the omnibox
-				displayStatblock(player.name, page, source, hash);
+				displayStatblock(player.name, player.id, page, source, hash);
 				highlightRow(row);
 			});
 
@@ -604,7 +581,7 @@ let signal;
 
 	function handleCurrentTurnData (obj) {
 		const turnNum = Number(obj.currentTurn);
-		const table = document.getElementById("initiative_order").querySelector("table");
+		const table = document.getElementById("initiative_order").querySelector("tbody");
 		table.querySelector("tr.active")?.classList.remove("active");
 		const playerRow = table.querySelector(`tr:nth-of-type(${turnNum})`);
 		playerRow?.classList.add("active");
@@ -755,23 +732,31 @@ let signal;
 		tr.classList.add(`${clazz}-highlight`);
 	}
 
-	async function displayStatblock (name, page, source, hash, scaledCr) {
+	async function displayStatblock (name, id, page, source, hash, scaledCr) {
 		name = getDataOrNull(name);
+		id = getDataOrNull(id);
 		page = getDataOrNull(page);
 		source = getDataOrNull(source);
 		hash = getDataOrNull(hash);
 		scaledCr = getDataOrNull(scaledCr);
 
 		// If it's got page, source, and hash, it's a... it's a MONSTER!!
-		if (page && source && hash) {
+		if (id && page && source && hash) {
 			// Add a statblock display on mouseover
 			const baseMon = await DataLoader.pCacheAndGet(page, source, hash);
 			const mon = (scaledCr !== undefined && scaledCr !== null && scaledCr !== "null") ? await ScaleCreature.scale(baseMon, scaledCr) : baseMon;
 			const statblock = Renderer.hover.$getHoverContent_stats(page, mon);
 			const scrollTop = window.scrollY;
 			$("#initiative-statblock-display").html("").append(statblock);
+			$("#initiative-statblock-display").off("cr_update").on("cr_update", (e, cr) => {
+				$("#initiative_order").find(`[data-id="${id}"]`).attr("data-scaled-cr", cr);
+				setCookie(`${id}__cr`, cr);
+			});
+			$("#initiative-statblock-display").off("cr_reset").on("cr_reset", (e) => {
+				$("#initiative_order").find(`[data-id="${id}"]`).removeAttr("data-scaled-cr");
+			});
 			// Update display name, if name was provided.
-			if (name && name !== mon.name) document.getElementById("initiative-statblock-display").querySelector("h1").textContent = `${name} [${mon.name}]`;
+			if (name && name !== mon.name) document.getElementById("initiative-statblock-display").querySelector("h1").textContent = `${name} [${mon._displayName || mon.name}]`;
 			window.scrollTo(0, scrollTop);
 		} else {
 			const $btnAddMonster = $(`<button class="assign-a-monster" title="Assign a creature...">Assign a creature...</button>`);
@@ -851,7 +836,7 @@ let signal;
 			if ($(el).is("[data-source]")) {
 				const playerId = $(el).data("id");
 				signal(`update_player:{"id":"${playerId}","name":""}`);
-				document.cookie = `${playerId}__hp=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`; // delete the HP cookie
+				removeCookie(`${playerId}__hp`);
 			}
 		});
 	}
@@ -866,7 +851,7 @@ let signal;
 			const cookieName = cookie.split("=")[0].trim(); // Get the cookie name
 			if (cookieName.endsWith("__hp")) {
 				// If the cookie name ends with "__hp", delete it
-				document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+				removeCookie(cookieName);
 			}
 		});
 	}
@@ -972,7 +957,11 @@ let signal;
 	function getCookie (name) {
 		const value = `; ${document.cookie}`;
 		const parts = value.split(`; ${name}=`);
-		if (parts.length == 2) return parts.pop().split(";").shift();
+		if (parts.length === 2) return parts.pop().split(";").shift();
+	}
+
+	function removeCookie (name) {
+		document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
 	}
 
 	async function initializeDOM () {
@@ -1085,7 +1074,7 @@ let signal;
 					});
 					handleDataObject({"controllerData": newInitObj});
 					const activeRow = document.querySelector(".initiative-tracker tr.active");
-					displayStatblock(activeRow.dataset.name, activeRow.dataset.page, activeRow.dataset.source, activeRow.dataset.hash);
+					displayStatblock(activeRow.dataset.name, activeRow.dataset.id, activeRow.dataset.page, activeRow.dataset.source, activeRow.dataset.hash);
 					highlightRow(activeRow);
 				}
 			}
