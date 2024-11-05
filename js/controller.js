@@ -3,7 +3,7 @@
 // 2. when a statblock is assigned to a player, retain their previous Name, Order, health status, and HP (but maybe not maxHp?)
 // 3. make hp cell adder more reusable for other "cookied" cell values
 // 4. make max hp changeable... maybe click once to use max rollable hp, click again to use min, click again to "roll"? (cookied)
-// 5. make CR adjustable per row (cookied)
+// 5. make a player row with assigned creature UNassignable.
 
 const PATH = "https://d20.orcnog.com/";
 
