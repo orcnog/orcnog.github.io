@@ -5,7 +5,7 @@
 // 4. make max hp changeable... maybe click once to use max rollable hp, click again to use min, click again to "roll"? (cookied)
 // 5. make CR adjustable per row (cookied)
 
-const PATH = "https://192.168.1.151:8913/";
+const PATH = "https://d20.orcnog.com/";
 
 let send;
 let signal;
