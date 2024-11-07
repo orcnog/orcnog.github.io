@@ -1,9 +1,8 @@
 // TODO:
-// 1. BUG! I messed up custom CR adjusting, and was about to mess up MaxHP adjusting... CR saves new value to a cookie, but it doesn't update any "stored statblock" or even hash. The event handling and data attrs that were defined on original element creation are still slways based on original stats.
-// 2. when a statblock is assigned to a player, retain their previous Name, Order, health status, and HP (but maybe not maxHp?)
-// 3. make hp cell adder more reusable for other "cookied" cell values
-// 4. make max hp changeable... maybe click once to use max rollable hp, click again to use min, click again to "roll"? (cookied)
-// 5. make a player row with assigned creature UNassignable.
+// 1. when a statblock is assigned to a player, retain their previous Name, Order, health status, and HP (but maybe not maxHp?)
+// 2. make max hp changeable... maybe click once to use max rollable hp, click again to use min, click again to "roll"? (cookied)
+// 3. make a player row with assigned creature able to be UNassigned.
+// 4. implement active-alerts array in voice app too
 
 const PATH = "https://d20.orcnog.com/";
 
@@ -365,16 +364,16 @@ let signal;
 		table.innerHTML = "";
 
 		// Loop through each player and create a row
-		players.forEach(player => {
+		players.forEach(async (player) => {
 			const row = document.createElement("tr");
 
+			// UrlUtil.autoEncodeHash(mon)
+
 			// add data-attributes for each of the following, if they exist in the incoming player obj
-			["id", "name", "spoken", "fromapp", "source", "hash", "page", "isNpc", "scaledCr"].forEach(prop => {
+			["id", "name", "spoken", "fromapp", "hash", "isNpc", "scaledCr"].forEach(prop => {
 				if (player[prop] != null) row.dataset[prop] = player[prop];
 			});
-			// grab the adjusted CR from cookie (if it was adjusted here)
-			cookieCr = getCookie(`${player.id}__cr`);
-			if (cookieCr) row.dataset.scaledCr = cookieCr;
+
 			if (player.bloodied) row.classList.add("bloodied");
 			if (player.dead) row.classList.add("dead");
 
@@ -420,34 +419,54 @@ let signal;
 			lockCell.appendChild(lockSpan);
 			row.appendChild(lockCell);
 
-			// Create and append the "hp" and "maxhp" cells
-			const hp = getCookie(`${player.id}__hp`) || player.hp.average; // getPlayerHp(player, "__hp", 0);
-			if (hp) {
+			const mon = await get5etMonsterByHash(player.hash, player.scaledCr);
+			// For creatures with statblocks...
+			if (mon) {
 				// Create and append the "hp" cell
+				let hp = getCookie(`${player.id}__hp`);
+				if (!hp) {
+					hp = mon?.hp?.average;
+				}
 				const hpCell = document.createElement("td");
 				const hpInput = document.createElement("input");
-				const cookieSuffix = "__hp";
+				const hpCookieSuffix = "__hp";
 				hpInput.type = "text";
 				hpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
 				hpInput.className = "player-hp";
-				hpInput.dataset.cookie = cookieSuffix;
-				setPlayerHp(hpInput, hp, cookieSuffix);
+				hpInput.dataset.cookie = hpCookieSuffix;
+				setPlayerHp(hpInput, hp, hpCookieSuffix);
 				hpInput.addEventListener("focus", handleHpFocus);
 				hpInput.addEventListener("change", handleHpChange);
 				hpInput.addEventListener("keydown", handleHpKeydown);
-				hpCell.addEventListener("click", handleHpClick);
+				hpCell.addEventListener("click", () => { hpInput.select(); });
 				hpCell.appendChild(hpInput);
 				row.appendChild(hpCell);
 
 				// Create and append the "maxhp" cell
+				let maxhp = getCookie(`${player.id}__hpmax`);
+				if (!maxhp) {
+					maxhp = mon.hp?.average;
+				}
 				const maxhpCell = document.createElement("td");
-				const maxhpInput = document.createElement("span");
-				const maxhp = getCookie(`${player.id}__hpmax`) || player.hp.average;
+				maxhpCell.className = "td-player-maxhp";
+				const maxhpInput = document.createElement("input");
+				const maxhpCookieSuffix = "__hpmax";
+				maxhpInput.type = "text";
+				maxhpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
 				maxhpInput.className = "player-maxhp";
-				maxhpInput.textContent = `/ ${maxhp}`;
+				maxhpInput.dataset.cookie = maxhpCookieSuffix;
+				setPlayerHp(maxhpInput, maxhp, maxhpCookieSuffix);
+				maxhpInput.addEventListener("focus", handleHpFocus);
+				maxhpInput.addEventListener("change", handleHpChange);
+				maxhpInput.addEventListener("keydown", handleHpKeydown);
 				maxhpInput.addEventListener("click", async (e) => {
-					const selectedHpType = await chooseCreatureMaxHP();
-					console.log(calculateNewHp(player.hp?.formula, selectedHpType));
+					e.preventDefault();
+					const userSelection = await popoverChooseRollValue(maxhpInput, "HP");
+					if (userSelection !== null) {
+						const rollAnimationMinMax = userSelection === 3 ? {min: await calculateNewHp(mon, 2), max: await calculateNewHp(mon, 1)} : null;
+						const newHp = await calculateNewHp(mon, userSelection);
+						setPlayerHp(maxhpInput, newHp, maxhpCookieSuffix, rollAnimationMinMax);
+					}
 				});
 				maxhpCell.appendChild(maxhpInput);
 				row.appendChild(maxhpCell);
@@ -469,6 +488,10 @@ let signal;
 			} else {
 				badgeInput.value = "Healthy";
 			}
+			badgeInput.addEventListener("mousedown", (e) => {
+				e.preventDefault();
+				e.target.blur(); // prevent cursor from flashing visibily inside the text field
+			});
 			badgeInput.addEventListener("click", (e) => {
 				e.preventDefault();
 				if (player.dead) {
@@ -484,8 +507,8 @@ let signal;
 
 			const showStatblockOnEvent = (e) => {
 				const tr = e.target.closest("tr");
-				const { name, id, page, source, hash, scaledCr } = tr.dataset;
-				displayStatblock(name, id, page, source, hash, scaledCr);
+				const { name, id, hash, scaledCr } = tr.dataset;
+				displayStatblock(name, id, hash, scaledCr);
 				highlightRow(tr);
 			};
 
@@ -559,16 +582,13 @@ let signal;
 
 				// Log the dataTransfer object to see what is received
 				const hash = evt.dataTransfer.getData("text/plain").split("#")?.[1];
-				const source = hash?.split("_")?.[1];
 				const page = UrlUtil.PG_BESTIARY;
-				row.dataset.page = page;
-				row.dataset.source = source;
 				row.dataset.hash = hash;
-				const mon = await DataLoader.pCacheAndGetHash(page, hash);
-				const playerObjToUpdate = getPlayerObjFromMon({name: player.name, pid: player.id, hash, mon});
+				const dmon = await get5etMonsterByHash(page, hash);
+				const playerObjToUpdate = getPlayerObjFromMon({name: player.name, pid: player.id, hash, dmon});
 				signal(`update_player:${JSON.stringify(playerObjToUpdate)}`);
 				$("body").trigger("click"); // close the omnibox
-				displayStatblock(player.name, player.id, page, source, hash);
+				displayStatblock(player.name, player.id, hash);
 				highlightRow(row);
 			});
 
@@ -619,12 +639,11 @@ let signal;
 
 			// Ensure the interval clears after the specified duration
 			setTimeout(finishFade, duration);
-
-			function finishFade () {
-				clearInterval(fadeInterval); // Stop the interval
-				document.getElementById(`volume_${musicOrAmbience}`).value = finish * 100; // Ensure it ends at the target volume
-				document.getElementById(`volume_${musicOrAmbience}`).disabled = false;
-			}
+		}
+		function finishFade () {
+			clearInterval(fadeInterval); // Stop the interval
+			document.getElementById(`volume_${musicOrAmbience}`).value = finish * 100; // Ensure it ends at the target volume
+			document.getElementById(`volume_${musicOrAmbience}`).disabled = false;
 		}
 	}
 
@@ -734,36 +753,47 @@ let signal;
 		tr.classList.add(`${clazz}-highlight`);
 	}
 
-	async function displayStatblock (name, id, page, source, hash, scaledCr) {
+	async function get5etMonsterByHash (hash, scaledCr) {
+		if (!hash) return;
+		const baseMon = await DataLoader.pCacheAndGetHash(UrlUtil.PG_BESTIARY, hash);
+		// If it's a scaled CR, grab the scaled version from cache, otherwise, use the base version
+		const mon = (scaledCr !== undefined && scaledCr !== null && scaledCr !== "null") ? await ScaleCreature.scale(baseMon, scaledCr) : baseMon;
+		return mon;
+	}
+
+	async function displayStatblock (name, id, hash, scaledCr) {
 		name = getDataOrNull(name);
 		id = getDataOrNull(id);
-		page = getDataOrNull(page);
-		source = getDataOrNull(source);
 		hash = getDataOrNull(hash);
 		scaledCr = getDataOrNull(scaledCr);
 
-		// If it's got page, source, and hash, it's a... it's a MONSTER!!
-		if (id && page && source && hash) {
+		// If it's got hash, it's a... it's a MONSTER!! (or npc with a statblock)!!
+		if (id && hash) {
 			// Add a statblock display on mouseover
-			const baseMon = await DataLoader.pCacheAndGet(page, source, hash);
-			const mon = (scaledCr !== undefined && scaledCr !== null && scaledCr !== "null") ? await ScaleCreature.scale(baseMon, scaledCr) : baseMon;
-			const statblock = Renderer.hover.$getHoverContent_stats(page, mon);
+			const mon = await get5etMonsterByHash(hash, scaledCr);
+			const statblock = Renderer.hover.$getHoverContent_stats(UrlUtil.PG_BESTIARY, mon);
 			const scrollTop = window.scrollY;
 			$("#initiative-statblock-display").html("").append(statblock);
-			$("#initiative-statblock-display").off("cr_update").on("cr_update", (e, cr) => {
-				$("#initiative_order").find(`[data-id="${id}"]`).attr("data-scaled-cr", cr);
-				setCookie(`${id}__cr`, cr);
+			$("#initiative-statblock-display").off("cr_update").on("cr_update", (e, scaledMon) => {
+				const cr = Parser?.crToNumber(scaledMon?.cr);
+				signal(`update_player:{"id":"${id}","scaledCr":"${cr}"}`);
+				postProcessStatblockTitle(name, scaledMon);
 			});
-			$("#initiative-statblock-display").off("cr_reset").on("cr_reset", (e) => {
-				$("#initiative_order").find(`[data-id="${id}"]`).removeAttr("data-scaled-cr");
+			$("#initiative-statblock-display").off("cr_reset").on("cr_reset", (e, resetMon) => {
+				signal(`update_player:{"id":"${id}","scaledCr":null}`);
+				postProcessStatblockTitle(name, resetMon);
 			});
-			// Update display name, if name was provided.
-			if (name && name !== mon.name) document.getElementById("initiative-statblock-display").querySelector("h1").textContent = `${name} [${mon._displayName || mon.name}]`;
+			postProcessStatblockTitle(name, mon);
 			window.scrollTo(0, scrollTop);
 		} else {
 			const $btnAddMonster = $(`<button class="assign-a-monster" title="Assign a creature...">Assign a creature...</button>`);
 			$("#initiative-statblock-display").html("").append($btnAddMonster);
 		}
+	}
+
+	function postProcessStatblockTitle (name, mon) {
+		// Update display name, if name was provided.
+		if (name && name !== mon.name) document.getElementById("initiative-statblock-display").querySelector("h1").textContent = `${name} [${mon._displayName || mon.name}]`;
 	}
 
 	function showAlert (title, $modalContent) {
@@ -835,10 +865,11 @@ let signal;
 		// clear out only the rows that are mapped to statblocks
 		$(".initiative-tracker tr").each((i, el) => {
 			const $el = $(el);
-			if ($(el).is("[data-source]")) {
+			if ($(el).is("[data-hash]")) {
 				const playerId = $(el).data("id");
 				signal(`update_player:{"id":"${playerId}","name":""}`);
 				removeCookie(`${playerId}__hp`);
+				removeCookie(`${playerId}__hpmax`);
 			}
 		});
 	}
@@ -857,7 +888,7 @@ let signal;
 			}
 		});
 	}
-	async function chooseCreatureMaxHP () {
+	async function modalChooseCreatureMaxHP (ele) {
 		// Ask user what kinda max HP to set: average, maximum, minimum, or rolled.
 		const userVal = await InputUiUtil.pGetUserGenericButton({
 			title: "Choose Max HP Type",
@@ -889,81 +920,163 @@ let signal;
 		return userVal;
 	}
 
+	async function popoverChooseRollValue (ele, title) {
+		return new Promise((resolve) => {
+			// Create a table to hold the icons
+			const popover = createPopover(ele, (popov) => {
+				const table = document.createElement("div");
+				table.className = "popover-maxhp";
+
+				// Create and append each cell individually
+				const cell1 = document.createElement("button");
+				cell1.className = "popover-maxhp-btn";
+				cell1.innerHTML = "Avg";
+				cell1.title = `Set to Average ${title} value.`;
+				cell1.value = 0;
+				cell1.addEventListener("click", () => {
+					resolve(0); // Resolve with the value 0 for "avg"
+					document.body.removeChild(popov); // Close the popover
+				});
+				table.appendChild(cell1);
+
+				const cell2 = document.createElement("button");
+				cell2.className = "popover-maxhp-btn";
+				cell2.innerHTML = "max";
+				cell2.title = `Set to Maximum rollable ${title} value.`;
+				cell2.value = 1;
+				cell2.addEventListener("click", () => {
+					resolve(1); // Resolve with the value 1 for "max"
+					document.body.removeChild(popov); // Close the popover
+				});
+				table.appendChild(cell2);
+
+				const cell3 = document.createElement("button");
+				cell3.className = "popover-maxhp-btn";
+				cell3.innerHTML = "min";
+				cell3.title = `Set to Minimum rollable ${title} value.`;
+				cell3.value = 2;
+				cell3.addEventListener("click", () => {
+					resolve(2); // Resolve with the value 2 for "min"
+					document.body.removeChild(popov); // Close the popover
+				});
+				table.appendChild(cell3);
+
+				const cell4 = document.createElement("button");
+				cell4.className = "popover-maxhp-btn";
+				cell4.innerHTML = `<svg fill="#ffffff" height="20" width="20" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-50.75 -50.75 609.02 609.02" xml:space="preserve" stroke="#ffffff" stroke-width="0.0050752" transform="rotate(0)"><g id="SVGRepo_iconCarrier"> <g> <g> <g> <polygon points="386.603,185.92 488.427,347.136 488.427,138.944 "></polygon> <polygon points="218.283,18.645 30.827,125.781 131.883,167.893 "></polygon> <polygon points="135.787,202.325 27.264,374.144 235.264,383.189 "></polygon> <polygon points="352.597,170.667 253.781,0 253.739,0 154.923,170.667 "></polygon> <polygon points="471.915,123.051 289.237,18.645 375.445,167.573 "></polygon> <polygon points="19.093,144 19.093,347.136 120.661,186.325 "></polygon> <polygon points="243.093,507.52 243.093,404.843 48.661,396.416 "></polygon> <polygon points="272.235,383.232 480.256,374.144 371.733,202.325 "></polygon> <polygon points="264.427,507.52 458.837,396.416 264.427,404.885 "></polygon> <polygon points="154.475,192 253.76,372.523 353.045,192 "></polygon> </g> </g> </g> </g></svg>`;
+				cell4.title = `Roll for ${title}!`;
+				cell4.value = 3;
+				cell4.addEventListener("click", () => {
+					resolve(3); // Resolve with the value 3 for "roll"
+					document.body.removeChild(popov); // Close the popover
+				});
+				table.appendChild(cell4);
+
+				return table;
+			});
+
+			function destroyPopover (e) {
+				if (e.relatedTarget === null || (e.relatedTarget !== ele && !popover.contains(e.relatedTarget))) {
+					document.body.removeChild(popover);
+					ele.removeEventListener("focusout", destroyPopover);
+					ele.removeEventListener("change", destroyPopover);
+					resolve(null); // Resolve with null if the popover is closed without a choice
+				}
+			}
+
+			ele.addEventListener("focusout", destroyPopover);
+			ele.addEventListener("change", destroyPopover);
+
+			return popover;
+		});
+	}
+
+	function createPopover (ele, htmlFunc) {
+		// Create the popover element
+		const popover = document.createElement("div");
+		popover.className = "controller-popover";
+		popover.style.position = "absolute";
+		popover.style.backgroundColor = "black";
+		popover.style.border = "1px solid #222";
+		popover.style.zIndex = "1000";
+		popover.style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.1)";
+		popover.appendChild(htmlFunc(popover));
+
+		// Append the popover to the body to measure its dimensions
+		document.body.appendChild(popover);
+
+		// Position the popover above the element
+		const rect = ele.getBoundingClientRect();
+		const popoverHeight = popover.offsetHeight; // Get the height after appending
+
+		// Adjust the top position to account for the popover's height and scroll position
+		popover.style.top = `${rect.top + window.scrollY - popoverHeight}px`; // Position above the element
+		popover.style.left = `${rect.left + (rect.width / 2) - (popover.offsetWidth / 2)}px`; // Center horizontally
+
+		return popover;
+	}
+
 	function getPlayerObjFromMon ({ name, pid, hash, mon }) {
 		if (!pid || !hash || !mon) return;
 		const displayName = name || mon.name;
-		const hpMin = Renderer.dice.parseRandomise2(`dmin(${mon.hp.formula})`);
-		const hpMax = Renderer.dice.parseRandomise2(`dmax(${mon.hp.formula})`);
-		const hpRandom = Renderer.dice.parseRandomise2(mon.hp.formula);
-		const hp = {...mon.hp, "max": hpMax, "min": hpMin, "rnd": hpRandom};
+		// const hpMin = Renderer.dice.parseRandomise2(`dmin(${mon.hp.formula})`);
+		// const hpMax = Renderer.dice.parseRandomise2(`dmax(${mon.hp.formula})`);
+		// const hpRandom = Renderer.dice.parseRandomise2(mon.hp.formula);
+		// const hp = {...mon.hp, "max": hpMax, "min": hpMin, "rnd": hpRandom};
 		const initiativeBonus = Math.floor((mon.dex - 10) / 2);
 		return {
 			"name": displayName,
 			"order": initiativeBonus + 10,
-			"hp": hp,
+			// "hp": hp,
 			"id": pid, // custom
-			"initBonus": initiativeBonus,
-			"page": UrlUtil.PG_BESTIARY,
-			"source": mon.source,
+			// "initBonus": initiativeBonus,
+			// "page": UrlUtil.PG_BESTIARY,
 			"hash": hash, // custom
 			"isNpc": mon.isNpc ? mon.isNpc : null,
-			"scaledCr": mon._isScaledCr ? mon._scaledCr : null,
+			// "scaledCr": mon._isScaledCr ? mon._scaledCr : null,
 		};
 	}
 
-	function getPlayerInitiativeRoll (player) {
-		return Number(player.initBonus) + 10;
-	}
-
-	function getPlayerHp (player, cookieSuffix, forceHpType) {
-		if (!player) {
-			console.error("`player` must be defined");
-			return;
-		}
-		let hpValue;
-		if (forceHpType !== null) {
-			hpValue = calculateNewHp(player.hp.formula, forceHpType);
-		}
-		const cookieHp = getCookie(`${player.id}${cookieSuffix}`);
-		if (cookieHp) {
-			hpValue = cookieHp;
-		} else {
-			hpValue = calculateNewHp(player.hp.formula, 0); // type 0 gives us Average HP
-		}
-		return hpValue;
-	}
-
 	/**
-	 * @param {*} formula string like "5d8"
+	 * @param {*} mon a 5et monster object (hopefully containing an `hp` property obj)
 	 * @param {*} hpType 0 = average HP, 1 = max HP, 2 = min HP, 3 = roll HP
 	 * @returns {Number} HP
 	 */
-	function calculateNewHp (formula, hpType) {
-		if (!formula) {
-			console.error("`formula` must be defined");
+	async function calculateNewHp (mon, hpType) {
+		if (!mon.hp?.formula) {
+			console.error("`formula` must be defined in `mon`.");
 			return;
 		}
 		if (hpType === 1) {
-			const hpMaximum = Renderer.dice.parseRandomise2(`dmax(${formula})`);
+			const hpMaximum = Renderer.dice.parseRandomise2(`dmax(${mon.hp.formula})`);
 			return hpMaximum;
 		}
 		if (hpType === 2) {
-			const hpMinimum = Renderer.dice.parseRandomise2(`dmin(${formula})`);
+			const hpMinimum = Renderer.dice.parseRandomise2(`dmin(${mon.hp.formula})`);
 			return hpMinimum;
 		}
 		if (hpType === 3) {
-			const hpRandom = Renderer.dice.parseRandomise2(formula);
+			// const hpRandom = Renderer.dice.parseRandomise2(mon.hp.formula);
+			const hpRandom = await Renderer.dice.pRoll2(mon.hp.formula, {
+				isUser: false,
+				name: mon.name,
+				label: "Initiative",
+			}, {isResultUsed: true});
 			return hpRandom;
 		}
 		// Default or hpType === 0
-		const hpAverage = Renderer.dice.parseAverage(formula);
+		const hpAverage = mon.hp.average;
 		return hpAverage;
 	}
 
-	function setPlayerHp (ele, hp, cookieSuffix) {
+	function setPlayerHp (ele, hp, cookieSuffix, rollAnimationMinMax) {
 		const hpInput = ele; // Use the passed element
-		hpInput.value = hp; // Set the input value to the new HP
 		hpInput.dataset.lastHp = hp; // Update the last HP value in the dataset
+		if (rollAnimationMinMax) {
+			animateNumber(ele, hp, rollAnimationMinMax);
+		} else {
+			hpInput.value = hp; // Set the input value to the new HP
+		}
 
 		// Find the parent row and get the player ID from the data-id attribute
 		const playerRow = hpInput?.closest("tr");
@@ -977,10 +1090,40 @@ let signal;
 		}
 	}
 
-	// Function to handle HP input click
-	function handleHpClick (e) {
-		const hpInput = e.target;
-		hpInput.select();
+	function animateNumber (element, finalNumber, rollAnimationMinMax) {
+		const totalUpdates = 14; // Total number of updates
+		const interval = 3; // duration / totalUpdates; // Base time between updates
+		let currentUpdate = 0; // Current update count
+		let randomMin = rollAnimationMinMax?.min || 1;
+		let randomMax = rollAnimationMinMax?.max || 100;
+		// Function to generate a random number
+		function getRandomNumber () {
+			return Math.floor(Math.random() * (randomMax - randomMin + 1)) + randomMin; // Random number between min and max (inclusive)
+		}
+
+		// Animation function
+		function updateNumber () {
+			if (currentUpdate < totalUpdates) {
+				// Calculate the delay for the current update
+				const speedFactor = Math.pow(1.35, currentUpdate); // Exponential increase
+				const randomNumber = getRandomNumber();
+
+				// Update the element's text content
+				if (element.tagName === "INPUT") element.value = randomNumber;
+				element.textContent = randomNumber;
+
+				// Schedule the next update
+				currentUpdate++;
+				setTimeout(updateNumber, interval * speedFactor);
+			} else {
+				// Final number display
+				if (element.tagName === "INPUT") element.value = finalNumber;
+				element.textContent = finalNumber;
+			}
+		}
+
+		// Start the animation
+		updateNumber();
 	}
 
 	// Function to handle HP input focus
@@ -1171,12 +1314,12 @@ let signal;
 					newInitObj?.players?.forEach((player) => {
 						const id = generatePlayerID();
 						const playerObjToAdd = getPlayerObjFromMon({name: player.name, pid: id, hash: player.hash, mon: player});
-						playerObjToAdd.id = id;
+						// playerObjToAdd.id = id;
 						signal({ "add_player": playerObjToAdd });
 					});
 					handleDataObject({"controllerData": newInitObj});
 					const activeRow = document.querySelector(".initiative-tracker tr.active");
-					displayStatblock(activeRow.dataset.name, activeRow.dataset.id, activeRow.dataset.page, activeRow.dataset.source, activeRow.dataset.hash);
+					displayStatblock(activeRow.dataset.name, activeRow.dataset.id, activeRow.dataset.hash);
 					highlightRow(activeRow);
 				}
 			}

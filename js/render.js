@@ -9912,7 +9912,7 @@ Renderer.monster = class {
 							: await ScaleCreature.scale(original, targetCr);
 
 						$content.empty().append(fnRender(toRender));
-						$content.trigger("cr_update", [targetCr]);
+						$content.trigger("cr_update", [toRender]);
 
 						Renderer.monster._bindListenersScale(toRender, ele);
 					},
@@ -9924,7 +9924,7 @@ Renderer.monster = class {
 			.click(async () => {
 				const toRender = await DataLoader.pCacheAndGet(page, source, hash);
 				$content.empty().append(fnRender(toRender));
-				$content.trigger("cr_reset");
+				$content.trigger("cr_reset", [toRender]);
 
 				Renderer.monster._bindListenersScale(toRender, ele);
 			});

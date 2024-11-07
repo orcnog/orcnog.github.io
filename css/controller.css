@@ -420,16 +420,55 @@ div#initiative_order {
     width: 3rem;
 }
 
-.initiative-tracker .player-maxhp {
-    /* While this is a fixed value (not an input), style it thusly */
-    margin-left: -2rem;
+.initiative-tracker .td-player-maxhp {
+    padding-left: 0;
+}
+
+.initiative-tracker .td-player-maxhp::before {
+    content: "/";
     color: #656565;
+    margin-left: -1ch;
+}
+
+.initiative-tracker .player-maxhp {
+    color: #656565;
+    background-color: transparent;
+    cursor: pointer;
 }
 
 .initiative-tracker .player-badge {
     width: 8ch; /* just enough width for the longest word, "Healthy" */
     background-color: transparent;
     cursor: pointer;
+}
+
+.popover-maxhp {
+    display: flex;
+    column-gap: 0.1rem;
+    padding: 0.1rem;
+    background-color: #39556e;
+}
+
+.popover-maxhp-btn {
+    display: flex;
+    align-items: center;
+    border: none;
+    padding: 0.4rem;
+    height: 2rem;
+    background-color: #111;
+    cursor: pointer;
+}
+
+.popover-maxhp-btn svg {
+    transition: transform 0.2s ease-out;
+}
+
+.popover-maxhp-btn:hover {
+    background-color: #2e4458;
+}
+
+.popover-maxhp-btn:hover svg {
+    transform: rotate(30deg);
 }
 
 #prev_turn,
