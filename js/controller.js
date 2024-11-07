@@ -355,7 +355,7 @@ let signal;
 	}
 
 	// Function to handle currentPlayers data and populate the table
-	function handleCurrentPlayersData (obj) {
+	async function handleCurrentPlayersData (obj) {
 		const players = obj.currentPlayers;
 
 		const table = document.getElementById("initiative_order").querySelector("tbody");
@@ -364,7 +364,14 @@ let signal;
 		table.innerHTML = "";
 
 		// Loop through each player and create a row
-		players.forEach(async (player) => {
+		for (const player of players) {
+			// Create a table row for each combatant
+			const row = await createPlayerRow(player);
+			// Append the row to the table
+			table.appendChild(row);
+		}
+
+		async function createPlayerRow (player) {
 			const row = document.createElement("tr");
 
 			// UrlUtil.autoEncodeHash(mon)
@@ -385,7 +392,22 @@ let signal;
 			orderInput.className = "player-order";
 			orderInput.addEventListener("focus", () => { orderInput.select(); });
 			orderInput.addEventListener("change", () => { signal(`update_player:{"id":"${player.id}","order":${orderInput.value}}`); });
-			orderCell.addEventListener("click", () => { orderInput.focus(); });
+			orderCell.addEventListener("click", async (e) => {
+				e.preventDefault();
+				const userSelection = await popoverChooseRollableValue(orderInput, "Initiative");
+				if (userSelection !== null) {
+					if (userSelection === 3) {
+						const rollAnimationMinMax = {min: await calculateNewInit(mon, 2), max: await calculateNewInit(mon, 1)};
+						const newInit = await calculateNewInit(mon, 3);
+						animateNumber(orderInput, newInit, rollAnimationMinMax).then(() => {
+							signal(`update_player:{"id":"${player.id}","order":${newInit}}`);
+						});
+					} else {
+						const newInit = await calculateNewInit(mon, userSelection);
+						signal(`update_player:{"id":"${player.id}","order":${newInit}}`);
+					}
+				}
+			});
 			orderCell.appendChild(orderInput);
 			row.appendChild(orderCell);
 
@@ -461,7 +483,7 @@ let signal;
 				maxhpInput.addEventListener("keydown", handleHpKeydown);
 				maxhpInput.addEventListener("click", async (e) => {
 					e.preventDefault();
-					const userSelection = await popoverChooseRollValue(maxhpInput, "HP");
+					const userSelection = await popoverChooseRollableValue(maxhpInput, "HP");
 					if (userSelection !== null) {
 						const rollAnimationMinMax = userSelection === 3 ? {min: await calculateNewHp(mon, 2), max: await calculateNewHp(mon, 1)} : null;
 						const newHp = await calculateNewHp(mon, userSelection);
@@ -592,9 +614,8 @@ let signal;
 				highlightRow(row);
 			});
 
-			// Append the row to the table
-			table.appendChild(row);
-		});
+			return row;
+		}
 	}
 
 	function handleCurrentRoundData (obj) {
@@ -920,55 +941,55 @@ let signal;
 		return userVal;
 	}
 
-	async function popoverChooseRollValue (ele, title) {
+	async function popoverChooseRollableValue (ele, title) {
 		return new Promise((resolve) => {
 			// Create a table to hold the icons
 			const popover = createPopover(ele, (popov) => {
 				const table = document.createElement("div");
-				table.className = "popover-maxhp";
+				table.className = "popover-choose-roll";
 
 				// Create and append each cell individually
 				const cell1 = document.createElement("button");
-				cell1.className = "popover-maxhp-btn";
+				cell1.className = "popover-choose-roll-btn";
 				cell1.innerHTML = "Avg";
 				cell1.title = `Set to Average ${title} value.`;
 				cell1.value = 0;
 				cell1.addEventListener("click", () => {
-					resolve(0); // Resolve with the value 0 for "avg"
-					document.body.removeChild(popov); // Close the popover
+					resolve(0); // Resolve with the value 0 for "average"
+					destroyPopover();
 				});
 				table.appendChild(cell1);
 
 				const cell2 = document.createElement("button");
-				cell2.className = "popover-maxhp-btn";
-				cell2.innerHTML = "max";
+				cell2.className = "popover-choose-roll-btn";
+				cell2.innerHTML = "Max";
 				cell2.title = `Set to Maximum rollable ${title} value.`;
 				cell2.value = 1;
 				cell2.addEventListener("click", () => {
-					resolve(1); // Resolve with the value 1 for "max"
-					document.body.removeChild(popov); // Close the popover
+					resolve(1); // Resolve with the value 1 for "maximum"
+					destroyPopover();
 				});
 				table.appendChild(cell2);
 
 				const cell3 = document.createElement("button");
-				cell3.className = "popover-maxhp-btn";
-				cell3.innerHTML = "min";
+				cell3.className = "popover-choose-roll-btn";
+				cell3.innerHTML = "Min";
 				cell3.title = `Set to Minimum rollable ${title} value.`;
 				cell3.value = 2;
 				cell3.addEventListener("click", () => {
-					resolve(2); // Resolve with the value 2 for "min"
-					document.body.removeChild(popov); // Close the popover
+					resolve(2); // Resolve with the value 2 for "minimum"
+					destroyPopover();
 				});
 				table.appendChild(cell3);
 
 				const cell4 = document.createElement("button");
-				cell4.className = "popover-maxhp-btn";
+				cell4.className = "popover-choose-roll-btn";
 				cell4.innerHTML = `<svg fill="#ffffff" height="20" width="20" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-50.75 -50.75 609.02 609.02" xml:space="preserve" stroke="#ffffff" stroke-width="0.0050752" transform="rotate(0)"><g id="SVGRepo_iconCarrier"> <g> <g> <g> <polygon points="386.603,185.92 488.427,347.136 488.427,138.944 "></polygon> <polygon points="218.283,18.645 30.827,125.781 131.883,167.893 "></polygon> <polygon points="135.787,202.325 27.264,374.144 235.264,383.189 "></polygon> <polygon points="352.597,170.667 253.781,0 253.739,0 154.923,170.667 "></polygon> <polygon points="471.915,123.051 289.237,18.645 375.445,167.573 "></polygon> <polygon points="19.093,144 19.093,347.136 120.661,186.325 "></polygon> <polygon points="243.093,507.52 243.093,404.843 48.661,396.416 "></polygon> <polygon points="272.235,383.232 480.256,374.144 371.733,202.325 "></polygon> <polygon points="264.427,507.52 458.837,396.416 264.427,404.885 "></polygon> <polygon points="154.475,192 253.76,372.523 353.045,192 "></polygon> </g> </g> </g> </g></svg>`;
 				cell4.title = `Roll for ${title}!`;
 				cell4.value = 3;
 				cell4.addEventListener("click", () => {
 					resolve(3); // Resolve with the value 3 for "roll"
-					document.body.removeChild(popov); // Close the popover
+					destroyPopover();
 				});
 				table.appendChild(cell4);
 
@@ -976,8 +997,10 @@ let signal;
 			});
 
 			function destroyPopover (e) {
-				if (e.relatedTarget === null || (e.relatedTarget !== ele && !popover.contains(e.relatedTarget))) {
-					document.body.removeChild(popover);
+				if (!e || e.relatedTarget === null || (e.relatedTarget !== ele && !popover.contains(e.relatedTarget))) {
+					if (popover && document.body.contains(popover)) {
+						document.body.removeChild(popover);
+					}
 					ele.removeEventListener("focusout", destroyPopover);
 					ele.removeEventListener("change", destroyPopover);
 					resolve(null); // Resolve with null if the popover is closed without a choice
@@ -1056,17 +1079,49 @@ let signal;
 			return hpMinimum;
 		}
 		if (hpType === 3) {
-			// const hpRandom = Renderer.dice.parseRandomise2(mon.hp.formula);
 			const hpRandom = await Renderer.dice.pRoll2(mon.hp.formula, {
 				isUser: false,
 				name: mon.name,
-				label: "Initiative",
+				label: "HP",
 			}, {isResultUsed: true});
 			return hpRandom;
 		}
 		// Default or hpType === 0
 		const hpAverage = mon.hp.average;
 		return hpAverage;
+	}
+
+	/**
+	 * @param {*} mon a 5et monster object (hopefully containing a `dex` property)
+	 * @param {*} rolltype 0 = average, 1 = max, 2 = min, 3 = roll
+	 * @returns {Number} Initiative roll
+	 */
+	async function calculateNewInit (mon, rollType) {
+		if (typeof mon.dex !== "number") {
+			console.error("`dex` must be defined in `mon`.");
+			return;
+		}
+		const initiativeModifier = mon ? Parser.getAbilityModNumber(mon.dex) : 0;
+		const initiativeFormula = `1d20${UiUtil.intToBonus(initiativeModifier)}`;
+		if (rollType === 1) {
+			const initMaximum = Renderer.dice.parseRandomise2(`dmax(${initiativeFormula})`);
+			return initMaximum;
+		}
+		if (rollType === 2) {
+			const initMinimum = Renderer.dice.parseRandomise2(`dmin(${initiativeFormula})`);
+			return initMinimum;
+		}
+		if (rollType === 3) {
+			const initRandom = await Renderer.dice.pRoll2(initiativeFormula, {
+				isUser: false,
+				name: mon.name,
+				label: "Initiative",
+			}, {isResultUsed: true});
+			return initRandom;
+		}
+		// Default or rollType === 0
+		const initAverage = 10 + initiativeModifier;
+		return initAverage;
 	}
 
 	function setPlayerHp (ele, hp, cookieSuffix, rollAnimationMinMax) {
@@ -1090,40 +1145,43 @@ let signal;
 		}
 	}
 
-	function animateNumber (element, finalNumber, rollAnimationMinMax) {
-		const totalUpdates = 14; // Total number of updates
-		const interval = 3; // duration / totalUpdates; // Base time between updates
-		let currentUpdate = 0; // Current update count
-		let randomMin = rollAnimationMinMax?.min || 1;
-		let randomMax = rollAnimationMinMax?.max || 100;
-		// Function to generate a random number
-		function getRandomNumber () {
-			return Math.floor(Math.random() * (randomMax - randomMin + 1)) + randomMin; // Random number between min and max (inclusive)
-		}
-
-		// Animation function
-		function updateNumber () {
-			if (currentUpdate < totalUpdates) {
-				// Calculate the delay for the current update
-				const speedFactor = Math.pow(1.35, currentUpdate); // Exponential increase
-				const randomNumber = getRandomNumber();
-
-				// Update the element's text content
-				if (element.tagName === "INPUT") element.value = randomNumber;
-				element.textContent = randomNumber;
-
-				// Schedule the next update
-				currentUpdate++;
-				setTimeout(updateNumber, interval * speedFactor);
-			} else {
-				// Final number display
-				if (element.tagName === "INPUT") element.value = finalNumber;
-				element.textContent = finalNumber;
+	async function animateNumber (element, finalNumber, rollAnimationMinMax) {
+		return new Promise((resolve) => {
+			const totalUpdates = 14; // Total number of updates
+			const interval = 3; // duration / totalUpdates; // Base time between updates
+			let currentUpdate = 0; // Current update count
+			let randomMin = rollAnimationMinMax?.min || 1;
+			let randomMax = rollAnimationMinMax?.max || 100;
+			// Function to generate a random number
+			function getRandomNumber () {
+				return Math.floor(Math.random() * (randomMax - randomMin + 1)) + randomMin; // Random number between min and max (inclusive)
 			}
-		}
 
-		// Start the animation
-		updateNumber();
+			// Animation function
+			function updateNumber () {
+				if (currentUpdate < totalUpdates) {
+					// Calculate the delay for the current update
+					const speedFactor = Math.pow(1.35, currentUpdate); // Exponential increase
+					const randomNumber = getRandomNumber();
+
+					// Update the element's text content
+					if (element.tagName === "INPUT") element.value = randomNumber;
+					element.textContent = randomNumber;
+
+					// Schedule the next update
+					currentUpdate++;
+					setTimeout(updateNumber, interval * speedFactor);
+				} else {
+					// Final number display
+					if (element.tagName === "INPUT") element.value = finalNumber;
+					element.textContent = finalNumber;
+					resolve();
+				}
+			}
+
+			// Start the animation
+			updateNumber();
+		});
 	}
 
 	// Function to handle HP input focus

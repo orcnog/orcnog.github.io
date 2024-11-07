@@ -442,14 +442,14 @@ div#initiative_order {
     cursor: pointer;
 }
 
-.popover-maxhp {
+.popover-choose-roll {
     display: flex;
     column-gap: 0.1rem;
     padding: 0.1rem;
     background-color: #39556e;
 }
 
-.popover-maxhp-btn {
+.popover-choose-roll-btn {
     display: flex;
     align-items: center;
     border: none;
@@ -459,15 +459,15 @@ div#initiative_order {
     cursor: pointer;
 }
 
-.popover-maxhp-btn svg {
+.popover-choose-roll-btn svg {
     transition: transform 0.2s ease-out;
 }
 
-.popover-maxhp-btn:hover {
+.popover-choose-roll-btn:hover {
     background-color: #2e4458;
 }
 
-.popover-maxhp-btn:hover svg {
+.popover-choose-roll-btn:hover svg {
     transform: rotate(30deg);
 }
 
