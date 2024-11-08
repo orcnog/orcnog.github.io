@@ -2,7 +2,7 @@
 // 1. when a statblock is assigned to a player, retain their previous Name, Order, health status, and HP (but maybe not maxHp?)
 // 2. make a player row with assigned creature able to be UNassigned.
 
-import { PATH } from "./controller-config.js";
+import { VOICE_APP_PATH } from "./controller-config.js";
 
 let send;
 let signal;
@@ -23,10 +23,10 @@ let signal;
 	let activeAlerts = [];
 	let isRowHoverEnabled = true;
 
-	const themes = await fetchJSON(`${PATH}/../styles/themes/themes.json`);
-	const slideshows = await fetchJSON(`${PATH}/../slideshow/slideshow-config.json`);
-	const musicPlaylists = await fetchJSON(`${PATH}/../audio/playlists.json`);
-	const ambiencePlaylists = await fetchJSON(`${PATH}/../audio/ambience.json`);
+	const themes = await fetchJSON(`${VOICE_APP_PATH}/../styles/themes/themes.json`);
+	const slideshows = await fetchJSON(`${VOICE_APP_PATH}/../slideshow/slideshow-config.json`);
+	const musicPlaylists = await fetchJSON(`${VOICE_APP_PATH}/../audio/playlists.json`);
+	const ambiencePlaylists = await fetchJSON(`${VOICE_APP_PATH}/../audio/ambience.json`);
 
 	function initPeer2Peer () {
 		peer = new Peer(null, { debug: 2 });
@@ -189,7 +189,7 @@ let signal;
 				const fromLeft = config.focalPointDistanceFromLeft ?? "50%";
 				let title;
 				if (config.image) {
-					imageUrl = `${PATH}../${config.image}`;
+					imageUrl = `${VOICE_APP_PATH}../${config.image}`;
 				} else if (config.url) {
 					const url = config.url;
 					const response = await fetch(`../${url}`);
@@ -201,7 +201,7 @@ let signal;
 
 					// Check if there is an <img> tag in the parsed HTML
 					if (tempDiv.querySelector(".slideshow-content img")) {
-						imageUrl = `${PATH}../${tempDiv.querySelector("img").getAttribute("src")}`;
+						imageUrl = `${VOICE_APP_PATH}../${tempDiv.querySelector("img").getAttribute("src")}`;
 						console.log("Image URL:", imageUrl);
 					}
 				}
@@ -317,7 +317,7 @@ let signal;
 	function handleCurrentThemeData (obj) {
 		document.getElementById("updateTheme").value = obj.currentTheme;
 		const themeImage = document.getElementById("updateTheme").selectedOptions[0].getAttribute("data-image");
-		document.getElementById("back_to_initiative").style.backgroundImage = `url("${PATH}${themeImage}")`;
+		document.getElementById("back_to_initiative").style.backgroundImage = `url("${VOICE_APP_PATH}${themeImage}")`;
 	}
 
 	// Function to handle currentSlideshow data and create radio buttons

@@ -1,1 +1,1 @@
-export const PATH = "https://localhost:5000/";
+export const VOICE_APP_PATH = "https://localhost:5000/";
