@@ -2,7 +2,7 @@
 // 1. when a statblock is assigned to a player, retain their previous Name, Order, health status, and HP (but maybe not maxHp?)
 // 2. make a player row with assigned creature able to be UNassigned.
 
-import { PATH } from './controller-config.js';
+import { PATH } from "./controller-config.js";
 
 let send;
 let signal;
