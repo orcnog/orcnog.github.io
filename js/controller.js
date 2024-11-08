@@ -1,6 +1,6 @@
 // TODO:
-// 1. when a statblock is assigned to a player, retain their previous Name, Order, health status, and HP (but maybe not maxHp?)
-// 2. make a player row with assigned creature able to be UNassigned.
+// 1. make a player row with assigned creature able to be UNassigned.
+// 2. prevent any signal from being sent if the app's mic is active.
 
 import { VOICE_APP_PATH } from "./controller-config.js";
 
@@ -77,6 +77,38 @@ let signal;
 			showAlert("No connection found.");
 		}
 	};
+
+	async function openOmnibox(value) {
+		return new Promise(resolve => {
+			// Set value and focus
+			const input = document.querySelector(".omni__input");
+			input.value = value;
+			input.focus();
+
+			// Show the output wrapper
+			document.querySelector(".omni__wrp-output")?.classList.remove("ve-hidden");
+
+			// Try to open search results div immediately
+			Omnisearch._pHandleClickSubmit();
+
+			// If it doesn't open immediately, wait for the TYPE_TIMEOUT_MS duration before triggering search
+			setTimeout(async () => {
+				if (document.querySelector(".omni__wrp-output").classList.contains("ve-hidden")) {
+					await Omnisearch._pHandleClickSubmit();
+				}
+				resolve();
+			}, Omnisearch._TYPE_TIMEOUT_MS);
+		});
+	}
+
+	function closeOmnibox() {
+		// Clear and blur the input
+		document.querySelector(".omni__input").value = "";
+		document.querySelector(".omni__input").blur();
+		
+		// Hide the output
+		document.querySelector(".omni__wrp-output").classList.add("ve-hidden");
+	}
 
 	// Function to populate theme selectbox with received data
 	function populateThemesData (themes) {
@@ -454,7 +486,7 @@ let signal;
 				hpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
 				hpInput.className = "player-hp";
 				hpInput.dataset.cookie = hpCookieSuffix;
-				setPlayerHp(hpInput, hp, hpCookieSuffix);
+				setPlayerHp(hpInput, player.id, hp, hpCookieSuffix);
 				hpInput.addEventListener("focus", handleHpFocus);
 				hpInput.addEventListener("change", handleHpChange);
 				hpInput.addEventListener("keydown", handleHpKeydown);
@@ -475,7 +507,7 @@ let signal;
 				maxhpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
 				maxhpInput.className = "player-maxhp";
 				maxhpInput.dataset.cookie = maxhpCookieSuffix;
-				setPlayerHp(maxhpInput, maxhp, maxhpCookieSuffix);
+				setPlayerHp(maxhpInput, player.id, maxhp, maxhpCookieSuffix);
 				maxhpInput.addEventListener("focus", handleHpFocus);
 				maxhpInput.addEventListener("change", handleHpChange);
 				maxhpInput.addEventListener("keydown", handleHpKeydown);
@@ -485,7 +517,7 @@ let signal;
 					if (userSelection !== null) {
 						const rollAnimationMinMax = userSelection === 3 ? {min: await calculateNewHp(mon, 2), max: await calculateNewHp(mon, 1)} : null;
 						const newHp = await calculateNewHp(mon, userSelection);
-						setPlayerHp(maxhpInput, newHp, maxhpCookieSuffix, rollAnimationMinMax);
+						setPlayerHp(maxhpInput, player.id, newHp, maxhpCookieSuffix, rollAnimationMinMax);
 					}
 				});
 				maxhpCell.appendChild(maxhpInput);
@@ -605,14 +637,7 @@ let signal;
 
 				// Log the dataTransfer object to see what is received
 				const hash = evt.dataTransfer.getData("text/plain").split("#")?.[1];
-				const page = UrlUtil.PG_BESTIARY;
-				row.dataset.hash = hash;
-				const dmon = await get5etMonsterByHash(hash);
-				const playerObjToUpdate = getPlayerObjFromMon({name: player.name, pid: player.id, hash: hash, mon: dmon});
-				signal(`update_player:${JSON.stringify(playerObjToUpdate)}`);
-				$("body").trigger("click"); // close the omnibox
-				displayStatblock(player.name, player.id, hash);
-				highlightRow(row);
+				await assignMonsterToRow(row, hash);
 			});
 
 			return row;
@@ -816,6 +841,37 @@ let signal;
 	function postProcessStatblockTitle (name, mon) {
 		// Update display name, if name was provided.
 		if (name && name !== mon.name) document.getElementById("initiative-statblock-display").querySelector("h1").textContent = `${name} [${mon._displayName || mon.name}]`;
+	}
+
+	async function assignMonsterToRow(row, hash) {
+		// Update row's hash
+		row.dataset.hash = hash;
+		
+		// Get player data from row
+		const player = {
+			name: row.dataset.name,
+			id: row.dataset.id,
+			order: row.querySelector('.player-order').value
+		};
+	
+		// Get monster data and create player object
+		const dmon = await get5etMonsterByHash(hash);
+		const playerObjToUpdate = getPlayerObjFromMon({
+			name: player.name, 
+			id: player.id, 
+			order: player.order, 
+			hash: hash, 
+			mon: dmon
+		});
+	
+		// Clear max HP cookie and update
+		removeCookie(`${player.id}__hpmax`);
+		signal(`update_player:${JSON.stringify(playerObjToUpdate)}`);
+	
+		// Close omnibox and update display
+		closeOmnibox();
+		displayStatblock(player.name, player.id, hash);
+		highlightRow(row);
 	}
 
 	function showAlert (title, $modalContent) {
@@ -1040,24 +1096,16 @@ let signal;
 		return popover;
 	}
 
-	function getPlayerObjFromMon ({ name, pid, hash, mon }) {
-		if (!pid || !hash || !mon) return;
+	function getPlayerObjFromMon ({ name, id, order, hash, mon }) {
+		if (!id || !hash || !mon) return;
 		const displayName = name || mon.name;
-		// const hpMin = Renderer.dice.parseRandomise2(`dmin(${mon.hp.formula})`);
-		// const hpMax = Renderer.dice.parseRandomise2(`dmax(${mon.hp.formula})`);
-		// const hpRandom = Renderer.dice.parseRandomise2(mon.hp.formula);
-		// const hp = {...mon.hp, "max": hpMax, "min": hpMin, "rnd": hpRandom};
-		const initiativeBonus = Math.floor((mon.dex - 10) / 2);
+		const initiativeOrder = order !== null ? order : Parser.getAbilityModNumber(mon.dex || 10);
 		return {
 			"name": displayName,
-			"order": initiativeBonus + 10,
-			// "hp": hp,
-			"id": pid, // custom
-			// "initBonus": initiativeBonus,
-			// "page": UrlUtil.PG_BESTIARY,
+			"order": initiativeOrder,
+			"id": id, // custom
 			"hash": hash, // custom
 			"isNpc": mon.isNpc ? mon.isNpc : null,
-			// "scaledCr": mon._isScaledCr ? mon._scaledCr : null,
 		};
 	}
 
@@ -1125,7 +1173,7 @@ let signal;
 		return initAverage;
 	}
 
-	function setPlayerHp (ele, hp, cookieSuffix, rollAnimationMinMax) {
+	function setPlayerHp (ele, id, hp, cookieSuffix, rollAnimationMinMax) {
 		const hpInput = ele; // Use the passed element
 		hpInput.dataset.lastHp = hp; // Update the last HP value in the dataset
 		if (rollAnimationMinMax) {
@@ -1134,15 +1182,19 @@ let signal;
 			hpInput.value = hp; // Set the input value to the new HP
 		}
 
-		// Find the parent row and get the player ID from the data-id attribute
-		const playerRow = hpInput?.closest("tr");
-		if (playerRow) {
-			const playerId = playerRow.dataset?.id;
-			if (playerId) {
-				setCookie(`${playerId}${cookieSuffix}`, hp); // Save the new HP value in a cookie
-			} else {
-				console.error("Player ID not found in the row.");
-			}
+		// First try to get playerId from parameter
+		let playerId = id;
+		
+		// If no playerId provided, try to get it from DOM
+		if (!playerId) {
+			const playerRow = hpInput?.closest("tr");
+			playerId = playerRow?.dataset?.id;
+		}
+
+		if (playerId) {
+			setCookie(`${playerId}${cookieSuffix}`, hp); // Save the new HP value in a cookie
+		} else {
+			console.error("Player ID not found in the row.");
 		}
 	}
 
@@ -1197,6 +1249,7 @@ let signal;
 		const raw = hpInput.value.trim();
 		const cur = Number(hpInput.dataset.lastHp); // Ensure cur is a number
 		const cookieSuffix = getDataOrNull(hpInput.dataset.cookie) || "__hp";
+		const id = hpInput.dataset.id;
 
 		let result; // Variable to hold the new HP value
 
@@ -1217,13 +1270,14 @@ let signal;
 		}
 
 		// Lock in the value, save it
-		setPlayerHp(hpInput, result, cookieSuffix);
+		setPlayerHp(hpInput, id, result, cookieSuffix);
 	}
 
 	function handleHpKeydown (e) {
 		const hpInput = e.target;
 		const cur = Number(hpInput.dataset.lastHp); // Get the current HP as a number
 		const cookieSuffix = getDataOrNull(hpInput.dataset.cookie) || "__hp";
+		const id = hpInput.dataset.id;
 		let result;
 
 		if (e.key === "ArrowUp") {
@@ -1233,7 +1287,7 @@ let signal;
 			} else {
 				result = Number(cur) + 1; // Increment HP by 1
 			}
-			setPlayerHp(hpInput, result, cookieSuffix);
+			setPlayerHp(hpInput, id, result, cookieSuffix);
 		} else if (e.key === "ArrowDown") {
 			e.preventDefault(); // Prevent the default action (scrolling)
 			if (e.shiftKey) {
@@ -1241,7 +1295,7 @@ let signal;
 			} else {
 				result = Number(cur) - 1; // Decrement HP by 1
 			}
-			setPlayerHp(hpInput, result, cookieSuffix);
+			setPlayerHp(hpInput, id, result, cookieSuffix);
 		} else if (e.key === ".") {
 			e.preventDefault();
 		} else if (e.key === "Enter") {
@@ -1351,14 +1405,23 @@ let signal;
 						setCookie("assign_monster_notice_dismissed", "true");
 					}
 				}
-				$(".omni__input").val("in:bestiary ").focus().trigger("click").focus(); // TODO: make this less hacky
-				if (e.target.closest(".initiative-tracker tr")) {
-					document.querySelectorAll(`.omni__output .omni__lnk-name[data-vet-page="bestiary.html"]`).forEach((lnk) => {
-						lnk.addEventListener("click", (e) => {
+				await openOmnibox("in:bestiary ");
+				const row = e.target.closest(".initiative-tracker tr");
+				if (row) {
+					const assignClickedMonsterToRow = (e) => {
+						if (e.target.tagName === "A" && e.target.dataset.vetPage === "bestiary.html") {
 							e.preventDefault();
 							e.stopImmediatePropagation();
-						});
-					});
+							const hash = e.target.dataset.vetHash;
+							assignMonsterToRow(row, hash)
+							.catch(err => console.error("Error assigning monster:", err))
+							.finally(() => {
+								// Clean up event listener after assignment completes
+								document.querySelector(`.omni__output`).removeEventListener("click", assignClickedMonsterToRow);
+							});
+						}
+					};
+					document.querySelector(`.omni__output`).addEventListener("click", assignClickedMonsterToRow);
 				}
 			}
 		});
@@ -1380,7 +1443,7 @@ let signal;
 					)) return;
 					newInitObj?.players?.forEach((player) => {
 						const id = generatePlayerID();
-						const playerObjToAdd = getPlayerObjFromMon({name: player.name, pid: id, hash: player.hash, mon: player});
+						const playerObjToAdd = getPlayerObjFromMon({name: player.name, id: id, order: null, hash: player.hash, mon: player});
 						// playerObjToAdd.id = id;
 						signal({ "add_player": playerObjToAdd });
 					});
