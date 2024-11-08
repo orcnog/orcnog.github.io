@@ -1,8 +1,6 @@
 // TODO:
 // 1. when a statblock is assigned to a player, retain their previous Name, Order, health status, and HP (but maybe not maxHp?)
-// 2. make max hp changeable... maybe click once to use max rollable hp, click again to use min, click again to "roll"? (cookied)
-// 3. make a player row with assigned creature able to be UNassigned.
-// 4. implement active-alerts array in voice app too
+// 2. make a player row with assigned creature able to be UNassigned.
 
 const PATH = "https://d20.orcnog.com/";
 
