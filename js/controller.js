@@ -493,9 +493,13 @@ let signal;
 				maxhpCell.appendChild(maxhpInput);
 				row.appendChild(maxhpCell);
 			} else {
-				// add 2 black table cells, then
-				row.appendChild(document.createElement("td"));
-				row.appendChild(document.createElement("td"));
+				// add an "assign monster" btn that spans 2 cells
+				row.appendChild(document.createElement("td")); // blank td
+				const td = document.createElement("td");
+				const span = document.createElement("span");
+				span.className = "player-assign-btn assign-a-monster";
+				td.appendChild(span);
+				row.appendChild(td);
 			}
 
 			// Create and append the "badge" cell (if it exists)
@@ -537,7 +541,7 @@ let signal;
 			// If it's a monster, add the statblock display on hover
 			row.addEventListener("mouseover", (e) => {
 				// If hover is enabled, show the statblock
-				if (isRowHoverEnabled) {
+				if (isRowHoverEnabled && "hash" in row.dataset) {
 					showStatblockOnEvent(e);
 
 					// Bind the keydown event to the document
@@ -562,8 +566,7 @@ let signal;
 			});
 
 			row.addEventListener("click", (e) => {
-				if (e.target.tagName === "INPUT") return;
-
+				if (e.target.tagName === "INPUT" || !("hash" in row.dataset)) return;
 				showStatblockOnEvent(e);
 
 				// Get the clicked row's statblock-lock-status
@@ -606,8 +609,8 @@ let signal;
 				const hash = evt.dataTransfer.getData("text/plain").split("#")?.[1];
 				const page = UrlUtil.PG_BESTIARY;
 				row.dataset.hash = hash;
-				const dmon = await get5etMonsterByHash(page, hash);
-				const playerObjToUpdate = getPlayerObjFromMon({name: player.name, pid: player.id, hash, dmon});
+				const dmon = await get5etMonsterByHash(hash);
+				const playerObjToUpdate = getPlayerObjFromMon({name: player.name, pid: player.id, hash: hash, mon: dmon});
 				signal(`update_player:${JSON.stringify(playerObjToUpdate)}`);
 				$("body").trigger("click"); // close the omnibox
 				displayStatblock(player.name, player.id, hash);
@@ -1350,7 +1353,15 @@ let signal;
 						setCookie("assign_monster_notice_dismissed", "true");
 					}
 				}
-				$(".omni__input").val("in:bestiary ").focus().trigger("click").focus();
+				$(".omni__input").val("in:bestiary ").focus().trigger("click").focus(); // TODO: make this less hacky
+				if (e.target.closest(".initiative-tracker tr")) {
+					document.querySelectorAll(`.omni__output .omni__lnk-name[data-vet-page="bestiary.html"]`).forEach((lnk) => {
+						lnk.addEventListener("click", (e) => {
+							e.preventDefault();
+							e.stopImmediatePropagation();
+						});
+					});
+				}
 			}
 		});
 
