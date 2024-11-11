@@ -1,5 +1,6 @@
 // TODO:
-// 1. make a player row with assigned creature able to be UNassigned.
+// 1. make a row with an assigned statblock un-assignable.
+// 2. make a monster row duplicateable.
 
 import { VOICE_APP_PATH } from "./controller-config.js";
 
@@ -1539,8 +1540,8 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 					}
 				}
 				await openOmnibox("in:bestiary ");
-				const row = e.target.closest(".initiative-tracker tr");
-				if (row) {
+					const row = e.target.closest(".initiative-tracker tr");
+					if (row) {
 					const assignClickedMonsterToRow = (e) => {
 						if (e.target.tagName === "A" && e.target.dataset.vetPage === "bestiary.html") {
 							e.preventDefault();
