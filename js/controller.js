@@ -3,6 +3,8 @@
 // 2. make a monster row duplicateable.
 
 import { VOICE_APP_PATH } from "./controller-config.js";
+// Add these imports at the top of your file
+import { InitiativeTrackerMonsterAdd } from "./dmscreen/initiativetracker/dmscreen-initiativetracker-monsteradd.js";
 
 (async function () {
 	let lastPeerId = null;
@@ -868,7 +870,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			postProcessStatblockTitle(name, mon);
 			window.scrollTo(0, scrollTop);
 		} else {
-			const $btnAddMonster = $(`<button class="assign-a-monster" title="Assign a creature...">Assign a creature...</button>`);
+			const $btnAddMonster = $(`<button class="assign-a-monster" title="Assign a new creature...">Assign a new creature...</button>`);
 			$("#initiative-statblock-display").html("").append($btnAddMonster);
 		}
 	}
@@ -1539,23 +1541,41 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 						setCookie("assign_monster_notice_dismissed", "true");
 					}
 				}
-				await openOmnibox("in:bestiary ");
+				// await openOmnibox("in:bestiary ");
+				// const row = e.target.closest(".initiative-tracker tr");
+				// if (row) {
+				// 	const assignClickedMonsterToRow = (e) => {
+				// 		if (e.target.tagName === "A" && e.target.dataset.vetPage === "bestiary.html") {
+				// 			e.preventDefault();
+				// 			e.stopImmediatePropagation();
+				// 			const hash = e.target.dataset.vetHash;
+				// 			assignMonsterToRow(row, hash)
+				// 			.catch(err => console.error("Error assigning monster:", err))
+				// 			.finally(() => {
+				// 				// Clean up event listener after assignment completes
+				// 				document.querySelector(`.omni__output`).removeEventListener("click", assignClickedMonsterToRow);
+				// 			});
+				// 		}
+				// 	};
+				// 	document.querySelector(`.omni__output`).addEventListener("click", assignClickedMonsterToRow);
+				// }
+
+				// Create and show the monster selection modal
+				const monsterAdd = new InitiativeTrackerMonsterAdd({
+					board: window.DM_SCREEN,
+					isRollHp: false
+				});
+
+				const [wasSelected, monstersToLoad] = await monsterAdd.pGetShowModalResults();
+				
+				if (wasSelected && monstersToLoad) {
 					const row = e.target.closest(".initiative-tracker tr");
 					if (row) {
-					const assignClickedMonsterToRow = (e) => {
-						if (e.target.tagName === "A" && e.target.dataset.vetPage === "bestiary.html") {
-							e.preventDefault();
-							e.stopImmediatePropagation();
-							const hash = e.target.dataset.vetHash;
-							assignMonsterToRow(row, hash)
-							.catch(err => console.error("Error assigning monster:", err))
-							.finally(() => {
-								// Clean up event listener after assignment completes
-								document.querySelector(`.omni__output`).removeEventListener("click", assignClickedMonsterToRow);
-							});
-						}
-					};
-					document.querySelector(`.omni__output`).addEventListener("click", assignClickedMonsterToRow);
+						await assignMonsterToRow(
+							row, 
+							`${encodeURIComponent(monstersToLoad.name)}_${encodeURIComponent(monstersToLoad.source)}`
+						);
+					}
 				}
 			}
 		});
