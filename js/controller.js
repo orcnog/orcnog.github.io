@@ -26,6 +26,10 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	const musicPlaylists = await fetchJSON(`${VOICE_APP_PATH}/../audio/playlists.json`);
 	const ambiencePlaylists = await fetchJSON(`${VOICE_APP_PATH}/../audio/ambience.json`);
 
+	/*************************************/
+	/* Networking communication          */
+	/*************************************/	
+
 	function initPeer2Peer () {
 		peer = new Peer(null, { debug: 2 });
 		peer.on("open", function (id) {
@@ -96,37 +100,87 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		}
 	}
 
-	async function openOmnibox(value) {
-		return new Promise(resolve => {
-			// Set value and focus
-			const input = document.querySelector(".omni__input");
-			input.value = value;
-			input.focus();
-
-			// Show the output wrapper
-			document.querySelector(".omni__wrp-output")?.classList.remove("ve-hidden");
-
-			// Try to open search results div immediately
-			Omnisearch._pHandleClickSubmit();
-
-			// If it doesn't open immediately, wait for the TYPE_TIMEOUT_MS duration before triggering search
-			setTimeout(async () => {
-				if (document.querySelector(".omni__wrp-output").classList.contains("ve-hidden")) {
-					await Omnisearch._pHandleClickSubmit();
+	function join (forcedPasskey) {
+		const passkey = forcedPasskey || recvIdInput.value;
+		if (passkey) {
+			setCookie("passkey", passkey);
+			if (conn) { conn.close(); }
+			conn = peer.connect(`orcnog-${passkey}`, { label: "CONTROLLER", reliable: true });
+			conn.on("open", function () {
+				console.debug(`conn.on('open')`);
+				p2pconnected = true;
+				status.innerHTML = `Connected to: ${conn.peer.split("orcnog-")[1]}`;
+				document.querySelectorAll(".control-panel").forEach(c => { c.classList.remove("closed"); });
+			});
+			conn.on("data", function (data) {
+				console.debug(`conn.on('data')`);
+				if (typeof data === "object") {
+					handleDataObject(data);
+				} else {
+					addMessage(`<span class="peerMsg">Peer:</span> ${data}`);
 				}
-				resolve();
-			}, Omnisearch._TYPE_TIMEOUT_MS);
-		});
+			});
+			conn.on("close", function () {
+				console.debug(`conn.on('close')`);
+				p2pconnected = false;
+				status.innerHTML = "<span class=\"red\">Connection closed</span>";
+				document.querySelectorAll(".control-panel").forEach(c => { c.classList.add("closed"); });
+			});
+		}
 	}
 
-	function closeOmnibox() {
-		// Clear and blur the input
-		document.querySelector(".omni__input").value = "";
-		document.querySelector(".omni__input").blur();
-		
-		// Hide the output
-		document.querySelector(".omni__wrp-output").classList.add("ve-hidden");
+	function checkForKeyAndJoin () {
+		let passkey;
+
+		if (!p2pconnected) {
+			// Get the current URL search parameters
+			const urlParams = new URLSearchParams(window.location.search);
+
+			// Check if the 'key' parameter exists
+			if (urlParams.has("id")) {
+				// Get the value of the 'key' parameter
+				const qsIdVal = urlParams.get("id");
+				passkey = qsIdVal;
+				// Call the join function with the value
+				join(passkey);
+			}
+		}
+		if (!passkey) passkey = getCookie("passkey");
+		if (passkey) recvIdInput.value = passkey;
+
+		recvIdInput.focus();
 	}
+
+	function initTab2Tab () {
+		// Create a broadcast channel to communicate between open tabs/windows
+		const channel = new BroadcastChannel("orcnog-initiative-controller-broadcast-channel");
+		channel.onmessage = async (event) => {
+			console.log("Message from other tab:", event.data);
+			if (p2pconnected) {
+				if (event?.data?.hasOwnProperty("new_initiative_board")) {
+					const newInitObj = event.data.new_initiative_board;
+					if (!await clearEncounterConfirmAndDo(
+						`Do you want to reset the initiative order with this new encounter data?`,
+						`<div class="mt-4"><p>${newInitObj?.players?.map(player => player.name).join("</p><p>")}</p></div>`,
+					)) return;
+					newInitObj?.players?.forEach((player) => {
+						const id = generatePlayerID();
+						const playerObjToAdd = getPlayerObjFromMon({name: player.name, id: id, order: null, hash: player.hash, mon: player});
+						// playerObjToAdd.id = id;
+						signal({ "add_player": playerObjToAdd });
+					});
+					handleDataObject({"controllerData": newInitObj});
+					const activeRow = document.querySelector(".initiative-tracker tr.active");
+					displayStatblock(activeRow.dataset.name, activeRow.dataset.id, activeRow.dataset.hash);
+					highlightRow(activeRow);
+				}
+			}
+		};
+	}
+	
+	/*************************************/
+	/* DOM Initial Population            */
+	/*************************************/	
 
 	// Function to populate theme selectbox with received data
 	function populateThemesData (themes) {
@@ -272,68 +326,6 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		}
 	}
 
-	function join (forcedPasskey) {
-		const passkey = forcedPasskey || recvIdInput.value;
-		if (passkey) {
-			setCookie("passkey", passkey);
-			if (conn) { conn.close(); }
-			conn = peer.connect(`orcnog-${passkey}`, { label: "CONTROLLER", reliable: true });
-			conn.on("open", function () {
-				console.debug(`conn.on('open')`);
-				p2pconnected = true;
-				status.innerHTML = `Connected to: ${conn.peer.split("orcnog-")[1]}`;
-				document.querySelectorAll(".control-panel").forEach(c => { c.classList.remove("closed"); });
-			});
-			conn.on("data", function (data) {
-				console.debug(`conn.on('data')`);
-				if (typeof data === "object") {
-					handleDataObject(data);
-				} else {
-					addMessage(`<span class="peerMsg">Peer:</span> ${data}`);
-				}
-			});
-			conn.on("close", function () {
-				console.debug(`conn.on('close')`);
-				p2pconnected = false;
-				status.innerHTML = "<span class=\"red\">Connection closed</span>";
-				document.querySelectorAll(".control-panel").forEach(c => { c.classList.add("closed"); });
-			});
-		}
-	}
-
-	function checkForKeyAndJoin () {
-		let passkey;
-
-		if (!p2pconnected) {
-			// Get the current URL search parameters
-			const urlParams = new URLSearchParams(window.location.search);
-
-			// Check if the 'key' parameter exists
-			if (urlParams.has("id")) {
-				// Get the value of the 'key' parameter
-				const qsIdVal = urlParams.get("id");
-				passkey = qsIdVal;
-				// Call the join function with the value
-				join(passkey);
-			}
-		}
-		if (!passkey) passkey = getCookie("passkey");
-		if (passkey) recvIdInput.value = passkey;
-
-		recvIdInput.focus();
-	}
-
-	function updateMicStatus(isActive) {
-		isMicActive = isActive;
-		// Update the visual indicator
-		const micStatus = document.getElementById("mic_status");
-		if (isActive) {
-			micStatus?.classList.add("active");
-		} else {
-			micStatus?.classList.remove("active");
-		}
-	}
-
 	async function handleDataObject (data) {
 		if (data.controllerData) {
 			const obj = data.controllerData;
@@ -366,6 +358,10 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			if (obj.hasOwnProperty("currentTurn")) handleCurrentTurnData(obj);
 		}
 	}
+
+	/*************************************/
+	/* Handle data objects               */
+	/*************************************/
 
 	// Function to handle hotMic data
 	function handleMicData (obj) {
@@ -433,248 +429,6 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			const row = await createPlayerRow(player);
 			// Append the row to the table
 			table.appendChild(row);
-		}
-
-		async function createPlayerRow (player) {
-			const row = document.createElement("tr");
-
-			// UrlUtil.autoEncodeHash(mon)
-
-			// add data-attributes for each of the following, if they exist in the incoming player obj
-			["id", "name", "spoken", "fromapp", "hash", "isNpc", "scaledCr"].forEach(prop => {
-				if (player[prop] != null) row.dataset[prop] = player[prop];
-			});
-
-			if (player.bloodied) row.classList.add("bloodied");
-			if (player.dead) row.classList.add("dead");
-
-			// Create and append the "order" cell
-			const orderCell = document.createElement("td");
-			const orderInput = document.createElement("input");
-			orderInput.type = "text";
-			orderInput.value = player.order;
-			orderInput.className = "player-order";
-			orderInput.addEventListener("focus", () => { orderInput.select(); });
-			orderInput.addEventListener("change", () => { signal(`update_player:{"id":"${player.id}","order":${orderInput.value}}`); });
-			orderCell.addEventListener("click", async (e) => {
-				e.preventDefault();
-				const userSelection = await popoverChooseRollableValue(orderInput, "Initiative");
-				if (userSelection !== null) {
-					if (userSelection === 3) {
-						const rollAnimationMinMax = {min: await calculateNewInit(mon, 2), max: await calculateNewInit(mon, 1)};
-						const newInit = await calculateNewInit(mon, 3);
-						animateNumber(orderInput, newInit, rollAnimationMinMax).then(() => {
-							signal(`update_player:{"id":"${player.id}","order":${newInit}}`);
-						});
-					} else {
-						const newInit = await calculateNewInit(mon, userSelection);
-						signal(`update_player:{"id":"${player.id}","order":${newInit}}`);
-					}
-				}
-			});
-			orderCell.appendChild(orderInput);
-			row.appendChild(orderCell);
-
-			// Create and append the "name" cell
-			const nameCell = document.createElement("td");
-			const nameInput = document.createElement("input");
-			nameInput.type = "text";
-			nameInput.value = player.name;
-			nameInput.className = "player-name";
-
-			// Set the width based on the character count plus a small buffer
-			function adjustInputWidth (input) {
-				input.style.width = `${Math.max(input.value.length, 1) + 2}ch`;
-			}
-
-			nameInput.addEventListener("click", () => { nameInput.focus(); });
-			nameInput.addEventListener("focus", () => { nameInput.select(); });
-			nameInput.addEventListener("change", () => {
-				adjustInputWidth(nameInput);
-				signal(`update_player:{"id":"${player.id}","name":"${nameInput.value}"}`);
-			});
-
-			adjustInputWidth(nameInput); // Adjust the width on initial load
-			nameCell.appendChild(nameInput); // Append the input to the table cell and the cell to the row
-			row.appendChild(nameCell);
-
-			// Create and append the "statblock-lock-status" cell
-			const lockCell = document.createElement("td");
-			const lockSpan = document.createElement("span");
-			lockSpan.classList.add("statblock-lock-status");
-			lockCell.appendChild(lockSpan);
-			row.appendChild(lockCell);
-
-			const mon = await get5etMonsterByHash(player.hash, player.scaledCr);
-			// For creatures with statblocks...
-			if (mon) {
-				// Create and append the "hp" cell
-				let hp = getCookie(`${player.id}__hp`);
-				if (!hp) {
-					hp = mon?.hp?.average;
-				}
-				const hpCell = document.createElement("td");
-				const hpInput = document.createElement("input");
-				const hpCookieSuffix = "__hp";
-				hpInput.type = "text";
-				hpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
-				hpInput.className = "player-hp";
-				hpInput.dataset.cookie = hpCookieSuffix;
-				setPlayerHp(hpInput, player.id, hp, hpCookieSuffix);
-				hpInput.addEventListener("focus", handleHpFocus);
-				hpInput.addEventListener("change", handleHpChange);
-				hpInput.addEventListener("keydown", handleHpKeydown);
-				hpCell.addEventListener("click", () => { hpInput.select(); });
-				hpCell.appendChild(hpInput);
-				row.appendChild(hpCell);
-
-				// Create and append the "maxhp" cell
-				let maxhp = getCookie(`${player.id}__hpmax`);
-				if (!maxhp) {
-					maxhp = mon.hp?.average;
-				}
-				const maxhpCell = document.createElement("td");
-				maxhpCell.className = "td-player-maxhp";
-				const maxhpInput = document.createElement("input");
-				const maxhpCookieSuffix = "__hpmax";
-				maxhpInput.type = "text";
-				maxhpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
-				maxhpInput.className = "player-maxhp";
-				maxhpInput.dataset.cookie = maxhpCookieSuffix;
-				setPlayerHp(maxhpInput, player.id, maxhp, maxhpCookieSuffix);
-				maxhpInput.addEventListener("focus", handleHpFocus);
-				maxhpInput.addEventListener("change", handleHpChange);
-				maxhpInput.addEventListener("keydown", handleHpKeydown);
-				maxhpInput.addEventListener("click", async (e) => {
-					e.preventDefault();
-					const userSelection = await popoverChooseRollableValue(maxhpInput, "HP");
-					if (userSelection !== null) {
-						const rollAnimationMinMax = userSelection === 3 ? {min: await calculateNewHp(mon, 2), max: await calculateNewHp(mon, 1)} : null;
-						const newHp = await calculateNewHp(mon, userSelection);
-						setPlayerHp(maxhpInput, player.id, newHp, maxhpCookieSuffix, rollAnimationMinMax);
-					}
-				});
-				maxhpCell.appendChild(maxhpInput);
-				row.appendChild(maxhpCell);
-			} else {
-				// add an "assign monster" btn that spans 2 cells
-				row.appendChild(document.createElement("td")); // blank td
-				const td = document.createElement("td");
-				const span = document.createElement("span");
-				span.className = "player-assign-btn assign-a-monster";
-				td.appendChild(span);
-				row.appendChild(td);
-			}
-
-			// Create and append the "badge" cell (if it exists)
-			const badgeCell = document.createElement("td");
-			const badgeInput = document.createElement("input");
-			badgeInput.type = "text";
-			badgeInput.className = "player-badge";
-			if (player.dead) {
-				badgeInput.value = "Dead";
-			} else if (player.bloodied) {
-				badgeInput.value = "Bloodied";
-			} else {
-				badgeInput.value = "Healthy";
-			}
-			badgeInput.addEventListener("mousedown", (e) => {
-				e.preventDefault();
-				e.target.blur(); // prevent cursor from flashing visibily inside the text field
-			});
-			badgeInput.addEventListener("click", (e) => {
-				e.preventDefault();
-				if (player.dead) {
-					signal(`update_player:{"id":"${player.id}","dead":false,"bloodied":false}`); // cycle back to healthy
-				} else if (player.bloodied) {
-					signal(`update_player:{"id":"${player.id}","dead":true,"bloodied":false}`); // from bloodied to dead
-				} else {
-					signal(`update_player:{"id":"${player.id}","dead":false,"bloodied":true}`); // from healthy to bloodied
-				}
-			});
-			badgeCell.appendChild(badgeInput);
-			row.appendChild(badgeCell);
-
-			const showStatblockOnEvent = (e) => {
-				const tr = e.target.closest("tr");
-				const { name, id, hash, scaledCr } = tr.dataset;
-				displayStatblock(name, id, hash, scaledCr);
-				highlightRow(tr);
-			};
-
-			// If it's a monster, add the statblock display on hover
-			row.addEventListener("mouseover", (e) => {
-				// If hover is enabled, show the statblock
-				if (isRowHoverEnabled && "hash" in row.dataset) {
-					showStatblockOnEvent(e);
-
-					// Bind the keydown event to the document
-					const keydownHandler = (event) => {
-						if (event.shiftKey) {
-							isRowHoverEnabled = false; // Disable hover on Shift key press
-							document.removeEventListener("keydown", keydownHandler); // Unbind the keydown event
-						}
-					};
-
-					// Add the keydown event listener to the document
-					document.addEventListener("keydown", keydownHandler);
-				}
-			});
-
-			table.addEventListener("mouseleave", (e) => {
-				if (!table.contains(e.relatedTarget)) {
-					if (!document.querySelector(".statblock-lock-status.locked")) {
-						isRowHoverEnabled = true;
-					}
-				}
-			});
-
-			row.addEventListener("click", (e) => {
-				if (e.target.tagName === "INPUT" || !("hash" in row.dataset)) return;
-				showStatblockOnEvent(e);
-
-				// Get the clicked row's statblock-lock-status
-				const statBlockLockCell = e.target?.closest("tr")?.querySelector(".statblock-lock-status");
-
-				if (statBlockLockCell) {
-					// Check if the row is currently locked
-					if (statBlockLockCell.classList.contains("locked")) {
-						// If locked, remove the class and enable row hover
-						statBlockLockCell.classList.remove("locked");
-						isRowHoverEnabled = true;
-					} else {
-						// If not locked, add the class and disable row hover
-						document.querySelectorAll(".statblock-lock-status.locked").forEach((c) => c.classList.remove("locked"));
-						statBlockLockCell.classList.add("locked");
-						isRowHoverEnabled = false;
-					}
-				}
-			});
-
-			// Add a dragover event handler to allow dropping
-			row.addEventListener("dragover", (evt) => {
-				evt.preventDefault(); // Prevent default to allow drop
-				evt.stopPropagation(); // Stop the event from bubbling up
-			});
-			row.addEventListener("dragenter", (evt) => {
-				evt.target.closest("tr")?.classList.add("drop-highlight");
-			});
-			row.addEventListener("dragleave", (evt) => {
-				if (row.contains(evt.relatedTarget)) return;
-				evt.target.closest("tr")?.classList.remove("drop-highlight");
-			});
-			// Add a drop event handler to the row
-			row.addEventListener("drop", async (evt) => {
-				evt.preventDefault(); // Prevent default behavior
-				evt.stopPropagation(); // Stop the event from bubbling up
-				evt.target.closest("tr")?.classList.remove("drop-highlight");
-
-				// Log the dataTransfer object to see what is received
-				const hash = evt.dataTransfer.getData("text/plain").split("#")?.[1];
-				await assignMonsterToRow(row, hash);
-			});
-
-			return row;
 		}
 	}
 
@@ -782,6 +536,299 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 	function handleCurrentAmbienceTrackData (obj) {
 		document.getElementById("update_ambience_track").value = obj.currentAmbienceTrack;
+	}
+
+	/*************************************/
+	/* Create player rows                */
+	/*************************************/	
+
+	async function createPlayerRow (player) {
+		const row = document.createElement("tr");
+
+		// UrlUtil.autoEncodeHash(mon)
+
+		// add data-attributes for each of the following, if they exist in the incoming player obj
+		["id", "name", "spoken", "fromapp", "hash", "isNpc", "scaledCr"].forEach(prop => {
+			if (player[prop] != null) row.dataset[prop] = player[prop];
+		});
+
+		if (player.bloodied) row.classList.add("bloodied");
+		if (player.dead) row.classList.add("dead");
+
+		// Create and append the "order" cell
+		const orderCell = document.createElement("td");
+		const orderInput = document.createElement("input");
+		orderInput.type = "text";
+		orderInput.value = player.order;
+		orderInput.className = "player-order";
+		orderInput.addEventListener("focus", () => { orderInput.select(); });
+		orderInput.addEventListener("change", () => { signal(`update_player:{"id":"${player.id}","order":${orderInput.value}}`); });
+		orderCell.addEventListener("click", async (e) => {
+			e.preventDefault();
+			const userSelection = await popoverChooseRollableValue(orderInput, "Initiative");
+			if (userSelection !== null) {
+				if (userSelection === 3) {
+					const rollAnimationMinMax = {min: await calculateNewInit(mon, 2), max: await calculateNewInit(mon, 1)};
+					const newInit = await calculateNewInit(mon, 3);
+					animateNumber(orderInput, newInit, rollAnimationMinMax).then(() => {
+						signal(`update_player:{"id":"${player.id}","order":${newInit}}`);
+					});
+				} else {
+					const newInit = await calculateNewInit(mon, userSelection);
+					signal(`update_player:{"id":"${player.id}","order":${newInit}}`);
+				}
+			}
+		});
+		orderCell.appendChild(orderInput);
+		row.appendChild(orderCell);
+
+		// Create and append the "name" cell
+		const nameCell = document.createElement("td");
+		const nameInput = document.createElement("input");
+		nameInput.type = "text";
+		nameInput.value = player.name;
+		nameInput.className = "player-name";
+
+		// Set the width based on the character count plus a small buffer
+		function adjustInputWidth (input) {
+			input.style.width = `${Math.max(input.value.length, 1) + 2}ch`;
+		}
+
+		nameInput.addEventListener("click", () => { nameInput.focus(); });
+		nameInput.addEventListener("focus", () => { nameInput.select(); });
+		nameInput.addEventListener("change", () => {
+			adjustInputWidth(nameInput);
+			signal(`update_player:{"id":"${player.id}","name":"${nameInput.value}"}`);
+		});
+
+		adjustInputWidth(nameInput); // Adjust the width on initial load
+		nameCell.appendChild(nameInput); // Append the input to the table cell and the cell to the row
+		row.appendChild(nameCell);
+
+		// Create and append the "statblock-lock-status" cell
+		const lockCell = document.createElement("td");
+		const lockSpan = document.createElement("span");
+		lockSpan.classList.add("statblock-lock-status");
+		lockCell.appendChild(lockSpan);
+		row.appendChild(lockCell);
+
+		const mon = await get5etMonsterByHash(player.hash, player.scaledCr);
+		// For creatures with statblocks...
+		if (mon) {
+			// Create and append the "hp" cell
+			let hp = getCookie(`${player.id}__hp`);
+			if (!hp) {
+				hp = mon?.hp?.average;
+			}
+			const hpCell = document.createElement("td");
+			const hpInput = document.createElement("input");
+			const hpCookieSuffix = "__hp";
+			hpInput.type = "text";
+			hpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
+			hpInput.className = "player-hp";
+			hpInput.dataset.cookie = hpCookieSuffix;
+			setPlayerHp(hpInput, player.id, hp, hpCookieSuffix);
+			hpInput.addEventListener("focus", handleHpFocus);
+			hpInput.addEventListener("change", handleHpChange);
+			hpInput.addEventListener("keydown", handleHpKeydown);
+			hpCell.addEventListener("click", () => { hpInput.select(); });
+			hpCell.appendChild(hpInput);
+			row.appendChild(hpCell);
+
+			// Create and append the "maxhp" cell
+			let maxhp = getCookie(`${player.id}__hpmax`);
+			if (!maxhp) {
+				maxhp = mon.hp?.average;
+			}
+			const maxhpCell = document.createElement("td");
+			maxhpCell.className = "td-player-maxhp";
+			const maxhpInput = document.createElement("input");
+			const maxhpCookieSuffix = "__hpmax";
+			maxhpInput.type = "text";
+			maxhpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
+			maxhpInput.className = "player-maxhp";
+			maxhpInput.dataset.cookie = maxhpCookieSuffix;
+			setPlayerHp(maxhpInput, player.id, maxhp, maxhpCookieSuffix);
+			maxhpInput.addEventListener("focus", handleHpFocus);
+			maxhpInput.addEventListener("change", handleHpChange);
+			maxhpInput.addEventListener("keydown", handleHpKeydown);
+			maxhpInput.addEventListener("click", async (e) => {
+				e.preventDefault();
+				const userSelection = await popoverChooseRollableValue(maxhpInput, "HP");
+				if (userSelection !== null) {
+					const rollAnimationMinMax = userSelection === 3 ? {min: await calculateNewHp(mon, 2), max: await calculateNewHp(mon, 1)} : null;
+					const newHp = await calculateNewHp(mon, userSelection);
+					setPlayerHp(maxhpInput, player.id, newHp, maxhpCookieSuffix, rollAnimationMinMax);
+				}
+			});
+			maxhpCell.appendChild(maxhpInput);
+			row.appendChild(maxhpCell);
+		} else {
+			// add an "assign monster" btn that spans 2 cells
+			row.appendChild(document.createElement("td")); // blank td
+			const td = document.createElement("td");
+			const span = document.createElement("span");
+			span.className = "player-assign-btn assign-a-monster";
+			td.appendChild(span);
+			row.appendChild(td);
+		}
+
+		// Create and append the "badge" cell (if it exists)
+		const badgeCell = document.createElement("td");
+		const badgeInput = document.createElement("input");
+		badgeInput.type = "text";
+		badgeInput.className = "player-badge";
+		if (player.dead) {
+			badgeInput.value = "Dead";
+		} else if (player.bloodied) {
+			badgeInput.value = "Bloodied";
+		} else {
+			badgeInput.value = "Healthy";
+		}
+		badgeInput.addEventListener("mousedown", (e) => {
+			e.preventDefault();
+			e.target.blur(); // prevent cursor from flashing visibily inside the text field
+		});
+		badgeInput.addEventListener("click", (e) => {
+			e.preventDefault();
+			if (player.dead) {
+				signal(`update_player:{"id":"${player.id}","dead":false,"bloodied":false}`); // cycle back to healthy
+			} else if (player.bloodied) {
+				signal(`update_player:{"id":"${player.id}","dead":true,"bloodied":false}`); // from bloodied to dead
+			} else {
+				signal(`update_player:{"id":"${player.id}","dead":false,"bloodied":true}`); // from healthy to bloodied
+			}
+		});
+		badgeCell.appendChild(badgeInput);
+		row.appendChild(badgeCell);
+
+		const showStatblockOnEvent = (e) => {
+			const tr = e.target.closest("tr");
+			const { name, id, hash, scaledCr } = tr.dataset;
+			displayStatblock(name, id, hash, scaledCr);
+			highlightRow(tr);
+		};
+
+		// If it's a monster, add the statblock display on hover
+		row.addEventListener("mouseover", (e) => {
+			// If hover is enabled, show the statblock
+			if (isRowHoverEnabled && "hash" in row.dataset) {
+				showStatblockOnEvent(e);
+
+				// Bind the keydown event to the document
+				const keydownHandler = (event) => {
+					if (event.shiftKey) {
+						isRowHoverEnabled = false; // Disable hover on Shift key press
+						document.removeEventListener("keydown", keydownHandler); // Unbind the keydown event
+					}
+				};
+
+				// Add the keydown event listener to the document
+				document.addEventListener("keydown", keydownHandler);
+			}
+		});
+
+		table.addEventListener("mouseleave", (e) => {
+			if (!table.contains(e.relatedTarget)) {
+				if (!document.querySelector(".statblock-lock-status.locked")) {
+					isRowHoverEnabled = true;
+				}
+			}
+		});
+
+		row.addEventListener("click", (e) => {
+			if (e.target.tagName === "INPUT" || !("hash" in row.dataset)) return;
+			showStatblockOnEvent(e);
+
+			// Get the clicked row's statblock-lock-status
+			const statBlockLockCell = e.target?.closest("tr")?.querySelector(".statblock-lock-status");
+
+			if (statBlockLockCell) {
+				// Check if the row is currently locked
+				if (statBlockLockCell.classList.contains("locked")) {
+					// If locked, remove the class and enable row hover
+					statBlockLockCell.classList.remove("locked");
+					isRowHoverEnabled = true;
+				} else {
+					// If not locked, add the class and disable row hover
+					document.querySelectorAll(".statblock-lock-status.locked").forEach((c) => c.classList.remove("locked"));
+					statBlockLockCell.classList.add("locked");
+					isRowHoverEnabled = false;
+				}
+			}
+		});
+
+		// Add a dragover event handler to allow dropping
+		row.addEventListener("dragover", (evt) => {
+			evt.preventDefault(); // Prevent default to allow drop
+			evt.stopPropagation(); // Stop the event from bubbling up
+		});
+		row.addEventListener("dragenter", (evt) => {
+			evt.target.closest("tr")?.classList.add("drop-highlight");
+		});
+		row.addEventListener("dragleave", (evt) => {
+			if (row.contains(evt.relatedTarget)) return;
+			evt.target.closest("tr")?.classList.remove("drop-highlight");
+		});
+		// Add a drop event handler to the row
+		row.addEventListener("drop", async (evt) => {
+			evt.preventDefault(); // Prevent default behavior
+			evt.stopPropagation(); // Stop the event from bubbling up
+			evt.target.closest("tr")?.classList.remove("drop-highlight");
+
+			// Log the dataTransfer object to see what is received
+			const hash = evt.dataTransfer.getData("text/plain").split("#")?.[1];
+			await assignMonsterToRow(row, hash);
+		});
+
+		return row;
+	}
+
+	/*************************************/
+	/* Misc functions                    */
+	/*************************************/	
+
+	function updateMicStatus(isActive) {
+		isMicActive = isActive;
+		// Update the visual indicator
+		const micStatus = document.getElementById("mic_status");
+		if (isActive) {
+			micStatus?.classList.add("active");
+		} else {
+			micStatus?.classList.remove("active");
+		}
+	}
+
+	async function openOmnibox(value) {
+		return new Promise(resolve => {
+			// Set value and focus
+			const input = document.querySelector(".omni__input");
+			input.value = value;
+			input.focus();
+
+			// Show the output wrapper
+			document.querySelector(".omni__wrp-output")?.classList.remove("ve-hidden");
+
+			// Try to open search results div immediately
+			Omnisearch._pHandleClickSubmit();
+
+			// If it doesn't open immediately, wait for the TYPE_TIMEOUT_MS duration before triggering search
+			setTimeout(async () => {
+				if (document.querySelector(".omni__wrp-output").classList.contains("ve-hidden")) {
+					await Omnisearch._pHandleClickSubmit();
+				}
+				resolve();
+			}, Omnisearch._TYPE_TIMEOUT_MS);
+		});
+	}
+
+	function closeOmnibox() {
+		// Clear and blur the input
+		document.querySelector(".omni__input").value = "";
+		document.querySelector(".omni__input").blur();
+		
+		// Hide the output
+		document.querySelector(".omni__wrp-output").classList.add("ve-hidden");
 	}
 
 	function addMessage (msg) {
@@ -1357,6 +1404,10 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
 	}
 
+	/*************************************/	
+	/* DOM manipulation                  */
+	/*************************************/
+
 	async function initializeDOM () {
 		/**
 		 * Populate some elements in the DOM
@@ -1563,32 +1614,9 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		document.getElementById("clear_initiative").addEventListener("click", async () => { await clearEncounterConfirmAndDo(); });
 	}
 
-	function initTab2Tab () {
-		// Create a broadcast channel to communicate between open tabs/windows
-		const channel = new BroadcastChannel("orcnog-initiative-controller-broadcast-channel");
-		channel.onmessage = async (event) => {
-			console.log("Message from other tab:", event.data);
-			if (p2pconnected) {
-				if (event?.data?.hasOwnProperty("new_initiative_board")) {
-					const newInitObj = event.data.new_initiative_board;
-					if (!await clearEncounterConfirmAndDo(
-						`Do you want to reset the initiative order with this new encounter data?`,
-						`<div class="mt-4"><p>${newInitObj?.players?.map(player => player.name).join("</p><p>")}</p></div>`,
-					)) return;
-					newInitObj?.players?.forEach((player) => {
-						const id = generatePlayerID();
-						const playerObjToAdd = getPlayerObjFromMon({name: player.name, id: id, order: null, hash: player.hash, mon: player});
-						// playerObjToAdd.id = id;
-						signal({ "add_player": playerObjToAdd });
-					});
-					handleDataObject({"controllerData": newInitObj});
-					const activeRow = document.querySelector(".initiative-tracker tr.active");
-					displayStatblock(activeRow.dataset.name, activeRow.dataset.id, activeRow.dataset.hash);
-					highlightRow(activeRow);
-				}
-			}
-		};
-	}
+	/*************************************/
+	/* Initialization            	     */
+	/*************************************/	
 
 	initPeer2Peer();
 	initTab2Tab();
