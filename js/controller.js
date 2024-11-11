@@ -1,11 +1,7 @@
 // TODO:
 // 1. make a player row with assigned creature able to be UNassigned.
-// 2. prevent any signal from being sent if the app's mic is active.
 
 import { VOICE_APP_PATH } from "./controller-config.js";
-
-let send;
-let signal;
 
 (async function () {
 	let lastPeerId = null;
@@ -22,6 +18,7 @@ let signal;
 	let cueString = "<span class=\"cueMsg\">Cue: </span>";
 	let activeAlerts = [];
 	let isRowHoverEnabled = true;
+	let isMicActive = false;
 
 	const themes = await fetchJSON(`${VOICE_APP_PATH}/../styles/themes/themes.json`);
 	const slideshows = await fetchJSON(`${VOICE_APP_PATH}/../slideshow/slideshow-config.json`);
@@ -68,7 +65,27 @@ let signal;
 		});
 	}
 
-	signal = function (sigName) {
+	async function signal(sigName) {
+		// If mic is active, wait for it to become inactive
+		if (isMicActive) {
+			console.warn("Signal delayed: Waiting for microphone to become inactive...");
+			
+			await new Promise(resolve => {
+				// Create a function to check mic status
+				function checkMic() {
+					if (!isMicActive) {
+						resolve();
+					} else {
+						// Check again in 250ms
+						setTimeout(checkMic, 250);
+					}
+				}
+				// Start checking
+				checkMic();
+			});
+		}
+	
+		// Now send the signal
 		if (conn && conn.open) {
 			conn.send(sigName);
 			addMessage(cueString + sigName);
@@ -76,7 +93,7 @@ let signal;
 			console.error("No connection found.");
 			showAlert("No connection found.");
 		}
-	};
+	}
 
 	async function openOmnibox(value) {
 		return new Promise(resolve => {
@@ -305,6 +322,17 @@ let signal;
 		recvIdInput.focus();
 	}
 
+	function updateMicStatus(isActive) {
+		isMicActive = isActive;
+		// Update the visual indicator
+		const micStatus = document.getElementById("mic_status");
+		if (isActive) {
+			micStatus?.classList.add("active");
+		} else {
+			micStatus?.classList.remove("active");
+		}
+	}
+
 	async function handleDataObject (data) {
 		if (data.controllerData) {
 			const obj = data.controllerData;
@@ -341,8 +369,13 @@ let signal;
 	// Function to handle hotMic data
 	function handleMicData (obj) {
 		const isHotMic = obj.hotMic === true;
-		if (isHotMic) document.getElementById("mic_status").classList.add("hot");
-		else document.getElementById("mic_status").classList.remove("hot");
+		if (isHotMic) {
+			document.getElementById("mic_status").classList.add("hot");
+			updateMicStatus(true);
+		} else {
+			document.getElementById("mic_status").classList.remove("hot");
+			updateMicStatus(false);
+		}
 	}
 
 	// Function to handle currentTheme data
@@ -661,6 +694,7 @@ let signal;
 		if (typeof newVol === "number") document.getElementById("volume_music").value = newVol * 100;
 	}
 
+	let fadeInterval;
 	function handleWillFadeData (obj, musicOrAmbience) {
 		const { start, finish, duration, id } = obj[`${musicOrAmbience}WillFade`];
 
@@ -672,7 +706,7 @@ let signal;
 
 			let currentVolume = start;
 
-			let fadeInterval = setInterval(() => {
+			fadeInterval = setInterval(() => {
 				const elapsedTime = Date.now() - startTime;
 				currentVolume += fadeStep;
 
@@ -1336,6 +1370,105 @@ let signal;
 		/**
 		 * Event listeners and handling
 		 */
+
+		// Theme dropdown
+		document.getElementById("updateTheme").addEventListener("change", (e) => {
+			signal(`updateTheme:${e.target.value}`);
+		});
+	
+		// Combat playlist dropdown
+		document.getElementById("update_combat_playlist").addEventListener("change", (e) => {
+			signal(`updateCombatPlaylist:${e.target.value}`);
+		});
+	
+		// Slideshow context dropdown
+		document.getElementById("updateSlideshowContext").addEventListener("change", (e) => {
+			signal(`updateSlideshowContext:${e.target.value}`);
+		});
+	
+		// App scale input
+		document.getElementById("update_app_scale").addEventListener("change", (e) => {
+			signal(`updateAppScale:${e.target.value}`);
+		});
+	
+		// Font size input
+		document.getElementById("update_font_size").addEventListener("change", (e) => {
+			signal(`updateFontSize:${e.target.value}`);
+		});
+	
+		// Initiative tracker button
+		document.getElementById("back_to_initiative").addEventListener("click", () => {
+			signal("back_to_initiative");
+		});
+	
+		// Turn navigation
+		document.getElementById("prev_turn").addEventListener("click", () => {
+			signal("prev_turn");
+		});
+		document.getElementById("next_turn").addEventListener("click", () => {
+			signal("next_turn");
+		});
+	
+		// Music controls
+		document.getElementById("repeat_music").addEventListener("click", () => {
+			signal("repeat_music");
+		});
+		document.getElementById("prev_track_music").addEventListener("click", () => {
+			signal("prev_track_music");
+		});
+		document.getElementById("play_music").addEventListener("click", () => {
+			signal("play_music");
+		});
+		document.getElementById("pause_music").addEventListener("click", () => {
+			signal("pause_music");
+		});
+		document.getElementById("next_track_music").addEventListener("click", () => {
+			signal("next_track_music");
+		});
+		document.getElementById("shuffle_music").addEventListener("click", () => {
+			signal("shuffle_music");
+		});
+		document.getElementById("volume_music").addEventListener("click", (e) => {
+			signal(`volume_music:${e.target.value/100}`);
+		});
+	
+		// Music playlist/track selection
+		document.getElementById("update_music_playlist").addEventListener("change", (e) => {
+			signal(`update_music:${e.target.value}`);
+		});
+		document.getElementById("update_music_track").addEventListener("change", (e) => {
+			signal(`update_music_track:${e.target.value}`);
+		});
+	
+		// Audio kill switch
+		document.getElementById("audio_kill_switch").addEventListener("click", () => {
+			signal("kill_audio");
+		});
+	
+		// Ambience controls
+		document.getElementById("prev_track_ambience").addEventListener("click", () => {
+			signal("prev_track_ambience");
+		});
+		document.getElementById("play_ambience").addEventListener("click", () => {
+			signal("play_ambience");
+		});
+		document.getElementById("pause_ambience").addEventListener("click", () => {
+			signal("pause_ambience");
+		});
+		document.getElementById("next_track_ambience").addEventListener("click", () => {
+			signal("next_track_ambience");
+		});
+		document.getElementById("volume_ambience").addEventListener("click", (e) => {
+			signal(`volume_ambience:${e.target.value/100}`);
+		});
+	
+		// Ambience playlist/track selection
+		document.getElementById("update_ambience_playlist").addEventListener("change", (e) => {
+			signal(`update_ambience:${e.target.value}`);
+		});
+		document.getElementById("update_ambience_track").addEventListener("change", (e) => {
+			signal(`update_ambience_track:${e.target.value}`);
+		});
 
 		document.querySelectorAll(".toggle").forEach(tog => {
 			tog.addEventListener("click", (e) => {

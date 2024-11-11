@@ -355,11 +355,11 @@ div#initiative_order {
 }
 .initiative-tracker tr.statblock-highlight,
 .initiative-tracker tr.statblock-highlight input {
-    background-color: rgba(65, 50, 0);
+    background-color: rgb(73 50 11);
 }
 .initiative-tracker tr.drop-highlight,
 .initiative-tracker tr.drop-highlight input {
-    background-color: rgba(185, 135, 0);
+    background-color: rgba(180, 130, 0);
 }
 .initiative-tracker tr.drop-highlight input {
     pointer-events: none;
