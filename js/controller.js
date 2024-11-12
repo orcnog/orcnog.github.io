@@ -176,15 +176,59 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			if (p2pconnected) {
 				if (event?.data?.hasOwnProperty("new_initiative_board")) {
 					const newInitObj = event.data.new_initiative_board;
-					if (!await clearEncounterConfirmAndDo(
-						`Do you want to reset the initiative order with this new encounter data?`,
-						`<div class="mt-4"><p>${newInitObj?.players?.map(player => player.name).join("</p><p>")}</p></div>`,
-					)) return;
-					newInitObj?.players?.forEach((player) => {
-						const playerObjToAdd = getPlayerObjFromMon({name: player.name, order: 0, hash: player.hash, mon: player});
-						// playerObjToAdd.id = null;
+					const result = await getEncounterLoadOptions(newInitObj?.players);
+					if (!result) return; // User cancelled
+					// Or, handle the result...
+					if (result.action === "clearAll") clearAll();
+					else if (result.action === "clearMonsters") clearMonsters();
+
+					// Create the grouped initiatives map outside the loop
+					const groupedInits = new Map();
+
+					// Process players sequentially
+					for (const player of newInitObj?.players || []) {
+						let playerId;
+						// Use the options
+						if (result.rollInitiative) {
+							if (result.groupCreatures) {
+								// Roll grouped initiatives - only roll once per creature type
+								let init = groupedInits.get(player.name);
+								if (init === undefined) {
+									init = await calculateNewInit(player, 3);
+									groupedInits.set(player.name, init);
+									console.log(`Rolling new initiative ${init} for ${player.name}`);
+								} else {
+									console.log(`Using existing initiative ${init} for ${player.name}`);
+								}
+								player.initiative = init;
+							} else {
+								// Roll individual initiatives
+								player.initiative = await calculateNewInit(player, 3);
+							}
+						}
+
+						if (result.rollHp) {
+							// Only generate ID if we're rolling HP
+							playerId = generatePlayerID();
+							const mon = await get5etMonsterByHash(player.hash);
+							const newHp = await calculateNewHp(mon, 3); // Roll random HP
+							// Store HP in cookies immediately using the generated ID
+							setCookie(`${playerId}__hp`, newHp);
+							setCookie(`${playerId}__hpmax`, newHp);
+						}
+
+						const playerObjToAdd = getPlayerObjFromMon({
+							name: player.name, 
+							order: player.initiative || 0, 
+							hash: player.hash, 
+							mon: player,
+							...(playerId && { id: playerId }) // Only include ID if it was generated
+						});
+						// Add the player
 						signal({ "add_player": playerObjToAdd });
-					});
+					}
+
+					// After all players are processed
 					handleDataObject({"controllerData": newInitObj});
 					const activeRow = document.querySelector(".initiative-tracker tr.active");
 					if (activeRow) {
@@ -1069,6 +1113,70 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			title: title,
 		});
 		$modalInner.append($modalContent);
+	}
+
+	async function getEncounterLoadOptions () {
+		// Create a state object to track checkbox values
+		const comp = BaseComponent.fromObject({
+			rollInitiative: true,
+			groupCreatures: true,
+			rollHp: false,
+		});
+	
+		const {$modalInner, doClose, pGetResolved} = await InputUiUtil._pGetShowModal({
+			title: "Load Encounter Options",
+			isHeaderBorder: true,
+			isMinHeight0: true,
+		});
+	
+		// Add checkboxes using the utility method
+		UiUtil.$getAddModalRowCb2({
+			$wrp: $modalInner,
+			comp,
+			prop: "rollInitiative",
+			text: "Roll Initiatives",
+		});
+	
+		UiUtil.$getAddModalRowCb2({
+			$wrp: $modalInner,
+			comp,
+			prop: "groupCreatures",
+			text: "Group creatures by type",
+		});
+	
+		UiUtil.$getAddModalRowCb2({
+			$wrp: $modalInner,
+			comp,
+			prop: "rollHp",
+			text: "Roll HP",
+		});
+	
+		// Create custom buttons
+		const $btnClearAll = $(`<button class="ve-btn ve-btn-primary mr-2"><span class="glyphicon glyphicon-ok"></span> Clear All and Add</button>`)
+			.click(() => doClose(true, {
+				action: "clearAll",
+				...comp._state,
+			}));
+	
+		const $btnClearMonsters = $(`<button class="ve-btn ve-btn-primary mr-2"><span class="glyphicon glyphicon-filter"></span> Clear Monsters and Add</button>`)
+			.click(() => doClose(true, {
+				action: "clearMonsters",
+				...comp._state,
+			}));
+	
+		const $btnCancel = $(`<button class="ve-btn ve-btn-default">Cancel</button>`)
+			.click(() => doClose(false));
+	
+		$$`<div class="ve-flex-v-center ve-flex-h-right pb-1 px-1 mt-2">
+			${$btnClearAll}
+			${$btnClearMonsters}
+			${$btnCancel}
+		</div>`.appendTo($modalInner);
+	
+		// Get the result
+		const [isDataEntered, data] = await pGetResolved();
+		if (!isDataEntered) return null;
+		return data;
 	}
 
 	async function clearEncounterConfirmAndDo (title, htmlDescription) {
