@@ -371,7 +371,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			if (obj.hasOwnProperty("ambienceWillFade")) handleWillFadeData(obj, "ambience");
 			if (obj.hasOwnProperty("currentAmbiencePlaylist")) handleCurrentAmbiencePlaylistData(obj);
 			if (obj.hasOwnProperty("currentAmbienceTrack")) handleCurrentAmbienceTrackData(obj);
-			if (obj.hasOwnProperty("currentPlayers")) handleCurrentPlayersData(obj);
+			if (obj.hasOwnProperty("currentPlayers")) await handleCurrentPlayersData(obj);
 			if (obj.hasOwnProperty("currentRound")) handleCurrentRoundData(obj);
 			if (obj.hasOwnProperty("currentTurn")) handleCurrentTurnData(obj);
 		}

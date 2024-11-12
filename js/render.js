@@ -1235,7 +1235,7 @@ globalThis.Renderer = function () {
 			textStack[0] += `</i>`;
 		}
 		textStack[0] += `<hr/>`;
-		textStack[0] += `<${this.wrapperTag}>Run: <a class="initiative-tracker-link" data-encounter=''>Initiative Tracker</a></${this.wrapperTag}>`;
+		textStack[0] += `<${this.wrapperTag}>Run: <a class="initiative-tracker-link" data-encounter='' href="javascript:void(0)">Initiative Tracker</a></${this.wrapperTag}>`;
 		textStack[0] += `<div class="float-clear"></div>`;
 		textStack[0] += `</${this.wrapperTag}>`;
 
