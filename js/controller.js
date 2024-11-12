@@ -1,6 +1,7 @@
 // TODO:
-// 1. make a row with an assigned statblock un-assignable.
-// 2. make a monster row duplicateable.
+// 1. when adding an encounter, give the option to roll initiative for all new creatures
+// 2. allow Add a Player option to add HP and Max HP.
+// 3. move the monster icon to the Assign a Monster button.
 
 import { VOICE_APP_PATH } from "./controller-config.js";
 
@@ -20,6 +21,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	let activeAlerts = [];
 	let isRowHoverEnabled = true;
 	let isMicActive = false;
+	let initTrackerTable;
 
 	const themes = await fetchJSON(`${VOICE_APP_PATH}/../styles/themes/themes.json`);
 	const slideshows = await fetchJSON(`${VOICE_APP_PATH}/../slideshow/slideshow-config.json`);
@@ -164,15 +166,16 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 						`<div class="mt-4"><p>${newInitObj?.players?.map(player => player.name).join("</p><p>")}</p></div>`,
 					)) return;
 					newInitObj?.players?.forEach((player) => {
-						const id = generatePlayerID();
-						const playerObjToAdd = getPlayerObjFromMon({name: player.name, id: id, order: null, hash: player.hash, mon: player});
-						// playerObjToAdd.id = id;
+						const playerObjToAdd = getPlayerObjFromMon({name: player.name, order: 0, hash: player.hash, mon: player});
+						// playerObjToAdd.id = null;
 						signal({ "add_player": playerObjToAdd });
 					});
 					handleDataObject({"controllerData": newInitObj});
 					const activeRow = document.querySelector(".initiative-tracker tr.active");
-					displayStatblock(activeRow.dataset.name, activeRow.dataset.id, activeRow.dataset.hash);
-					highlightRow(activeRow);
+					if (activeRow) {
+						displayStatblock(activeRow.dataset.name, activeRow.dataset.id, activeRow.dataset.hash);
+						highlightRow(activeRow);
+					}
 				}
 			}
 		};
@@ -418,17 +421,17 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	async function handleCurrentPlayersData (obj) {
 		const players = obj.currentPlayers;
 
-		const table = document.getElementById("initiative_order").querySelector("tbody");
+		initTrackerTable = document.getElementById("initiative_order").querySelector("tbody");
 
 		// Clear the table before inserting new rows
-		table.innerHTML = "";
+		initTrackerTable.innerHTML = "";
 
 		// Loop through each player and create a row
 		for (const player of players) {
 			// Create a table row for each combatant
 			const row = await createPlayerRow(player);
 			// Append the row to the table
-			table.appendChild(row);
+			initTrackerTable.appendChild(row);
 		}
 	}
 
@@ -548,7 +551,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		// UrlUtil.autoEncodeHash(mon)
 
 		// add data-attributes for each of the following, if they exist in the incoming player obj
-		["id", "name", "spoken", "fromapp", "hash", "isNpc", "scaledCr"].forEach(prop => {
+		["id", "name", "order", "spoken", "fromapp", "hash", "isNpc", "scaledCr"].forEach(prop => {
 			if (player[prop] != null) row.dataset[prop] = player[prop];
 		});
 
@@ -565,17 +568,19 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		orderInput.addEventListener("change", () => { signal(`update_player:{"id":"${player.id}","order":${orderInput.value}}`); });
 		orderCell.addEventListener("click", async (e) => {
 			e.preventDefault();
-			const userSelection = await popoverChooseRollableValue(orderInput, "Initiative");
-			if (userSelection !== null) {
-				if (userSelection === 3) {
-					const rollAnimationMinMax = {min: await calculateNewInit(mon, 2), max: await calculateNewInit(mon, 1)};
-					const newInit = await calculateNewInit(mon, 3);
-					animateNumber(orderInput, newInit, rollAnimationMinMax).then(() => {
+			if (player.hash) {
+				const userSelection = await popoverChooseRollableValue(orderInput, "Initiative");
+				if (userSelection !== null) {
+					if (userSelection === 3) {
+						const rollAnimationMinMax = {min: await calculateNewInit(mon, 2), max: await calculateNewInit(mon, 1)};
+						const newInit = await calculateNewInit(mon, 3);
+						animateNumber(orderInput, newInit, rollAnimationMinMax).then(() => {
+							signal(`update_player:{"id":"${player.id}","order":${newInit}}`);
+						});
+					} else {
+						const newInit = await calculateNewInit(mon, userSelection);
 						signal(`update_player:{"id":"${player.id}","order":${newInit}}`);
-					});
-				} else {
-					const newInit = await calculateNewInit(mon, userSelection);
-					signal(`update_player:{"id":"${player.id}","order":${newInit}}`);
+					}
 				}
 			}
 		});
@@ -594,7 +599,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			input.style.width = `${Math.max(input.value.length, 1) + 2}ch`;
 		}
 
-		nameInput.addEventListener("click", () => { nameInput.focus(); });
+		nameInput.addEventListener("click", (e) => { if (e.button === 0) nameInput.focus(); });
 		nameInput.addEventListener("focus", () => { nameInput.select(); });
 		nameInput.addEventListener("change", () => {
 			adjustInputWidth(nameInput);
@@ -728,8 +733,8 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			}
 		});
 
-		table.addEventListener("mouseleave", (e) => {
-			if (!table.contains(e.relatedTarget)) {
+		initTrackerTable.addEventListener("mouseleave", (e) => {	
+			if (!initTrackerTable.contains(e.relatedTarget)) {
 				if (!document.querySelector(".statblock-lock-status.locked")) {
 					isRowHoverEnabled = true;
 				}
@@ -831,6 +836,37 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		document.querySelector(".omni__wrp-output").classList.add("ve-hidden");
 	}
 
+	async function selectMonsterFromOmnibox (row) {
+		
+		const dismissedNotice = getCookie("assign_monster_notice_dismissed") === "true";
+		if (!dismissedNotice) {
+			if (await InputUiUtil.pGetUserBoolean({title: "How to Assign a Creature", htmlDescription: `<ol><li>Search for a creature in the global search box.</li><li>Drag and drop that creature's name onto a combatant name in the initiative tracker.</li></ol>`, textYes: "Do not show this again", textNo: "Okay"})) {
+				setCookie("assign_monster_notice_dismissed", "true");
+			}
+		}
+		if (row) {
+			row.classList.add("omnibox-highlight");
+		}
+		await openOmnibox("in:bestiary ");
+		if (row) {
+			const assignClickedMonsterToRow = (e) => {
+				if (e.target.tagName === "A" && e.target.dataset.vetPage === "bestiary.html") {
+					e.preventDefault();
+					e.stopImmediatePropagation();
+					const hash = e.target.dataset.vetHash;
+					assignMonsterToRow(row, hash)
+					.catch(err => console.error("Error assigning monster:", err))
+					.finally(() => {
+						// Clean up event listener and css after assignment completes
+						document.querySelector(`.omni__output`).removeEventListener("click", assignClickedMonsterToRow);
+						row.classList.remove("omnibox-highlight");
+					});
+				}
+			};
+			document.querySelector(`.omni__output`).addEventListener("click", assignClickedMonsterToRow);
+		}
+	}
+
 	function addMessage (msg) {
 		let now = new Date();
 		let h = now.getHours();
@@ -925,6 +961,10 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		if (name && name !== mon.name) document.getElementById("initiative-statblock-display").querySelector("h1").textContent = `${name} [${mon._displayName || mon.name}]`;
 	}
 
+	function renamePlayer (row) {
+		row.querySelector(".player-name").focus();
+	}
+
 	async function assignMonsterToRow(row, hash) {
 		// Update row's hash
 		row.dataset.hash = hash;
@@ -954,6 +994,48 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		closeOmnibox();
 		displayStatblock(player.name, player.id, hash);
 		highlightRow(row);
+	}
+
+	async function removeMonsterAssignment (row) {
+		signal(`update_player:{"id":"${row.dataset.id}","hash":null}`);
+	}
+
+	async function resetHpToAverage (row) {
+		// Get the monster data from the row
+		const hash = row.dataset.hash;
+		const id = row.dataset.id;
+		const scaledCr = row.dataset.scaledCr;
+		
+		// Get the monster stats
+		const mon = await get5etMonsterByHash(hash, scaledCr);
+		if (!mon?.hp?.average) return;
+	
+		// Reset both current HP and max HP to the monster's average
+		const hpInput = row.querySelector(".player-hp");
+		const maxHpInput = row.querySelector(".player-maxhp");
+		
+		setPlayerHp(hpInput, id, mon.hp.average, "__hp");
+		setPlayerHp(maxHpInput, id, mon.hp.average, "__hpmax");
+	}
+
+	function addNewPlayer (name, order, hash = null) {
+		if (!name) return;
+		hash = hash || null;
+		order = Number(order) || 0;
+		const playerObjToAdd = {
+			name: name,
+			order: order,
+			hash: hash,
+		};
+		signal({ "add_player": playerObjToAdd });
+	}
+
+	function duplicatePlayer (row) {
+		addNewPlayer(row.dataset.name, row.dataset.order, row.dataset.hash);
+	}
+
+	function deletePlayer (row) {
+		signal(`update_player:{"id":"${row.dataset.id}","name":"","hash":null}`);
 	}
 
 	function showAlert (title, $modalContent) {
@@ -1179,7 +1261,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	}
 
 	function getPlayerObjFromMon ({ name, id, order, hash, mon }) {
-		if (!id || !hash || !mon) return;
+		if ( !hash || !mon) return;
 		const displayName = name || mon.name;
 		const initiativeOrder = order !== null ? order : Parser.getAbilityModNumber(mon.dex || 10);
 		return {
@@ -1569,49 +1651,44 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			const name = document.getElementById("new_player_name").value;
 			const number = document.getElementById("new_player_roll").value;
 
-			signal(`add_player:{"name":"${name}","order":"${number}"}`);
+			addNewPlayer(name, number);
 		});
 
 		document.getElementById("new_player_master").addEventListener("submit", (e) => {
 			e.preventDefault(); // Prevent default form submission
-
 			// Get form data
 			const name = document.getElementById("new_player_name_master").value;
 			const number = document.getElementById("new_player_roll_master").value;
 
-			signal(`add_player:{"name":"${name}","order":"${number}"}`);
+			addNewPlayer(name, number);
 		});
 
 		document.body.addEventListener("click", async (e) => {
 			if (e.target.classList.contains("assign-a-monster")) {
-				const dismissedNotice = getCookie("assign_monster_notice_dismissed") === "true";
-				if (!dismissedNotice) {
-					if (await InputUiUtil.pGetUserBoolean({title: "How to Assign a Creature", htmlDescription: `<ol><li>Search for a creature in the global search box.</li><li>Drag and drop that creature's name onto a combatant name in the initiative tracker.</li></ol>`, textYes: "Do not show this again", textNo: "Okay"})) {
-						setCookie("assign_monster_notice_dismissed", "true");
-					}
-				}
-				await openOmnibox("in:bestiary ");
-					const row = e.target.closest(".initiative-tracker tr");
-					if (row) {
-					const assignClickedMonsterToRow = (e) => {
-						if (e.target.tagName === "A" && e.target.dataset.vetPage === "bestiary.html") {
-							e.preventDefault();
-							e.stopImmediatePropagation();
-							const hash = e.target.dataset.vetHash;
-							assignMonsterToRow(row, hash)
-							.catch(err => console.error("Error assigning monster:", err))
-							.finally(() => {
-								// Clean up event listener after assignment completes
-								document.querySelector(`.omni__output`).removeEventListener("click", assignClickedMonsterToRow);
-							});
-						}
-					};
-					document.querySelector(`.omni__output`).addEventListener("click", assignClickedMonsterToRow);
-				}
+				selectMonsterFromOmnibox(e.target.closest("tr[data-id]"));
 			}
 		});
 
 		document.getElementById("clear_initiative").addEventListener("click", async () => { await clearEncounterConfirmAndDo(); });
+
+		document.querySelector(".initiative-tracker").addEventListener("contextmenu", evt => {
+			const row = evt.target.closest("tr[data-id]");
+			if (row) {
+				evt.preventDefault();
+				const hash = row.dataset.hash;
+				const id = row.dataset.id;
+				ContextUtil.pOpenMenu(evt, ContextUtil.getMenu([
+					new ContextUtil.Action("Rename", () => { renamePlayer(row) }),
+					new ContextUtil.Action("Duplicate", () => { duplicatePlayer(row) }),
+					new ContextUtil.Action( hash ? "Assign new monster" : "Assign a monster", () => { selectMonsterFromOmnibox(row) }),
+					new ContextUtil.Action("Reset HP/Max HP to average", () => { resetHpToAverage(row) }),
+					new ContextUtil.Action("Unassign monster", () => { removeMonsterAssignment(row) }),
+					new ContextUtil.Action("Delete", () => { deletePlayer(row) }),
+				]),
+					{userData: {entity: hash}}
+				);
+			}
+		});
 	}
 
 	/*************************************/
