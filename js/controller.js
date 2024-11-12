@@ -1,7 +1,6 @@
 // TODO:
 // 1. when adding an encounter, give the option to roll initiative for all new creatures
 // 2. allow Add a Player option to add HP and Max HP.
-// 3. move the monster icon to the Assign a Monster button.
 
 import { VOICE_APP_PATH } from "./controller-config.js";
 
@@ -108,24 +107,40 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			setCookie("passkey", passkey);
 			if (conn) { conn.close(); }
 			conn = peer.connect(`orcnog-${passkey}`, { label: "CONTROLLER", reliable: true });
+			
 			conn.on("open", function () {
 				console.debug(`conn.on('open')`);
 				p2pconnected = true;
 				status.innerHTML = `Connected to: ${conn.peer.split("orcnog-")[1]}`;
 				document.querySelectorAll(".control-panel").forEach(c => { c.classList.remove("closed"); });
 			});
+	
 			conn.on("data", function (data) {
 				console.debug(`conn.on('data')`);
+				// Check for error message
+				if (data?.error === "CONTROLLER_ALREADY_CONNECTED") {
+					p2pconnected = false;
+					status.innerHTML = "<span class=\"red\">Connection rejected: Another controller is already connected</span>";
+					showAlert("Connection Error", "Another controller is already connected to this session.");
+					conn.duplicateControllerError = true;
+					return;
+				}
+	
+				// Handle normal data
 				if (typeof data === "object") {
 					handleDataObject(data);
 				} else {
 					addMessage(`<span class="peerMsg">Peer:</span> ${data}`);
 				}
 			});
+	
 			conn.on("close", function () {
 				console.debug(`conn.on('close')`);
 				p2pconnected = false;
-				status.innerHTML = "<span class=\"red\">Connection closed</span>";
+				// Only show generic close message if it wasn't a duplicate controller error
+				if (!conn.duplicateControllerError) {
+					status.innerHTML = "<span class=\"red\">Connection closed</span>";
+				}
 				document.querySelectorAll(".control-panel").forEach(c => { c.classList.add("closed"); });
 			});
 		}
@@ -133,23 +148,23 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 	function checkForKeyAndJoin () {
 		let passkey;
-
+	
 		if (!p2pconnected) {
 			// Get the current URL search parameters
 			const urlParams = new URLSearchParams(window.location.search);
-
+	
 			// Check if the 'key' parameter exists
-			if (urlParams.has("id")) {
+			if (urlParams.has("key")) {
 				// Get the value of the 'key' parameter
-				const qsIdVal = urlParams.get("id");
-				passkey = qsIdVal;
+				const qsKeyVal = urlParams.get("key");
+				passkey = qsKeyVal;
 				// Call the join function with the value
 				join(passkey);
 			}
 		}
 		if (!passkey) passkey = getCookie("passkey");
 		if (passkey) recvIdInput.value = passkey;
-
+	
 		recvIdInput.focus();
 	}
 
