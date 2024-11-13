@@ -872,25 +872,67 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 		// Add a dragover event handler to allow dropping
 		row.addEventListener("dragover", (evt) => {
+			console.debug(`${row.dataset.name} dragover`, evt);
 			evt.preventDefault(); // Prevent default to allow drop
 			evt.stopPropagation(); // Stop the event from bubbling up
+
+			// Calculate if we're in the top or bottom half of the row
+			const rect = row.getBoundingClientRect();
+			const isInsertBelow = evt.clientY > rect.bottom - 8;
+
+			// Add visual indicator
+			if (isInsertBelow && !row.classList.contains("drop-below")) {
+				console.debug(`${row.dataset.name} drop-below`);
+				row.classList.remove("drop-highlight");
+				row.classList.add("drop-below");
+			} else {
+				row.classList.remove("drop-below");
+				row.classList.add("drop-highlight");
+			}
 		});
 		row.addEventListener("dragenter", (evt) => {
-			evt.target.closest("tr")?.classList.add("drop-highlight");
+			console.debug(`${row.dataset.name} dragenter`, evt);
+			// Calculate if we're in the top or bottom half of the row
+			const rect = row.getBoundingClientRect();
+			const isInsertBelow = evt.clientY > rect.bottom - 8;
+
+			if (isInsertBelow) {
+				row.classList.remove("drop-highlight");
+				row.classList.add("drop-below");
+			} else {
+				row.classList.remove("drop-below");
+				row.classList.add("drop-highlight");
+			}
 		});
 		row.addEventListener("dragleave", (evt) => {
+			console.debug(`${row.dataset.name} dragleave`, evt);
 			if (row.contains(evt.relatedTarget)) return;
-			evt.target.closest("tr")?.classList.remove("drop-highlight");
+			row.classList.remove("drop-below", "drop-highlight");
 		});
 		// Add a drop event handler to the row
 		row.addEventListener("drop", async (evt) => {
+			console.debug(`${row.dataset.name} drop`, evt);
 			evt.preventDefault(); // Prevent default behavior
 			evt.stopPropagation(); // Stop the event from bubbling up
-			evt.target.closest("tr")?.classList.remove("drop-highlight");
+
+			// Clean up indicators
+			row.classList.remove("drop-below", "drop-highlight");
+
+			// Get drop position
+			const rect = row.getBoundingClientRect();
+			const isInsertBelow = evt.clientY > rect.bottom - 8;
 
 			// Log the dataTransfer object to see what is received
+			console.log(evt.dataTransfer);
 			const hash = evt.dataTransfer.getData("text/plain").split("#")?.[1];
-			await assignMonsterToRow(row, hash);
+
+			if (isInsertBelow) {
+				// Insert below
+				const newPlayerOrder = Number(row.dataset.order) - 1;
+				addNewPlayer("test", newPlayerOrder, hash);
+			} else {
+				await assignMonsterToRow(row, hash);
+			}
 		});
 
 		return row;
