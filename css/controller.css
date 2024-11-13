@@ -367,7 +367,11 @@ div#initiative_order {
 }
 .initiative-tracker tbody tr.drop-highlight,
 .initiative-tracker tbody tr.drop-highlight input {
-    background-color: rgba(180, 130, 0);
+    background-color: rgb(80, 150, 60);
+}
+.initiative-tracker tbody tr.drop-highlight.has-statblock,
+.initiative-tracker tbody tr.drop-highlight.has-statblock input {
+    background-color: rgba(160, 120, 0);
 }
 .initiative-tracker tbody tr.drop-highlight input {
     pointer-events: none;

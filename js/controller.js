@@ -724,6 +724,9 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		const mon = await get5etMonsterByHash(player.hash, player.scaledCr);
 		// For creatures with statblocks...
 		if (mon) {
+			// Identify the row as having a statblock
+			row.classList.add("has-statblock");
+
 			// Create and append the "hp" cell
 			let hp = getCookie(`${player.id}__hp`);
 			if (!hp) {
