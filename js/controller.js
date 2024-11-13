@@ -10,7 +10,6 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	let peer = null;
 	let conn = null;
 	let p2pconnected = false;
-	// Create a broadcast channel to communicate between open tabs/windows
 	const broadcastChannel = new BroadcastChannel("orcnog-initiative-controller-broadcast-channel");
 	let recvIdInput = document.getElementById("receiver-id");
 	let status = document.getElementById("status");
@@ -25,10 +24,35 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	let isMicActive = false;
 	let initTrackerTable;
 
-	const themes = await fetchJSON(`${VOICE_APP_PATH}/../styles/themes/themes.json`);
-	const slideshows = await fetchJSON(`${VOICE_APP_PATH}/../slideshow/slideshow-config.json`);
-	const musicPlaylists = await fetchJSON(`${VOICE_APP_PATH}/../audio/playlists.json`);
-	const ambiencePlaylists = await fetchJSON(`${VOICE_APP_PATH}/../audio/ambience.json`);
+	// Initialize with empty objects/arrays as fallbacks
+	let themes = [];
+	let slideshows = [];
+	let musicPlaylists = [];
+	let ambiencePlaylists = [];
+
+    try {
+        themes = await fetchJSON(`${VOICE_APP_PATH}/../styles/themes/themes.json`);
+    } catch (error) {
+        console.warn("Failed to load themes:", error);
+    }
+
+    try {
+        slideshows = await fetchJSON(`${VOICE_APP_PATH}/../slideshow/slideshow-config.json`);
+    } catch (error) {
+        console.warn("Failed to load slideshows:", error);
+    }
+
+    try {
+        musicPlaylists = await fetchJSON(`${VOICE_APP_PATH}/../audio/playlists.json`);
+    } catch (error) {
+        console.warn("Failed to load music playlists:", error);
+    }
+
+    try {
+        ambiencePlaylists = await fetchJSON(`${VOICE_APP_PATH}/../audio/ambience.json`);
+    } catch (error) {
+        console.warn("Failed to load ambience playlists:", error);
+    }
 
 	/*************************************/
 	/* Networking communication          */
@@ -462,8 +486,8 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	// Function to handle currentTheme data
 	function handleCurrentThemeData (obj) {
 		document.getElementById("updateTheme").value = obj.currentTheme;
-		const themeImage = document.getElementById("updateTheme").selectedOptions[0].getAttribute("data-image");
-		document.getElementById("back_to_initiative").style.backgroundImage = `url("${VOICE_APP_PATH}${themeImage}")`;
+		const themeImage = document.getElementById("updateTheme")?.selectedOptions?.[0]?.getAttribute("data-image");
+		if (themeImage) document.getElementById("back_to_initiative").style.backgroundImage = `url("${VOICE_APP_PATH}${themeImage}")`;
 	}
 
 	// Function to handle currentSlideshow data and create radio buttons
