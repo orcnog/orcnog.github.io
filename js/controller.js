@@ -872,46 +872,28 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 		// Add a dragover event handler to allow dropping
 		row.addEventListener("dragover", (evt) => {
-			console.debug(`${row.dataset.name} dragover`, evt);
+			// console.debug(`${row.dataset.name} dragover`, evt);
 			evt.preventDefault(); // Prevent default to allow drop
 			evt.stopPropagation(); // Stop the event from bubbling up
 
 			// Calculate if we're in the top or bottom half of the row
 			const rect = row.getBoundingClientRect();
-			const isInsertBelow = evt.clientY > rect.bottom - 8;
+			const isInsertBelow = evt.clientY > rect.bottom - 7;
 
-			// Add visual indicator
-			if (isInsertBelow && !row.classList.contains("drop-below")) {
-				console.debug(`${row.dataset.name} drop-below`);
-				row.classList.remove("drop-highlight");
-				row.classList.add("drop-below");
-			} else {
-				row.classList.remove("drop-below");
-				row.classList.add("drop-highlight");
-			}
+			// Update visual indicator
+			row.classList.toggle("drop-below", isInsertBelow);
+			row.classList.toggle("drop-highlight", !isInsertBelow);
 		});
 		row.addEventListener("dragenter", (evt) => {
-			console.debug(`${row.dataset.name} dragenter`, evt);
-			// Calculate if we're in the top or bottom half of the row
-			const rect = row.getBoundingClientRect();
-			const isInsertBelow = evt.clientY > rect.bottom - 8;
-
-			if (isInsertBelow) {
-				row.classList.remove("drop-highlight");
-				row.classList.add("drop-below");
-			} else {
-				row.classList.remove("drop-below");
-				row.classList.add("drop-highlight");
-			}
+			evt.preventDefault();
+			evt.stopPropagation();
 		});
 		row.addEventListener("dragleave", (evt) => {
-			console.debug(`${row.dataset.name} dragleave`, evt);
 			if (row.contains(evt.relatedTarget)) return;
 			row.classList.remove("drop-below", "drop-highlight");
 		});
 		// Add a drop event handler to the row
 		row.addEventListener("drop", async (evt) => {
-			console.debug(`${row.dataset.name} drop`, evt);
 			evt.preventDefault(); // Prevent default behavior
 			evt.stopPropagation(); // Stop the event from bubbling up
 
@@ -920,16 +902,16 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 			// Get drop position
 			const rect = row.getBoundingClientRect();
-			const isInsertBelow = evt.clientY > rect.bottom - 8;
+			const isInsertBelow = evt.clientY > rect.bottom - 7;
 
 			// Log the dataTransfer object to see what is received
-			console.log(evt.dataTransfer);
 			const hash = evt.dataTransfer.getData("text/plain").split("#")?.[1];
 
 			if (isInsertBelow) {
-				// Insert below
+				// Insert new monster below
+				const newMonsterName = getMonsterNameFromHash(hash);
 				const newPlayerOrder = Number(row.dataset.order) - 1;
-				addNewPlayer("test", newPlayerOrder, hash);
+				addNewPlayer(newMonsterName, newPlayerOrder, hash);
 			} else {
 				await assignMonsterToRow(row, hash);
 			}
@@ -1064,6 +1046,14 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	function highlightRow (tr, clazz = "statblock") {
 		[...tr.parentNode.children].forEach(sibling => sibling !== tr && sibling.classList.remove(`${clazz}-highlight`));
 		tr.classList.add(`${clazz}-highlight`);
+	}
+
+	function getMonsterNameFromHash (hash) {
+		if (!hash) return null;
+		const namePart = hash.split("_")[0];
+		const lowercaseName = decodeURIComponent(namePart).replace(/%20/g, " ");
+		const sentenceCaseName = lowercaseName.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+		return sentenceCaseName;
 	}
 
 	async function get5etMonsterByHash (hash, scaledCr) {
