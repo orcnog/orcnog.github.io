@@ -30,33 +30,33 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	let musicPlaylists = [];
 	let ambiencePlaylists = [];
 
-    try {
-        themes = await fetchJSON(`${VOICE_APP_PATH}/../styles/themes/themes.json`);
-    } catch (error) {
-        console.warn("Failed to load themes:", error);
-    }
+	try {
+		themes = await fetchJSON(`${VOICE_APP_PATH}/../styles/themes/themes.json`);
+	} catch (error) {
+		console.warn("Failed to load themes:", error);
+	}
 
-    try {
-        slideshows = await fetchJSON(`${VOICE_APP_PATH}/../slideshow/slideshow-config.json`);
-    } catch (error) {
-        console.warn("Failed to load slideshows:", error);
-    }
+	try {
+		slideshows = await fetchJSON(`${VOICE_APP_PATH}/../slideshow/slideshow-config.json`);
+	} catch (error) {
+		console.warn("Failed to load slideshows:", error);
+	}
 
-    try {
-        musicPlaylists = await fetchJSON(`${VOICE_APP_PATH}/../audio/playlists.json`);
-    } catch (error) {
-        console.warn("Failed to load music playlists:", error);
-    }
+	try {
+		musicPlaylists = await fetchJSON(`${VOICE_APP_PATH}/../audio/playlists.json`);
+	} catch (error) {
+		console.warn("Failed to load music playlists:", error);
+	}
 
-    try {
-        ambiencePlaylists = await fetchJSON(`${VOICE_APP_PATH}/../audio/ambience.json`);
-    } catch (error) {
-        console.warn("Failed to load ambience playlists:", error);
-    }
+	try {
+		ambiencePlaylists = await fetchJSON(`${VOICE_APP_PATH}/../audio/ambience.json`);
+	} catch (error) {
+		console.warn("Failed to load ambience playlists:", error);
+	}
 
 	/*************************************/
 	/* Networking communication          */
-	/*************************************/	
+	/*************************************/
 
 	function initPeer2Peer () {
 		peer = new Peer(null, { debug: 2 });
@@ -98,14 +98,14 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		});
 	}
 
-	async function signal(sigName) {
+	async function signal (sigName) {
 		// If mic is active, wait for it to become inactive
 		if (isMicActive) {
 			console.warn("Signal delayed: Waiting for microphone to become inactive...");
-			
+
 			await new Promise(resolve => {
 				// Create a function to check mic status
-				function checkMic() {
+				function checkMic () {
 					if (!isMicActive) {
 						resolve();
 					} else {
@@ -117,7 +117,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				checkMic();
 			});
 		}
-	
+
 		// Now send the signal
 		if (conn && conn.open) {
 			conn.send(sigName);
@@ -134,7 +134,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			setCookie("passkey", passkey);
 			if (conn) { conn.close(); }
 			conn = peer.connect(`orcnog-${passkey}`, { label: "CONTROLLER", reliable: true });
-			
+
 			conn.on("open", function () {
 				console.debug(`conn.on('open')`);
 				p2pconnected = true;
@@ -143,10 +143,10 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				// Send ready broadcast to other tabs/windows immediately
 				broadcastChannel.postMessage({
 					type: "controller_ready",
-					timestamp: Date.now()
+					timestamp: Date.now(),
 				});
 			});
-	
+
 			conn.on("data", function (data) {
 				console.debug(`conn.on('data')`);
 				// Check for error message
@@ -157,7 +157,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 					conn.duplicateControllerError = true;
 					return;
 				}
-	
+
 				// Handle normal data
 				if (typeof data === "object") {
 					handleDataObject(data);
@@ -165,7 +165,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 					addMessage(`<span class="peerMsg">Peer:</span> ${data}`);
 				}
 			});
-	
+
 			conn.on("close", function () {
 				console.debug(`conn.on('close')`);
 				p2pconnected = false;
@@ -180,11 +180,11 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 	function checkForKeyAndJoin () {
 		let passkey;
-	
+
 		if (!p2pconnected) {
 			// Get the current URL search parameters
 			const urlParams = new URLSearchParams(window.location.search);
-	
+
 			// Check if the 'key' parameter exists
 			if (urlParams.has("key")) {
 				// Get the value of the 'key' parameter
@@ -196,7 +196,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		}
 		if (!passkey) passkey = getCookie("passkey");
 		if (passkey) recvIdInput.value = passkey;
-	
+
 		recvIdInput.focus();
 	}
 
@@ -209,11 +209,10 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				broadcastChannel.postMessage({
 					type: "controller_ack",
 					timestamp: event.data.timestamp,
-					status: "ready"
+					status: "ready",
 				});
 
 				if (event?.data?.hasOwnProperty("new_initiative_board")) {
-
 					const newInitObj = event.data.new_initiative_board;
 					const result = await getEncounterLoadOptions(newInitObj?.players);
 					if (!result) return; // User cancelled
@@ -257,11 +256,11 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 						}
 
 						const playerObjToAdd = getPlayerObjFromMon({
-							name: player.name, 
-							order: player.initiative || 0, 
-							hash: player.hash, 
+							name: player.name,
+							order: player.initiative || 0,
+							hash: player.hash,
 							mon: player,
-							...(playerId && { id: playerId }) // Only include ID if it was generated
+							...(playerId && { id: playerId }), // Only include ID if it was generated
 						});
 						// Add the player
 						signal({ "add_player": playerObjToAdd });
@@ -280,15 +279,15 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				broadcastChannel.postMessage({
 					type: "controller_ack",
 					timestamp: event.data.timestamp,
-					status: "waiting"
+					status: "waiting",
 				});
 			}
 		};
 	}
-	
+
 	/*************************************/
 	/* DOM Initial Population            */
-	/*************************************/	
+	/*************************************/
 
 	// Function to populate theme selectbox with received data
 	function populateThemesData (themes) {
@@ -648,7 +647,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 	/*************************************/
 	/* Create player rows                */
-	/*************************************/	
+	/*************************************/
 
 	async function createPlayerRow (player) {
 		const row = document.createElement("tr");
@@ -838,7 +837,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			}
 		});
 
-		initTrackerTable.addEventListener("mouseleave", (e) => {	
+		initTrackerTable.addEventListener("mouseleave", (e) => {
 			if (!initTrackerTable.contains(e.relatedTarget)) {
 				if (!document.querySelector(".statblock-lock-status.locked")) {
 					isRowHoverEnabled = true;
@@ -896,9 +895,9 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 	/*************************************/
 	/* Misc functions                    */
-	/*************************************/	
+	/*************************************/
 
-	function updateMicStatus(isActive) {
+	function updateMicStatus (isActive) {
 		isMicActive = isActive;
 		// Update the visual indicator
 		const micStatus = document.getElementById("mic_status");
@@ -909,7 +908,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		}
 	}
 
-	async function openOmnibox(value) {
+	async function openOmnibox (value) {
 		return new Promise(resolve => {
 			// Set value and focus
 			const input = document.querySelector(".omni__input");
@@ -932,17 +931,16 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		});
 	}
 
-	function closeOmnibox() {
+	function closeOmnibox () {
 		// Clear and blur the input
 		document.querySelector(".omni__input").value = "";
 		document.querySelector(".omni__input").blur();
-		
+
 		// Hide the output
 		document.querySelector(".omni__wrp-output").classList.add("ve-hidden");
 	}
 
 	async function selectMonsterFromOmnibox (row) {
-		
 		const dismissedNotice = getCookie("assign_monster_notice_dismissed") === "true";
 		if (!dismissedNotice) {
 			if (await InputUiUtil.pGetUserBoolean({title: "How to Assign a Creature", htmlDescription: `<ol><li>Search for a creature in the global search box.</li><li>Drag and drop that creature's name onto a combatant name in the initiative tracker.</li></ol>`, textYes: "Do not show this again", textNo: "Okay"})) {
@@ -960,12 +958,12 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 					e.stopImmediatePropagation();
 					const hash = e.target.dataset.vetHash;
 					assignMonsterToRow(row, hash)
-					.catch(err => console.error("Error assigning monster:", err))
-					.finally(() => {
+						.catch(err => console.error("Error assigning monster:", err))
+						.finally(() => {
 						// Clean up event listener and css after assignment completes
-						document.querySelector(`.omni__output`).removeEventListener("click", assignClickedMonsterToRow);
-						row.classList.remove("omnibox-highlight");
-					});
+							document.querySelector(`.omni__output`).removeEventListener("click", assignClickedMonsterToRow);
+							row.classList.remove("omnibox-highlight");
+						});
 				}
 			};
 			document.querySelector(`.omni__output`).addEventListener("click", assignClickedMonsterToRow);
@@ -1070,31 +1068,31 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		row.querySelector(".player-name").focus();
 	}
 
-	async function assignMonsterToRow(row, hash) {
+	async function assignMonsterToRow (row, hash) {
 		// Update row's hash
 		row.dataset.hash = hash;
-		
+
 		// Get player data from row
 		const player = {
 			name: row.dataset.name,
 			id: row.dataset.id,
-			order: row.querySelector('.player-order').value
+			order: row.querySelector(".player-order").value,
 		};
-	
+
 		// Get monster data and create player object
 		const dmon = await get5etMonsterByHash(hash);
 		const playerObjToUpdate = getPlayerObjFromMon({
-			name: player.name, 
-			id: player.id, 
-			order: player.order, 
-			hash: hash, 
-			mon: dmon
+			name: player.name,
+			id: player.id,
+			order: player.order,
+			hash: hash,
+			mon: dmon,
 		});
-	
+
 		// Clear max HP cookie and update
 		removeCookie(`${player.id}__hpmax`);
 		signal(`update_player:${JSON.stringify(playerObjToUpdate)}`);
-	
+
 		// Close omnibox and update display
 		closeOmnibox();
 		displayStatblock(player.name, player.id, hash);
@@ -1110,15 +1108,15 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		const hash = row.dataset.hash;
 		const id = row.dataset.id;
 		const scaledCr = row.dataset.scaledCr;
-		
+
 		// Get the monster stats
 		const mon = await get5etMonsterByHash(hash, scaledCr);
 		if (!mon?.hp?.average) return;
-	
+
 		// Reset both current HP and max HP to the monster's average
 		const hpInput = row.querySelector(".player-hp");
 		const maxHpInput = row.querySelector(".player-maxhp");
-		
+
 		setPlayerHp(hpInput, id, mon.hp.average, "__hp");
 		setPlayerHp(maxHpInput, id, mon.hp.average, "__hpmax");
 	}
@@ -1168,13 +1166,13 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			groupCreatures: true,
 			rollHp: false,
 		});
-	
+
 		const {$modalInner, doClose, pGetResolved} = await InputUiUtil._pGetShowModal({
 			title: "Load Encounter Options",
 			isHeaderBorder: true,
 			isMinHeight0: true,
 		});
-	
+
 		// Add checkboxes using the utility method
 		UiUtil.$getAddModalRowCb2({
 			$wrp: $modalInner,
@@ -1182,43 +1180,43 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			prop: "rollInitiative",
 			text: "Roll Initiatives",
 		});
-	
+
 		UiUtil.$getAddModalRowCb2({
 			$wrp: $modalInner,
 			comp,
 			prop: "groupCreatures",
 			text: "Group creatures by type",
 		});
-	
+
 		UiUtil.$getAddModalRowCb2({
 			$wrp: $modalInner,
 			comp,
 			prop: "rollHp",
 			text: "Roll HP",
 		});
-	
+
 		// Create custom buttons
 		const $btnClearAll = $(`<button class="ve-btn ve-btn-primary mr-2"><span class="glyphicon glyphicon-ok"></span> Clear All and Add</button>`)
 			.click(() => doClose(true, {
 				action: "clearAll",
 				...comp._state,
 			}));
-	
+
 		const $btnClearMonsters = $(`<button class="ve-btn ve-btn-primary mr-2"><span class="glyphicon glyphicon-filter"></span> Clear Monsters and Add</button>`)
 			.click(() => doClose(true, {
 				action: "clearMonsters",
 				...comp._state,
 			}));
-	
+
 		const $btnCancel = $(`<button class="ve-btn ve-btn-default">Cancel</button>`)
 			.click(() => doClose(false));
-	
+
 		$$`<div class="ve-flex-v-center ve-flex-h-right pb-1 px-1 mt-2">
 			${$btnClearAll}
 			${$btnClearMonsters}
 			${$btnCancel}
 		</div>`.appendTo($modalInner);
-	
+
 		// Get the result
 		const [isDataEntered, data] = await pGetResolved();
 		if (!isDataEntered) return null;
@@ -1430,7 +1428,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	}
 
 	function getPlayerObjFromMon ({ name, id, order, hash, mon }) {
-		if ( !hash || !mon) return;
+		if (!hash || !mon) return;
 		const displayName = name || mon.name;
 		const initiativeOrder = order !== null ? order : Parser.getAbilityModNumber(mon.dex || 10);
 		return {
@@ -1517,7 +1515,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 		// First try to get playerId from parameter
 		let playerId = id;
-		
+
 		// If no playerId provided, try to get it from DOM
 		if (!playerId) {
 			const playerRow = hpInput?.closest("tr");
@@ -1655,7 +1653,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
 	}
 
-	/*************************************/	
+	/*************************************/
 	/* DOM manipulation                  */
 	/*************************************/
 
@@ -1678,32 +1676,32 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		document.getElementById("updateTheme").addEventListener("change", (e) => {
 			signal(`updateTheme:${e.target.value}`);
 		});
-	
+
 		// Combat playlist dropdown
 		document.getElementById("update_combat_playlist").addEventListener("change", (e) => {
 			signal(`updateCombatPlaylist:${e.target.value}`);
 		});
-	
+
 		// Slideshow context dropdown
 		document.getElementById("updateSlideshowContext").addEventListener("change", (e) => {
 			signal(`updateSlideshowContext:${e.target.value}`);
 		});
-	
+
 		// App scale input
 		document.getElementById("update_app_scale").addEventListener("change", (e) => {
 			signal(`updateAppScale:${e.target.value}`);
 		});
-	
+
 		// Font size input
 		document.getElementById("update_font_size").addEventListener("change", (e) => {
 			signal(`updateFontSize:${e.target.value}`);
 		});
-	
+
 		// Initiative tracker button
 		document.getElementById("back_to_initiative").addEventListener("click", () => {
 			signal("back_to_initiative");
 		});
-	
+
 		// Turn navigation
 		document.getElementById("prev_turn").addEventListener("click", () => {
 			signal("prev_turn");
@@ -1711,7 +1709,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		document.getElementById("next_turn").addEventListener("click", () => {
 			signal("next_turn");
 		});
-	
+
 		// Music controls
 		document.getElementById("repeat_music").addEventListener("click", () => {
 			signal("repeat_music");
@@ -1732,9 +1730,9 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			signal("shuffle_music");
 		});
 		document.getElementById("volume_music").addEventListener("click", (e) => {
-			signal(`volume_music:${e.target.value/100}`);
+			signal(`volume_music:${e.target.value / 100}`);
 		});
-	
+
 		// Music playlist/track selection
 		document.getElementById("update_music_playlist").addEventListener("change", (e) => {
 			signal(`update_music:${e.target.value}`);
@@ -1742,12 +1740,12 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		document.getElementById("update_music_track").addEventListener("change", (e) => {
 			signal(`update_music_track:${e.target.value}`);
 		});
-	
+
 		// Audio kill switch
 		document.getElementById("audio_kill_switch").addEventListener("click", () => {
 			signal("kill_audio");
 		});
-	
+
 		// Ambience controls
 		document.getElementById("prev_track_ambience").addEventListener("click", () => {
 			signal("prev_track_ambience");
@@ -1762,9 +1760,9 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			signal("next_track_ambience");
 		});
 		document.getElementById("volume_ambience").addEventListener("click", (e) => {
-			signal(`volume_ambience:${e.target.value/100}`);
+			signal(`volume_ambience:${e.target.value / 100}`);
 		});
-	
+
 		// Ambience playlist/track selection
 		document.getElementById("update_ambience_playlist").addEventListener("change", (e) => {
 			signal(`update_ambience:${e.target.value}`);
@@ -1847,14 +1845,14 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				const hash = row.dataset.hash;
 				const id = row.dataset.id;
 				ContextUtil.pOpenMenu(evt, ContextUtil.getMenu([
-					new ContextUtil.Action("Rename", () => { renamePlayer(row) }),
-					new ContextUtil.Action("Duplicate", () => { duplicatePlayer(row) }),
-					new ContextUtil.Action( hash ? "Assign new monster" : "Assign a monster", () => { selectMonsterFromOmnibox(row) }),
-					new ContextUtil.Action("Reset HP/Max HP to average", () => { resetHpToAverage(row) }),
-					new ContextUtil.Action("Unassign monster", () => { removeMonsterAssignment(row) }),
-					new ContextUtil.Action("Delete", () => { deletePlayer(row) }),
+					new ContextUtil.Action("Rename", () => { renamePlayer(row); }),
+					new ContextUtil.Action("Duplicate", () => { duplicatePlayer(row); }),
+					new ContextUtil.Action(hash ? "Assign new monster" : "Assign a monster", () => { selectMonsterFromOmnibox(row); }),
+					new ContextUtil.Action("Reset HP/Max HP to average", () => { resetHpToAverage(row); }),
+					new ContextUtil.Action("Unassign monster", () => { removeMonsterAssignment(row); }),
+					new ContextUtil.Action("Delete", () => { deletePlayer(row); }),
 				]),
-					{userData: {entity: hash}}
+				{userData: {entity: hash}},
 				);
 			}
 		});
@@ -1862,7 +1860,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 	/*************************************/
 	/* Initialization            	     */
-	/*************************************/	
+	/*************************************/
 
 	initPeer2Peer();
 	initTab2Tab();
