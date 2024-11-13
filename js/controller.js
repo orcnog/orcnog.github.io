@@ -6,9 +6,11 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 (async function () {
 	let lastPeerId = null;
-	let peer = null; // Own peer object
+	let peer = null;
 	let conn = null;
 	let p2pconnected = false;
+	// Create a broadcast channel to communicate between open tabs/windows
+	const broadcastChannel = new BroadcastChannel("orcnog-initiative-controller-broadcast-channel");
 	let recvIdInput = document.getElementById("receiver-id");
 	let status = document.getElementById("status");
 	let message = document.getElementById("message");
@@ -113,6 +115,11 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				p2pconnected = true;
 				status.innerHTML = `Connected to: ${conn.peer.split("orcnog-")[1]}`;
 				document.querySelectorAll(".control-panel").forEach(c => { c.classList.remove("closed"); });
+				// Send ready broadcast to other tabs/windows immediately
+				broadcastChannel.postMessage({
+					type: "controller_ready",
+					timestamp: Date.now()
+				});
 			});
 	
 			conn.on("data", function (data) {
@@ -169,12 +176,19 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	}
 
 	function initTab2Tab () {
-		// Create a broadcast channel to communicate between open tabs/windows
-		const channel = new BroadcastChannel("orcnog-initiative-controller-broadcast-channel");
-		channel.onmessage = async (event) => {
+		broadcastChannel.onmessage = async (event) => {
 			console.log("Message from other tab:", event.data);
+
 			if (p2pconnected) {
+				// Send acknowledgment immediately
+				broadcastChannel.postMessage({
+					type: "controller_ack",
+					timestamp: event.data.timestamp,
+					status: "ready"
+				});
+
 				if (event?.data?.hasOwnProperty("new_initiative_board")) {
+
 					const newInitObj = event.data.new_initiative_board;
 					const result = await getEncounterLoadOptions(newInitObj?.players);
 					if (!result) return; // User cancelled
@@ -236,6 +250,13 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 						highlightRow(activeRow);
 					}
 				}
+			} else {
+				// Send "exists but not connected" acknowledgment
+				broadcastChannel.postMessage({
+					type: "controller_ack",
+					timestamp: event.data.timestamp,
+					status: "waiting"
+				});
 			}
 		};
 	}
