@@ -500,6 +500,18 @@ div#initiative_order {
     cursor: pointer;
 }
 
+.controller-popover {
+    border-radius: 0.1rem;
+}
+
+.controller-popover.hp-to-maxhp {
+    transform: translate(0.8rem, -0.2rem);
+}
+
+.controller-popover.hp-to-maxhp .popover-choose-roll-btn {
+    padding: 0.2rem;
+}
+
 .popover-choose-roll {
     display: flex;
     column-gap: 0.1rem;
@@ -517,7 +529,7 @@ div#initiative_order {
     cursor: pointer;
 }
 
-.popover-choose-roll-btn svg {
+.popover-choose-roll-btn.d20-icon svg {
     transition: transform 0.2s ease-out;
 }
 
@@ -525,7 +537,7 @@ div#initiative_order {
     background-color: #2e4458;
 }
 
-.popover-choose-roll-btn:hover svg {
+.popover-choose-roll-btn.d20-icon:hover svg {
     transform: rotate(30deg);
 }
 

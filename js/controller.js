@@ -872,7 +872,6 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 		// Add a dragover event handler to allow dropping
 		row.addEventListener("dragover", (evt) => {
-			// console.debug(`${row.dataset.name} dragover`, evt);
 			evt.preventDefault(); // Prevent default to allow drop
 			evt.stopPropagation(); // Stop the event from bubbling up
 
@@ -1367,7 +1366,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	async function popoverChooseRollableValue (ele, title) {
 		return new Promise((resolve) => {
 			// Create a table to hold the icons
-			const popover = createPopover(ele, (popov) => {
+			const popover = createPopover(ele, "top", "choose-rollable-value", (popover) => {
 				const table = document.createElement("div");
 				table.className = "popover-choose-roll";
 
@@ -1380,6 +1379,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				cell1.addEventListener("click", () => {
 					resolve(0); // Resolve with the value 0 for "average"
 					destroyPopover();
+					popoverSetHpEqualToMaxHp(ele);
 				});
 				table.appendChild(cell1);
 
@@ -1391,6 +1391,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				cell2.addEventListener("click", () => {
 					resolve(1); // Resolve with the value 1 for "maximum"
 					destroyPopover();
+					popoverSetHpEqualToMaxHp(ele);
 				});
 				table.appendChild(cell2);
 
@@ -1402,17 +1403,19 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				cell3.addEventListener("click", () => {
 					resolve(2); // Resolve with the value 2 for "minimum"
 					destroyPopover();
+					popoverSetHpEqualToMaxHp(ele);
 				});
 				table.appendChild(cell3);
 
 				const cell4 = document.createElement("button");
-				cell4.className = "popover-choose-roll-btn";
+				cell4.className = "popover-choose-roll-btn d20-icon";
 				cell4.innerHTML = `<svg fill="#ffffff" height="20" width="20" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-50.75 -50.75 609.02 609.02" xml:space="preserve" stroke="#ffffff" stroke-width="0.0050752" transform="rotate(0)"><g id="SVGRepo_iconCarrier"> <g> <g> <g> <polygon points="386.603,185.92 488.427,347.136 488.427,138.944 "></polygon> <polygon points="218.283,18.645 30.827,125.781 131.883,167.893 "></polygon> <polygon points="135.787,202.325 27.264,374.144 235.264,383.189 "></polygon> <polygon points="352.597,170.667 253.781,0 253.739,0 154.923,170.667 "></polygon> <polygon points="471.915,123.051 289.237,18.645 375.445,167.573 "></polygon> <polygon points="19.093,144 19.093,347.136 120.661,186.325 "></polygon> <polygon points="243.093,507.52 243.093,404.843 48.661,396.416 "></polygon> <polygon points="272.235,383.232 480.256,374.144 371.733,202.325 "></polygon> <polygon points="264.427,507.52 458.837,396.416 264.427,404.885 "></polygon> <polygon points="154.475,192 253.76,372.523 353.045,192 "></polygon> </g> </g> </g> </g></svg>`;
 				cell4.title = `Roll for ${title}!`;
 				cell4.value = 3;
 				cell4.addEventListener("click", () => {
 					resolve(3); // Resolve with the value 3 for "roll"
 					destroyPopover();
+					popoverSetHpEqualToMaxHp(ele);
 				});
 				table.appendChild(cell4);
 
@@ -1437,10 +1440,63 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		});
 	}
 
-	function createPopover (ele, htmlFunc) {
+	async function popoverSetHpEqualToMaxHp (ele) {
+		const userSelection = await new Promise(resolve => {
+			const popover = createPopover(ele, "left", "hp-to-maxhp", () => {
+				const table = document.createElement("div");
+				table.className = "popover-choose-roll";
+				const cell = document.createElement("button");
+				cell.className = "popover-choose-roll-btn";
+				cell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>`;
+				cell.title = "Set HP to Max HP";
+				cell.addEventListener("click", () => {
+					resolve(true);
+					destroyPopover();
+				});
+				table.appendChild(cell);
+
+				return table;
+			});
+
+			function destroyPopover (e) {
+				if (!e || e.relatedTarget === null || (e.relatedTarget !== ele && !popover.contains(e.relatedTarget))) {
+					if (popover && document.body.contains(popover)) {
+						document.body.removeChild(popover);
+					}
+					ele.removeEventListener("focusout", destroyPopover);
+					ele.removeEventListener("change", destroyPopover);
+					resolve(null);
+				}
+			}
+
+			ele.addEventListener("focusout", destroyPopover);
+			ele.addEventListener("change", destroyPopover);
+
+			return popover;
+		});
+
+		// Now set the hp to the maxhp
+		if (userSelection === true) {
+			const maxhp = ele.closest("tr").querySelector("input.player-maxhp");
+			const hp = ele.closest("tr").querySelector("input.player-hp");
+			const id = ele.closest("tr").dataset.id;
+			setPlayerHp(hp, id, maxhp.value, "__hp");
+		}
+	}
+
+	/**
+	 * Creates a popover element positioned relative to a target element.
+	 * @param {HTMLElement} ele - The target element to position the popover relative to
+	 * @param {string} [dir='top'] - The direction to position the popover ('top', 'left', 'right', or 'bottom')
+	 * @param {string} [clazz] - A class to add to the popover
+	 * @param {Function} htmlFunc - Function that returns the HTML content for the popover
+	 * @returns {HTMLElement} The created popover element
+	 */
+
+	function createPopover (ele, dir = "top", clazz, htmlFunc) {
 		// Create the popover element
 		const popover = document.createElement("div");
-		popover.className = "controller-popover";
+		popover.className = `controller-popover ${clazz || ""}`;
 		popover.style.position = "absolute";
 		popover.style.backgroundColor = "black";
 		popover.style.border = "1px solid #222";
@@ -1456,8 +1512,19 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		const popoverHeight = popover.offsetHeight; // Get the height after appending
 
 		// Adjust the top position to account for the popover's height and scroll position
-		popover.style.top = `${rect.top + window.scrollY - popoverHeight}px`; // Position above the element
-		popover.style.left = `${rect.left + (rect.width / 2) - (popover.offsetWidth / 2)}px`; // Center horizontally
+		if (dir === "top") {
+			popover.style.top = `${rect.top + window.scrollY - popoverHeight}px`; // Position above the element
+			popover.style.left = `${rect.left + (rect.width / 2) - (popover.offsetWidth / 2)}px`; // Center horizontally
+		} else if (dir === "left") {
+			popover.style.top = `${rect.top + window.scrollY}px`; // Position above the element
+			popover.style.left = `${rect.left + window.scrollX - popover.offsetWidth}px`; // Center horizontally
+		} else if (dir === "right") {
+			popover.style.top = `${rect.top + window.scrollY}px`; // Position above the element
+			popover.style.left = `${rect.left + window.scrollX + rect.width}px`; // Center horizontally
+		} else if (dir === "bottom") {
+			popover.style.top = `${rect.top + window.scrollY + rect.height}px`; // Position above the element
+			popover.style.left = `${rect.left + (rect.width / 2) - (popover.offsetWidth / 2)}px`; // Center horizontally
+		}
 
 		return popover;
 	}
