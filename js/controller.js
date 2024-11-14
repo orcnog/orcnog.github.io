@@ -880,6 +880,12 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			const rect = row.getBoundingClientRect();
 			const isInsertBelow = evt.clientY > rect.bottom - 7;
 
+			// Only allow drop-below if this is the last row of its initiative group
+			if (isInsertBelow && !isLastOfInitiativeGroup(row)) {
+				row.classList.remove("drop-below", "drop-highlight");
+				return;
+			}
+
 			// Update visual indicator
 			row.classList.toggle("drop-below", isInsertBelow);
 			row.classList.toggle("drop-highlight", !isInsertBelow);
@@ -923,6 +929,14 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	/*************************************/
 	/* Misc functions                    */
 	/*************************************/
+
+	function isLastOfInitiativeGroup (row) {
+		const currentOrder = row.querySelector(".player-order").value;
+		const nextRow = row.nextElementSibling;
+
+		// If there's no next row, or the next row has a different order, this is the last of its group
+		return !nextRow || nextRow.querySelector(".player-order").value !== currentOrder;
+	}
 
 	function updateMicStatus (isActive) {
 		isMicActive = isActive;
