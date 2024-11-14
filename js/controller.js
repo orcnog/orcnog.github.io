@@ -1,7 +1,6 @@
 // TODO:
 // 1. allow Add a Player option to add HP and Max HP.
 // 2. Add option to Encounter Blocks to make them re-balanceable for different party sizes.
-// 3. Merge in latest changes from source (forked mirror-3) repo
 
 import { VOICE_APP_PATH } from "./controller-config.js";
 
