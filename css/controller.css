@@ -381,10 +381,6 @@ div#initiative_order {
     pointer-events: none;
 }
 
-.initiative-tracker tbody tr.omnibox-highlight {
-    outline: 1px dashed rgb(184, 134, 11);
-}
-
 .initiative-tracker tr.drop-below::after {
     content: "";
     position: absolute;
@@ -500,6 +496,10 @@ div#initiative_order {
     cursor: pointer;
 }
 
+.soft-select-highlight {
+    outline: 1px dashed rgb(184, 134, 11) !important;
+}
+
 .controller-popover {
     border-radius: 0.1rem;
 }
@@ -527,6 +527,9 @@ div#initiative_order {
     height: 2rem;
     background-color: #111;
     cursor: pointer;
+}
+.popover-choose-roll-btn:focus {
+    outline: 1px solid rgb(184, 134, 11);
 }
 
 .popover-choose-roll-btn.d20-icon svg {
