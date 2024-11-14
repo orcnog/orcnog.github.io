@@ -1,6 +1,9 @@
 // TODO:
-// 1. allow Add a Player option to add HP and Max HP.
-// 2. Add option to Encounter Blocks to make them re-balanceable for different party sizes.
+// 1. in production, player ORDER is coming across as Number in some cases, String in others. Causing reordering issues (possibly on the voice-app side).
+// 2. Make the auto-popover show over MaxHp input when the user assigns or reassigns monster statblock to a row (right now, it only shows after CR change).
+// 3. allow Add a Player option to add HP and Max HP.
+// 4. Add option to Encounter Blocks to make them re-balanceable for different party sizes.
+// 5. Apparently, there are some 5et creatures that are missing HP formulas.  Need to handle for those. See: dum-dum goblin.
 
 import { VOICE_APP_PATH } from "./controller-config.js";
 
