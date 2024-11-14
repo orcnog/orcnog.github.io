@@ -771,6 +771,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 					const rollAnimationMinMax = userSelection === 3 ? {min: await calculateNewHp(mon, 2), max: await calculateNewHp(mon, 1)} : null;
 					const newHp = await calculateNewHp(mon, userSelection);
 					setPlayerHp(maxhpInput, player.id, newHp, maxhpCookieSuffix, rollAnimationMinMax);
+					popoverSetHpEqualToMaxHp(maxhpInput);
 				}
 			});
 			maxhpCell.appendChild(maxhpInput);
@@ -1379,7 +1380,6 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				cell1.addEventListener("click", () => {
 					resolve(0); // Resolve with the value 0 for "average"
 					destroyPopover();
-					popoverSetHpEqualToMaxHp(ele);
 				});
 				table.appendChild(cell1);
 
@@ -1391,7 +1391,6 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				cell2.addEventListener("click", () => {
 					resolve(1); // Resolve with the value 1 for "maximum"
 					destroyPopover();
-					popoverSetHpEqualToMaxHp(ele);
 				});
 				table.appendChild(cell2);
 
@@ -1403,7 +1402,6 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				cell3.addEventListener("click", () => {
 					resolve(2); // Resolve with the value 2 for "minimum"
 					destroyPopover();
-					popoverSetHpEqualToMaxHp(ele);
 				});
 				table.appendChild(cell3);
 
@@ -1415,7 +1413,6 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				cell4.addEventListener("click", () => {
 					resolve(3); // Resolve with the value 3 for "roll"
 					destroyPopover();
-					popoverSetHpEqualToMaxHp(ele);
 				});
 				table.appendChild(cell4);
 
@@ -1459,18 +1456,18 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			});
 
 			function destroyPopover (e) {
-				if (!e || e.relatedTarget === null || (e.relatedTarget !== ele && !popover.contains(e.relatedTarget))) {
+				if (!e || e.target === null || (e.target !== ele && !popover.contains(e.target))) {
 					if (popover && document.body.contains(popover)) {
 						document.body.removeChild(popover);
 					}
-					ele.removeEventListener("focusout", destroyPopover);
-					ele.removeEventListener("change", destroyPopover);
+					document.body.removeEventListener("mousedown", destroyPopover);
+					document.body.removeEventListener("focusin", destroyPopover);
 					resolve(null);
 				}
 			}
 
-			ele.addEventListener("focusout", destroyPopover);
-			ele.addEventListener("change", destroyPopover);
+			document.body.addEventListener("mousedown", destroyPopover);
+			document.body.addEventListener("focusin", destroyPopover);
 
 			return popover;
 		});
