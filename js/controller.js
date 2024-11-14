@@ -1972,7 +1972,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	}
 
 	/*************************************/
-	/* Initialization            	     */
+	/* Initialization                    */
 	/*************************************/
 
 	initPeer2Peer();
