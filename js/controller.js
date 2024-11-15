@@ -1,9 +1,13 @@
 // TODO:
-// 1. in production, player ORDER is coming across as Number in some cases, String in others. Causing reordering issues (possibly on the voice-app side).
-// 2. Make the auto-popover show over MaxHp input when the user assigns or reassigns monster statblock to a row (right now, it only shows after CR change).
-// 3. allow Add a Player option to add HP and Max HP.
-// 4. Add option to Encounter Blocks to make them re-balanceable for different party sizes.
-// 5. Apparently, there are some 5et creatures that are missing HP formulas.  Need to handle for those. See: dum-dum goblin.
+// 1. Fix locakable hover statblocks (from omnibox + hold shift).
+// 2. Apparently, there are some 5et creatures that are missing HP formulas.  Need to handle for those. See: dum-dum goblin.
+// 3. Apparently, there are some 5et creatures with CRs set to "0.5" instead of "1/2".  Need to handle for those. See: Aberrant Spirit (TCE).
+// 4. 5et handles for summoned CRs. I haven't bothered... but I feel like I need to eventually support them.
+// 5. Allow Add a Player option to add HP and Max HP.
+// 6. Add option to adventure page to set the party size (within the range of the adv) and save to session.
+// 7. Add option to Encounter Blocks to make them re-balanceable for different party sizes.
+// 8. Add feature that totals up all encounters in an adventure and displays the total adjusted XP vs Daily Budget.
+// 9. When applying a new initiative to a player, provide an option to apply it to all creatures with the same name?
 
 import { VOICE_APP_PATH } from "./controller-config.js";
 
@@ -284,7 +288,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 							...(playerId && { id: playerId }), // Only include ID if it was generated
 						});
 						// Add the player
-						signal({ "add_player": playerObjToAdd });
+						await signal({ "add_player": playerObjToAdd });
 					}
 
 					// After all players are processed
@@ -1152,14 +1156,17 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		const playerObjToUpdate = getPlayerObjFromMon({
 			name: player.name,
 			id: player.id,
-			order: player.order,
+			order: Number(player.order),
 			hash: hash,
 			mon: dmon,
 		});
 
 		// Clear max HP cookie and update
 		removeCookie(`${player.id}${maxhpCookieSuffix}`);
-		signal(`update_player:${JSON.stringify(playerObjToUpdate)}`);
+		signal(`update_player:${JSON.stringify(playerObjToUpdate)}`).then(() => {
+			const maxHpField = document.querySelector(`[data-id="${player.id}"] .player-maxhp`);
+			popoverChooseHpValue(maxHpField, dmon, player.id, true);
+		});
 
 		// Close omnibox and update display
 		closeOmnibox();
@@ -1588,6 +1595,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			"id": id, // custom
 			"hash": hash, // custom
 			"isNpc": mon.isNpc ? mon.isNpc : null,
+			"scaledCr": mon._isScaledCr ? mon._scaledCr : null,
 		};
 	}
 
