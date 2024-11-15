@@ -675,9 +675,10 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		// UrlUtil.autoEncodeHash(mon)
 
 		// add data-attributes for each of the following, if they exist in the incoming player obj
-		["id", "name", "order", "spoken", "fromapp", "hash", "isNpc", "scaledCr"].forEach(prop => {
+		["id", "name", "spoken", "fromapp", "hash", "isNpc", "scaledCr"].forEach(prop => {
 			if (player[prop] != null) row.dataset[prop] = player[prop];
 		});
+		row.dataset.order = Number(player.order); // ensure order is a number
 
 		if (player.bloodied) row.classList.add("bloodied");
 		if (player.dead) row.classList.add("dead");
@@ -686,10 +687,10 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		const orderCell = document.createElement("td");
 		const orderInput = document.createElement("input");
 		orderInput.type = "text";
-		orderInput.value = player.order;
+		orderInput.value = Number(player.order);
 		orderInput.className = "player-order";
 		orderInput.addEventListener("focus", () => { orderInput.select(); });
-		orderInput.addEventListener("change", () => { signal(`update_player:{"id":"${player.id}","order":${orderInput.value}}`); });
+		orderInput.addEventListener("change", () => { signal(`update_player:{"id":"${player.id}","order":${Number(orderInput.value)}}`); });
 		orderCell.addEventListener("click", async (e) => {
 			e.preventDefault();
 			if (player.hash) {
@@ -699,11 +700,11 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 						const rollAnimationMinMax = {min: await calculateNewInit(mon, 2), max: await calculateNewInit(mon, 1)};
 						const newInit = await calculateNewInit(mon, 3);
 						animateNumber(orderInput, newInit, rollAnimationMinMax).then(() => {
-							signal(`update_player:{"id":"${player.id}","order":${newInit}}`);
+							signal(`update_player:{"id":"${player.id}","order":${Number(newInit)}}`);
 						});
 					} else {
 						const newInit = await calculateNewInit(mon, userSelection);
-						signal(`update_player:{"id":"${player.id}","order":${newInit}}`);
+						signal(`update_player:{"id":"${player.id}","order":${Number(newInit)}}`);
 					}
 				}
 			}
@@ -1583,7 +1584,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		const initiativeOrder = order !== null ? order : Parser.getAbilityModNumber(mon.dex || 10);
 		return {
 			"name": displayName,
-			"order": initiativeOrder,
+			"order": Number(initiativeOrder),
 			"id": id, // custom
 			"hash": hash, // custom
 			"isNpc": mon.isNpc ? mon.isNpc : null,
@@ -1809,7 +1810,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			}
 
 			setPlayerHp(maxhpInput, id, newHp, maxhpCookieSuffix, rollAnimationMinMax);
-			popoverSetHpEqualToMaxHp(maxhpInput, doFocus);
+			popoverSetHpEqualToMaxHp(maxhpInput, true);
 		}
 	}
 
@@ -2025,8 +2026,8 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				ContextUtil.pOpenMenu(evt, ContextUtil.getMenu([
 					new ContextUtil.Action("Rename", () => { renamePlayer(row); }),
 					new ContextUtil.Action("Duplicate", () => { duplicatePlayer(row); }),
-					new ContextUtil.Action(hash ? "Assign new monster" : "Assign a monster", () => { selectMonsterFromOmnibox(row); }),
 					new ContextUtil.Action("Reset HP/Max HP to average", () => { resetHpToAverage(row); }),
+					new ContextUtil.Action(hash ? "Pick a different monster" : "Assign a monster", () => { selectMonsterFromOmnibox(row); }),
 					new ContextUtil.Action("Unassign monster", () => { removeMonsterAssignment(row); }),
 					new ContextUtil.Action("Delete", () => { deletePlayer(row); }),
 				]),
