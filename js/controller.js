@@ -1,13 +1,14 @@
 // TODO:
 // 1. Fix locakable hover statblocks (from omnibox + hold shift).
-// 2. Apparently, there are some 5et creatures that are missing HP formulas.  Need to handle for those. See: dum-dum goblin.
-// 3. Apparently, there are some 5et creatures with CRs set to "0.5" instead of "1/2".  Need to handle for those. See: Aberrant Spirit (TCE).
-// 4. 5et handles for summoned CRs. I haven't bothered... but I feel like I need to eventually support them.
-// 5. Allow Add a Player option to add HP and Max HP.
-// 6. Add option to adventure page to set the party size (within the range of the adv) and save to session.
-// 7. Add option to Encounter Blocks to make them re-balanceable for different party sizes.
-// 8. Add feature that totals up all encounters in an adventure and displays the total adjusted XP vs Daily Budget.
-// 9. When applying a new initiative to a player, provide an option to apply it to all creatures with the same name?
+// 2. When no players have HP/MaxHP, the monster icons present really squished.  Need to fix that.
+// 3. Apparently, there are some 5et creatures that are missing HP formulas.  Need to handle for those. See: dum-dum goblin.
+// 4. Apparently, there are some 5et creatures with CRs set to "0.5" instead of "1/2".  Need to handle for those. See: Aberrant Spirit (TCE).
+// 5. 5et handles for summoned CRs. I haven't bothered... but I feel like I need to eventually support them.
+// 6. Allow Add a Player option to add HP and Max HP.
+// 7. Add option to adventure page to set the party size (within the range of the adv) and save to session.
+// 8. Add option to Encounter Blocks to make them re-balanceable for different party sizes.
+// 9. Add feature that totals up all encounters in an adventure and displays the total adjusted XP vs Daily Budget.
+// 10. When applying a new initiative to a player, provide an option to apply it to all creatures with the same name?
 
 import { VOICE_APP_PATH } from "./controller-config.js";
 
