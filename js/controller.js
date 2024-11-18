@@ -1,14 +1,11 @@
 // TODO:
-// 1. Fix locakable hover statblocks (from omnibox + hold shift).
-// 2. When no players have HP/MaxHP, the monster icons present really squished.  Need to fix that.
-// 3. Apparently, there are some 5et creatures that are missing HP formulas.  Need to handle for those. See: dum-dum goblin.
-// 4. Apparently, there are some 5et creatures with CRs set to "0.5" instead of "1/2".  Need to handle for those. See: Aberrant Spirit (TCE).
-// 5. 5et handles for summoned CRs. I haven't bothered... but I feel like I need to eventually support them.
-// 6. Allow Add a Player option to add HP and Max HP.
-// 7. Add option to adventure page to set the party size (within the range of the adv) and save to session.
-// 8. Add option to Encounter Blocks to make them re-balanceable for different party sizes.
-// 9. Add feature that totals up all encounters in an adventure and displays the total adjusted XP vs Daily Budget.
-// 10. When applying a new initiative to a player, provide an option to apply it to all creatures with the same name?
+// 1. Related to #2, I think! Apparently, there are some 5et creatures with CRs set to "0.5" instead of "1/2".  Need to handle for those. See: Aberrant Spirit (TCE).
+// 2. Related to #1, I think! 5et handles for summoned CRs. I haven't bothered... but I feel like I need to eventually support them.
+// 3. Allow Add a Player option to add HP and Max HP.
+// 4. Add option to adventure page to set the party size (within the range of the adv) and save to session.
+// 5. Add option to Encounter Blocks to make them re-balanceable for different party sizes.
+// 6. Add feature that totals up all encounters in an adventure and displays the total adjusted XP vs Daily Budget.
+// 7. When applying a new initiative to a player, provide an option to apply it to all creatures with the same name?
 
 import { VOICE_APP_PATH } from "./controller-config.js";
 
@@ -755,8 +752,8 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 			// Create and append the "hp" cell
 			let hp = getCookie(`${player.id}${hpCookieSuffix}`);
-			if (!hp) {
-				hp = mon?.hp?.average;
+			if (!hp || hp === "null" || hp === "undefined") {
+				hp = await calculateNewHp(mon, 0);
 			}
 			const hpCell = document.createElement("td");
 			const hpInput = document.createElement("input");
@@ -774,8 +771,8 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 			// Create and append the "maxhp" cell
 			let maxhp = getCookie(`${player.id}${maxhpCookieSuffix}`);
-			if (!maxhp) {
-				maxhp = mon.hp?.average;
+			if (!maxhp || maxhp === "null" || maxhp === "undefined") {
+				maxhp = await calculateNewHp(mon, 0);
 			}
 			const maxhpCell = document.createElement("td");
 			maxhpCell.className = "td-player-maxhp";
@@ -1076,8 +1073,10 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	}
 
 	function highlightRow (tr, clazz = "statblock") {
-		[...tr.parentNode.children].forEach(sibling => sibling !== tr && sibling.classList.remove(`${clazz}-highlight`));
-		tr.classList.add(`${clazz}-highlight`);
+		if (tr?.parentNode?.children) {
+			[...tr.parentNode.children].forEach(sibling => sibling !== tr && sibling?.classList?.remove(`${clazz}-highlight`));
+			tr.classList?.add(`${clazz}-highlight`);
+		}
 	}
 
 	function getMonsterNameFromHash (hash) {
@@ -1150,6 +1149,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			name: row.dataset.name,
 			id: row.dataset.id,
 			order: row.querySelector(".player-order").value,
+			hadStats: row.classList.contains("has-statblock"),
 		};
 
 		// Get monster data and create player object
@@ -1162,17 +1162,20 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			mon: dmon,
 		});
 
-		// Clear max HP cookie and update
-		removeCookie(`${player.id}${maxhpCookieSuffix}`);
-		signal(`update_player:${JSON.stringify(playerObjToUpdate)}`).then(() => {
-			const maxHpField = document.querySelector(`[data-id="${player.id}"] .player-maxhp`);
-			popoverChooseHpValue(maxHpField, dmon, player.id, true);
-		});
+		// Uncomment to clear max HP before sending the new updated player signal
+		// removeCookie(`${player.id}${maxhpCookieSuffix}`);
 
-		// Close omnibox and update display
-		closeOmnibox();
-		displayStatblock(player.name, player.id, hash);
-		highlightRow(row);
+		// Send the new updated player signal
+		signal(`update_player:${JSON.stringify(playerObjToUpdate)}`).then(() => {
+			if (player.hadStats) {
+				const maxHpField = document.querySelector(`[data-id="${player.id}"] .player-maxhp`);
+				popoverChooseHpValue(maxHpField, dmon, player.id, true);
+			}
+			// Close omnibox and update display
+			closeOmnibox();
+			displayStatblock(player.name, player.id, hash);
+			highlightRow(row);
+		});
 	}
 
 	async function removeMonsterAssignment (row) {
@@ -1187,14 +1190,15 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 		// Get the monster stats
 		const mon = await get5etMonsterByHash(hash, scaledCr);
-		if (!mon?.hp?.average) return;
+		const avgHp = await calculateNewHp(mon, 0);
+		if (avgHp === null) return;
 
 		// Reset both current HP and max HP to the monster's average
 		const hpInput = row.querySelector(".player-hp");
 		const maxHpInput = row.querySelector(".player-maxhp");
 
-		setPlayerHp(hpInput, id, mon.hp.average, hpCookieSuffix);
-		setPlayerHp(maxHpInput, id, mon.hp.average, maxhpCookieSuffix);
+		setPlayerHp(hpInput, id, avgHp, hpCookieSuffix);
+		setPlayerHp(maxHpInput, id, avgHp, maxhpCookieSuffix);
 	}
 
 	function addNewPlayer (name, order, hash = null) {
@@ -1606,8 +1610,19 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	 * @returns {Number} HP
 	 */
 	async function calculateNewHp (mon, hpType) {
-		if (!mon.hp?.formula) {
-			console.error("`formula` must be defined in `mon`.");
+		if (!mon) {
+			console.error("`mon` must be defined.");
+			return;
+		}
+		let formula = mon.hp?.formula;
+		if (!formula) {
+			if (mon.hp?.average) {
+				return mon.hp.average;
+			}
+			if (mon.hp?.special) {
+				return mon.hp.special;
+			}
+			console.error("HP is not correctly defined in `mon`.");
 			return;
 		}
 		if (hpType === 1) {
@@ -1796,6 +1811,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	}
 
 	async function popoverChooseHpValue (maxhpInput, mon, id, doFocus) {
+		if (!mon || !("hp" in mon)) return;
 		const userSelection = await popoverChooseRollableValue(maxhpInput, "HP", doFocus);
 		if (userSelection !== null) {
 			const max = await calculateNewHp(mon, 1);

@@ -13915,7 +13915,11 @@ Renderer.hover = class {
 						// handle DM screen integration
 						if (this._dmScreen && opts.compactReferenceData) {
 							const panel = this._dmScreen.getPanelPx(EventUtil.getClientX(evt), EventUtil.getClientY(evt));
-							if (!panel) return;
+							if (!panel) {
+								// If no panel but we're dragging, just do position adjustment
+								drag.type = 0;
+								return;
+							}
 							this._dmScreen.setHoveringPanel(panel);
 							const target = panel.getAddButtonPos();
 
