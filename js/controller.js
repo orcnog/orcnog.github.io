@@ -750,45 +750,56 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			// Identify the row as having a statblock
 			row.classList.add("has-statblock");
 
-			// Create and append the "hp" cell
+			// Create the hp and maxhp cells and inputs
+			const hpCell = document.createElement("td");
+			const hpInput = document.createElement("input");
+			const maxhpCell = document.createElement("td");
+			const maxhpInput = document.createElement("input");
+
+			// HP cell
 			let hp = getCookie(`${player.id}${hpCookieSuffix}`);
 			if (!hp || hp === "null" || hp === "undefined") {
 				hp = await calculateNewHp(mon, 0);
 			}
-			const hpCell = document.createElement("td");
-			const hpInput = document.createElement("input");
 			hpInput.type = "text";
 			hpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
 			hpInput.className = "player-hp";
-			hpInput.dataset.cookie = hpCookieSuffix;
-			setPlayerHp(hpInput, player.id, hp, hpCookieSuffix);
 			hpInput.addEventListener("focus", handleHpFocus);
 			hpInput.addEventListener("change", handleHpChange);
 			hpInput.addEventListener("keydown", handleHpKeydown);
+			hpInput.addEventListener("value_update", (e) => {
+				// final rendered value after custom event handling
+				handleHpValuesUpdate(hpInput, maxhpInput);
+			});
 			hpCell.addEventListener("click", () => { hpInput.select(); });
-			hpCell.appendChild(hpInput);
-			row.appendChild(hpCell);
+			hpInput.dataset.cookie = hpCookieSuffix;
+			setPlayerHp(hpInput, player.id, hp, hpCookieSuffix);
 
-			// Create and append the "maxhp" cell
+			// Max HP cell
 			let maxhp = getCookie(`${player.id}${maxhpCookieSuffix}`);
 			if (!maxhp || maxhp === "null" || maxhp === "undefined") {
 				maxhp = await calculateNewHp(mon, 0);
 			}
-			const maxhpCell = document.createElement("td");
 			maxhpCell.className = "td-player-maxhp";
-			const maxhpInput = document.createElement("input");
 			maxhpInput.type = "text";
 			maxhpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
 			maxhpInput.className = "player-maxhp";
 			maxhpInput.dataset.cookie = maxhpCookieSuffix;
-			setPlayerHp(maxhpInput, player.id, maxhp, maxhpCookieSuffix);
 			maxhpInput.addEventListener("focus", handleHpFocus);
 			maxhpInput.addEventListener("change", handleHpChange);
 			maxhpInput.addEventListener("keydown", handleHpKeydown);
+			maxhpInput.addEventListener("value_update", (e) => {
+				handleHpValuesUpdate(hpInput, maxhpInput);
+			});
 			maxhpInput.addEventListener("click", async (e) => {
 				e.preventDefault();
 				await popoverChooseHpValue(maxhpInput, mon, player.id, false);
 			});
+			setPlayerHp(maxhpInput, player.id, maxhp, maxhpCookieSuffix);
+
+			// Append hp, then maxhp to the table row
+			hpCell.appendChild(hpInput);
+			row.appendChild(hpCell);
 			maxhpCell.appendChild(maxhpInput);
 			row.appendChild(maxhpCell);
 		} else {
@@ -1482,6 +1493,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 					}
 					ele.removeEventListener("focusout", destroyPopover);
 					ele.removeEventListener("change", destroyPopover);
+					ele.removeEventListener("value_update", destroyPopover);
 					ele.classList.remove("soft-select-highlight");
 					resolve(null); // Resolve with null if the popover is closed without a choice
 				}
@@ -1489,6 +1501,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 			ele.addEventListener("focusout", destroyPopover);
 			ele.addEventListener("change", destroyPopover);
+			ele.addEventListener("value_update", destroyPopover);
 
 			return popover;
 		});
@@ -1686,6 +1699,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			animateNumber(ele, hp, rollAnimationMinMax);
 		} else {
 			hpInput.value = hp; // Set the input value to the new HP
+			hpInput.dispatchEvent(new Event("value_update", { bubbles: true }));
 		}
 
 		// First try to get playerId from parameter
@@ -1807,6 +1821,20 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		} else if (e.key === "Enter") {
 			e.preventDefault();
 			e.target.blur();
+		}
+	}
+
+	function handleHpValuesUpdate (hpInput, maxHpInput) {
+		hpInput.classList.remove("half-hp", "zero-hp", "over-max-hp");
+		if (Number(hpInput.value) <= 0) {
+			// if value is 0, assign class "zero-hp"
+			hpInput.classList.add("zero-hp");
+		} else if (Number(hpInput.value) <= Number(maxHpInput.value) / 2) {
+			// if value is half (or less) of max hp, assign class "half-hp"
+			hpInput.classList.add("half-hp");
+		} else if (Number(hpInput.value) > Number(maxHpInput.value)) {
+			// if value is greater than max hp, assign class "over-max-hp"
+			hpInput.classList.add("over-max-hp");
 		}
 	}
 

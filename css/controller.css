@@ -464,6 +464,18 @@ div#initiative_order {
     cursor: pointer;
 }
 
+.initiative-tracker .player-hp.half-hp {
+    color: #b88;
+}
+
+.initiative-tracker .player-hp.zero-hp {
+    color: #c55;
+}
+
+.initiative-tracker .player-hp.over-max-hp {
+    color: #8b8;
+}
+
 .initiative-tracker .player-assign-btn,
 .monster-icon {
     display: inline-flex;
