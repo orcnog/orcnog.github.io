@@ -1,11 +1,9 @@
 // TODO:
 // 1. Related to #2, I think! Apparently, there are some 5et creatures with CRs set to "0.5" instead of "1/2".  Need to handle for those. See: Aberrant Spirit (TCE).
 // 2. Related to #1, I think! 5et handles for summoned CRs. I haven't bothered... but I feel like I need to eventually support them.
-// 3. Allow Add a Player option to add HP and Max HP.
-// 4. Add option to adventure page to set the party size (within the range of the adv) and save to session.
-// 5. Add option to Encounter Blocks to make them re-balanceable for different party sizes.
-// 6. Add feature that totals up all encounters in an adventure and displays the total adjusted XP vs Daily Budget.
-// 7. When applying a new initiative to a player, provide an option to apply it to all creatures with the same name?
+// 3. Add option to adventure page to set the party size (within the range of the adv) and save to session.
+// 4. Add option to Encounter Blocks to make them re-balanceable for different party sizes.
+// 5. Add feature that totals up all encounters in an adventure and displays the total adjusted XP vs Daily Budget.
 
 import { VOICE_APP_PATH } from "./controller-config.js";
 
@@ -702,11 +700,15 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 						const rollAnimationMinMax = {min: await calculateNewInit(mon, 2), max: await calculateNewInit(mon, 1)};
 						const newInit = await calculateNewInit(mon, 3);
 						animateNumber(orderInput, newInit, rollAnimationMinMax).then(() => {
-							signal(`update_player:{"id":"${player.id}","order":${Number(newInit)}}`);
+							signal(`update_player:{"id":"${player.id}","order":${Number(newInit)}}`).then(() => {
+								popoverApplyInitiativeToAll(orderInput, newInit, true);
+							});
 						});
 					} else {
 						const newInit = await calculateNewInit(mon, userSelection);
-						signal(`update_player:{"id":"${player.id}","order":${Number(newInit)}}`);
+						signal(`update_player:{"id":"${player.id}","order":${Number(newInit)}}`).then(() => {
+							popoverApplyInitiativeToAll(orderInput, newInit, true);
+						});
 					}
 				}
 			}
@@ -745,6 +747,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		row.appendChild(lockCell);
 
 		const mon = await get5etMonsterByHash(player.hash, player.scaledCr);
+
 		// For creatures with statblocks...
 		if (mon) {
 			// Identify the row as having a statblock
@@ -1388,6 +1391,28 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			}
 		});
 	}
+
+	function getGroupedCreatures (row) {
+		// Get all the creatures that are very similarly named, including numerated creatures (ex: Goblin 1, Goblin 2, etc.)
+		// Get the base name by removing any trailing numbers and whitespace
+		const baseName = row.dataset.name.replace(/\s*\d+$/, "").trim();
+
+		// Get all rows from initiative tracker
+		const rows = Array.from(document.querySelectorAll(".initiative-tracker tr"));
+
+		// Filter rows to find similarly named creatures
+		return rows.filter(r => {
+			// Skip if no name
+			if (!r.dataset.name) return false;
+
+			// Get base name of current row by removing trailing numbers
+			const currBaseName = r.dataset.name.replace(/\s*\d+$/, "").trim();
+
+			// Return true if base names match
+			return currBaseName === baseName;
+		});
+	}
+
 	async function modalChooseCreatureMaxHP (ele) {
 		// Ask user what kinda max HP to set: average, maximum, minimum, or rolled.
 		const userVal = await InputUiUtil.pGetUserGenericButton({
@@ -1507,7 +1532,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		});
 	}
 
-	async function popoverSetHpEqualToMaxHp (ele, doFocus) {
+	async function popoverApplyMaxHpToHp (ele, doFocus) {
 		const maxHpInput = ele;
 		const hpInput = ele.closest("tr")?.querySelector("input.player-hp");
 		if (!maxHpInput || !hpInput) return;
@@ -1555,6 +1580,67 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		if (userSelection === true) {
 			const id = maxHpInput.closest("tr").dataset.id;
 			setPlayerHp(hpInput, id, maxHpInput.value, hpCookieSuffix);
+		}
+	}
+
+	async function popoverApplyInitiativeToAll (ele, newInitValue, doFocus) {
+		const initiativeSourceInput = ele;
+		const sourceRow = initiativeSourceInput.closest("tr");
+		const groupedCreatureRows = getGroupedCreatures(sourceRow);
+		const topRowOrderInput = groupedCreatureRows[0].querySelector("input.player-order");
+
+		const userSelection = await new Promise(resolve => {
+			let focusOnThis;
+			const popover = createPopover(topRowOrderInput, "top", "apply-initiative-to-all", () => {
+				const table = document.createElement("div");
+				table.className = "popover-choose-roll";
+				const cell = document.createElement("button");
+				cell.className = "popover-choose-roll-btn";
+				cell.innerHTML = `Apply?`;
+				cell.title = "Set initiative of all creatures to the same as the source creature.";
+				cell.addEventListener("click", () => {
+					resolve(true);
+					destroyPopover();
+				});
+				if (doFocus) focusOnThis = cell;
+				table.appendChild(cell);
+				// soft-select-highlight all the rows
+				groupedCreatureRows.forEach(row => {
+					row.querySelector("input.player-order").classList.add("soft-select-highlight");
+				});
+
+				return table;
+			});
+			if (doFocus && focusOnThis) focusOnThis.focus();
+
+			function destroyPopover (e) {
+				if (!e || e.target === null || (!ele.contains(e.target) && e.target !== ele && !popover.contains(e.target))) {
+					if (popover && document.body.contains(popover)) {
+						document.body.removeChild(popover);
+					}
+					document.body.removeEventListener("mousedown", destroyPopover);
+					document.body.removeEventListener("focusin", destroyPopover);
+					initiativeSourceInput.classList.remove("soft-select-highlight");
+					groupedCreatureRows.forEach(row => {
+						row.querySelector("input.player-order").classList.remove("soft-select-highlight");
+					});
+					resolve(null);
+				}
+			}
+
+			document.body.addEventListener("mousedown", destroyPopover);
+			document.body.addEventListener("focusin", destroyPopover);
+
+			return popover;
+		});
+
+		// Now set the hp to the maxhp
+		if (userSelection === true) {
+			for (const row of groupedCreatureRows) {
+				const id = row.dataset.id;
+				row.querySelector("input.player-order").value = newInitValue;
+				await signal(`update_player:{"id":"${id}","order":${newInitValue}}`);
+			}
 		}
 	}
 
@@ -1863,7 +1949,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			}
 
 			setPlayerHp(maxhpInput, id, newHp, maxhpCookieSuffix, rollAnimationMinMax);
-			popoverSetHpEqualToMaxHp(maxhpInput, true);
+			popoverApplyMaxHpToHp(maxhpInput, true);
 		}
 	}
 
@@ -2076,15 +2162,23 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				evt.preventDefault();
 				const hash = row.dataset.hash;
 				const id = row.dataset.id;
-				ContextUtil.pOpenMenu(evt, ContextUtil.getMenu([
+				const menuItems = hash ? [
 					new ContextUtil.Action("Rename", () => { renamePlayer(row); }),
-					new ContextUtil.Action("Duplicate", () => { duplicatePlayer(row); }),
-					new ContextUtil.Action("Reset HP/Max HP to average", () => { resetHpToAverage(row); }),
-					new ContextUtil.Action(hash ? "Pick a different monster" : "Assign a monster", () => { selectMonsterFromOmnibox(row); }),
+					new ContextUtil.Action("Pick a different monster", () => { selectMonsterFromOmnibox(row); }),
+					new ContextUtil.Action("Reset HP/Max to average", () => { resetHpToAverage(row); }),
 					new ContextUtil.Action("Unassign monster", () => { removeMonsterAssignment(row); }),
+					new ContextUtil.Action("Duplicate", () => { duplicatePlayer(row); }),
 					new ContextUtil.Action("Delete", () => { deletePlayer(row); }),
-				]),
-				{userData: {entity: hash}},
+				] : [
+					new ContextUtil.Action("Rename", () => { renamePlayer(row); }),
+					new ContextUtil.Action("Assign a monster", () => { selectMonsterFromOmnibox(row); }),
+					new ContextUtil.Action("Track HP/Max HP", () => { assignMonsterToRow(row, "commoner_MM"); }),
+					new ContextUtil.Action("Duplicate", () => { duplicatePlayer(row); }),
+					new ContextUtil.Action("Delete", () => { deletePlayer(row); }),
+				];
+
+				ContextUtil.pOpenMenu(evt, ContextUtil.getMenu(menuItems),
+					{userData: {entity: hash}},
 				);
 			}
 		});
