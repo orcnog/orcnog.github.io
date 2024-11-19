@@ -1,9 +1,11 @@
 // TODO:
+// 0. BUG: async stuff still not perfect.  Adding a full encounter from adventure link sometimes results in duplicate entries.
 // 1. Related to #2, I think! Apparently, there are some 5et creatures with CRs set to "0.5" instead of "1/2".  Need to handle for those. See: Aberrant Spirit (TCE).
 // 2. Related to #1, I think! 5et handles for summoned CRs. I haven't bothered... but I feel like I need to eventually support them.
 // 3. Add option to adventure page to set the party size (within the range of the adv) and save to session.
 // 4. Add option to Encounter Blocks to make them re-balanceable for different party sizes.
 // 5. Add feature that totals up all encounters in an adventure and displays the total adjusted XP vs Daily Budget.
+// 6. Support Day Mode.
 
 import { VOICE_APP_PATH } from "./controller-config.js";
 
