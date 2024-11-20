@@ -72,18 +72,18 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			} else {
 				lastPeerId = peer.id;
 			}
-			console.debug(`peer.on('open')`);
+			console.log(`peer.on('open')`);
 			checkForKeyAndJoin();
 		});
 		peer.on("connection", function (c) {
-			console.debug(`peer.on('connection')`);
+			console.log(`peer.on('connection')`);
 			c.on("open", function () {
 				c.send("Sender does not accept incoming connections");
 				setTimeout(function () { c.close(); }, 500);
 			});
 		});
 		peer.on("disconnected", function () {
-			console.debug(`peer.on('disconnected')`);
+			console.log(`peer.on('disconnected')`);
 			p2pconnected = false;
 			status.innerHTML = "<span class=\"red\">Connection lost. Please reconnect</span>";
 			document.querySelectorAll(".control-panel").forEach(c => { c.classList.add("closed"); });
@@ -92,7 +92,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			peer.reconnect();
 		});
 		peer.on("close", function () {
-			console.debug(`peer.on('close')`);
+			console.log(`peer.on('close')`);
 			p2pconnected = false;
 			conn = null;
 			status.innerHTML = "<span class=\"red\">Connection destroyed. Please refresh</span>";
@@ -139,7 +139,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			// Now send the signal
 			if (conn && conn.open) {
 				conn.send(sigName);
-				addMessage(cueString + sigName);
+				addMessage(cueString + (typeof sigName === "object" ? JSON.stringify(sigName) : sigName));
 				console.info("Data Sent:", sigName);
 			} else {
 				console.error("No connection found.");
@@ -157,7 +157,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			conn = peer.connect(`orcnog-${passkey}`, { label: "CONTROLLER", reliable: true });
 
 			conn.on("open", function () {
-				console.debug(`conn.on("open")`);
+				console.log(`conn.on("open")`);
 				p2pconnected = true;
 				status.innerHTML = `Connected to: ${conn.peer.split("orcnog-")[1]}`;
 				document.querySelectorAll(".control-panel").forEach(c => { c.classList.remove("closed"); });
@@ -169,7 +169,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			});
 
 			conn.on("data", async (data) => {
-				console.debug(`conn.on("data")`);
+				console.log(`conn.on("data")`, data);
 				// Check for error message
 				if (data?.error === "CONTROLLER_ALREADY_CONNECTED") {
 					p2pconnected = false;
@@ -190,7 +190,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			});
 
 			conn.on("close", function () {
-				console.debug(`"conn.on("close")`);
+				console.log(`"conn.on("close")`);
 				p2pconnected = false;
 				// Only show generic close message if it wasn't a duplicate controller error
 				if (!conn.duplicateControllerError) {
@@ -286,11 +286,19 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 							...(playerId && { id: playerId }), // Only include ID if it was generated
 						});
 						// Add the player
-						await signal({ "add_player": playerObjToAdd });
+						// Wait for the signal to complete before continuing
+						try {
+							// console.debug(`Sending add_player signal:`, playerObjToAdd);
+							await signal({ "add_player": playerObjToAdd }).then(() => {
+								// console.debug(`---response received`);
+							});
+						} catch (error) {
+							console.error(`Error adding player ${player.name}:`, error);
+							continue;
+						}
 					}
 
-					// After all players are processed
-					handleDataObject(newInitObj);
+					console.debug("activating row");
 					const activeRow = document.querySelector(".initiative-tracker tr.active");
 					if (activeRow) {
 						displayStatblock(activeRow.dataset.name, activeRow.dataset.id, activeRow.dataset.hash);
