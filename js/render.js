@@ -1205,7 +1205,8 @@ globalThis.Renderer = function () {
 	};
 
 	this._renderEncounterBlock = async function (entry, textStack, meta, options) {
-		if (entry?.combatants?.length <= 0) return;
+		// If we have no combatant data anywhere, exit
+		if (!entry?.combatants?.length && (!entry?.variations?.length || entry.variations.every(v => v?.combatants?.length <= 0))) return;
 
 		const id = CryptUtil.uid();
 		let adjXp = entry.adjxp || 0;
@@ -1225,20 +1226,57 @@ globalThis.Renderer = function () {
 		if (entry.name != null) {
 			if (Renderer.ENTRIES_WITH_ENUMERATED_TITLES_LOOKUP[entry.type]) this._handleTrackTitles(entry.name);
 			textStack[0] += `<span class="rd__h rd__h--2-inset" data-title-index="${this._headerIndex++}" ${this._getEnumeratedTitleRel(entry.name)}><h4 class="entry-title-inner">${entry.name}</h4>${this._getPagePart(entry, true)}</span>`;
+
+			// Add variation selector if variations exist
+			if (entry.variations?.length) {
+				textStack[0] += `
+				<div class="encounter-variation-select">
+					<label for="${id}-variation-select" class="encounter-variation-select-label">${entry.varyBy || "Variation"}</label>
+					<select id="${id}-variation-select" class="form-control input-sm encounter-variation-select-input">
+						${entry.variations.map((v, i) => `<option value="${v.variant || i}" ${v.default ? "selected" : ""}>${v.variant || `Variant ${i + 1}`}</option>`).join("")}
+					</select>
+				</div>`;
+			}
 		} else {
 			textStack[0] += `<span class="rd__h rd__h--2-inset rd__h--2-inset-no-name">${partPageExpandCollapse}</span>`;
 		}
 
-		textStack[0] += `<p class="encounter-adj-xp">`;
+		textStack[0] += `<p id="${id}-adj-xp" class="encounter-adj-xp">`;
 		this._recursiveRender(`{@footnote Adjusted XP: <span class="adj-xp-value">${adjXp || "Calculating..."}</span>|This tells you the "Adjusted XP" of the encounter, which helps you estimate its difficulty and helps you balance the encounter against a party's "{@footnote daily budget|A rough estimate of the adjusted XP value for encounters the party can handle before the characters will need to take a long rest.|Daily Budget}", using the {@table The Adventuring Day; Adventuring Day XP|DMG|Adventuring Day XP} table in the {@book DMG}.|Encounter Difficulty},`, textStack, meta);
 		textStack[0] += `</p>`;
 
 		textStack[0] += `</${this.wrapperTag}>`;
 
+		const combatants = entry.combatants || (entry.variations ? (entry.variations.find(v => v.default === true) || entry.variations[0])?.combatants : []) || [];
+
+		textStack[0] += `<${this.wrapperTag} id="${id}-creatures">`;
+		textStack[0] += this._renderEncounterCreatures(combatants, entry, [""], meta, options);
+		textStack[0] += `</${this.wrapperTag}>`;
+
+		this._lastDepthTrackerInheritedProps = cachedLastDepthTrackerProps;
+
+		// Register the async work in the cache
+		Renderer._cache.encounter = Renderer?._cache?.encounter || {};
+
+		Renderer._cache.encounter[id] = {
+			pFn: async () => {
+				// Render the adjusted XP. Must be done after the textStack has been output to the DOM.
+				await this._renderEncounterAdjXp(id, combatants, entry, meta, options);
+
+				// Set up variation selector handlers. Must be done after the textStack has been output to the DOM.
+				this._setupEncounterVariationHandlers(id, entry, meta, options);
+			},
+		};
+
+		// Add the trigger element
+		textStack[0] += `<style data-rd-cache-id="${id}" data-rd-cache="encounter" onload="Renderer._cache.pRunFromEle(this)"></style>`;
+	};
+
+	this._renderEncounterCreatures = function (combatants, entry, textStack, meta, options) {
 		const fauxEntry = {
 			type: "list",
 			style: "list-no-bullets",
-			items: entry.combatants.map(ent => {
+			items: combatants.map(ent => {
 				if (typeof ent === "string") return ent;
 				if (ent.type === "item") return ent;
 
@@ -1267,106 +1305,106 @@ globalThis.Renderer = function () {
 			textStack[0] += `</i>`;
 		}
 		textStack[0] += `<hr/>`;
-		textStack[0] += `<${this.wrapperTag}>Run: <a class="initiative-tracker-link" data-encounter='' href="javascript:void(0)">Initiative Tracker</a></${this.wrapperTag}>`;
+		textStack[0] += `<${this.wrapperTag}>Run: <a class="initiative-tracker-link" data-encounter=""" href="javascript:void(0)">Initiative Tracker</a></${this.wrapperTag}>`;
 		textStack[0] += `<div class="float-clear"></div>`;
 		textStack[0] += `</${this.wrapperTag}>`;
 
-		this._lastDepthTrackerInheritedProps = cachedLastDepthTrackerProps;
+		return textStack[0];
+	};
 
-		if (adjXp === 0) {
-			// Register the async work in the cache
-			Renderer._cache.encounter = Renderer._cache.encounter || {};
+	this._renderEncounterAdjXp = async function (id, combatants, entry, meta, options) {
+		if (!combatants.length) return;
 
-			Renderer._cache.encounter[id] = {
-				pFn: async (ele) => {
-					const creatures = entry?.combatants;
-					if (!creatures) return;
+		const $ele = $(`#${id}`);
+		if (!$ele.length) return;
 
-					const $ele = $(`#${id}`);
-					if (!$ele.length) return;
+		try {
+			let totalXp = 0;
+			let totalNumOfMonsters = 0;
+			const processedCreatures = [];
+			const page = UrlUtil.PG_BESTIARY;
 
-					// Capture the renderer's 'this' context
-					const _renderer = this;
+			await Promise.all(combatants.map(async function (c) {
+				if (!c.hasOwnProperty("creature")) return null;
+				const qty = c.quantity || 1;
 
-					try {
-						let totalXp = 0;
-						let totalNumOfMonsters = 0;
-						const processedCreatures = [];
-						const page = UrlUtil.PG_BESTIARY;
+				// Get custom hash for this creature
+				const [tagName, textArgs] = Renderer.splitFirstSpace(c.creature.slice(1, -1));
+				// let example = {
+				// 	"name": "Giant Bat",
+				// 	"displayText": "",
+				// 	"others": [
+				// 		"scaled=2",
+				// 	],
+				// 	"page": "bestiary.html",
+				// 	"source": "MM",
+				// 	"hash": "giant%20bat_mm",
+				// 	"preloadId": "giant bat__mm__2____",
+				// 	"subhashes": [
+				// 		{
+				// 			"key": "scaled",
+				// 			"value": 2,
+				// 		},
+				// 	],
+				// 	"linkText": "Giant Bat (CR 2)",
+				// 	"hashPreEncoded": true,
+				// };
+				const {name, source, hash, subhashes} = Renderer.utils.getTagMeta(tagName, textArgs);
+				const baseMon = await DataLoader.pCacheAndGetHash(
+					page,
+					hash,
+				);
+				if (!baseMon || !baseMon.name) throw Error({message: `Error retrieving monster`});
+				const scaledCr = subhashes?.find(item => item.key === "scaled")?.value;
+				const mon = typeof scaledCr !== "undefined" ? await ScaleCreature.scale(baseMon, scaledCr) : baseMon;
 
-						await Promise.all(creatures.map(async function (c) {
-							if (!c.hasOwnProperty("creature")) return null;
-							const qty = c.quantity || 1;
+				// Only add to XP totals if not an NPC
+				if (!mon.isNpc) {
+					const baseCr = mon.cr.cr || mon.cr;
+					totalXp += Parser.crToXpNumber(baseCr) * qty;
+					totalNumOfMonsters += qty;
+				}
 
-							// Get custom hash for this creature
-							const [tagName, textArgs] = Renderer.splitFirstSpace(c.creature.slice(1, -1));
-							// let example = {
-							// 	"name": "Giant Bat",
-							// 	"displayText": "",
-							// 	"others": [
-							// 		"scaled=2",
-							// 	],
-							// 	"page": "bestiary.html",
-							// 	"source": "MM",
-							// 	"hash": "giant%20bat_mm",
-							// 	"preloadId": "giant bat__mm__2____",
-							// 	"subhashes": [
-							// 		{
-							// 			"key": "scaled",
-							// 			"value": 2,
-							// 		},
-							// 	],
-							// 	"linkText": "Giant Bat (CR 2)",
-							// 	"hashPreEncoded": true,
-							// };
-							const {name, source, hash, subhashes} = Renderer.utils.getTagMeta(tagName, textArgs);
-							const baseMon = await DataLoader.pCacheAndGetHash(
-								page,
-								hash,
-							);
-							if (!baseMon || !baseMon.name) throw Error({message: `Error retrieving monster`});
-							const scaledCr = subhashes?.find(item => item.key === "scaled")?.value;
-							const mon = typeof scaledCr !== "undefined" ? await ScaleCreature.scale(baseMon, scaledCr) : baseMon;
+				// Return the creature data
+				// Add multiple entries for creatures with qty > 1
+				for (let i = 0; i < qty; i++) {
+					mon.hash = hash;
+					processedCreatures.push(mon);
+				}
+			})).then(creatures => combatants.filter(Boolean));
 
-							// Only add to XP totals if not an NPC
-							if (!mon.isNpc) {
-								const baseCr = mon.cr.cr || mon.cr;
-								totalXp += Parser.crToXpNumber(baseCr) * qty;
-								totalNumOfMonsters += qty;
-							}
+			// Calculate final XP
+			const multiplier = Parser.numMonstersToXpMult(totalNumOfMonsters);
+			const adjXp = (multiplier || 1) * totalXp;
 
-							// Return the creature data
-							// Add multiple entries for creatures with qty > 1
-							for (let i = 0; i < qty; i++) {
-								mon.hash = hash;
-								processedCreatures.push(mon);
-							}
-						})).then(creatures => creatures.filter(Boolean));
-
-						// Calculate final XP
-						const multiplier = Parser.numMonstersToXpMult(totalNumOfMonsters);
-						const adjXp = (multiplier || 1) * totalXp;
-
-						// Create encounter data object
-						const encounterData = {
-							name: entry.name || null,
-							adjxp: adjXp,
-							creatures: processedCreatures,
-						};
-
-						// UPDATE THE DOM
-						$ele.find(".adj-xp-value").text(adjXp);
-						$ele.find(".initiative-tracker-link").attr("data-encounter", JSON.stringify(encounterData));
-					} catch (e) {
-						$ele.find(".adj-xp-value").html(`<span class="text-danger">Error</span>`);
-						$ele.find(".initiative-tracker-link").html(`<span class="text-danger">Error: ${e.message}</span>`);
-					}
-				},
+			// Create encounter data object
+			const encounterData = {
+				name: entry.name || null,
+				adjxp: adjXp,
+				creatures: processedCreatures,
 			};
 
-			// Add the trigger element
-			textStack[0] += `<style data-rd-cache-id="${id}" data-rd-cache="encounter" onload="Renderer._cache.pRunFromEle(this)"></style>`;
+			// UPDATE THE DOM
+			$ele.find(".adj-xp-value").text(adjXp);
+			$ele.find(".initiative-tracker-link").attr("data-encounter", JSON.stringify(encounterData));
+		} catch (e) {
+			$ele.find(".adj-xp-value").html(`<span class="text-danger">Error</span>`);
+			$ele.find(".initiative-tracker-link").html(`<span class="text-danger">Error: ${e.message}</span>`);
 		}
+	};
+
+	this._setupEncounterVariationHandlers = function (id, entry, meta, options) {
+		const _this = this;
+		const $ele = $(`#${id}`);
+		$ele.find(`#${id}-variation-select`).on("change", function () {
+			const variant = $(this).val();
+			const encounterData = entry.variations?.find(v => v.variant === variant)?.combatants;
+			if (encounterData?.length) {
+				const newCreatureListAndNotes = _this._renderEncounterCreatures(encounterData, entry, [""], meta, options);
+				$ele.find(`#${id}-creatures`).html(newCreatureListAndNotes);
+				_this._renderEncounterAdjXp(id, encounterData, entry, meta, options);
+			}
+		});
 	};
 
 	this._renderVariant = function (entry, textStack, meta, options) {
@@ -1418,7 +1456,7 @@ globalThis.Renderer = function () {
 	};
 
 	this._renderVariantSub = function (entry, textStack, meta, options) {
-		// pretend this is an inline-header'd entry, but set a flag so we know not to add bold
+		// pretend this is an inline-header'ed entry, but set a flag so we know not to add bold
 		this._subVariant = true;
 		const fauxEntry = entry;
 		fauxEntry.type = "entries";

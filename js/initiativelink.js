@@ -24,10 +24,12 @@ async function sendEncounterData (data, timeout = 100) {
 			reject(new Error("No controller response"));
 		}, timeout);
 
-		function messageHandler (event) {
+		async function messageHandler (event) {
 			if (event.data.type === "controller_ack" && event.data.timestamp === message.timestamp) {
 				clearTimeout(timer);
 				channel.removeEventListener("message", messageHandler);
+				// showAlert("Data Sent", "<p>New encounter data sent to your Voice Initiative Controller tab.</p>");
+				await InputUiUtil.pGetUserBoolean({title: "Encounter Data Sent", htmlDescription: `<p>New encounter data sent to your Voice Initiative Controller tab.</p>`, isAlert: true});
 				resolve(event.data);
 			}
 		}
@@ -40,7 +42,8 @@ async function sendEncounterData (data, timeout = 100) {
 
 // Listen for controller ready messages with a separate handler
 channel.addEventListener("message", async (event) => {
-	console.log("Received message:", event.data);
+	// Log message data for debugging
+	console.debug("Received message:", event.data);
 	if (event.data.type === "controller_ready" && pendingEncounterData) {
 		console.log("New controller is ready, sending pending encounter data");
 		try {

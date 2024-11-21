@@ -492,28 +492,6 @@
 								"<style>.ve-night-mode .rd__b-inset--readaloud {background-color: #292229; /*302334*/} .ve-night-mode .rd__h--0, .ve-night-mode .rd__h--1, .ve-night-mode .rd__h--2 {color: #f24a38;} .ve-night-mode .rd__h--1 {border-bottom-color: #f24a38;} .ve-night-mode .hwin .ve-tbl-border {background-color: #942c20;} .ve-night-mode .stats__sect-header-inner {color: #f24a38; border-bottom-color: #942c20;} .ve-night-mode .stats__h-name {color: #f24a38;}</style>"
 							]
 						},
-						{
-							"type": "encounter",
-							"name": "Encounter: TEST!",
-							"id": "encounter block test",
-							"combatants": [
-								{
-									"creature": "{@creature Hamelia|HoE}",
-									"quantity": 1
-								},
-								{
-									"creature": "{@creature Giant Bat|||scaled=2}",
-									"quantity": 2
-								},
-								{
-									"creature": "{@creature Swarm of Bats}",
-									"quantity": 1
-								}
-							],
-							"notes": [
-								"Click the link below to launch the Voice Initiative controller screen for this encounter!"
-							]
-						},
 						"The House of Elazar by Tom Cartos is a spooky one-shot adventure designed for Dungeons & Dragons 5th Edition. The adventure is designed for 3 to 5 players of 3rd level, but its encounters are mechanically balanced for 4 players. This text is written for the Dungeon Master, and it introduces the small town of Hogsbottom (the starting setting of most of my D&D one-shots), the opening narration to help emmerse your players in the setting, and descriptions of each explorable room in the Manor, as well as encounter blocks which describe and help run individual combat encounters.",
 						{
 							"type": "entries",
