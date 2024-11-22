@@ -69,11 +69,8 @@
 							"page": 1,
 							"id": "navigating the 5etools interface",
 							"entries": [
-								"{@b 5eTools} is a website providing a suite of tools for 5th Edition Dungeons & Dragons players and Dungeon Masters.",
-								"It offers a variety of content reference pages, like creatures, classes, feats or items.",
-								"It also offers a robust set of utility pages like \"this is your life\" from Xanathar's Guide to Everything, a Stat Generation page and DM Screen view.",
-								"It also has a complete system for adding third party homebrew materials featuring a builder and a repository of already converted content.",
-								"I suggest you start {@link https://wiki.tercept.net/en/5eTools|here} to get you basic quetsions answered."
+								"{@b 5eTools} is a website providing a suite of tools for 5th Edition Dungeons & Dragons players and Dungeon Masters. It offers a variety of content reference pages, like creatures, classes, feats or items. It also offers a robust set of utility pages like \"this is your life\" from Xanathar's Guide to Everything, a Stat Generation page and DM Screen view. It also has a complete system for adding third party homebrew materials featuring a builder and a repository of already converted content.",
+								"I suggest you start {@link here|https://wiki.tercept.net/en/5eTools} to get you basic quetsions answered."
 							]
 						},
 						{
@@ -82,7 +79,7 @@
 							"page": 1,
 							"id": "orcnog customizations",
 							"entries": [
-								"This site is a duplicate of the original {@link https://5e.tools}, forked from Giddy's repo, and with my own small customizations added. While I have tried to keep the site as clean and close to the original as I can, there's no guarantee that all of the latest 5eTools features have made it into this forked site just yet.",
+								"This site is a duplicate of the original {@link https://2014.5e.tools}, forked from Giddy's repo, and with my own small customizations added. While I have tried to keep the site as clean and close to the original as I can, there's no guarantee that all of the latest 5eTools features have made it into this forked site just yet.",
 								"That said, I will try to always ensure that this site is in a working state (even if it's not as up to date as humaly possible).  &lt;/Disclaimer&gt;"
 							]
 						}
@@ -110,7 +107,8 @@
 									"combatants": [
 										{
 											"creature": "{@creature Hamelia|HoE}",
-											"quantity": 1
+											"quantity": 1,
+											"npc": true
 										},
 										{
 											"creature": "{@creature Giant Bat|||scaled=2}",
@@ -133,11 +131,12 @@
 									"varyBy": "Party Size",
 									"variations": [
 										{
-											"variant": "3",
+											"variantName": "3",
 											"combatants": [
 												{
 													"creature": "{@creature Hamelia|HoE}",
-													"quantity": 1
+													"quantity": 1,
+													"npc": true
 												},
 												{
 													"creature": "{@creature Giant Bat|||scaled=3}",
@@ -145,20 +144,22 @@
 												},
 												{
 													"creature": "{@creature Swarm of Bats}",
-													"quantity": 1
+													"quantity": 1,
+													"note": "This is an additional note about the swarm of bats."
 												}
 											],
 											"notes": [
-												"Click the link below to launch the Voice Initiative controller screen for this encounter!"
+												"V3 Click the link below to launch the Voice Initiative controller screen for this encounter!"
 											]
 										},
 										{
-											"variant": "4",
+											"variantName": "4",
 											"default": true,
 											"combatants": [
 												{
 													"creature": "{@creature Hamelia|HoE}",
-													"quantity": 1
+													"quantity": 1,
+													"npc": true
 												},
 												{
 													"creature": "{@creature Giant Bat|||scaled=2}",
@@ -166,19 +167,21 @@
 												},
 												{
 													"creature": "{@creature Swarm of Bats}",
-													"quantity": 1
+													"quantity": 1,
+													"note": "This is an additional note about the swarm of bats."
 												}
 											],
 											"notes": [
-												"Click the link below to launch the Voice Initiative controller screen for this encounter!"
+												"V4 Click the link below to launch the Voice Initiative controller screen for this encounter!"
 											]
 										},
 										{
-											"variant": "5",
+											"variantName": "5",
 											"combatants": [
 												{
 													"creature": "{@creature Hamelia|HoE}",
-													"quantity": 1
+													"quantity": 1,
+													"npc": true
 												},
 												{
 													"creature": "{@creature Giant Bat|||scaled=2}",
@@ -186,7 +189,8 @@
 												},
 												{
 													"creature": "{@creature Swarm of Bats}",
-													"quantity": 2
+													"quantity": 2,
+													"note": "This is an additional note about the swarm of bats."
 												},
 												{
 													"creature": "{@creature Animated Broom|cm|Animated Rake}",
@@ -194,7 +198,7 @@
 												}
 											],
 											"notes": [
-												"Click the link below to launch the Voice Initiative controller screen for this encounter!"
+												"V5 Click the link below to launch the Voice Initiative controller screen for this encounter!"
 											]
 										}
 									]
@@ -275,14 +279,30 @@
 							"page": 1,
 							"id": "in-game",
 							"entries": [
-								"During game-play, you'll need to be familiar with the various elements you'll see in the adventure text.  Such as \"readalouds\":",
+								"During game-play, you'll need to be familiar with the various elements you'll see in the adventure text.  Such as \"boxed text\" and \"readalouds\":",
+								{
+									"type": "entries",
+									"name": "Boxed Text",
+									"page": 1,
+									"id": "boxed text",
+									"entries": [
+										"When you see boxed text (sometimes referred to as an inset block) like the following, it is meant to highlight important information, be it backstory, a note about a trap, or something else. Occassionally, the text is intended to be read aloud to the players, but if that's the case, it will be clearly noted. (see \"Readalouds\" below). This {@i is} a convention of D&D adventure texts.",
+										{
+											"type": "inset",
+											"page": 1,
+											"entries": [
+												"This is an example inset (boxed) text block."
+											]
+										}
+									]
+								},
 								{
 									"type": "entries",
 									"name": "Readalouds",
 									"page": 1,
 									"id": "readalouds",
 									"entries": [
-										"When you see an inset block like the following throughout this adventure, this text is meant to be read aloud to your players in-game.  (This {@i is} a convention of D&D adventure texts.)",
+										"When you see an inset block like the following throughout this adventure, this text is always meant to be read aloud to your players in-game.  This {@i is} a convention of D&D adventure texts.",
 										{
 											"type": "insetReadaloud",
 											"page": 1,
@@ -290,6 +310,17 @@
 												"This is an example readaloud text block."
 											]
 										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "DM Tutorials",
+									"page": 1,
+									"id": "dm tutorials",
+									"entries": [
+										"For more detailed instructions on how to run adventures from adventure text, please see the excellent \"{@adventure Running the Adventure|lmop|0|Running the Adventure}\" DM tutorial in the Lost Mines of Phandelver adventure. It was written for the physical hardback book, but the instructions are still relevant for this digital version as well.",
+										"For more in-depth examples of how to author 5eTools content for adventures/books leveraging the suite of 5eTools conventions, features, and tricks, please see the very clutch \"{@5etools Render Demo|renderdemo.html}\".",
+										"Other excellent tools for content creators include the {@5etools Homebrew Builder|makebrew.html} to assist in creating your own homebrew \"source\", the {@5etools Text Converter|converter.html} to assist in {@i beginning to} {@footnote convert your work|One could spend hours trying to write a proper tutorial for this tool, but suffice it to say to a newcomer, start by tinkering with the \"Mode\" and \"Parse as...\" options after hovering over the hamburger menu icon: <span style=\"display: inline-flex; position: static;\" class=\"sidemenu__toggle\"><span class=\"sidemenu__hotzone\"></span><span class=\"sidemenu__burger\"></span><span class=\"sidemenu__burger\"></span><span class=\"sidemenu__burger\"></span></span>} into a format compatible with 5eTools ({@i it's a good starting point, but you'll still need to do some manual work}), and the {@5etools Encounter Builder|bestiary.html#goblin_mm,encounterbuilder:true} tool within the Bestiary page to help {@footnote build and balance combat encounters|Add/remove creatures to/from the bestiary by clicking the (<span class=\"best-ecgen__visible ve-col-1 no-wrap pl-0 ve-btn-group\"><button class=\"ve-btn ve-btn-success ve-btn-xs best-ecgen__btn-list\" title=\"Add (SHIFT for 5)\"><span class=\"glyphicon glyphicon-plus\"></span></button><button class=\"ve-btn ve-btn-danger ve-btn-xs best-ecgen__btn-list\" title=\"Subtract (SHIFT for 5)\"><span class=\"glyphicon glyphicon-minus\"></span></button></span> buttons, or exit out of the Encounter Builder mode by clicking the <button class=\"ve-btn ve-btn-success ve-btn-xs\">Back to Stat Blocks</button> button. Re-enter encounter builder mode by clicking the <button class=\"ve-btn ve-btn-success ve-btn-xs mr-2\">Encounter Builder</button> button.}."
 									]
 								}
 							]

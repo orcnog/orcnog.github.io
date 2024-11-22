@@ -1233,7 +1233,7 @@ globalThis.Renderer = function () {
 				<div class="encounter-variation-select">
 					<label for="${id}-variation-select" class="encounter-variation-select-label">${entry.varyBy || "Variation"}</label>
 					<select id="${id}-variation-select" class="form-control input-sm encounter-variation-select-input">
-						${entry.variations.map((v, i) => `<option value="${v.variant || i}" ${v.default ? "selected" : ""}>${v.variant || `Variant ${i + 1}`}</option>`).join("")}
+						${entry.variations.map((v, i) => `<option value="${v.variantName || i}" ${v.default ? "selected" : ""}>${v.variantName || `Variant ${i + 1}`}</option>`).join("")}
 					</select>
 				</div>`;
 			}
@@ -1247,10 +1247,11 @@ globalThis.Renderer = function () {
 
 		textStack[0] += `</${this.wrapperTag}>`;
 
-		const combatants = entry.combatants || (entry.variations ? (entry.variations.find(v => v.default === true) || entry.variations[0])?.combatants : []) || [];
+		const encounterData = entry.combatants ? { combatants: entry.combatants, notes: entry.notes } : entry.variations ? (entry.variations.find(v => v.default === true) || entry.variations[0]) : {};
 
 		textStack[0] += `<${this.wrapperTag} id="${id}-creatures">`;
-		textStack[0] += this._renderEncounterCreatures(combatants, entry, [""], meta, options);
+		textStack[0] += this._renderEncounterCreatures(encounterData, [""], meta, options);
+		textStack[0] += this._renderEncounterNotes(encounterData, [""], meta, options);
 		textStack[0] += `</${this.wrapperTag}>`;
 
 		this._lastDepthTrackerInheritedProps = cachedLastDepthTrackerProps;
@@ -1261,8 +1262,7 @@ globalThis.Renderer = function () {
 		Renderer._cache.encounter[id] = {
 			pFn: async () => {
 				// Render the adjusted XP. Must be done after the textStack has been output to the DOM.
-				await this._renderEncounterAdjXp(id, combatants, entry, meta, options);
-
+				await this._renderEncounterAdjXp(id, encounterData, entry, meta, options);
 				// Set up variation selector handlers. Must be done after the textStack has been output to the DOM.
 				this._setupEncounterVariationHandlers(id, entry, meta, options);
 			},
@@ -1272,7 +1272,8 @@ globalThis.Renderer = function () {
 		textStack[0] += `<style data-rd-cache-id="${id}" data-rd-cache="encounter" onload="Renderer._cache.pRunFromEle(this)"></style>`;
 	};
 
-	this._renderEncounterCreatures = function (combatants, entry, textStack, meta, options) {
+	this._renderEncounterCreatures = function (encounterData, textStack, meta, options) {
+		const combatants = encounterData.combatants;
 		const fauxEntry = {
 			type: "list",
 			style: "list-no-bullets",
@@ -1283,36 +1284,44 @@ globalThis.Renderer = function () {
 				const out = {...ent, type: "item"};
 
 				if (ent.creature) {
-					const qty = ent.quantity || 1;
 					const creature = ent.creature;
-					out.entry = `${qty} x ${creature}`;
+					const qty = ent.quantity || 1;
+					const npcNote = ent.npc === true ? `{@note (NPC)}` : "";
+					const creatureNote = ent.note ? `{@note ${ent.note}}` : "";
+					out.entry = `${qty} x ${creature} ${npcNote} ${creatureNote}`;
 				}
 				return out;
 			}),
 		};
 		this._renderList(fauxEntry, textStack, meta, options);
 
-		const len = entry.notes?.length || 0;
+		return textStack[0];
+	};
+
+	this._renderEncounterNotes = function (encounterData, textStack, meta, options) {
+		const notes = encounterData.notes;
+		const len = notes?.length || 0;
 		if (len > 0) {
 			textStack[0] += `<i class="ve-muted">`;
-			entry.notes[0] = `<b>Notes: </b>${entry.notes[0]}`;
+			notes[0] = `<b>Notes: </b>${notes[0]}`;
 			for (let i = 0; i < len; ++i) {
 				const cacheDepth = meta.depth;
 				meta.depth = 2;
-				this._recursiveRender(entry.notes[i], textStack, meta, {prefix: "<p>", suffix: "</p>"});
+				this._recursiveRender(notes[i], textStack, meta, {prefix: "<p>", suffix: "</p>"});
 				meta.depth = cacheDepth;
 			}
 			textStack[0] += `</i>`;
 		}
 		textStack[0] += `<hr/>`;
-		textStack[0] += `<${this.wrapperTag}>Run: <a class="initiative-tracker-link" data-encounter=""" href="javascript:void(0)">Initiative Tracker</a></${this.wrapperTag}>`;
+		textStack[0] += `<${this.wrapperTag}>Run: <a class="initiative-tracker-link" data-encounter="" href="javascript:void(0)">Initiative Tracker</a></${this.wrapperTag}>`;
 		textStack[0] += `<div class="float-clear"></div>`;
 		textStack[0] += `</${this.wrapperTag}>`;
 
 		return textStack[0];
 	};
 
-	this._renderEncounterAdjXp = async function (id, combatants, entry, meta, options) {
+	this._renderEncounterAdjXp = async function (id, encounterData, entry, meta, options) {
+		const combatants = encounterData.combatants;
 		if (!combatants.length) return;
 
 		const $ele = $(`#${id}`);
@@ -1327,28 +1336,10 @@ globalThis.Renderer = function () {
 			await Promise.all(combatants.map(async function (c) {
 				if (!c.hasOwnProperty("creature")) return null;
 				const qty = c.quantity || 1;
+				const taggedNpc = c.npc === true;
 
 				// Get custom hash for this creature
 				const [tagName, textArgs] = Renderer.splitFirstSpace(c.creature.slice(1, -1));
-				// let example = {
-				// 	"name": "Giant Bat",
-				// 	"displayText": "",
-				// 	"others": [
-				// 		"scaled=2",
-				// 	],
-				// 	"page": "bestiary.html",
-				// 	"source": "MM",
-				// 	"hash": "giant%20bat_mm",
-				// 	"preloadId": "giant bat__mm__2____",
-				// 	"subhashes": [
-				// 		{
-				// 			"key": "scaled",
-				// 			"value": 2,
-				// 		},
-				// 	],
-				// 	"linkText": "Giant Bat (CR 2)",
-				// 	"hashPreEncoded": true,
-				// };
 				const {name, source, hash, subhashes} = Renderer.utils.getTagMeta(tagName, textArgs);
 				const baseMon = await DataLoader.pCacheAndGetHash(
 					page,
@@ -1359,7 +1350,7 @@ globalThis.Renderer = function () {
 				const mon = typeof scaledCr !== "undefined" ? await ScaleCreature.scale(baseMon, scaledCr) : baseMon;
 
 				// Only add to XP totals if not an NPC
-				if (!mon.isNpc) {
+				if (!taggedNpc) {
 					const baseCr = mon.cr.cr || mon.cr;
 					totalXp += Parser.crToXpNumber(baseCr) * qty;
 					totalNumOfMonsters += qty;
@@ -1371,7 +1362,7 @@ globalThis.Renderer = function () {
 					mon.hash = hash;
 					processedCreatures.push(mon);
 				}
-			})).then(creatures => combatants.filter(Boolean));
+			})).then(combatants => combatants.filter(Boolean));
 
 			// Calculate final XP
 			const multiplier = Parser.numMonstersToXpMult(totalNumOfMonsters);
@@ -1398,10 +1389,11 @@ globalThis.Renderer = function () {
 		const $ele = $(`#${id}`);
 		$ele.find(`#${id}-variation-select`).on("change", function () {
 			const variant = $(this).val();
-			const encounterData = entry.variations?.find(v => v.variant === variant)?.combatants;
-			if (encounterData?.length) {
-				const newCreatureListAndNotes = _this._renderEncounterCreatures(encounterData, entry, [""], meta, options);
-				$ele.find(`#${id}-creatures`).html(newCreatureListAndNotes);
+			const encounterData = entry.variations?.find(v => v.variantName === variant);
+			if (encounterData) {
+				const newCreatureList = _this._renderEncounterCreatures(encounterData, [""], meta, options);
+				const newEncounterNotes = _this._renderEncounterNotes(encounterData, [""], meta, options);
+				$ele.find(`#${id}-creatures`).html(newCreatureList + newEncounterNotes);
 				_this._renderEncounterAdjXp(id, encounterData, entry, meta, options);
 			}
 		});
@@ -3245,6 +3237,7 @@ Renderer.getFilterSubhashes = function (filters, namespace = null) {
 
 Renderer._cache = {
 	inlineStatblock: {},
+	encounter: {},
 
 	async pRunFromEle (ele) {
 		const cached = Renderer._cache[ele.dataset.rdCache][ele.dataset.rdCacheId];

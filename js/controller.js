@@ -1,9 +1,16 @@
 // TODO:
 // 1. Add feature that totals up all encounters in an adventure and displays the total adjusted XP vs Daily Budget.
-// 2. Related to #2, I think! Apparently, there are some 5et creatures with CRs set to "0.5" instead of "1/2".  Need to handle for those. See: Aberrant Spirit (TCE).
-// 3. Related to #1, I think! 5et handles for summoned CRs. I haven't bothered... but I feel like I need to eventually support them.
+// 2. Related to #3, I think! 5et handles for summoned CRs. I haven't bothered... but I feel like I need to eventually support them.
+// 3. Related to #2, I think! Apparently, there are some 5et creatures with CRs set to "0.5" instead of "1/2".  Need to handle for those. See: Aberrant Spirit (TCE).
 // 4. Apparently, some creatures have no CR listed.  Need to handle for those in controller.js AND render.js encounter adj xp calculation.
-// 5. Support Day Mode.
+// 5a. IDEA: allow monster rows to have "onHalfHealth" and "onZeroHealth" attributes, which can produce popups with text notes as those combatants HP changes.
+// 5b. Support this in the Encounter Block in render.js
+// 5c. Add a context menu option to add / edit these attributes in the controller.js interface. (Don't send this info to the voice app.)
+// 6a. IDEA (related to #5): allow encounters to have "Turn 0" thru "Turn N" popup notes as well.
+// 6b. Support in Encounter Blocks: probably display as nested entries UNDER the Run: Initiative Tracker link.
+// 6c. Support in controller.js interface??  Not sure what that UI/UX would be like.
+// 7. Support Day Mode.
+// 8. Allow for "hidden" combatants in the controller.js side. Might need to support this on the voice app side, as advancing a turn to a hidden creature would have to be handled by probably highlighting no creature in the app.
 
 import { VOICE_APP_PATH } from "./controller-config.js";
 
