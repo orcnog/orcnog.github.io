@@ -3,15 +3,15 @@ import * as ut from "./util.js";  // Assuming `listFiles` and `readJson` exist i
 
 // Function to find all valid 'data' nodes (from adventureData or top-level)
 const findDataNodes = (json) => {
-    const isValidData = (arr) => arr.some(item => item.type === "section" || item.type === "entries");
+	const isValidData = (arr) => arr.some(item => item.type === "section" || item.type === "entries");
 
-    const adventureDataNodes = (json.adventureData || [])
-        .filter(adventure => Array.isArray(adventure.data) && isValidData(adventure.data))
-        .map(adventure => adventure.data);
+	const adventureDataNodes = (json.adventureData || [])
+		.filter(adventure => Array.isArray(adventure.data) && isValidData(adventure.data))
+		.map(adventure => adventure.data);
 
-    const topLevelDataNode = Array.isArray(json.data) && isValidData(json.data) ? [json.data] : [];
+	const topLevelDataNode = Array.isArray(json.data) && isValidData(json.data) ? [json.data] : [];
 
-    return [...adventureDataNodes, ...topLevelDataNode].length ? [...adventureDataNodes, ...topLevelDataNode] : null;
+	return [...adventureDataNodes, ...topLevelDataNode].length ? [...adventureDataNodes, ...topLevelDataNode] : null;
 };
 
 // Function to find @item and @creature tags
