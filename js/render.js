@@ -1222,6 +1222,9 @@ globalThis.Renderer = function () {
 		const partExpandCollapse = !this._isPartPageExpandCollapseDisabled ? this._getPtExpandCollapseSpecial() : "";
 		const partPageExpandCollapse = `<span class="ve-flex-vh-center">${[pagePart, partExpandCollapse].filter(Boolean).join("")}</span>`;
 
+		const defaultVariant = entry.variations?.find(v => v.default) || entry.variations[0] || {}; // Default to the first found
+		const DEFAULT_VARIANT_INDEX = entry.variations.findIndex(v => v.variantName === defaultVariant.variantName) || 0;
+
 		textStack[0] += `<${this.wrapperTag} class="encounter-title">`;
 		if (entry.name != null) {
 			if (Renderer.ENTRIES_WITH_ENUMERATED_TITLES_LOOKUP[entry.type]) this._handleTrackTitles(entry.name);
@@ -1233,7 +1236,7 @@ globalThis.Renderer = function () {
 				<div class="encounter-variation-select">
 					<label for="${id}-variation-select" class="encounter-variation-select-label">${entry.varyBy || "Variation"}</label>
 					<select id="${id}-variation-select" class="form-control input-sm encounter-variation-select-input">
-						${entry.variations.map((v, i) => `<option value="${v.variantName || i}" ${v.default ? "selected" : ""}>${v.variantName || `Variant ${i + 1}`}</option>`).join("")}
+                    ${entry.variations.map((v, i) => `<option value="${v.variantName || i}" ${i === DEFAULT_VARIANT_INDEX ? "selected" : ""}>${v.variantName || `Variant ${i + 1}`}</option>`).join("")}
 					</select>
 				</div>`;
 			}
@@ -1241,9 +1244,9 @@ globalThis.Renderer = function () {
 			textStack[0] += `<span class="rd__h rd__h--2-inset rd__h--2-inset-no-name">${partPageExpandCollapse}</span>`;
 		}
 
-		textStack[0] += `<p id="${id}-adj-xp" class="encounter-adj-xp">`;
-		this._recursiveRender(`{@footnote Adjusted XP: <span class="adj-xp-value">${adjXp || "Calculating..."}</span>|This tells you the "Adjusted XP" of the encounter, which helps you estimate its difficulty and helps you balance the encounter against a party's "{@footnote daily budget|A rough estimate of the adjusted XP value for encounters the party can handle before the characters will need to take a long rest.|Daily Budget}", using the {@table The Adventuring Day; Adventuring Day XP|DMG|Adventuring Day XP} table in the {@book DMG}.|Encounter Difficulty},`, textStack, meta);
-		textStack[0] += `</p>`;
+		textStack[0] += `<div id="${id}-adj-xp" class="encounter-adj-xp">`;
+		textStack[0] += `<span class="difficulty-value">"Calculating..."</span>`;
+		textStack[0] += `</div>`;
 
 		textStack[0] += `</${this.wrapperTag}>`;
 
@@ -1262,9 +1265,11 @@ globalThis.Renderer = function () {
 		Renderer._cache.encounter[id] = {
 			pFn: async () => {
 				// Render the adjusted XP. Must be done after the textStack has been output to the DOM.
-				await this._renderEncounterAdjXp(id, encounterData, entry, meta, options);
+				await this._renderEncounterAdjXp(id, encounterData, defaultVariant, entry, meta, options);
 				// Set up variation selector handlers. Must be done after the textStack has been output to the DOM.
-				this._setupEncounterVariationHandlers(id, entry, meta, options);
+				if (entry.variations?.length) {
+					this._setupEncounterVariationHandlers(id, entry, meta, options);
+				}
 			},
 		};
 
@@ -1320,7 +1325,25 @@ globalThis.Renderer = function () {
 		return textStack[0];
 	};
 
-	this._renderEncounterAdjXp = async function (id, encounterData, entry, meta, options) {
+	this._renderEncounterAdjXp = async function (id, encounterData, variant, entry, meta, options) {
+		// Regex matcher for party size labels
+		const partySizeLabels = [
+			"[#|num|number|no.|qty|quantity|count] of [PC|player|character|hero|team|ally|party|participant|adventurer]s?", // ex: "Number of Players"
+			"[PCs|players|characters|heroes|adventurers]", // ex: "PCs"
+			"total [PCs|players|characters|heroes|adventurers]", // ex: "Total Players"
+			"[#|num|number|no.|qty|quantity] in party", // ex: "# in Party"
+			"[PC|player|character|hero|team|ally|party|participant|adventurer] count", // ex: "Player Count"
+			"party size",
+			"party members",
+			"group size",
+			"size of [party|team|adventuring party]", // ex: Size of Party
+			"team size",
+			"group members",
+			"adventuring party",
+			"player group",
+		];
+		const playerCountRegex = new RegExp(partySizeLabels.join("|"), "i");
+		const isVaryingByPlayerCount = entry.varyBy ? playerCountRegex.test(entry.varyBy) : false;
 		const combatants = encounterData.combatants;
 		if (!combatants.length) return;
 
@@ -1368,6 +1391,39 @@ globalThis.Renderer = function () {
 			const multiplier = Parser.numMonstersToXpMult(totalNumOfMonsters);
 			const adjXp = (multiplier || 1) * totalXp;
 
+			// Define the party size and average level
+			const partySize = Number(variant.variantName) || 4;
+			const avgPartyLevel = 3; // Replace with actual average party level
+
+			// Calculate XP thresholds based on average player level
+			const xpThresholds = {
+				easy: Parser.LEVEL_TO_XP_EASY[avgPartyLevel] * partySize,
+				medium: Parser.LEVEL_TO_XP_MEDIUM[avgPartyLevel] * partySize,
+				hard: Parser.LEVEL_TO_XP_HARD[avgPartyLevel] * partySize,
+				deadly: Parser.LEVEL_TO_XP_DEADLY[avgPartyLevel] * partySize,
+				absurd: (Parser.LEVEL_TO_XP_DEADLY[avgPartyLevel] * partySize) + ((Parser.LEVEL_TO_XP_DEADLY[avgPartyLevel] * partySize) - (Parser.LEVEL_TO_XP_HARD[avgPartyLevel] * partySize)),
+			};
+
+			const _TITLE_DIFFICULTIES = {
+				easy: "An easy encounter doesn't tax the characters' resources or put them in serious peril. They might lose a few hit points, but victory is pretty much guaranteed.",
+				medium: "A medium encounter usually has one or two scary moments for the players, but the characters should emerge victorious with no casualties. One or more of them might need to use healing resources.",
+				hard: "A hard encounter could go badly for the adventurers. Weaker characters might get taken out of the fight, and there's a slim chance that one or more characters might die.",
+				deadly: "A deadly encounter could be lethal for one or more player characters. Survival often requires good tactics and quick thinking, and the party risks defeat",
+				absurd: "An &quot;absurd&quot; encounter is a deadly encounter as per the rules, but is differentiated here to provide an additional tool for judging just how deadly a &quot;deadly&quot; encounter will be. It is calculated as: &quot;deadly + (deadly - hard)&quot;.",
+			};
+
+			// Calculate the daily budget
+			const dailyBudget = Parser.LEVEL_TO_XP_DAILY[avgPartyLevel] * partySize;
+
+			// Determine the difficulty based on adjusted XP and party size
+			let difficultyKey;
+			if (adjXp < xpThresholds.easy) difficultyKey = "Trivial";
+			else if (adjXp < xpThresholds.medium) difficultyKey = "Easy";
+			else if (adjXp < xpThresholds.hard) difficultyKey = "Medium";
+			else if (adjXp < xpThresholds.deadly) difficultyKey = "Hard";
+			else if (adjXp < xpThresholds.absurd) difficultyKey = "Deadly";
+			else difficultyKey = "Absurd";
+
 			// Create encounter data object
 			const encounterData = {
 				name: entry.name || null,
@@ -1375,8 +1431,19 @@ globalThis.Renderer = function () {
 				creatures: processedCreatures,
 			};
 
+			const difficultyTempStack = [""];
+			this._recursiveRender(`{@footnote Difficulty: ${difficultyKey}|
+				Based on a party size of {@color ${partySize}|--rgb-warning} player characters at level {@color ${avgPartyLevel}|--rgb-warning}:<br/><br/>
+				{@b Difficulty}: {@footnote ${difficultyKey}|${_TITLE_DIFFICULTIES[difficultyKey.toLowerCase()]}|${difficultyKey} Encounter}.<br/>
+				{@footnote {@b Adjusted XP}|Adjusted by a multiplier of {@color ×${multiplier}|--rgb-warning}, based on a party size of {@color ${partySize}|--rgb-warning} encountering {@color ${totalNumOfMonsters}|--rgb-warning} hostile creatures.<br/><br/>{@note Based on the {@table Encounter Multipliers; Encounter Multipliers|DMG|Encounter Multipliers} table in the {@book DMG}.}<br/><br/>|Adjusted XP}: ${adjXp}<br/>
+				{@footnote {@b Daily Budget}|A rough estimate of the adjusted XP value for encounters the party can handle before the characters will need to take a long rest, based on the {@table The Adventuring Day; Adventuring Day XP|DMG|Adventuring Day XP} table in the {@book DMG}.|Daily Budget}: ${dailyBudget}<br/>
+				|Encounter Difficulty}`, difficultyTempStack, meta);
+
 			// UPDATE THE DOM
 			$ele.find(".adj-xp-value").text(adjXp);
+			// $ele.find(".difficulty-value").text(difficultyKey);
+			$ele.find(".difficulty-value").html(difficultyTempStack.join(""));
+			$ele.find(".daily-budget-value").text(dailyBudget);
 			$ele.find(".initiative-tracker-link").attr("data-encounter", JSON.stringify(encounterData));
 		} catch (e) {
 			$ele.find(".adj-xp-value").html(`<span class="text-danger">Error</span>`);
@@ -1394,7 +1461,7 @@ globalThis.Renderer = function () {
 				const newCreatureList = _this._renderEncounterCreatures(encounterData, [""], meta, options);
 				const newEncounterNotes = _this._renderEncounterNotes(encounterData, [""], meta, options);
 				$ele.find(`#${id}-creatures`).html(newCreatureList + newEncounterNotes);
-				_this._renderEncounterAdjXp(id, encounterData, entry, meta, options);
+				_this._renderEncounterAdjXp(id, encounterData, variant, entry, meta, options);
 			}
 		});
 	};
