@@ -706,7 +706,7 @@
 				{
 					"name": "Elf Recon: Christmas Crash!",
 					"headers": [
-						"Running The Adventure",
+						"Running the Adventure",
 						"Player Builds",
 						"Before The Session"
 					]
@@ -721,10 +721,7 @@
 					"name": "Frozen Waterfall"
 				},
 				{
-					"name": "Winter Wolves Attack!"
-				},
-				{
-					"name": "Icy Cavern Entry"
+					"name": "Ice Cavern Entry"
 				},
 				{
 					"name": "Yeti Encounter"
@@ -736,10 +733,26 @@
 					"name": "Kobolds & Sorcerer"
 				},
 				{
-					"name": "The Evilt Easter Bunny"
+					"name": "The Evil Easter Bunny",
+					"headers": [
+						"Victory"
+					]
 				},
 				{
-					"name": "Santa"
+					"name": "Santa",
+					"headers": [
+						"Figuring Out the Real Santa",
+						"Deciding Santa's Fate"
+					]
+				},
+				{
+					"name": "A Hoppy Ending"
+				},
+				{
+					"name": "And To All a Good Night!"
+				},
+				{
+					"name": "Alternate Shortened Ending"
 				}
 			],
 			"level": {
@@ -1218,17 +1231,23 @@
 						{
 							"type": "entries",
 							"name": "Victory",
+							"id": "victory",
 							"entries": [
 								"When the players vanquish the Easter Bunny, read the following aloud:",
 								{
 									"type": "insetReadaloud",
 									"entries": [
-										"The Easter Bunny staggers back, clutching her chest dramatically. \"No! My reign of pastel perfection... undone by {@i elves} and their insufferable {@i Christmas cheer}! Curse you!\"",
+										"The Easter Bunny staggers back, clutching her chest dramatically. \"No! My reign of pastel perfection... undone by {@i elves} and their insufferable {@i Christmas cheer}! Curse you!\""
+									]
+								},
+								"{@cue If time is {@i extremely} short, consider skipping to the final narration: {@area And To All a Good Night!|and_to_all_a_good_night|x}|critical} <br/>{@cue If time is kinda short, proceed to the {@area Alternate Shortened Ending|alternate_shortened_ending|x}|media} <br/>{@cue Or preferably, time permitting, continue from here...|info}",
+								{
+									"type": "insetReadaloud",
+									"entries": [
 										"With a final gasp, her fluffy exterior melts away and her form shrinks, revealing a small gnarled goblin, sprawled on the ground. A golden crown with oversized bunny ears tumbles from her head, landing with a soft clink beside a {@i treasure chest}, emblazoned with a colorful Easter egg lock. The room grows still, save for the faint shimmer of magical light around the crown."
 									]
 								},
-								"The treasure chest requires a {@cue DC 10 Thieves' Tools check} to open, or clever use of a weapon, spell, or item.",
-								"When the players open the chest, read the following aloud:",
+								"The treasure chest requires a {@cue DC 10 Thieves' Tools check} to open, or clever use of a weapon, spell, or item. When the players open the chest, read the following aloud:",
 								{
 									"type": "insetReadaloud",
 									"entries": [
@@ -1242,6 +1261,7 @@
 				{
 					"type": "entries",
 					"name": "Santa",
+					"id": "santa",
 					"entries": [
 						"Santa's fingers bleed as he works them to the bone, crafting tiny trinkets and tiny toys for Easter eggs. Read the following \"flash back cut scene\":",
 						{
@@ -1255,7 +1275,7 @@
 								"The fake Santa grins wickedly. \"Ho ho ho! Let's see them figure this out, shall we?\""
 							]
 						},
-						"Now, read the following as the players come down the final tunnel:",
+						"Now, cut {@i back} to the players' perspective. Read the following as the players come down the final tunnel:",
 						{
 							"type": "insetReadaloud",
 							"entries": [
@@ -1277,6 +1297,7 @@
 							"type": "entries",
 							"name": "Figuring Out the Real Santa",
 							"entries": [
+								"A few clues may factor into the players' deliberation over which Santa is the {@i real Santa}...",
 								{
 									"type": "entries",
 									"name": "Santa's bleeding fingers:",
@@ -1297,46 +1318,124 @@
 									"entries": [
 										"Let the players surprise you! Basically any half-decent idea should be successful. Bonus points for allowing a character to tie it in with their backstory or something!"
 									]
+								}
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Deciding Santa's Fate",
+							"entries": [
+								"The players may decide to attack the bad Santa, return the hat to the good Santa, or accuse the bad Santa in a social interaction. Choose the corresponding resolution below based on their approach.",
+								{
+									"type": "entries",
+									"name": "If the Players Attack the Bad Santa",
+									"entries": [
+										"If the players attack, any amount of damage or a controlling spell instantly subdues him—this is not meant to be a combat encounter. When subdued, the bad Santa pouts and argues, then with a puff of smoke transforms back into a kobold and attempts to flee, never to be seen again."
+									]
 								},
-								"When the players make their decision, read the following:",
+								{
+									"type": "entries",
+									"name": "If the Players Return the Hat",
+									"entries": [
+										"If the players give the hat to the good Santa, a golden glow envelops him as he regains his full strength and joyful demeanor. The bad Santa scowls, his disguise breaking as he transforms into a kobold with a final huff, fleeing in a puff of smoke."
+									]
+								},
+								{
+									"type": "entries",
+									"name": "If the Players Accuse the Bad Santa",
+									"entries": [
+										"If the players accuse the bad Santa, he pouts and tries to argue, but his weak excuses and unconvincing tone betray him. Eventually, he snarls, drops his disguise in a puff of smoke, and flees the scene as a kobold."
+									]
+								},
+								"Once the players make their decision, read the following:",
 								{
 									"type": "insetReadaloud",
 									"entries": [
-										"Relief washes over Santa's face as he realizes you've chosen correctly. His eyes twinkle with gratitude, and his voice booms with warmth, \"Ho ho ho! You've done it, my friends!\" The cavern seems to brighten with joy. As you hold the embroidered red cap in your hands, you feel it quiver with anticipation, almost as if eager to return to its rightful owner.",
+										"Relief washes over the true Santa's face as he realizes you've chosen correctly. His eyes twinkle with gratitude, and his voice booms with warmth, \"Ho ho ho! You've done it, my friends!\" The cavern seems to brighten with joy. As you hold the embroidered red cap in your hands, you feel it quiver with anticipation, almost as if eager to return to its rightful owner.",
 										"{@cue [Pause for player interaction with the hat/Santa]}",
 										"The moment the hat touches Santa's head, a golden light bursts forth, enveloping him in a soft glow. His cheeks regain their rosy hue, and his belly shakes with renewed laughter. \"Ho ho ho! Christmas is saved!\" The sound of jingling sleigh bells echoes faintly, and the air fills with the faint scent of peppermint and pine."
 									]
 								}
 							]
-						},
+						}
+					]
+				},
+				{
+					"type": "entries",
+					"name": "A Hoppy Ending",
+					"id": "a_hoppy_ending",
+					"entries": [
+						"If the Easter crown still doesn't have a proper owner, read the following:",
 						{
-							"type": "entries",
-							"name": "A Hoppy Ending",
-							"id": "a_hoppy_ending",
+							"type": "insetReadaloud",
 							"entries": [
-								"If the Easter crown still doesn't have a proper owner, read the following:",
-								{
-									"type": "insetReadaloud",
-									"entries": [
-										"Just then, a familiar figure timidly steps forward from the other room—it's the kobold who showed a glimmer of kindness during the fight. He wrings his hands nervously, his gaze shifting between you and the pastel Easter crown, now gleaming with magic. \"I... I don't think Easter should try to outshine Christmas,\" he mutters, his voice trembling but sincere. \"It should be about spreading joy in its own way.\" The crown glints in the soft light, its oversized bunny ears seeming to nod in agreement. Perhaps, it's waiting for someone worthy to take up the mantle.",
-										"{@cue [Pause for player agency with the crown]}",
-										"When the crown is placed upon the kobold's head, magic swirls around him, transforming his scales into brilliant white fur. His form stretches, reshaping into a proud, upright rabbit, his ears standing tall and proud. \"I vow to honor Easter and keep it as a day of joy and delight,\" he declares, his voice filled with conviction. \"Easter will stay Easter—and never again will it try to overthrow Christmas!\" The cavern brightens further, as if the magic itself approves of this newfound harmony."
-									]
-								}
+								"Just then, a familiar figure timidly steps forward from the other room—it's the kobold who showed a glimmer of kindness during the fight. \"I... I don't think Easter should try to outshine Christmas,\" he mutters, voice trembling but sincere. \"It should be about spreading joy in its own way.\" Suddenly, you feel the bunny ear crown wiggle in delight. Glancing at the crown, you see its oversized ears seeming to nod in agreement."
 							]
 						},
+						"{@cue [Pause for player agency with the crown]}",
+						"If the players do not realize they should crown the kobold, Santa interjects...",
 						{
-							"type": "entries",
-							"name": "And To All a Good Night!",
-							"id": "and_to_all_a_good_night",
+							"type": "insetReadaloud",
 							"entries": [
+								"\"I think our heroes have another decision to make\", Santa says with a wink. \"This one seems pretty easy to me, my friends.\""
+							]
+						},
+						"If the players crown the good kobold...",
+						{
+							"type": "insetReadaloud",
+							"entries": [
+								"When the crown is placed on the kobold's head, magic swirls around him, transforming his scales into soft white fur and reshaping him into a proud, upright rabbit. Puffing out his chest, he declares, \"I vow to honor Easter and stay in my lane! Easter will stay Easter—and never again will it try to overthrow Christmas!\" The cavern resonates with harmony."
+							]
+						},
+						"After a new Easter Bunny is crowned, continue with the final narration: \"{@area And To All a Good Night!|and_to_all_a_good_night|x}\"."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Alternate Shortened Ending",
+					"id": "alternate_shortened_ending",
+					"entries": [
+						{
+							"type": "inset",
+							"entries": [
+								"If you're short on time, read this shortened ending:",
 								{
 									"type": "insetReadaloud",
 									"entries": [
-										"Leading Santa out of the cave, you step into the snowy night. The sleigh awaits, fully repaired and gleaming, surrounded by industrious North Pole elves who are repacking the scattered gifts with cheerful efficiency. Santa turns to you, his face glowing with pride. \"You've not only saved Christmas,\" he says, his voice booming with joy, \"but you've saved Easter too! The world owes you a great debt.\"",
-										"Santa steps into his sleigh, his reindeer stamping eagerly in the snow. And with a booming \"Ho ho ho! Merry Christmas to all!\" the sleigh soars into the starry night. As you watch it disappear into the distance with a twinkle, Christmas spirit fills your heart. MERRY CHRISTMAS TO ALL, INDEED!"
+										"With the Easter Bunny defeated, the cavern grows quiet, save for the faint shimmer of magical light around the golden crown with its oversized bunny ears. Santa steps forward from the shadows, his fingers raw and bleeding, but his face alight with gratitude. \"You've done it, my friends! You've saved me—and Christmas! Ho ho ho!\" He winces, glancing at the crown. \"But Easter still needs a protector, one who can keep it joyful without greed or spite.\""
 									]
-								}
+								},
+								"{@cue If the players do not volunteer or quickly come up with a solution, read the following:}",
+								{
+									"type": "insetReadaloud",
+									"entries": [
+										"From the other room, a familiar kobold cautiously steps into view, his eyes wide with hope and humility. \"I... I think I can do it,\" he says, voice trembling. \"Easter should be about spreading joy, not stealing it.\" The bunny-ear crown wiggles, almost as if it agrees. Santa gives you a knowing nod.",
+										"When the crown is placed on the kobold's head, a swirl of magic surrounds him, transforming his scaly form into a regal, upright rabbit with shimmering white fur. Puffing out his chest, he declares, \"I vow to honor Easter and keep it in its rightful place, bringing joy to all!\" The cavern resonates with harmony as the magic settles."
+									]
+								},
+								"{@cue If a player volunteers to wear the crown, read the following:}",
+								{
+									"type": "insetReadaloud",
+									"entries": [
+										"When the crown is placed on your head, a swirl of magic surrounds you, transforming your form into a regal, upright rabbit with shimmering white fur.",
+										"Santa steps forward and asks, \"Do you vow to honor Easter and keep it in its rightful place, bringing joy to all? And never to try to overthrow Christmas?\" {@cue [Pause for player response. If yes, read:]} The cavern resonates with harmony as the magic settles."
+									]
+								},
+								"After a new Easter Bunny is crowned, continue with the final narration: \"{@area And To All a Good Night!|and_to_all_a_good_night|x}\"."
+							]
+						}
+					]
+				},
+				{
+					"type": "entries",
+					"name": "And To All a Good Night!",
+					"id": "and_to_all_a_good_night",
+					"entries": [
+						{
+							"type": "insetReadaloud",
+							"entries": [
+								"Leading Santa out of the cave, you step into the snowy night. The sleigh awaits, fully repaired and gleaming, surrounded by industrious North Pole elves who are repacking the scattered gifts with cheerful efficiency. Santa turns to you, his face glowing with pride. \"You've not only saved Christmas,\" he says, his voice booming with joy, \"but you've saved Easter too! The world owes you a great debt.\"",
+								"Santa steps into his sleigh, his reindeer stamping eagerly in the snow. And as the sleigh soars into the starry night, you hear Santa's booming voice call \"Ho ho ho! Merry Christmas to all!\" as you watch it disappear into the distance with a twinkle."
 							]
 						}
 					]
