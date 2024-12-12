@@ -1,18 +1,14 @@
 {
 	"$schema": "https://raw.githubusercontent.com/TheGiddyLimit/5etools-utils/master/schema/brew-fast/homebrew.json",
 	"_meta": {
-		"dependencies": {
-			"monster": [
-				"MM"
-			]
-		},
-		"sources": [
-			{
-				"json": "HoE",
+        "sources": [
+            {
+                "json": "HoE",
 				"abbreviation": "HoE",
 				"full": "The House of Elazar",
+                "url": "https://5e.orcnog.com/homebrew/dnd/adventure/adventure_hoe.json",
 				"convertedBy": [
-					"orcnog"
+                    "orcnog"
 				],
 				"version": "1.0",
 				"color": "#851f21",
@@ -21,7 +17,12 @@
 		],
 		"dateAdded": 1729028448,
 		"dateLastModified": 1729028448,
-		"edition": "classic"
+		"edition": "classic",
+        "dependencies": {
+            "monster": [
+                "MM"
+            ]
+        }
 	},
 	"item": [
 		{

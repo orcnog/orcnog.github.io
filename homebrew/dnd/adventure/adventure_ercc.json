@@ -1,0 +1,1266 @@
+{
+	"$schema": "https://raw.githubusercontent.com/TheGiddyLimit/5etools-utils/master/schema/brew-fast/homebrew.json",
+	"_meta": {
+		"sources": [
+			{
+				"json": "ERCC",
+				"abbreviation": "ERCC",
+				"full": "Elf Recon: Christmas Crash!",
+				"url": "https://5e.orcnog.com/homebrew/dnd/adventure/adventure_ercc.json",
+				"convertedBy": [
+					"orcnog"
+				],
+				"version": "1.0",
+				"color": "ee3131"
+			}
+		],
+		"dateAdded": 1613648837,
+		"dateLastModified": 1613648837,
+		"_dateLastModifiedHash": "e5f748a123",
+		"internalCopies": [
+			"monster"
+		],
+		"dependencies": {
+			"monster": [
+				"MPMM"
+			]
+		},
+		"edition": "classic"
+	},
+	"item": [
+		{
+			"name": "Silver Bell Dust",
+			"source": "ERCC",
+			"page": 212,
+			"rarity": "uncommon",
+			"wondrous": true,
+			"entries": [
+				"A silver sleigh bell straight from Santa's sleigh (probably). When shaken it rings with a beautiful joyful sound announcing \"it's Christmas time in the city\" but also silver dust comes out of it. As an action, you can sprinkle this dust on yourself or another creature you can see within 5 feet of you. The recipient gains a flying speed of 30 feet and the ability to hover for 1 minute. If the creature is airborne when this effect ends, it falls safely to the ground, taking no damage and landing on its feet.",
+				"A silver bell holds enough dust for one use."
+			]
+		},
+		{
+			"name": "Double Shot White Chocolate Peppermint Mocha Orcnog, Extra Whip",
+			"source": "ERCC",
+			"page": 212,
+			"type": "P",
+			"rarity": "uncommon",
+			"entries": [
+				"When you drink this potion, you gain advantage on one ability check, attack roll, or saving throw of your choice that you make within the next hour.",
+				"This potion takes the form of a sparkling, golden mist that moves and pours like water."
+			]
+		}
+	],
+	"monster": [
+		{
+			"name": "Nevin McCallister",
+			"isNamedCreature": true,
+			"source": "ERCC",
+			"size": [
+				"S"
+			],
+			"type": {
+				"type": "humanoid",
+				"tags": [
+					"gnome"
+				]
+			},
+			"alignment": [
+				"C",
+				"G"
+			],
+			"ac": [
+				14
+			],
+			"hp": {
+				"average": 35,
+				"formula": "8d6 + 8"
+			},
+			"speed": {
+				"walk": 35
+			},
+			"str": 8,
+			"dex": 18,
+			"con": 12,
+			"int": 8,
+			"wis": 7,
+			"cha": 8,
+			"save": {
+				"dex": "+6",
+				"wis": "+0",
+				"int": "+1",
+				"cha": "+1"
+			},
+			"skill": {
+				"acrobatics": "+6",
+				"perception": "+0",
+				"stealth": "+6"
+			},
+			"senses": [
+				"darkvision 60 ft."
+			],
+			"passive": 10,
+			"languages": [
+				"Common",
+				"Gnomish"
+			],
+			"cr": "2",
+			"trait": [
+				{
+					"name": "Rascal Action",
+					"entries": [
+						"On each of its turns, Nevin can use a bonus action to take the Dash, Disengage, or Hide action."
+					]
+				},
+				{
+					"name": "Sugar Buzz",
+					"entries": [
+						"Due to an insane sugar high from his recent all-junk-food diet, Nevin's reflexes are, at present, otherworldly. When Nevin is makes a Dexterity saving throw to take only half damage, he instead takes no damage if he succeeds, and only half damage if he fails."
+					]
+				},
+				{
+					"name": "Little Twerp Resistance (3/Day)",
+					"entries": [
+						"If Nevin fails a saving throw, he can choose to succeed instead."
+					]
+				},
+				{
+					"name": "Pack Tactics",
+					"entries": [
+						"Nevin has advantage on an attack roll against a creature if at least one of the Nevin's allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+					]
+				}
+			],
+			"action": [
+				{
+					"name": "Pencil Stab",
+					"entries": [
+						"{@atk mw} {@hit 1} to hit, reach 5 ft., one target. {@h}1 piercing damage."
+					]
+				},
+				{
+					"name": "Pellet Gun",
+					"entries": [
+						"{@atk rw} {@hit 6} to hit, range 30/90 ft., one target. {@h}1 piercing damage."
+					]
+				}
+			],
+			"legendary": [
+				{
+					"name": "",
+					"entries": [
+						"Little Twerp Actions."
+					]
+				},
+				{
+					"name": "Move",
+					"entries": [
+						"Nevin moves up to its speed without provoking opportunity attacks."
+					]
+				},
+				{
+					"name": "Attack",
+					"entries": [
+						"Nevin makes one weapon attack."
+					]
+				}
+			],
+			"traitTags": [
+				"Pack Tactics"
+			],
+			"senseTags": [
+				"D"
+			],
+			"languageTags": [
+				"C",
+				"E"
+			],
+			"damageTags": [
+				"P"
+			],
+			"miscTags": [
+				"RW"
+			]
+		},
+		{
+			"name": "Mama McCallister",
+			"group": [
+				"Gem Dragon"
+			],
+			"source": "ERCC",
+			"page": 172,
+			"size": [
+				"L"
+			],
+			"type": {
+				"type": "dragon",
+				"tags": [
+					"gem"
+				]
+			},
+			"alignment": [
+				"C",
+				"N"
+			],
+			"alignmentPrefix": "typically ",
+			"ac": [
+				{
+					"ac": 15,
+					"from": [
+						"natural armor"
+					]
+				}
+			],
+			"hp": {
+				"average": 95,
+				"formula": "10d10 + 40"
+			},
+			"speed": {
+				"walk": 40,
+				"burrow": 20,
+				"climb": 40,
+				"fly": 80
+			},
+			"str": 17,
+			"dex": 12,
+			"con": 18,
+			"int": 16,
+			"wis": 14,
+			"cha": 17,
+			"save": {
+				"dex": "+4",
+				"con": "+7",
+				"wis": "+5",
+				"cha": "+6"
+			},
+			"skill": {
+				"perception": "+8",
+				"stealth": "+7",
+				"survival": "+5"
+			},
+			"senses": [
+				"blindsight 30 ft.",
+				"darkvision 120 ft."
+			],
+			"passive": 18,
+			"resist": [
+				"cold",
+				"radiant"
+			],
+			"languages": [
+				"Common",
+				"Draconic",
+				"telepathy 120 ft."
+			],
+			"cr": "5",
+			"spellcasting": [
+				{
+					"type": "spellcasting",
+					"name": "Spellcasting (Psionics)",
+					"headerEntries": [
+						"Mama McCallister casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 16}):"
+					],
+					"will": [
+						"{@spell dancing lights}",
+						"{@spell guidance}"
+					],
+					"daily": {
+						"1e": [
+							"{@spell hypnotic pattern}",
+							"{@spell lesser restoration}"
+						]
+					},
+					"ability": "int",
+					"displayAs": "action"
+				}
+			],
+			"action": [
+				{
+					"name": "Multiattack",
+					"entries": [
+						"Mama McCallister makes one Bite attack and two Claw attacks."
+					]
+				},
+				{
+					"name": "Purse",
+					"entries": [
+						"{@atk mw} {@hit 6} to hit, reach 10 ft., one target. {@h}14 ({@damage 2d10 + 3}) piercing damage plus 4 ({@damage 1d8}) radiant damage."
+					]
+				},
+				{
+					"name": "Manicured Nails",
+					"entries": [
+						"{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d6 + 3}) slashing damage."
+					]
+				},
+				{
+					"name": "Psychotic High Pitched Rage Scream {@recharge 5}",
+					"entries": [
+						"Mama McCallister exhales a burst of brilliant radiance in a 30-foot cone. Each creature in that area must make a {@dc 15} Constitution saving throw, taking 27 ({@damage 6d8}) radiant damage on a failed save, or half as much damage on a successful one. Mama McCallister then gains 10 temporary hit points by absorbing a portion of the radiant energy."
+					]
+				}
+			],
+			"dragonAge": "young",
+			"senseTags": [
+				"B",
+				"SD"
+			],
+			"actionTags": [
+				"Breath Weapon",
+				"Multiattack"
+			],
+			"languageTags": [
+				"C",
+				"DR",
+				"TP"
+			],
+			"damageTags": [
+				"P",
+				"R",
+				"S"
+			],
+			"spellcastingTags": [
+				"P"
+			],
+			"miscTags": [
+				"AOE",
+				"MW",
+				"RCH"
+			],
+			"conditionInflictSpell": [
+				"charmed",
+				"incapacitated"
+			],
+			"hasToken": true,
+			"hasFluff": true,
+			"hasFluffImages": true
+		},
+		{
+			"name": "Old Man Marley",
+			"source": "ERCC",
+			"size": [
+				"M"
+			],
+			"type": {
+				"type": "humanoid",
+				"tags": [
+					"human"
+				]
+			},
+			"alignment": [
+				"N",
+				"N"
+			],
+			"ac": [
+				{
+					"ac": 16,
+					"from": [
+						"heavy peacoat",
+						"trash can lid shield"
+					]
+				}
+			],
+			"hp": {
+				"average": 60,
+				"formula": "8d8 + 24"
+			},
+			"speed": {
+				"walk": 30
+			},
+			"str": 15,
+			"dex": 13,
+			"con": 14,
+			"int": 8,
+			"wis": 11,
+			"cha": 13,
+			"skill": {
+				"intimidation": "+3",
+				"perception": "+2"
+			},
+			"passive": 12,
+			"resist": [
+				"cold"
+			],
+			"languages": [
+				"Common"
+			],
+			"cr": "4",
+			"trait": [
+				{
+					"name": "Wintry Weapon (Recharges after a Short or Long Rest)",
+					"entries": [
+						"As a bonus action, Marley can wreath his snow shovel in a wintry swirl of cold. Marley is unharmed by this cold, which lasts until the end of the guard's next turn. While wreathed in cold, the weapon deals an extra 3 ({@damage 1d6}) cold damage on a hit."
+					]
+				}
+			],
+			"action": [
+				{
+					"name": "Multiattack",
+					"entries": [
+						"Marley makes two melee attacks."
+					]
+				},
+				{
+					"name": "Snow Shovel",
+					"entries": [
+						"{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}8 ({@damage 1d8 + 4}) slashing damage."
+					]
+				},
+				{
+					"name": "Icicle Throw",
+					"entries": [
+						"{@atk rw} {@hit 5} to hit, range 100/400 ft., one target. {@h}8 ({@damage 1d10 + 3}) piercing damage."
+					]
+				}
+			],
+			"actionTags": [
+				"Multiattack"
+			],
+			"languageTags": [
+				"C"
+			],
+			"damageTags": [
+				"F",
+				"P",
+				"S"
+			],
+			"miscTags": [
+				"MW",
+				"RNG",
+				"RW"
+			],
+			"hasToken": true,
+			"hasFluff": true
+		},
+		{
+			"name": "Crazy Bird Lady",
+			"isNpc": true,
+			"source": "ERCC",
+			"page": 206,
+			"size": [
+				"M"
+			],
+			"type": {
+				"type": "humanoid",
+				"tags": [
+					"human"
+				]
+			},
+			"alignment": [
+				"N",
+				"E"
+			],
+			"ac": [
+				12,
+				{
+					"ac": 15,
+					"condition": "with {@spell mage armor}",
+					"braces": true
+				}
+			],
+			"hp": {
+				"average": 27,
+				"formula": "5d8 + 5"
+			},
+			"speed": {
+				"walk": 30
+			},
+			"str": 10,
+			"dex": 14,
+			"con": 12,
+			"int": 17,
+			"wis": 10,
+			"cha": 11,
+			"skill": {
+				"arcana": "+5",
+				"investigation": "+5",
+				"performance": "+2"
+			},
+			"passive": 10,
+			"languages": [
+				"Common",
+				"Draconic",
+				"Elvish",
+				"Halfling"
+			],
+			"cr": "2",
+			"spellcasting": [
+				{
+					"name": "Spellcasting",
+					"type": "spellcasting",
+					"headerEntries": [
+						"Crazy Bird Lady is a 4th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). She has the following wizard spells prepared:"
+					],
+					"spells": {
+						"0": {
+							"spells": [
+								"{@spell acid splash|PHB|homeless stank}",
+								"{@spell light|PHB|glowing birdseed}",
+								"{@spell mage hand|PHB|helper pigeon}",
+								"{@spell poison spray|PHB|spit on you}",
+								"{@spell shocking grasp|PHB|freezing hands}"
+							]
+						},
+						"1": {
+							"slots": 4,
+							"spells": [
+								"{@spell detect magic|PHB|the birds can hear}",
+								"{@spell mage armor|PHB|cardboard box armor}",
+								"{@spell magic missile|PHB|turtle dove ninja stars}",
+								"{@spell sleep}"
+							]
+						},
+						"2": {
+							"slots": 3,
+							"spells": [
+								"{@spell blindness/deafness|PHB|birdseed in the face!}",
+								"{@spell cloud of daggers|PHB|swarm of pigeons}",
+								"{@spell scorching ray|PHB|homeless breath}"
+							]
+						}
+					},
+					"ability": "int"
+				}
+			],
+			"trait": [
+				{
+					"name": "Echo Spell (1/Day)",
+					"entries": [
+						"Crazy Bird Lady can cast the spell she cast on her last turn, whose casting time becomes 1 bonus action. This bonus casting uses a spell slot as normal."
+					]
+				}
+			],
+			"action": [
+				{
+					"name": "Shortsword",
+					"entries": [
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+					]
+				}
+			],
+			"languageTags": [
+				"C",
+				"DR",
+				"E",
+				"H"
+			],
+			"damageTags": [
+				"P"
+			],
+			"damageTagsSpell": [
+				"A",
+				"F",
+				"I",
+				"L",
+				"O",
+				"S"
+			],
+			"spellcastingTags": [
+				"CW"
+			],
+			"miscTags": [
+				"MW"
+			],
+			"hasToken": true,
+			"hasFluff": true,
+			"hasFluffImages": true
+		},
+		{
+			"name": "Security Guard",
+			"source": "ERCC",
+			"_copy": {
+				"name": "Goblin",
+				"source": "MM",
+				"_mod": {
+					"trait": {
+						"mode": "removeArr",
+						"names": "Nimble Escape"
+					},
+					"action": [
+						{
+							"mode": "replaceArr",
+							"replace": "Scimitar",
+							"items": {
+								"name": "Shortsword",
+								"entries": [
+									"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) slashing damage."
+								]
+							}
+						},
+						{
+							"mode": "appendArr",
+							"items": {
+								"name": "Taser {@recharge 5}",
+								"entries": [
+									"{@atk mw} {@hit 4} to hit, reach 5 ft., one creature. {@h}2 ({@damage 1d2}) lightning damage, and the target must succeed on a {@dc 13} Constitution saving throw or be {@condition stunned} for 1 round."
+								]
+							}
+						}
+					]
+				}
+			},
+			"hasToken": true,
+			"hasFluff": true
+		},
+		{
+			"name": "Scary Furnace",
+			"source": "ERCC",
+			"size": [
+				"L"
+			],
+			"type": "construct",
+			"alignment": [
+				"U"
+			],
+			"ac": [
+				17
+			],
+			"hp": {
+				"average": 50,
+				"formula": "50d1"
+			},
+			"speed": {
+				"walk": 30
+			},
+			"str": 14,
+			"dex": 10,
+			"con": 10,
+			"int": 3,
+			"wis": 3,
+			"cha": 1,
+			"senses": [
+				"blindsight 30 ft. (blind beyond this radius)"
+			],
+			"passive": 6,
+			"cr": "3",
+			"action": [
+				{
+					"name": "Slam",
+					"entries": [
+						"{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d8 + 2}) bludgeoning damage."
+					]
+				},
+				{
+					"name": "Belch Fire {@recharge 4}",
+					"entries": [
+						"The stove belches fire in a 15-foot cone. Each creature in the area must make a {@dc 10} Dexterity saving throw, taking 22 ({@damage 4d10}) fire damage on a failed save, or half as much damage on a successful one."
+					]
+				}
+			],
+			"senseTags": [
+				"B"
+			],
+			"damageTags": [
+				"B",
+				"F"
+			],
+			"miscTags": [
+				"AOE",
+				"MW"
+			],
+			"hasToken": true,
+			"hasFluff": true
+		},
+		{
+			"name": "Caroler",
+			"source": "ERCC",
+			"_copy": {
+				"name": "Commoner",
+				"source": "MM",
+				"_mod": {
+					"action": [
+						{
+							"mode": "appendArr",
+							"items": {
+								"name": "Mug of Cocoa to the Face! (1/Day)",
+								"entries": [
+									"{@atk mw} {@hit 2} to hit, reach 5 ft., one target. {@h}2 ({@damage 1d4}) fire damage and the target is temporarily {@condition blind} until the end of the target's next turn."
+								]
+							}
+						},
+						{
+							"mode": "replaceArr",
+							"replace": "Club",
+							"items": {
+								"name": "Unarmed Strike",
+								"entries": [
+									"{@atk mw} {@hit 2} to hit, reach 5 ft., one target. {@h}1 ({@damage 1}) bludgeoning damage."
+								]
+							}
+						}
+					]
+				}
+			},
+			"hasToken": true,
+			"hasFluff": true
+		}
+	],
+	"adventure": [
+		{
+			"name": "Elf Recon: Christmas Crash!",
+			"id": "ERCC",
+			"source": "ERCC",
+			"group": "homebrew",
+			"storyline": "",
+			"contents": [
+				{
+					"name": "Elf Recon: Christmas Crash!",
+					"headers": [
+						"Running The Adventure",
+						"Player Builds",
+						"Before The Session"
+					]
+				},
+				{
+					"name": "Cold Open"
+				},
+				{
+					"name": "Crash Site"
+				},
+				{
+					"name": "Frozen Waterfall"
+				},
+				{
+					"name": "Winter Wolves Attack!"
+				},
+				{
+					"name": "Icy Cavern Entry"
+				},
+				{
+					"name": "Yeti Encounter"
+				},
+				{
+					"name": "Stocking Puzzle"
+				},
+				{
+					"name": "Kobolds & Sorcerer"
+				},
+				{
+					"name": "The Evilt Easter Bunny"
+				},
+				{
+					"name": "Santa"
+				}
+			],
+			"level": {
+				"start": 3,
+				"end": 3
+			},
+			"published": "2022-12-09"
+		}
+	],
+	"adventureData": [
+		{
+			"id": "ERCC",
+			"source": "ERCC",
+			"data": [
+				{
+					"type": "section",
+					"name": "Elf Recon: Christmas Crash!",
+					"id": "christmas_crash",
+					"entries": [
+						"The Evil Easter Bunny has kidnapped Santa Clause! After crashing his sleigh, the Easter Bunny and her Kobold minions dragged Santa to their ice cavern, where the Easter Bunny has trapped Santa and demanded that he use his Christmas magic to make the perfect baby bunny gift for her soon-to-be Cadburry egg hatchling.  But nothing he makes is good enough!  Doesn't the Easter Bunny know that Santa is an expert in making toys for children, not bunnies!  As Christmas Eve rapidly approaches, Santa toils in a cage, alone and scared, struggling to appease the persnickety white rabbit.",
+						{
+							"type": "entries",
+							"name": "Running the Adventure",
+							"id": "running_the_adventure",
+							"entries": [
+								"Inspired (at least thematically) by Disney's short film, {@i Prep & Landing}, this adventure is a light, silly take on a North Pole spec-ops team sent in to find and rescue Santa after his sleigh crashes on a Christmas training run.",
+								"{@i Elf Recon: Christmas Crash!} is a one-shot 5th Edition adventure for 3-5 characters of 3rd level.",
+								"Run this one-shot online or in person. Using this 5eTools version, I suggest leveraging the Voice Initiative DM's Display tool when running this adventure.  After initializing a session in https://d20.orcnog.com and selecting the \"Holiday\" theme, you can click the \"Initiative Tracker\" links throughout this adventure to update the initiative board per encounter."
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Player Builds",
+							"id": "player_builds",
+							"entries": [
+								"Each player should make a new level 3 character, flavored as a North Pole elf, part of a special ops team ready to take on dangerous missions.  (Any 5e race is actually fine, as long as the flavor is there.)  In addition to their real name, ask your players to also choose a \"call sign\"."
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Before The Session",
+							"id": "before_the_session",
+							"entries": [
+								"Ahead of time, ask each player what one item their character wanted most for Christmas!  They can pick any magic item within reason: nothing more rare than \"Uncommon\", and nothing more valuable than 500 gp."
+							]
+						}
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Cold Open",
+					"id": "cold_open",
+					"entries": [
+						"{@cue [Show the Control Room image.]|media}",
+						"{@cue [Alarms going off]|media}",
+						"Read the following aloud, except the text in [brackets]:",
+						{
+							"type": "insetReadaloud",
+							"page": 1,
+							"id": "cold_open_readaloud",
+							"entries": [
+								"\"Alert!  Alert!  We've lost Santa's sleigh on radar!  Repeat, we've lost Santa's sleigh on radar!\"",
+								"{@cue [Red Alert 1 image]|media}",
+								"Reports of a crash are coming in from a small northern village!",
+								"{@cue [Red Alert 2 image]|media}",
+								"Admiral, what do we do?\"",
+								"{@cue [Red Alert 3 image]|media}",
+								"\"THERE'S ONLY ONE CREW I WANT ON THIS MISSION. SCRAMBLE THE SPECIAL-OPS TEAM... {@i ELF RECON}.\"",
+								"\"Elf Recon, you have a go!  Prep for immediate extraction operation!\"",
+								"You and your spec ops team scramble to the rocket sled, geared up and ready to rescue the boss. In a flash, you're airborne, {@cue [Drop Zone 1 image]|media} piercing the cold thick northern air at blinding speed. As Maverick, Santa's ace covert-op reindeer, navigates over the tiny village near Santa's sleigh fell off radar, his gruff voice comes over the intercom communicating that you'll reach the drop zone in T-minus 10 seconds. 9... 8... You tighten your parachute straps one last time, position yourself at the edge of the loading bay and... {@cue [Drop Zone 2 image]|media}",
+								"One by one in rapid succession, 4 brave Christmas heroes jump from the flying sled and begin plummeting toward the ground below."
+							]
+						},
+						"Ask each player to introduce their character now. Ask them to describe their character and tell us their call sign, then describe what they say when they touch down."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Crash Site",
+					"id": "crash_site",
+					"entries": [
+						"{@cue [Load the Sleigh Crash Site map.]|media}",
+						{
+							"type": "insetReadaloud",
+							"page": 1,
+							"id": "crash_site_readaloud",
+							"entries": [
+								"Stowing your chutes and dusting the snow off your heroic shoulders, you take in the crash scene.  Splinters of bright-red painted wood litter the road of this tiny village. Broken toys, smashed gifts, and other sleigh debris mottle up the otherwise pure white snow covering the ground. Your eyes follow the trail of wreckage all the up the oblong trench of the impact crater… and there it is, Big Red, the Spruce Christmas Goose, Noel One, Die Klausvagen… Santa's Sleigh itself: brought down to the humble ground like a meteor from the heavens. Thankfully, the village is small, and the crash is in an open area between buildings, so hopefully no one in the village was seriously hurt.  Actually… speaking of… where is everyone? And what is this myriad of footprints leading away from the crash site?  Lots and lots of tiny tracks, a few huge tracks, but nothing matching Santa's boots…  What could it mean??..."
+							]
+						},
+						"Time-permitting, let the players dick around in the village if they like.  Eventually, they need to follow the trail.",
+						{
+							"type": "insetDMAction",
+							"page": 1,
+							"id": "gifts_dm_actions",
+							"entries": [
+								"{@b DC 10 Survival}  = The tiny footprints are kobold tracks.  The huge footprints were made by a single large bipedal beast.",
+								"{@b DC 10 Insight}  = There's no obvious reason the village should be empty at this time of day (approaching dusk).",
+								"{@b DC 10 Investigation}  = Gifts!  Each player gets what they wanted for Christmas (see Player Builds)!",
+								{
+									"type": "insetReadaloud",
+									"page": 1,
+									"id": "gifts_readaloud",
+									"entries": [
+										"Searching the wreckage, you see that there are some unopened gifts with names on the labels.  You are delighted to find one addressed to \"[your name]\"!"
+									]
+								},
+								{
+									"type": "list",
+									"items": [
+										"Further investigation is free to find one gift addressed to each character's name.",
+										"{@b DEX challenge} - One of the gifts is in a tree, hanging from a branch by a ribbon.",
+										"{@b STR challenge} - One of the gifts is stuck under the heavy end of the sleigh.",
+										"{@b CON challenge} - One of the gifts is submerged in a trough of near-freezing water.",
+										"{@b INT challenge} - There are 3 gifts with names smudged... one of them belongs to one of the characters.",
+										"{@b WIS challenge} - One gift has no label on it... shake it to perceive that it's EXACTLY was [one character] asked for!",
+										"{@b CHA challenge} - An arctic albino squirrel darts out of a pile of gifts holding one tiny giftbox in his grubby paws."
+									]
+								}
+							]
+						},
+						"Once the players are done in the village… FOLLOW THE TRAIL!!"
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Frozen Waterfall",
+					"id": "frozen_waterfall",
+					"entries": [
+						"As the players set out across a frozen tundra, read the following...",
+						{
+							"type": "insetReadaloud",
+							"entries": [
+								"As you make your way through the icy tundra, the pleasantly light falling snow begins to thicken as the wind picks up.  The air temperature drops quickly as your tactical cold-weather gear begins to fail to keep your body temperature nominal.  Within moments, you find yourself fighting through a full-on blizzard.",
+								"{@cue [Load the Frozen Waterfall image.]|media}",
+								"You've been trekking through the blizzard for over an hour. Gusts of freezing biting wind threaten to blow you over, and the flying specs of snow now feel like tiny daggers as they hit your face.  I need everyone to make a Constitution saving throw to withstand the extreme conditions.",
+								"{@cue [DC 10 save to avoid gaining 1 level of exhaustion]}",
+								"Despite the extreme cold and the nearly-blinding snow, [player with the highest Survival score] manages to track the largest of the footprints all the way to their termination at the base of what appears to be a frozen waterfall, cascading down from atop a cliff.  The tracks appear to disappear right at the base of the waterfall... hmm, the captors couldn't have climbed up the ice, could they?"
+							]
+						},
+						"Allow the players agency to survey their surroundings at the frozen waterfall...",
+						{
+							"type": "insetDMAction",
+							"entries": [
+								"{@b DC 10 Survival}  = The tracks do not indicate a shifting of weight or changing of direction at the waterfall. In fact, they appear to walk straight into it.",
+								"{@b DC 10 Insight}  = It doesn't seem to add up that the Santa-nabbers would have climbed the frozen-solid waterfall when the cliff is not sheer or dangerous-looking and seems much more easily traversable by foot.",
+								"{@b DC 10 Investigation}  = The waterfall appears to have almost been flash-frozen.  You see tiny frozen droplets on the ground around the base of the waterfall, indicating that they frozen in mid-air and fell, rather than slowly hardening over time into ice.",
+								"{@b DC 10 Arcana}  = You've heard of spells that can instantly freeze water.",
+								"{@b DC 10 Perception}  = The tracks seem to walk themselves straight toward the waterfall... in fact, at the base of the frozen cascade you see what looks like the back half of a footprint... the front half, the toes covered up by the ice from the waterfall."
+							]
+						},
+						"After a while, the players should realize they need to go through the waterfall, either by melting it or busting through it."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Ice Cavern Entry",
+					"id": "ice_cavern_entry",
+					"entries": [
+						"Players can get past the frozen waterfall barrier by doing any of the following:",
+						{
+							"type": "list",
+							"items": [
+								"Melting the ice - with magic or other clever means.",
+								{
+									"type": "entries",
+									"entries": [
+										"Break through the ice - by making Athletics checks or attacks.",
+										{
+											"type": "list",
+											"items": [
+												"Strength check {@cue [DC 20 Athletics]} to bust some of the ice. 3 total successes are required. Any single character who fails 3 attempts or more suffers 1 level of exhaustion.",
+												"The Frozen Wall has an AC of 100, and a DT of 10. Any single character who missed 3 attacks or more suffers 1 level of exhaustion."
+											]
+										}
+									]
+								},
+								"The first room of the cave is dimly lit by a campfire in the southwest corner. A natural frozen pool guards the west wall. The meandering cave winds to the north from here.",
+								"But more pressing is the ominous presense of... a yeti and 2 winter wolf guard dogs!",
+								{
+									"type": "insetReadaloud",
+									"entries": [
+										"Finally [melting/breaking through] the ice reveals an icy cavern! Even in the dim light, you can definitely see that the huge yeti footprints continue into this cave. They must have entered before the waterfall froze. Intriguing!"
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Yeti Encounter",
+					"id": "yeti_encounter",
+					"entries": [
+						"After the players enter the icy cavern, read the following to kick off the Yeti encounter...",
+						{
+							"type": "insetReadaloud",
+							"entries": [
+								"As your eyes adjust to the darkness, your heart leaps into your throat as you realize... the Yeti is right in front of you, cracking its knuckles! Roll for initiative!"
+							]
+						},
+						"Start the Yeti & Wolves encounter:",
+						{
+							"type": "encounter",
+							"name": "Yeti and Winter Wolves!",
+							"id": "yeti_and_winter_wolves_encounter",
+							"varyBy": "Party Size",
+							"variations": [
+								{
+									"variantName": "3",
+									"combatants": [
+										{
+											"creature": "{@creature yeti}",
+											"quantity": 1
+										},
+										{
+											"creature": "{@creature young winter wolf}",
+											"quantity": 3
+										}
+									],
+									"notes": [
+										"Deadly fight for 3 PCs (\"Deadly\" threshold is 1,200; this adj XP is 1,200)."
+									]
+								},
+								{
+									"variantName": "4",
+									"default": true,
+									"combatants": [
+										{
+											"creature": "{@creature yeti}",
+											"quantity": 1
+										},
+										{
+											"creature": "{@creature winter wolf}",
+											"quantity": 2,
+											"note": "Perhaps knock off a few HP to start"
+										}
+									],
+									"notes": [
+										"Deadly++ fight for 4 PCs (\"Deadly\" threshold is 1,600; this adj XP is 2,100)."
+									]
+								},
+								{
+									"variantName": "5",
+									"combatants": [
+										{
+											"creature": "{@creature yeti}",
+											"quantity": 1
+										},
+										{
+											"creature": "{@creature winter wolf}",
+											"quantity": 1
+										},
+										{
+											"creature": "{@creature young winter wolf}",
+											"quantity": 2
+										}
+									],
+									"notes": [
+										"Deadly+ fight for 5 PCs (\"Deadly\" threshold is 2,000; this adj XP is 2,200)."
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Stocking Puzzle",
+					"id": "stocking_puzzle",
+					"entries": [
+						{
+							"type": "insetReadaloud",
+							"entries": [
+								"Coming to a dead end in this cave corridor, you see what appears to be a boulder blocking the passage. On the cave wall to the left are some toys: a teddy bear, a doll, a tin soldier, and a jack-in-the-box. Next to the solid boulder are 4 stockings hung by a fire, each with a name written on it. The names on the stockings are as follows, from left to right: \"Paul, Betty Claire, Ben Bolder, Kraken Seahawks\". The stockings look peaceful, lit by the crackling fire."
+							]
+						},
+						"The solution is to put the correct toy in the correct stocking to unlock the door.",
+						{
+							"type": "inset",
+							"entries": [
+								"{@b Solution: The toy rhymes with the name written on the stocking.}",
+								{
+									"type": "list",
+									"items": [
+										"Put the doll in the stocking with the name Paul.",
+										"Put the teddy bear in the stocking with the name Betty Claire.",
+										"Put the tin soldier in the stocking with the name Ben Bolder.",
+										"Put the jack-in-the-box in the stocking with the name Kraken Seahawks."
+									]
+								},
+								"{@i If they need a hint, scratched into the wall is a crudely handwritten sentence: \"Ben wants a tin soldier for Christmas.\"}"
+							]
+						},
+						"Once they put all the toys in the right stockings, the boulder rolls away (get it? a reference to Easter, am I right?). Proceed to the next section."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Kobolds & Sorcerer",
+					"id": "kobolds_and_sorcerer",
+					"entries": [
+						{
+							"type": "insetReadaloud",
+							"entries": [
+								"The boulder rumbles as it rolls itself out of the way. On the other side of the secret door, bewildered, stand several icewind kobolds wearing festive red hats, and one red robed kobold with a wily scowl. They seem to be gathered around the red kobold as he interacts with a glowing orb. But all of the kobolds in the room stop when you come in. \"Intruders!\" shouts the red kobold. \"They've come to take away our guest and foil our master's plan! Stop them!\" Roll for initiative!"
+							]
+						},
+						"Run the Kobolds & Sorcerer encounter:",
+						{
+							"type": "encounter",
+							"name": "Kobolds & Sorcerer",
+							"id": "kobolds_and_sorcerer_encounter",
+							"varyBy": "Party Size",
+							"variations": [
+								{
+									"variantName": "3",
+									"combatants": [
+										{
+											"creature": "{@creature kobold}",
+											"quantity": 6
+										},
+										{
+											"creature": "{@creature kobold}",
+											"quantity": 1
+										}
+									]
+								},
+								{
+									"variantName": "4",
+									"combatants": [
+										{
+											"creature": "{@creature kobold}",
+											"quantity": 6
+										},
+										{
+											"creature": "{@creature kobold}",
+											"quantity": 1
+										}
+									]
+								},
+								{
+									"variantName": "5",
+									"combatants": [
+										{
+											"creature": "{@creature kobold}",
+											"quantity": 6
+										},
+										{
+											"creature": "{@creature kobold}",
+											"quantity": 1
+										}
+									]
+								}
+							],
+							"notes": [
+								"After the red kobold sorcerer gets off a couple of spells, he will retreat to the back room. The blue kobolds (and maybe the yeti) fight to the death."
+							]
+						},
+						{
+							"type": "entries",
+							"entries": [
+								{
+									"type": "entries",
+									"name": "Room description",
+									"entries": [
+										"If asked for a description of the room, read the following:",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"Icy cave pillars stretch from floor to ceiling randomly throughout this large space. Amongst a couple of unlit campfires, there is one lit campfire which provides a bit of dim light along with a glowing orb illuminating an alcove at the northeast end. The cave continues to wind south along the east wall of this room."
+											]
+										}
+									]
+								},
+								{
+									"type": "entries",
+									"name": "Santa Hats",
+									"entries": [
+										"The red kobold controls the (otherwise not-evil) blue kobolds via the festive red hats they wear. One by one they were tricked into wearing them, at which point they immediately fell under the geas spell and began serving the sorcerer.",
+										"Knocking a hat off a blue kobold's head is nearly impossible, as they have fused themselves into the heads of their wearers thru a semi organic weave if tendrils. But a critical hit on an attack, or a nat 1 failed saving throw on a spell targeting the kobold will result in the hat losing its grip and flying off. At that point the kobold stops attacking and takes a full round to gather their wits, looking around confused. One round later, if successfully convinced with a DC 10 Cha check, they will join the party's side but only attack the red kobold. After the fight, they strongly wish to just pull their friends' bodies from the cave and leave (rather than join the heroes any further)."
+									]
+								}
+							]
+						},
+						"Continuing down the cave..."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "The Evil Easter Bunny",
+					"id": "the_evil_easter_bunny",
+					"entries": [
+						"Read the following as the party continues through the cave...",
+						{
+							"type": "insetReadaloud",
+							"entries": [
+								"The air grows colder as you descend the southward tunnel, its twisting, narrowing walls pressing in like the confines of a burrow. The fading torchlight gives way to darkness, and the low, jagged ceiling forces you to stoop. Suddenly, the passage opens into a cramped cavern, dimly lit by an orange glow from carrot-colored stalactites hanging low like fangs above your heads.",
+								"But before you can take in more of your surroundings, a sound slices through the oppressive silence—a piercing, ear-splitting shriek that reverberates through the close confines. It's cunning, malicious, and... undeniably coming from a... uh... {@i bunny}?",
+								"{@cue Reveal the Easter Bunny minifigure!}",
+								"Bounding into view from behind a jagged orange stalagmite, a towering white rabbit glares at you with eyes full of cold contempt. Her pristine fur bristles, and her voice drips with venom as she sneers, \"So, you've come to meddle in my plans, have you? Fools! You'll never take my prize!\"",
+								"She gestures grandly, her sinister grin growing wider. \"The fat man? Oh, he serves ME now—ME, the EASTER BUNNY! Here, in my domain, he and his clumsy, sausage-like fingers will toil endlessly, crafting delightful little trinkets for my eggs. Toys, baubles, and treasures that will make every child forget Christmas ever existed!\"",
+								"Her laughter echoes chillingly through the cavern. \"That's right! EASTER shall reign supreme! EASTER will be the new Christmas! FOREVER!\"",
+								"Her voice drops to a menacing growl as her gaze hardens. \"And as for you lot? Hah! You'll make fine decorations for my lair. Frozen and forgotten—an eternal testament to my victory!\"",
+								"The ground seems to tremble beneath her imposing form. \"Prepare yourselves, for you won't leave here alive. Roll for initiative!\""
+							]
+						},
+						"When the bunny makes her final threat, the two kobold guards emerge from the shadows and attack the party along with the Easter Bunny.",
+						{
+							"type": "encounter",
+							"name": "Easter Bunny Encounter",
+							"id": "easter_bunny_encounter",
+							"varyBy": "Party Size",
+							"variations": [
+								{
+									"variantName": "3",
+									"combatants": [
+										{
+											"creature": "{@creature kobold}",
+											"quantity": 2
+										},
+										{
+											"creature": "{@creature young white dragon}",
+											"quantity": 1
+										}
+									],
+									"notes": [
+										"The guards will fight to the death, but the bunny grabs her basket of Cadburry Eggs and flees once she gets to half health."
+									]
+								},
+								{
+									"variantName": "4",
+									"combatants": [
+										{
+											"creature": "{@creature kobold}",
+											"quantity": 2
+										},
+										{
+											"creature": "{@creature young white dragon}",
+											"quantity": 1
+										}
+									],
+									"notes": [
+										"The guards will fight to the death, but the bunny grabs her basket of Cadburry Eggs and flees once she gets to half health."
+									]
+								},
+								{
+									"variantName": "5",
+									"combatants": [
+										{
+											"creature": "{@creature kobold}",
+											"quantity": 2
+										},
+										{
+											"creature": "{@creature young white dragon}",
+											"quantity": 1
+										}
+									],
+									"notes": [
+										"The guards will fight to the death, but the bunny grabs her basket of Cadburry Eggs and flees once she gets to half health."
+									]
+								}
+							]
+						},
+						{
+							"type": "entries",
+							"entries": [
+								{
+									"type": "entries",
+									"name": "Room Description",
+									"entries": [
+										"If asked for a description of the room, read the following:",
+										{
+											"type": "insetReadaloud",
+											"entries": [
+												"The space is cramped with a low ceiling, and dimly lit by the glowing orange stalacmites. Upon a natural plateau in the west corner is another exit from this room."
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Santa",
+							"entries": [
+								"Santa's fingers bleed as he works them to the bone, crafting tiny trinkets and tiny toys for Easter eggs. Read the following \"cut scene\":",
+								{
+									"type": "insetReadaloud",
+									"entries": [
+										"Meanwhile somewhere at the back of the cave...",
+										"A not-so-jolly man in a velvet-red suit pushes on a tiny piece of a toy, trying desperately to snap it into place, but his grip slips, and the jagged toy part catches on his already raw, bleeding fingers. \"Chestnuts!\" he curses as he finches in pain. Clumbsily, he drops the tiny toy part, which clatters to the floor of his iron cage.",
+										"\"Egh.  These tiny Easter egg toys... my big plump fingers just weren't meant for this kind of crafting.\"",
+										"Suddenly, a small figures enter the chamber at the far end...  The white-bearded man squints in the dim light. \"Who's that?  Easter Bunny, is that you?\"",
+										"[Kobold voice:] \"Not quite, Santa.\" A tiny kobold runs up to the man. \"Let's give ourselves a little insurance policy here…  hee hee hee.\" he says as he reads a spell from a scroll.  A swirl of magic illuminates the kobold, and before he knows it, Santa is looking at... himself.  A perfect copy."
+									]
+								},
+								"Now, read the following as the players come down the final tunnel:",
+								{
+									"type": "insetReadaloud",
+									"entries": [
+										"At the far end of the tunnel is the cave's end. In an alcove along the north wall is a cage whose door is standing open, and just beside it are two identical creatures that look exactly like Santa Claus!  Crap!  Which one is the real one!"
+									]
+								},
+								"The real Santa's eyes sparkle when he sees his beloved North Pole elves have come to rescue him.",
+								{
+									"type": "insetReadaloud",
+									"entries": [
+										"[Real Santa:] \"Ho ho ho! Christmas will be saved after all!\"",
+										"[Fake Santa:] \"What?? N… No, you can't believe him.  I just watched him transform into this figure!  He's not me, I'M ME!\"",
+										"[Real Santa:] \"Oh, the jig is up now, you naughty little trickster!  That's my spec-ops team! You're in for it now!\"",
+										"[Fake Santa:] \"No!  I don't know how he knows exactly what to say, but he's not the real Santa!\"",
+										"[Real Santa:] \"No, YOU'RE not the real Santa!\""
+									]
+								},
+								"Figuring out the real Santa: The real Santa's fingers are bleeding from all the toiling he's been made to do crafting toys for the baby dragon.  Also, he knows the spec-ops team by name."
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

@@ -6,6 +6,8 @@
 		"For example, add \"My Homebrew.json\" to the \"toImport\" array below, and have a valid JSON homebrew file in this (\"homebrew/\") directory."
 	],
 	"toImport": [
+		"dnd/adventure/adventure_ercc.json",
+		"dnd/adventure/adventure_gaach.json",
 		"dnd/adventure/adventure_hoe.json",
 		"dnd/adventure/adventure_twc.json",
 		"dnd/book/book_odmg.json",
