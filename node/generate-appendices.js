@@ -1,5 +1,5 @@
 import fs from "fs";
-import * as ut from "./util.js";  // Assuming `listFiles` and `readJson` exist in util.js
+import * as ut from "./util.js"; // Assuming `listFiles` and `readJson` exist in util.js
 
 // Function to find all valid 'data' nodes (from adventureData or top-level)
 const findDataNodes = (json) => {
@@ -42,14 +42,14 @@ const findTags = (json) => {
 
 	return {
 		items: [...items],
-		creatures: [...creatures]
+		creatures: [...creatures],
 	};
 };
 
 // Function to determine the next appendix name prefix
 const getNextAppendixName = (sections) => {
 	const romanNumerals = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
-	let maxAlpha = '';
+	let maxAlpha = "";
 	let maxRoman = 0;
 	let maxNumeric = 0;
 	let noNumberAppendix = false;
@@ -59,25 +59,25 @@ const getNextAppendixName = (sections) => {
 		if (match) {
 			const appendixType = match[1];
 			if (!appendixType) {
-				noNumberAppendix = true;  // "Appendix: " case
+				noNumberAppendix = true; // "Appendix: " case
 			} else if (/^[A-HJ-Z]$/.test(appendixType)) {
 				// Alphabet case: ignoring "I" to avoid conflict with Roman numerals
 				maxAlpha = appendixType > maxAlpha ? appendixType : maxAlpha;
 			} else if (/^\d+$/.test(appendixType)) {
-				maxNumeric = Math.max(maxNumeric, parseInt(appendixType));  // Numeric case
+				maxNumeric = Math.max(maxNumeric, parseInt(appendixType)); // Numeric case
 			} else if (romanNumerals.includes(appendixType)) {
-				maxRoman = Math.max(maxRoman, romanNumerals.indexOf(appendixType) + 1);  // Roman numeral case
+				maxRoman = Math.max(maxRoman, romanNumerals.indexOf(appendixType) + 1); // Roman numeral case
 			}
 		}
 	});
 
 	// Prioritize the appendix numbering scheme found
-	if (noNumberAppendix) return "Appendix: ";  // For unnumbered appendices
+	if (noNumberAppendix) return "Appendix: "; // For unnumbered appendices
 	if (maxAlpha) return `Appendix ${String.fromCharCode(maxAlpha.charCodeAt(0) + 1)}: `;
 	if (maxNumeric) return `Appendix ${maxNumeric + 1}: `;
 	if (maxRoman) return `Appendix ${romanNumerals[maxRoman]}: `;
 
-	return "Appendix A: ";  // Default case if nothing is found
+	return "Appendix A: "; // Default case if nothing is found
 };
 
 // Function to generate appendices for items and creatures
@@ -102,11 +102,11 @@ const generateAppendices = ({ items, creatures, sections }) => {
 						{
 							type: "list",
 							columns: 3,
-							items: items.map(item => `{@item ${item}}`)
-						}
-					]
-				}
-			]
+							items: items.map(item => `{@item ${item}}`),
+						},
+					],
+				},
+			],
 		});
 		nextAppendixName = getNextAppendixName([...sections, ...newAppendices]);
 	}
@@ -122,9 +122,9 @@ const generateAppendices = ({ items, creatures, sections }) => {
 				{
 					type: "list",
 					columns: 3,
-					items: creatures.map(creature => `{@creature ${creature}}`)
-				}
-			]
+					items: creatures.map(creature => `{@creature ${creature}}`),
+				},
+			],
 		});
 	}
 
@@ -135,24 +135,24 @@ const generateAppendices = ({ items, creatures, sections }) => {
 const updateAdventureContents = (json, appendices) => {
 	if (!json.adventure || !Array.isArray(json.adventure)) return;
 
-	const adventure = json.adventure[0];  // Assuming top-level adventure object
+	const adventure = json.adventure[0]; // Assuming top-level adventure object
 	if (!adventure.contents || !Array.isArray(adventure.contents)) return;
 
 	// Loop through appendices and insert them into contents
 	appendices.forEach((appendix, index) => {
-		const identifier = appendix.name.match(/^Appendix (\w):/)[1];  // Extracting A, B, etc.
+		const identifier = appendix.name.match(/^Appendix (\w):/)[1]; // Extracting A, B, etc.
 		adventure.contents.push({
-			name: appendix.name.replace(/^Appendix \w: /, ""),  // Strip out the "Appendix X: " part
+			name: appendix.name.replace(/^Appendix \w: /, ""), // Strip out the "Appendix X: " part
 			ordinal: {
 				type: "appendix",
-				identifier: identifier
-			}
+				identifier: identifier,
+			},
 		});
 	});
 };
 
 // Main function to run the process
-async function processAdventure(filePath) {
+async function processAdventure (filePath) {
 	const json = ut.readJson(filePath); // Read the JSON file using a utility function
 
 	// Find all valid 'data' nodes
@@ -211,7 +211,7 @@ async function processAdventure(filePath) {
 			updateAdventureContents(json, newAppendices);
 
 			// Write the updated JSON back to the file
-			fs.writeFileSync(filePath, JSON.stringify(json, null, "\t"), "utf-8");  // Save with tabbed indentation
+			fs.writeFileSync(filePath, JSON.stringify(json, null, "\t"), "utf-8"); // Save with tabbed indentation
 			console.log(`Appendices applied to ${filePath}`);
 			process.exit(0);
 		} else {
@@ -226,7 +226,7 @@ const promptUser = (message) => {
 	return new Promise((resolve) => {
 		process.stdout.write(message);
 		process.stdin.once("data", (data) => {
-			resolve(data.toString().trim().toLowerCase() === 'y');
+			resolve(data.toString().trim().toLowerCase() === "y");
 		});
 	});
 };
