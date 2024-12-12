@@ -1064,8 +1064,12 @@
 										},
 										{
 											"creature": "{@creature kobold}",
-											"quantity": 1
+											"quantity": 1,
+											"note": "After the kobold sorcerer gets off a couple of spells, he will retreat southward to the back room."
 										}
+									],
+									"notes": [
+										"Amid the chaos, you notice one kobold awkwardly swinging its weapon but clearly avoiding serious harm to anyone, its beady eyes wide with something resembling... remorse? It mutters under its breath, \"I just wanna make kids smile, not... this!\""
 									]
 								},
 								{
@@ -1077,8 +1081,12 @@
 										},
 										{
 											"creature": "{@creature kobold}",
-											"quantity": 1
+											"quantity": 1,
+											"note": "After the kobold sorcerer gets off a couple of spells, he will retreat southward to the back room."
 										}
+									],
+									"notes": [
+										"Amid the chaos, you notice one kobold awkwardly swinging its weapon but clearly avoiding serious harm to anyone, its beady eyes wide with something resembling... remorse? It mutters under its breath, \"I just wanna make kids smile, not... this!\""
 									]
 								},
 								{
@@ -1090,13 +1098,14 @@
 										},
 										{
 											"creature": "{@creature kobold}",
-											"quantity": 1
+											"quantity": 1,
+											"note": "After the kobold sorcerer gets off a couple of spells, he will retreat southward to the back room."
 										}
+									],
+									"notes": [
+										"Amid the chaos, you notice one kobold awkwardly swinging its weapon but clearly avoiding serious harm to anyone, its beady eyes wide with something resembling... remorse? It mutters under its breath, \"I just wanna make kids smile, not... this!\""
 									]
 								}
-							],
-							"notes": [
-								"After the red kobold sorcerer gets off a couple of spells, he will retreat to the back room. The blue kobolds (and maybe the yeti) fight to the death."
 							]
 						},
 						{
@@ -1165,9 +1174,6 @@
 											"creature": "{@creature young white dragon}",
 											"quantity": 1
 										}
-									],
-									"notes": [
-										"The guards will fight to the death, but the bunny grabs her basket of Cadburry Eggs and flees once she gets to half health."
 									]
 								},
 								{
@@ -1181,9 +1187,6 @@
 											"creature": "{@creature young white dragon}",
 											"quantity": 1
 										}
-									],
-									"notes": [
-										"The guards will fight to the death, but the bunny grabs her basket of Cadburry Eggs and flees once she gets to half health."
 									]
 								},
 								{
@@ -1197,9 +1200,6 @@
 											"creature": "{@creature young white dragon}",
 											"quantity": 1
 										}
-									],
-									"notes": [
-										"The guards will fight to the death, but the bunny grabs her basket of Cadburry Eggs and flees once she gets to half health."
 									]
 								}
 							]
@@ -1224,38 +1224,119 @@
 						},
 						{
 							"type": "entries",
-							"name": "Santa",
+							"name": "Victory",
 							"entries": [
-								"Santa's fingers bleed as he works them to the bone, crafting tiny trinkets and tiny toys for Easter eggs. Read the following \"cut scene\":",
+								"When the players vanquish the Easter Bunny, read the following aloud:",
 								{
 									"type": "insetReadaloud",
 									"entries": [
-										"Meanwhile somewhere at the back of the cave...",
-										"A not-so-jolly man in a velvet-red suit pushes on a tiny piece of a toy, trying desperately to snap it into place, but his grip slips, and the jagged toy part catches on his already raw, bleeding fingers. \"Chestnuts!\" he curses as he finches in pain. Clumbsily, he drops the tiny toy part, which clatters to the floor of his iron cage.",
-										"\"Egh.  These tiny Easter egg toys... my big plump fingers just weren't meant for this kind of crafting.\"",
-										"Suddenly, a small figures enter the chamber at the far end...  The white-bearded man squints in the dim light. \"Who's that?  Easter Bunny, is that you?\"",
-										"[Kobold voice:] \"Not quite, Santa.\" A tiny kobold runs up to the man. \"Let's give ourselves a little insurance policy here…  hee hee hee.\" he says as he reads a spell from a scroll.  A swirl of magic illuminates the kobold, and before he knows it, Santa is looking at... himself.  A perfect copy."
+										"The Easter Bunny staggers back, clutching her chest dramatically. \"No! My reign of pastel perfection... undone by {@i elves} and their insufferable {@i Christmas cheer}! Curse you!\"",
+										"With a final gasp, her fluffy exterior melts away and her form shrinks, revealing a small gnarled goblin, sprawled on the ground. A golden crown with oversized bunny ears tumbles from her head, landing with a soft clink beside a {@i treasure chest}, emblazoned with a colorful Easter egg lock. The room grows still, save for the faint shimmer of magical light around the crown."
 									]
 								},
-								"Now, read the following as the players come down the final tunnel:",
+								"The treasure chest requires a {@cue DC 10 Thieves' Tools check} to open, or clever use of a weapon, spell, or item.",
+								"When the players open the chest, read the following aloud:",
 								{
 									"type": "insetReadaloud",
 									"entries": [
-										"At the far end of the tunnel is the cave's end. In an alcove along the north wall is a cage whose door is standing open, and just beside it are two identical creatures that look exactly like Santa Claus!  Crap!  Which one is the real one!"
+										"Inside the chest, you find piles of glittering treasures—golden eggs, jeweled carrots, and sparkling pastel baubles. But beneath the glimmering hoard lies a worn red Santa cap, embroidered on the inside with the name \"St. Nick.\""
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Santa",
+					"entries": [
+						"Santa's fingers bleed as he works them to the bone, crafting tiny trinkets and tiny toys for Easter eggs. Read the following \"flash back cut scene\":",
+						{
+							"type": "insetReadaloud",
+							"entries": [
+								"Meanwhile somewhere at the back of the cave...",
+								"A not-so-jolly man in a velvet-red suit pushes on a tiny piece of a toy, trying desperately to snap it into place, but his grip slips, and the jagged toy part catches on his already raw, bleeding fingers. \"Chestnuts!\" he curses as he finches in pain. Clumbsily, he drops the tiny toy part, which clatters to the floor of his iron cage.",
+								"\"Egh.  These tiny Easter egg toys... my big plump fingers just weren't meant for this kind of crafting... [Sigh]... All this work, for Easter... How did it come to this?\" he says somberly, his belly not shaking like a bowl full of anything.",
+								"Suddenly, a small figures enter the chamber at the far end...  The white-bearded man squints in the dim light. \"Who's that?  Easter Bunny, is that you?\"",
+								"[Kobold voice:] \"Not quite, Santa.\" A tiny kobold scurries up to the fat man. \"Oh ho, the boss isn't taking any chances! Let's make things a little more... confusing.\" He cackles and chants a spell from a scroll. A swirl of magic illuminates the kobold, and before he knows it, Santa is looking at... himself.  A perfect copy.",
+								"The fake Santa grins wickedly. \"Ho ho ho! Let's see them figure this out, shall we?\""
+							]
+						},
+						"Now, read the following as the players come down the final tunnel:",
+						{
+							"type": "insetReadaloud",
+							"entries": [
+								"At the far end of the cavern, you see an alcove along the north wall. A crude cage stands with its door ajar, and beside it are two identical figures—two Santa Clauses! Crap! Which one is the real one?"
+							]
+						},
+						"Both Santas react when they see you enter the chamber.",
+						{
+							"type": "insetReadaloud",
+							"entries": [
+								"[Santa 1:] \"Ho ho ho! Christmas will be saved after all!\"",
+								"[Santa 2:] \"What?? N… No, you can't believe him.  I just watched him transform into this figure!  He's not me, I'M ME!\"",
+								"[Santa 1:] \"Oh, the jig is up now, you naughty little trickster!  That's my spec-ops team! You're in for it now!\"",
+								"[Santa 2:] \"No!  I don't know how he knows exactly what to say, but he's not the real Santa!\"",
+								"[Santa 1:] \"No, YOU'RE not the real Santa!\""
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Figuring Out the Real Santa",
+							"entries": [
+								{
+									"type": "entries",
+									"name": "Santa's bleeding fingers:",
+									"entries": [
+										"The real Santa's fingers are raw and bleeding from the endless crafting he's been forced to do for the Easter Bunny."
 									]
 								},
-								"The real Santa's eyes sparkle when he sees his beloved North Pole elves have come to rescue him.",
+								{
+									"type": "entries",
+									"name": "Knowledge of the team:",
+									"entries": [
+										"The real Santa knows your special ops team by name and greets you with genuine familiarity."
+									]
+								},
+								{
+									"type": "entries",
+									"name": "Any other clever ideas:",
+									"entries": [
+										"Let the players surprise you! Basically any half-decent idea should be successful. Bonus points for allowing a character to tie it in with their backstory or something!"
+									]
+								}
+							]
+						},
+						{
+							"type": "entries",
+							"name": "A Hoppy Ending",
+							"id": "a_hoppy_ending",
+							"entries": [
 								{
 									"type": "insetReadaloud",
 									"entries": [
-										"[Real Santa:] \"Ho ho ho! Christmas will be saved after all!\"",
-										"[Fake Santa:] \"What?? N… No, you can't believe him.  I just watched him transform into this figure!  He's not me, I'M ME!\"",
-										"[Real Santa:] \"Oh, the jig is up now, you naughty little trickster!  That's my spec-ops team! You're in for it now!\"",
-										"[Fake Santa:] \"No!  I don't know how he knows exactly what to say, but he's not the real Santa!\"",
-										"[Real Santa:] \"No, YOU'RE not the real Santa!\""
+										"Relief washes over Santa's face as he realizes you've chosen correctly. His eyes twinkle with gratitude, and his voice booms with warmth, \"Ho ho ho! You've done it, my friends!\" The cavern seems to brighten with joy. As you hold the embroidered red cap in your hands, you feel it quiver with anticipation, almost as if eager to return to its rightful owner.",
+										"{@cue [Pause for player interaction with the hat/Santa]}",
+										"The moment the hat touches Santa's head, a golden light bursts forth, enveloping him in a soft glow. His cheeks regain their rosy hue, and his belly shakes with renewed laughter. \"Ho ho ho! Christmas is saved!\" The sound of jingling sleigh bells echoes faintly, and the air fills with the faint scent of peppermint and pine.",
+										"Just then, a familiar figure timidly steps forward from the other room—it's the kobold who showed a glimmer of kindness during the fight. He wrings his hands nervously, his gaze shifting between you and the pastel Easter crown, now gleaming with magic. \"I... I don't think Easter should try to outshine Christmas,\" he mutters, his voice trembling but sincere. \"It should be about spreading joy in its own way.\" The crown glints in the soft light, its oversized bunny ears seeming to nod in agreement. Perhaps, it's waiting for someone worthy to take up the mantle.",
+										"{@cue [Pause for player agency with the crown]}",
+										"When the crown is placed upon the kobold's head, magic swirls around him, transforming his scales into brilliant white fur. His form stretches, reshaping into a proud, upright rabbit, his ears standing tall and proud. \"I vow to honor Easter and keep it as a day of joy and delight,\" he declares, his voice filled with conviction. \"Easter will stay Easter—and never again will it try to overthrow Christmas!\" The cavern brightens further, as if the magic itself approves of this newfound harmony."
 									]
-								},
-								"Figuring out the real Santa: The real Santa's fingers are bleeding from all the toiling he's been made to do crafting toys for the baby dragon.  Also, he knows the spec-ops team by name."
+								}
+							]
+						},
+						{
+							"type": "entries",
+							"name": "And To All a Good Night!",
+							"id": "and_to_all_a_good_night",
+							"entries": [
+								{
+									"type": "insetReadaloud",
+									"entries": [
+										"Leading Santa out of the cave, you step into the snowy night. The sleigh awaits, fully repaired and gleaming, surrounded by industrious North Pole elves who are repacking the scattered gifts with cheerful efficiency. Santa turns to you, his face glowing with pride. \"You've not only saved Christmas,\" he says, his voice booming with joy, \"but you've saved Easter too! The world owes you a great debt.\"",
+										"Santa steps into his sleigh, his reindeer stamping eagerly in the snow. And with a booming \"Ho ho ho! Merry Christmas to all!\" the sleigh soars into the starry night. As you watch it disappear into the distance with a twinkle, Christmas spirit fills your heart. MERRY CHRISTMAS TO ALL, INDEED!"
+									]
+								}
 							]
 						}
 					]
