@@ -831,34 +831,27 @@
 							]
 						},
 						"Time-permitting, let the players dick around in the village if they like.  Eventually, they need to follow the trail.",
+						"{@cue {@b DC 10 Survival}  = The tiny footprints are kobold tracks.  The huge footprints were made by a single large bipedal beast.}",
+						"{@cue {@b DC 10 Insight}  = There's no obvious reason the village should be empty at this time of day (approaching dusk).}",
+						"{@cue {@b DC 10 Investigation}  = Gifts!  Each player gets what they wanted for Christmas (see Player Builds)!} Read the following:",
 						{
-							"type": "insetDMAction",
+							"type": "insetReadaloud",
 							"page": 1,
-							"id": "gifts_dm_actions",
+							"id": "gifts_readaloud",
 							"entries": [
-								"{@b DC 10 Survival}  = The tiny footprints are kobold tracks.  The huge footprints were made by a single large bipedal beast.",
-								"{@b DC 10 Insight}  = There's no obvious reason the village should be empty at this time of day (approaching dusk).",
-								"{@b DC 10 Investigation}  = Gifts!  Each player gets what they wanted for Christmas (see Player Builds)!",
-								{
-									"type": "insetReadaloud",
-									"page": 1,
-									"id": "gifts_readaloud",
-									"entries": [
-										"Searching the wreckage, you see that there are some unopened gifts with names on the labels.  You are delighted to find one addressed to \"[your name]\"!"
-									]
-								},
-								{
-									"type": "list",
-									"items": [
-										"Further investigation is free to find one gift addressed to each character's name.",
-										"{@b DEX challenge} - One of the gifts is in a tree, hanging from a branch by a ribbon.",
-										"{@b STR challenge} - One of the gifts is stuck under the heavy end of the sleigh.",
-										"{@b CON challenge} - One of the gifts is submerged in a trough of near-freezing water.",
-										"{@b INT challenge} - There are 3 gifts with names smudged... one of them belongs to one of the characters.",
-										"{@b WIS challenge} - One gift has no label on it... shake it to perceive that it's EXACTLY was [one character] asked for!",
-										"{@b CHA challenge} - An arctic albino squirrel darts out of a pile of gifts holding one tiny giftbox in his grubby paws."
-									]
-								}
+								"Searching the wreckage, you see that there are some unopened gifts with names on the labels.  You are delighted to find one addressed to \"[your name]\"!"
+							]
+						},
+						"Further investigation is free to find one gift addressed to each character's name.",
+						{
+							"type": "list",
+							"items": [
+								"{@cue {@b DEX challenge} - One of the gifts is in a tree, hanging from a branch by a ribbon.}",
+								"{@cue {@b STR challenge} - One of the gifts is stuck under the heavy end of the sleigh.}",
+								"{@cue {@b CON challenge} - One of the gifts is submerged in a trough of near-freezing water.}",
+								"{@cue {@b INT challenge} - There are 3 gifts with names smudged... one of them belongs to one of the characters.}",
+								"{@cue {@b WIS challenge} - One gift has no label on it... shake it to perceive that it's EXACTLY was [one character] asked for!}",
+								"{@cue {@b CHA challenge} - An arctic albino squirrel darts out of a pile of gifts holding one tiny giftbox in his grubby paws.}"
 							]
 						},
 						"Once the players are done in the village… FOLLOW THE TRAIL!!"
@@ -882,13 +875,13 @@
 						},
 						"Allow the players agency to survey their surroundings at the frozen waterfall...",
 						{
-							"type": "insetDMAction",
-							"entries": [
-								"{@b DC 10 Survival}  = The tracks do not indicate a shifting of weight or changing of direction at the waterfall. In fact, they appear to walk straight into it.",
-								"{@b DC 10 Insight}  = It doesn't seem to add up that the Santa-nabbers would have climbed the frozen-solid waterfall when the cliff is not sheer or dangerous-looking and seems much more easily traversable by foot.",
-								"{@b DC 10 Investigation}  = The waterfall appears to have almost been flash-frozen.  You see tiny frozen droplets on the ground around the base of the waterfall, indicating that they frozen in mid-air and fell, rather than slowly hardening over time into ice.",
-								"{@b DC 10 Arcana}  = You've heard of spells that can instantly freeze water.",
-								"{@b DC 10 Perception}  = The tracks seem to walk themselves straight toward the waterfall... in fact, at the base of the frozen cascade you see what looks like the back half of a footprint... the front half, the toes covered up by the ice from the waterfall."
+							"type": "list",
+							"items": [
+								"{@cue {@b DC 10 Survival}  = The tracks do not indicate a shifting of weight or changing of direction at the waterfall. In fact, they appear to walk straight into it.}",
+								"{@cue {@b DC 10 Insight}  = It doesn't seem to add up that the Santa-nabbers would have climbed the frozen-solid waterfall when the cliff is not sheer or dangerous-looking and seems much more easily traversable by foot.}",
+								"{@cue {@b DC 10 Investigation}  = The waterfall appears to have almost been flash-frozen.  You see tiny frozen droplets on the ground around the base of the waterfall, indicating that they frozen in mid-air and fell, rather than slowly hardening over time into ice.}",
+								"{@cue {@b DC 10 Arcana}  = You've heard of spells that can instantly freeze water.}",
+								"{@cue {@b DC 10 Perception}  = The tracks seem to walk themselves straight toward the waterfall... in fact, at the base of the frozen cascade you see what looks like the back half of a footprint... the front half, the toes covered up by the ice from the waterfall.}"
 							]
 						},
 						"After a while, the players should realize they need to go through the waterfall, either by melting it or busting through it."
@@ -1304,6 +1297,15 @@
 									"entries": [
 										"Let the players surprise you! Basically any half-decent idea should be successful. Bonus points for allowing a character to tie it in with their backstory or something!"
 									]
+								},
+								"When the players make their decision, read the following:",
+								{
+									"type": "insetReadaloud",
+									"entries": [
+										"Relief washes over Santa's face as he realizes you've chosen correctly. His eyes twinkle with gratitude, and his voice booms with warmth, \"Ho ho ho! You've done it, my friends!\" The cavern seems to brighten with joy. As you hold the embroidered red cap in your hands, you feel it quiver with anticipation, almost as if eager to return to its rightful owner.",
+										"{@cue [Pause for player interaction with the hat/Santa]}",
+										"The moment the hat touches Santa's head, a golden light bursts forth, enveloping him in a soft glow. His cheeks regain their rosy hue, and his belly shakes with renewed laughter. \"Ho ho ho! Christmas is saved!\" The sound of jingling sleigh bells echoes faintly, and the air fills with the faint scent of peppermint and pine."
+									]
 								}
 							]
 						},
@@ -1312,12 +1314,10 @@
 							"name": "A Hoppy Ending",
 							"id": "a_hoppy_ending",
 							"entries": [
+								"If the Easter crown still doesn't have a proper owner, read the following:",
 								{
 									"type": "insetReadaloud",
 									"entries": [
-										"Relief washes over Santa's face as he realizes you've chosen correctly. His eyes twinkle with gratitude, and his voice booms with warmth, \"Ho ho ho! You've done it, my friends!\" The cavern seems to brighten with joy. As you hold the embroidered red cap in your hands, you feel it quiver with anticipation, almost as if eager to return to its rightful owner.",
-										"{@cue [Pause for player interaction with the hat/Santa]}",
-										"The moment the hat touches Santa's head, a golden light bursts forth, enveloping him in a soft glow. His cheeks regain their rosy hue, and his belly shakes with renewed laughter. \"Ho ho ho! Christmas is saved!\" The sound of jingling sleigh bells echoes faintly, and the air fills with the faint scent of peppermint and pine.",
 										"Just then, a familiar figure timidly steps forward from the other room—it's the kobold who showed a glimmer of kindness during the fight. He wrings his hands nervously, his gaze shifting between you and the pastel Easter crown, now gleaming with magic. \"I... I don't think Easter should try to outshine Christmas,\" he mutters, his voice trembling but sincere. \"It should be about spreading joy in its own way.\" The crown glints in the soft light, its oversized bunny ears seeming to nod in agreement. Perhaps, it's waiting for someone worthy to take up the mantle.",
 										"{@cue [Pause for player agency with the crown]}",
 										"When the crown is placed upon the kobold's head, magic swirls around him, transforming his scales into brilliant white fur. His form stretches, reshaping into a proud, upright rabbit, his ears standing tall and proud. \"I vow to honor Easter and keep it as a day of joy and delight,\" he declares, his voice filled with conviction. \"Easter will stay Easter—and never again will it try to overthrow Christmas!\" The cavern brightens further, as if the magic itself approves of this newfound harmony."
