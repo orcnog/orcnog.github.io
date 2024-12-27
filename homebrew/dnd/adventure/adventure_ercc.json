@@ -17,14 +17,14 @@
 		"dateAdded": 1613648837,
 		"dateLastModified": 1613648837,
 		"_dateLastModifiedHash": "e5f748a123",
-		"internalCopies": [
-			"monster"
-		],
 		"dependencies": {
 			"monster": [
 				"MPMM"
 			]
 		},
+		"internalCopies": [
+			"monster"
+		],
 		"edition": "classic"
 	},
 	"item": [
@@ -43,7 +43,7 @@
 			"rarity": "uncommon",
 			"wondrous": true,
 			"entries": [
-				"A silver sleigh bell straight from Santa's sleigh (probably). When shaken it rings with a beautiful joyful sound announcing \"it's Christmas time in the city\"! When you ring this bell as an action, only those who truly embody the Christmas spirit, i.e. good-aligned creatures, can hear it's beautiful sound. When a creature within 30 ft. of the bell hear it ring, they gain the effects of the {@spell bless} spell.",
+				"A silver sleigh bell straight from Santa's sleigh (probably). When shaken it rings with a beautiful joyful sound announcing \"it's Christmas time in the city\"! When you ring this bell as an action, only those who truly embody the Christmas spirit, i.e. good-aligned creatures, can hear it's beautiful sound. When a creature within 30 feet of the bell hear it ring, they gain the effects of the {@spell bless} spell.",
 				"The silver sleigh bell can be used once per day."
 			]
 		},
@@ -127,25 +127,25 @@
 				{
 					"name": "Bite",
 					"entries": [
-						"{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}8 ({@damage 1d10 + 3}) piercing damage."
+						"{@atk mw} {@hit 5} to hit, reach 5 feet, one target. {@h}8 ({@damage 1d10 + 3}) piercing damage."
 					]
 				},
 				{
 					"name": "Carrot Pike",
 					"entries": [
-						"{@atk mw} {@hit 5} to hit, reach 10 ft., one target. {@h}8 ({@damage 1d10 + 3}) piercing damage."
+						"{@atk mw} {@hit 5} to hit, reach 10 feet, one target. {@h}8 ({@damage 1d10 + 3}) piercing damage."
 					]
 				},
 				{
 					"name": "Cotton Tail",
 					"entries": [
-						"{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}0 bludgeoning damage."
+						"{@atk mw} {@hit 5} to hit, reach 5 feet, one target. {@h}0 bludgeoning damage."
 					]
 				},
 				{
 					"name": "Egg Throw",
 					"entries": [
-						"{@atk rw} {@hit 4} to hit, range 30/60 ft., one target. {@h}6 ({@damage 1d8 + 2}) bludgeoning damage. If the target's Charisma score is 13 or higher, it must take it's next action to wipe the splatters of it's face"
+						"{@atk rw} {@hit 4} to hit, range 30/60 feet, one target. {@h}6 ({@damage 1d8 + 2}) bludgeoning damage and make a Charisma saving throw (which they ideally want to {@i fail!}). On a successful save, the creature must spend its reaction to wipe the splatters off it's face."
 					]
 				},
 				{
@@ -173,22 +173,26 @@
 				{
 					"name": "Wind-Up Bombs (Costs 2 Actions)",
 					"entries": [
-						"The Easter Bunny tosses out 3 cheap plastic wind-up toy chicks, which just happen to be proximity bombs that seek out the nearest target. They move at a speed of 15 ft. and once they are within 10 ft. of a target or take any damage, they explode, dealing {@damage 2d6} fire damage to any creatures within a 10 ft. radius."
+						"The Easter Bunny tosses out 3 cheap plastic wind-up toy chicks, which just happen to be proximity bombs that seek out the nearest target. They move at a speed of 15 feet and once they are within 10 feet of a target or take any damage, they explode, dealing {@damage 2d6} fire damage to any creatures within a 10 foot radius."
 					]
 				},
 				{
 					"name": "Cadbury Cream Egg",
 					"entries": [
-						"{@atk rw} {@hit 4} to hit, range 30/60 ft., one target. {@h}6 ({@damage 1d8 + 2}) bludgeoning damage. The target must succeed on a {@dc 13} Strength saving throw or be {@condition restrained} by delicious Cadbury cream. A creature can repeat the saving throw at the end of its turn."
+						"{@atk rw} {@hit 4} to hit, range 30/60 feet, one target. {@h}6 ({@damage 1d8 + 2}) bludgeoning damage. The target must succeed on a {@dc 13} Strength saving throw or be {@condition restrained} by delicious Cadbury cream. A creature can repeat the saving throw at the end of its turn."
 					]
 				},
 				{
 					"name": "Mad Hops",
 					"entries": [
-						"The Easter Bunny disengages by jumping 45 feet away. each creature within 15ft. of where it lands must make a {@dc 13} Dexterity saving throw or take {@damage 2d12} thunder damage, half damage on a success. "
+						"The Easter Bunny disengages by jumping 45 feet away. each creature within 15 feet of where it lands must make a {@dc 13} Dexterity saving throw or take {@damage 2d12} thunder damage, half damage on a success."
 					]
 				}
 			],
+			"legendaryGroup": {
+				"name": "Easter Bunny",
+				"source": "ERCC"
+			},
 			"damageTags": [
 				"B",
 				"I",
@@ -198,6 +202,70 @@
 				"constitution",
 				"dexterity",
 				"strength"
+			]
+		},
+		{
+			"name": "Kobold Sorcerer",
+			"source": "ERCC",
+			"_copy": {
+				"name": "Kobold Scale Sorcerer",
+				"source": "MPMM",
+				"_mod": {
+					"spellcasting": [
+						{
+							"mode": "removeSpells",
+							"daily": {
+								"2e": [
+									"{@spell levitate}"
+								]
+							}
+						},
+						{
+							"mode": "addSpells",
+							"daily": {
+								"1e": [
+									"{@spell invisibility}",
+									"{@spell polymorph}"
+								]
+							}
+						}
+					]
+				}
+			},
+			"speed": {
+				"walk": 30,
+				"fly": 30
+			}
+		}
+	],
+	"legendaryGroup": [
+		
+		{
+			"name": "Easter Bunny",
+			"source": "ERCC",
+			"lairActions": [
+				"On initiative count 20 (losing initiative ties), the Easter Bunny can take one of the following lair actions; the Easter Bunny can't take the same lair action two rounds in a row:",
+				{
+					"type": "list",
+					"style": "list-hang-notitle",
+					"items": [
+						{
+							"type": "item",
+							"name": "Rabbit Hole (Vanish)",
+							"entry": "The Easter Bunny disengages and chooses a point within 30 feet to burrow into the ground, creating a 10 foot wide by 20 foot deep burrow hole and vanishing. The Easter Bunny momentarily {@spell blink||blinks} into a pocket dimension for no more than one round.  After envoking this ability, the East Bunny {@i must} envoke the {@b {@i Rabbit Hole (Reappear)}} lair action in the following round to reemerge from a new burrow hole."
+						},
+						{
+							"type": "item",
+							"name": "Rabbit Hole (Reappear)",
+							"entry": "After envoking the {@b {@i Rabbit Hole (Vanish)}} lair action, The Easter Bunny creates a new burrow hole 10 feet wide by 20 feet deep within 30 feet of the burrow hole it vanished into and emerges from it, taking up an unoccupied space of its choice adjacent to the new burrow hole."
+						},
+						{
+							"type": "item",
+							"name": "Carrot Cave-In",
+							"entry": "A thunderous roar that can be heard up to 300 feet away shakes the cavenous lair, loosing stones and stalactites that crash down from the ceiling within a 30 ft radius circle of the Easter Bunny's choosing. Creatures in the effected area must succeed on a DC 15 Dexterity saving throw or take 7 ({@damage 2d8}) piercing damage."
+						}
+					]
+				}
 			]
 		}
 	],
@@ -255,17 +323,10 @@
 					"name": "A Hoppy Ending"
 				},
 				{
-					"name": "And To All a Good Night!"
-				},
-				{
 					"name": "Alternate Shortened Ending"
 				},
 				{
-					"name": "Monsters and NPCs",
-					"ordinal": {
-						"type": "appendix",
-						"identifier": "A"
-					}
+					"name": "And To All a Good Night!"
 				},
 				{
 					"name": "Magic Items",
@@ -342,18 +403,18 @@
 							"id": "cold_open_readaloud",
 							"entries": [
 								"\"Alert!  Alert!  We've lost Santa's sleigh on radar!  Repeat, we've lost Santa's sleigh on radar!\"",
-								"{@cue [Red Alert 1 image]|media}",
+								"{@cue [Image #2: Red Alert 1]|media}",
 								"Reports of a crash are coming in from a small northern village!",
-								"{@cue [Red Alert 2 image]|media}",
+								"{@cue [Image #3: Red Alert 2]|media}",
 								"Admiral, what do we do?\"",
-								"{@cue [Red Alert 3 image]|media}",
+								"{@cue [Image #4: Red Alert 3]|media}",
 								"\"THERE'S ONLY ONE CREW I WANT ON THIS MISSION. SCRAMBLE THE SPECIAL-OPS TEAM… {@i ELF RECON}.\"",
 								"\"Elf Recon, you have a go!  Prep for immediate extraction operation!\"",
-								"You and your spec ops team scramble to the rocket sled, geared up and ready to rescue the boss. In a flash, you're airborne, {@cue [Drop Zone 1 image]|media} piercing the cold thick northern air at blinding speed. As Maverick, Santa's ace covert-op reindeer, navigates over the tiny village near Santa's sleigh fell off radar, his gruff voice comes over the intercom communicating that you'll reach the drop zone in T-minus 10 seconds. 9… 8… You tighten your parachute straps one last time, position yourself at the edge of the loading bay and… {@cue [Drop Zone 2 image]|media}",
-								"One by one in rapid succession, 4 brave Christmas heroes jump from the flying sled and begin plummeting toward the ground below."
+								"You and your spec ops team scramble to the rocket sled, geared up and ready to rescue the boss. In a flash, you're airborne, {@cue [Image #5: Drop Zone 1]|media} piercing the cold thick northern air at blinding speed. As Maverick, Santa's ace covert-op reindeer, navigates over the tiny village near Santa's sleigh fell off radar, his gruff voice comes over the intercom communicating that you'll reach the drop zone in T-minus 10 seconds. 9… 8… You tighten your parachute straps one last time, position yourself at the edge of the loading bay and… {@cue [Image #6: Drop Zone 2 image]|media}",
+								"One by one in rapid succession, 4 brave Christmas heroes jump from the flying sled and begin plummeting toward the ground below. {@cue [Image #7: Drop Zone 3]|media}"
 							]
 						},
-						"Ask each player to introduce their character now. Ask them to describe their character and tell us their call sign, then describe what they say when they touch down."
+						"Ask each player to introduce their PC now. Ask them to describe their character and tell us their call sign, then describe what they say when they touch down."
 					]
 				},
 				{
@@ -361,13 +422,16 @@
 					"name": "Crash Site",
 					"id": "crash_site",
 					"entries": [
-						"{@cue [Load the Sleigh Crash Site map.]|media}",
 						{
 							"type": "insetReadaloud",
 							"page": 1,
 							"id": "crash_site_readaloud",
 							"entries": [
-								"Stowing your chutes and dusting the snow off your heroic shoulders, you take in the crash scene.  Splinters of bright-red painted wood litter the road of this tiny village. Broken toys, smashed gifts, and other sleigh debris mottle up the otherwise pure white snow covering the ground. Your eyes follow the trail of wreckage all the up the oblong trench of the impact crater… and there it is, Big Red, the Spruce Christmas Goose, Noel One, Die Klausvagen… Santa's Sleigh itself: brought down to the humble ground like a meteor from the heavens. Thankfully, the village is small, and the crash is in an open area between buildings, so hopefully no one in the village was seriously hurt.  Actually… speaking of… where is everyone? And what is this myriad of footprints leading away from the crash site?  Lots and lots of tiny tracks, a few huge tracks, but nothing matching Santa's boots…  What could it mean??…"
+								"{@cue [Image #8: Crash Site]|media}",
+								"Stowing your chutes and dusting the snow off your heroic shoulders, you take in the crash scene.  Splinters of bright-red painted wood litter the road of this tiny village. Broken toys, smashed gifts, and other sleigh debris mottle up the otherwise pure white snow covering the ground.",
+								"Your eyes follow the trail of wreckage all the up the oblong trench of the impact crater… and there it is, Big Red, the Spruce Christmas Goose, Noel One, Die Klausvagen… Santa's Sleigh itself: brought down to the humble ground like a meteor from the heavens.",
+								"Thankfully, the village is small, and the crash is in an open area between buildings, so hopefully no one in the village was seriously hurt.  Actually… speaking of… where is everyone? And what is this myriad of footprints leading away from the crash site?  Lots and lots of tiny tracks, a few huge tracks, but nothing matching Santa's boots…  What could it mean??…",
+								"You glance around again.  Well, they couldn't have picked a nicer village to crash in, at least!"
 							]
 						},
 						"Time-permitting, let the players dick around in the village if they like.  Eventually, they need to follow the trail.",
@@ -401,7 +465,7 @@
 									"page": 1,
 									"id": "gifts_readaloud",
 									"entries": [
-										"Searching the wreckage, you see scattered gifts, a bag containing 4 {@item lump of coal|ERCC|Lumps of Coal}, and you find that there are some unopened gifts with names on the labels. Oooo! You are delighted to find one addressed to \"[your name]\"!"
+										"Searching the wreckage, you see scattered gifts, splintered pieces of sleigh, a bag containing 4 {@item lump of coal|ERCC|Lumps of Coal}, and the glint of something solver in the snow... bending down you see it's a {@item Silver Sleigh Bell|ERCC}. You also find that there are several unopened gifts with names on the labels. Oooo! You are delighted to find one addressed to \"[your name]\"!"
 									]
 								},
 								"Further investigation is free to find one gift addressed to each character's name.",
@@ -587,7 +651,7 @@
 						{
 							"type": "insetReadaloud",
 							"entries": [
-								"The boulder rumbles as it rolls itself out of the way. On the other side of the secret door, bewildered, stand several icewind kobolds wearing festive red hats, and one red robed kobold with a wily scowl. They seem to be gathered around the red kobold as he interacts with a glowing orb. But all of the kobolds in the room stop when you come in. \"Intruders!\" shouts the red kobold. \"They've come to take away our guest and foil our master's plan! Stop them!\" Roll for initiative!"
+								"The boulder rumbles as it rolls itself out of the way. On the other side of the secret door, bewildered, stand several kobolds wearing festive red hats, and one winged kobold with a wily scowl. They seem to be gathered around the winged kobold as he interacts with a glowing orb. But all of the kobolds in the room stop when you come in. \"Intruders!\" shouts the winged kobold. \"They've come to take away our guest and foil our master's plan! Stop them!\" Roll for initiative!"
 							]
 						},
 						"Run the Kobolds & Sorcerer encounter:",
@@ -605,13 +669,10 @@
 											"quantity": 4
 										},
 										{
-											"creature": "{@creature kobold scale sorcerer|MPMM}",
+											"creature": "{@creature kobold sorcerer|ERCC}",
 											"quantity": 1,
-											"note": "After the kobold sorcerer gets off a couple of spells, he will retreat southward to the back room."
+											"note": "After the kobold sorcerer gets off a fog spell, he will cast invisibility on himself and retreat southward to the back room."
 										}
-									],
-									"notes": [
-										"Amid the chaos, you notice one kobold awkwardly swinging its weapon but clearly avoiding serious harm to anyone, its beady eyes wide with something resembling… remorse? It mutters under its breath, \"I just wanna make kids smile, not… this!\""
 									]
 								},
 								{
@@ -622,13 +683,10 @@
 											"quantity": 6
 										},
 										{
-											"creature": "{@creature kobold scale sorcerer|MPMM}",
+											"creature": "{@creature kobold sorcerer|ERCC}",
 											"quantity": 1,
-											"note": "After the kobold sorcerer gets off a couple of spells, he will retreat southward to the back room."
+											"note": "After the kobold sorcerer gets off a fog spell, he will cast invisibility on himself and retreat southward to the back room."
 										}
-									],
-									"notes": [
-										"Amid the chaos, you notice one kobold awkwardly swinging its weapon but clearly avoiding serious harm to anyone, its beady eyes wide with something resembling… remorse? It mutters under its breath, \"I just wanna make kids smile, not… this!\""
 									]
 								},
 								{
@@ -639,13 +697,10 @@
 											"quantity": 7
 										},
 										{
-											"creature": "{@creature kobold scale sorcerer|MPMM}",
+											"creature": "{@creature kobold sorcerer|ERCC}",
 											"quantity": 1,
-											"note": "After the kobold sorcerer gets off a couple of spells, he will retreat southward to the back room."
+											"note": "After the kobold sorcerer gets off a fog spell, he will cast invisibility on himself and retreat southward to the back room."
 										}
-									],
-									"notes": [
-										"Amid the chaos, you notice one kobold awkwardly swinging its weapon but clearly avoiding serious harm to anyone, its beady eyes wide with something resembling… remorse? It mutters under its breath, \"I just wanna make kids smile, not… this!\""
 									]
 								}
 							]
@@ -670,8 +725,8 @@
 									"type": "entries",
 									"name": "Santa Hats",
 									"entries": [
-										"The red kobold controls the (otherwise not-evil) blue kobolds via the festive red hats they wear. One by one they were tricked into wearing them, at which point they immediately fell under the geas spell and began serving the sorcerer.",
-										"Knocking a hat off a blue kobold's head is nearly impossible, as they have fused themselves into the heads of their wearers thru a semi organic weave if tendrils. But a critical hit on an attack, or a nat 1 failed saving throw on a spell targeting the kobold will result in the hat losing its grip and flying off. At that point the kobold stops attacking and takes a full round to gather their wits, looking around confused. One round later, if successfully convinced with a DC 10 Cha check, they will join the party's side but only attack the red kobold. After the fight, they strongly wish to just pull their friends' bodies from the cave and leave (rather than join the heroes any further)."
+										"The sorcerer kobold controls the other kobolds (who are otherwise good-aligned) via the festive red hats they wear. One by one, these good kobolds were tricked into wearing the hats, at which point they immediately fell under the {@spell geas} spell and began serving the sorcerer.",
+										"Any time a kobold is hit, {@dice 1d6|roll a 1d6}, and on a roll of 4 or higher, the kobold's hat is knocked off. Alternatively, if a kobold takes fire or radiant damage, their hat is burnt to ash. Once a hat is destroyed or dislodged, you immediately notice the kobold's beady eyes wide with remorse. It pleads something such as {@i \"I just wanna make kids smile, not… this!\"} and likely runs out of the room."
 									]
 								}
 							]
@@ -982,12 +1037,13 @@
 					"name": "And To All a Good Night!",
 					"id": "and_to_all_a_good_night",
 					"entries": [
-						"Vistory in hand, the north pole elves must now return Santa to his duties.  Read the following:",
+						"Victory in hand, the north pole elves must now return Santa to his duties.  Read the following:",
 						{
 							"type": "insetReadaloud",
 							"entries": [
 								"Leading Santa out of the cave, you step into the snowy night. The sleigh awaits, fully repaired and gleaming, surrounded by industrious North Pole elves who are repacking the scattered gifts with cheerful efficiency. Santa turns to you, his face glowing with pride. \"You've not only saved Christmas,\" he says, his voice booming with joy, \"but you've saved Easter too! The world owes you a great debt.\"",
-								"Santa steps into his sleigh, his reindeer stamping eagerly in the snow. And as the sleigh soars into the starry night, you hear Santa's booming voice call \"Ho ho ho! Merry Christmas to all!\" as you watch it disappear into the distance with a twinkle."
+								"As Santa steps into his sleigh, you radio headquarters with the words they've been waiting for: \"The Big Guy is safe.\" The room erupts. Elves cheer, hats fly, and bells jingle in celebration!",
+								"Santa's reindeer stamp eagerly in the snow as Santa takes the reins. Moments later, as the sleigh soars into the starry night, you hear Santa's booming voice call \"Ho ho ho! Merry Christmas to all!\" ...as you watch the sleigh disappear into the distance with a twinkle."
 							]
 						}
 					]
@@ -995,22 +1051,16 @@
 				{
 					"type": "section",
 					"name": "Appendix A: Magic Items",
-					"page": 52,
 					"id": "199",
 					"entries": [
 						"A magic item is a wondrous treasure that adventurers find in a monster's hoard, in a trap-riddled dungeon, or in the possession of a slain foe. Every adventure holds the promise—but not a guarantee—of finding one or more magic items.",
 						{
-							"type": "section",
+							"type": "list",
 							"name": "Item Descriptions",
-							"page": 52,
-							"entries": [
-								{
-									"type": "list",
-									"columns": 3,
-									"items": [
-										"{@item Double Shot White Chocolate Peppermint Mocha Orcnog with Extra Whip and a Cinnamon Bacon Stir Stick|ERCC}"
-									]
-								}
+							"items": [
+								"{@item Silver Sleigh Bell|ERCC}",
+								"{@item Lump of Coal|ERCC|Lumps of Coal}",
+								"{@item Double Shot White Chocolate Peppermint Mocha Orcnog with Extra Whip and a Cinnamon Bacon Stir Stick|ERCC}"
 							]
 						}
 					]
@@ -1018,20 +1068,19 @@
 				{
 					"type": "section",
 					"name": "Appendix B: Monsters and NPCs",
-					"page": 54,
 					"entries": [
 						"The monsters and NPCs appearing in the adventure are presented in this section in alphabetical order.",
 						{
 							"type": "list",
-							"columns": 3,
+							"columns": 2,
 							"items": [
-								"{@creature yeti}",
-								"{@creature wolf|||scaled=1/8}",
-								"{@creature wolf}",
-								"{@creature young winter wolf|TftYP}",
-								"{@creature kobold}",
-								"{@creature kobold scale sorcerer|MPMM}",
-								"{@creature the easter bunny|ERCC}"
+								"{@creature The Easter Bunny|ERCC}",
+								"{@creature Kobold}",
+								"{@creature Kobold Scale Sorcerer|MPMM}",
+								"{@creature Wolf|||scaled=1/8}",
+								"{@creature Wolf}",
+								"{@creature Yeti}",
+								"{@creature Young Winter Wolf|TftYP}"
 							]
 						}
 					]
