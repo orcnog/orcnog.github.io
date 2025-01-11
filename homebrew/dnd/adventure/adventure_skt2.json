@@ -92,6 +92,10 @@
 					]
 				}
 			},
+			"hp": {
+				"average": 604,
+				"formula": "26d20 + 208"
+			},
 			"legendaryGroup": {
 				"name": "Blue Dragon",
 				"source": "MM"
@@ -160,7 +164,7 @@
 				}
 			},
 			"hp": {
-				"average": 481,
+				"average": 604,
 				"formula": "26d20 + 208"
 			},
 			"int": 18,
