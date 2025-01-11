@@ -39,7 +39,7 @@ class SublistCellTemplate {
 	) {
 		this._name = name;
 		this._css = css;
-		this._colStyle = colStyle;
+		this._colStyle = colStyle || "";
 	}
 
 	get name () { return this._name; }
@@ -462,8 +462,8 @@ class SublistManager {
 	}
 
 	async _pHandleJsonDownload () {
-		const entities = await this.getPinnedEntities();
-		entities.forEach(ent => DataUtil.cleanJson(MiscUtil.copyFast(ent)));
+		const entities = (await this.getPinnedEntities()).map(ent => MiscUtil.copyFast(ent));
+		entities.forEach(ent => DataUtil.cleanJson(ent));
 		DataUtil.userDownload(`${this._getDownloadName()}-data`, entities);
 	}
 
@@ -1436,6 +1436,7 @@ class ListPage {
 	_bindPopoutButton () {
 		this._getOrTabRightButton(`popout`, `new-window`)
 			.off("click")
+			.off("auxclick")
 			.title(`Popout Window (SHIFT for Source Data; CTRL for Markdown Render)`)
 			.on(
 				"click",
@@ -1445,7 +1446,15 @@ class ListPage {
 					if (EventUtil.isCtrlMetaKey(evt)) return this._bindPopoutButton_doShowMarkdown(evt);
 					return this._bindPopoutButton_doShowStatblock(evt);
 				},
-			);
+			)
+			.on("auxclick", evt => {
+				if (Hist.lastLoadedId === null) return;
+
+				if (!EventUtil.isMiddleMouse(evt)) return;
+				evt.stopPropagation();
+
+				return Renderer.hover.pDoBrowserPopoutCurPage(evt, this._lastRender.entity);
+			});
 	}
 
 	_bindPopoutButton_doShowStatblock (evt) {

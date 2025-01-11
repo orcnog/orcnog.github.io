@@ -1,4 +1,9 @@
 {
+	"_meta": {
+		"internalCopies": [
+			"subclass"
+		]
+	},
 	"class": [
 		{
 			"name": "Rogue",
@@ -94,7 +99,7 @@
 					},
 					{
 						"_": [
-							"Leather armor|phb",
+							"leather armor|phb",
 							{
 								"item": "dagger|phb",
 								"quantity": 2
@@ -1463,7 +1468,7 @@
 			"level": 17,
 			"header": 2,
 			"entries": [
-				"Starting at 17th level, you become a master of instant death. When you attack and hit a creature that is {@status surprised}, it must make a Constitution saving throw (DC 8 + your Dexterity modifier + your proficiency bonus). On a failed save, double the damage of your attack against the creature."
+				"Starting at 17th level, you become a master of instant death. When you attack and hit a creature that is {@status surprised}, it must make a Constitution saving throw ({@dc 8} + your Dexterity modifier + your proficiency bonus). On a failed save, double the damage of your attack against the creature."
 			]
 		},
 		{
@@ -1687,6 +1692,36 @@
 			]
 		},
 		{
+			"name": "Psi-Bolstered Knack",
+			"source": "TCE",
+			"page": 63,
+			"className": "Rogue",
+			"classSource": "PHB",
+			"subclassShortName": "Soulknife",
+			"subclassSource": "TCE",
+			"level": 3,
+			"consumes": {
+				"name": "Psionic Energy Die"
+			},
+			"entries": [
+				"When your nonpsionic training fails you, your psionic power can help: if you fail an ability check using a skill or tool with which you have proficiency, you can roll one Psionic Energy die and add the number rolled to the check, potentially turning failure into success. You expend the die only if the roll succeeds."
+			]
+		},
+		{
+			"name": "Psychic Whispers",
+			"source": "TCE",
+			"page": 63,
+			"className": "Rogue",
+			"classSource": "PHB",
+			"subclassShortName": "Soulknife",
+			"subclassSource": "TCE",
+			"level": 3,
+			"entries": [
+				"You can establish telepathic communication between yourself and others-perfect for quiet infiltration. As an action, choose one or more creatures you can see, up to a number of creatures equal to your proficiency bonus, and then roll one Psionic Energy die. For a number of hours equal to the number rolled, the chosen creatures can speak telepathically with you, and you can speak telepathically with them. To send or receive a message (no action required), you and the other creature must be within 1 mile of each other. A creature can't use this telepathy if it can't speak any languages, and a creature can end the telepathic connection at any time (no action required). You and the creature don't need to speak a common language to understand each other.",
+				"The first time you use this power after each long rest, you don't expend the Psionic Energy die. All other times you use the power, you expend the die."
+			]
+		},
+		{
 			"name": "Soulknife",
 			"source": "TCE",
 			"page": 63,
@@ -1730,11 +1765,11 @@
 					"entries": [
 						{
 							"type": "refSubclassFeature",
-							"subclassFeature": "Psi-Bolstered Knack|Rogue|TCE|Soulknife|TCE|3"
+							"subclassFeature": "Psi-Bolstered Knack|Rogue|PHB|Soulknife|TCE|3"
 						},
 						{
 							"type": "refSubclassFeature",
-							"subclassFeature": "Psychic Whispers|Rogue|TCE|Soulknife|TCE|3"
+							"subclassFeature": "Psychic Whispers|Rogue|PHB|Soulknife|TCE|3"
 						}
 					]
 				}
@@ -1752,8 +1787,34 @@
 			"header": 1,
 			"entries": [
 				"{@i 3rd-level Soulknife feature}",
-				"You can manifest your psionic power as shimmering blades of psychic energy. Whenever you take the {@action Attack} action, you can manifest a psychic blade from your free hand and make the attack with that blade. This magic blade is a simple melee weapon with the finesse and thrown properties. It has a normal range of 60 feet and no long range, and on a hit, it deals psychic damage equal to {@dice 1d6} plus the ability modifier you used for the attack roll. The blade vanishes immediately after it hits or misses its target, and it leaves no mark on its target if it deals damage.",
-				"After you attack with the blade, you can make a melee or ranged weapon attack with a second psychic blade as a bonus action on the same turn, provided your other hand is free to create it. The damage die of this bonus attack is {@dice 1d4}, instead of {@dice 1d6}."
+				"You can manifest your psionic power as shimmering blades of psychic energy. Whenever you take the {@action Attack} action, you can manifest a psychic blade from your free hand and make the attack with that blade. This magic blade is a simple melee weapon with the finesse and thrown properties. It has a normal range of 60 feet and no long range, and on a hit, it deals psychic damage equal to {@damage 1d6} plus the ability modifier you used for the attack roll. The blade vanishes immediately after it hits or misses its target, and it leaves no mark on its target if it deals damage.",
+				"After you attack with the blade, you can make a melee or ranged weapon attack with a second psychic blade as a bonus action on the same turn, provided your other hand is free to create it. The damage die of this bonus attack is {@damage 1d4}, instead of {@damage 1d6}."
+			]
+		},
+		{
+			"name": "Homing Strikes",
+			"source": "TCE",
+			"page": 63,
+			"className": "Rogue",
+			"classSource": "PHB",
+			"subclassShortName": "Soulknife",
+			"subclassSource": "TCE",
+			"level": 9,
+			"entries": [
+				"If you make an attack roll with your Psychic Blades and miss the target, you can roll one Psionic Energy die and add the number rolled to the attack roll. If this causes the attack to hit, you expend the Psionic Energy die."
+			]
+		},
+		{
+			"name": "Psychic Teleportation",
+			"source": "TCE",
+			"page": 63,
+			"className": "Rogue",
+			"classSource": "PHB",
+			"subclassShortName": "Soulknife",
+			"subclassSource": "TCE",
+			"level": 9,
+			"entries": [
+				"As a bonus action, you manifest one of your Psychic Blades, expend one Psionic Energy die and roll it, and throw the blade at an unoccupied space you can see, up to a number of feet away equal to 10 times the number rolled. You then teleport to that space, and the blade vanishes."
 			]
 		},
 		{
@@ -1774,11 +1835,11 @@
 					"entries": [
 						{
 							"type": "refSubclassFeature",
-							"subclassFeature": "Homing Strikes|Rogue|TCE|Soulknife|TCE|9"
+							"subclassFeature": "Homing Strikes|Rogue|PHB|Soulknife|TCE|9"
 						},
 						{
 							"type": "refSubclassFeature",
-							"subclassFeature": "Psychic Teleportation|Rogue|TCE|Soulknife|TCE|9"
+							"subclassFeature": "Psychic Teleportation|Rogue|PHB|Soulknife|TCE|9"
 						}
 					]
 				}
@@ -1924,7 +1985,7 @@
 			"level": 17,
 			"header": 2,
 			"entries": [
-				"At 17th level, you learn to exploit a creature's weaknesses by carefully studying its tactics and movement. While your Insightful Fighting feature applies to a creature, your Sneak Attack damage against that creature increases by {@dice 3d6}."
+				"At 17th level, you learn to exploit a creature's weaknesses by carefully studying its tactics and movement. While your Insightful Fighting feature applies to a creature, your Sneak Attack damage against that creature increases by {@damage 3d6}."
 			]
 		},
 		{
@@ -2215,62 +2276,6 @@
 			"header": 2,
 			"entries": [
 				"Beginning at 17th level, your mastery of the blade lets you turn failure into success in combat. If you miss with an attack roll, you can roll it again with advantage. Once you do so, you can't use this feature again until you finish a short or long rest."
-			]
-		},
-		{
-			"name": "Psi-Bolstered Knack",
-			"source": "TCE",
-			"page": 63,
-			"className": "Rogue",
-			"classSource": "TCE",
-			"subclassShortName": "Soulknife",
-			"subclassSource": "TCE",
-			"level": 3,
-			"consumes": {
-				"name": "Psionic Energy Die"
-			},
-			"entries": [
-				"When your nonpsionic training fails you, your psionic power can help: if you fail an ability check using a skill or tool with which you have proficiency, you can roll one Psionic Energy die and add the number rolled to the check, potentially turning failure into success. You expend the die only if the roll succeeds."
-			]
-		},
-		{
-			"name": "Psychic Whispers",
-			"source": "TCE",
-			"page": 63,
-			"className": "Rogue",
-			"classSource": "TCE",
-			"subclassShortName": "Soulknife",
-			"subclassSource": "TCE",
-			"level": 3,
-			"entries": [
-				"You can establish telepathic communication between yourself and others-perfect for quiet infiltration. As an action, choose one or more creatures you can see, up to a number of creatures equal to your proficiency bonus, and then roll one Psionic Energy die. For a number of hours equal to the number rolled, the chosen creatures can speak telepathically with you, and you can speak telepathically with them. To send or receive a message (no action required), you and the other creature must be within 1 mile of each other. A creature can't use this telepathy if it can't speak any languages, and a creature can end the telepathic connection at any time (no action required). You and the creature don't need to speak a common language to understand each other.",
-				"The first time you use this power after each long rest, you don't expend the Psionic Energy die. All other times you use the power, you expend the die."
-			]
-		},
-		{
-			"name": "Homing Strikes",
-			"source": "TCE",
-			"page": 63,
-			"className": "Rogue",
-			"classSource": "TCE",
-			"subclassShortName": "Soulknife",
-			"subclassSource": "TCE",
-			"level": 9,
-			"entries": [
-				"If you make an attack roll with your Psychic Blades and miss the target, you can roll one Psionic Energy die and add the number rolled to the attack roll. If this causes the attack to hit, you expend the Psionic Energy die."
-			]
-		},
-		{
-			"name": "Psychic Teleportation",
-			"source": "TCE",
-			"page": 63,
-			"className": "Rogue",
-			"classSource": "TCE",
-			"subclassShortName": "Soulknife",
-			"subclassSource": "TCE",
-			"level": 9,
-			"entries": [
-				"As a bonus action, you manifest one of your Psychic Blades, expend one Psionic Energy die and roll it, and throw the blade at an unoccupied space you can see, up to a number of feet away equal to 10 times the number rolled. You then teleport to that space, and the blade vanishes."
 			]
 		}
 	]

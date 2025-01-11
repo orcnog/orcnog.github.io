@@ -29,3 +29,6 @@ sw-injector.js
 
 # Config files
 js/controller-config.js
+
+# Dev scripts
+dev-*.sh

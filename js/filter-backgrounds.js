@@ -13,7 +13,7 @@ class PageFilterBackgrounds extends PageFilterBase {
 	constructor () {
 		super();
 
-		this._skillFilter = new Filter({header: "Skill Proficiencies", displayFn: StrUtil.toTitleCase});
+		this._skillFilter = new Filter({header: "Skill Proficiencies", displayFn: StrUtil.toTitleCase.bind(StrUtil)});
 		this._prereqFilter = new Filter({
 			header: "Prerequisite",
 			items: [...FilterCommon.PREREQ_FILTER_ITEMS],
@@ -170,6 +170,7 @@ class ModalFilterBackgrounds extends ModalFilterBase {
 				hash,
 				source,
 				sourceJson: bg.source,
+				page: bg.page,
 				skills: bg._skillDisplay,
 			},
 			{
