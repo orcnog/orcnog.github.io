@@ -78,6 +78,16 @@
 									"In storm giant form, Iymrith retains her alignment, hit points, Hit Dice, ability to speak, proficiencies, Legendary Resistance, lair actions, and Intelligence, Wisdom, and Charisma scores, as well as this action. Her statistics are otherwise replaced by those of the new form."
 								]
 							}
+						},
+						{
+							"mode": "replaceArr",
+							"replace": "Frightful Presence",
+							"items": {
+								"name": "Frightful Presence",
+								"entries": [
+									"Each creature of Iymrith's choice that is within 120 feet of Iymrith and aware of it must succeed on a {@dc 20} Wisdom saving throw or become {@condition frightened} for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. The DC decreases by 5 each time the saving throw is re-attempted. If a creature's saving throw is successful or the effect ends for it, the creature is immune to Iymrith's Frightful Presence for the next 24 hours."
+								]
+							}
 						}
 					]
 				}
