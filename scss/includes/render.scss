@@ -449,6 +449,16 @@ $rgb-inset-border: #656565;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
+                    column-gap: 2em;
+                }
+                .encounter-variation-select {
+                    display: flex;
+                    align-items: center;
+                    column-gap: 1em;
+                    margin-left: auto;
+                }
+                .encounter-variation-select-input {
+                    width: auto;
                 }
                 .encounter-adj-xp {
                     margin-bottom: var(--h-mb-p);

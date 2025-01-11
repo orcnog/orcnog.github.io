@@ -1,18 +1,14 @@
 {
 	"$schema": "https://raw.githubusercontent.com/TheGiddyLimit/5etools-utils/master/schema/brew-fast/homebrew.json",
 	"_meta": {
-		"dependencies": {
-			"monster": [
-				"MM"
-			]
-		},
-		"sources": [
-			{
-				"json": "HoE",
+        "sources": [
+            {
+                "json": "HoE",
 				"abbreviation": "HoE",
 				"full": "The House of Elazar",
+                "url": "https://5e.orcnog.com/homebrew/dnd/adventure/adventure_hoe.json",
 				"convertedBy": [
-					"orcnog"
+                    "orcnog"
 				],
 				"version": "1.0",
 				"color": "#851f21",
@@ -21,7 +17,12 @@
 		],
 		"dateAdded": 1729028448,
 		"dateLastModified": 1729028448,
-		"edition": "classic"
+		"edition": "classic",
+        "dependencies": {
+            "monster": [
+                "MM"
+            ]
+        }
 	},
 	"item": [
 		{
@@ -178,6 +179,27 @@
 			"hasFluffImages": true
 		},
 		{
+			"name": "Emmanuel Elazar",
+			"isNpc": true,
+			"isNamedCreature": true,
+			"source": "HoE",
+			"page": 1,
+			"_copy": {
+				"name": "Vampire Spawn",
+				"source": "MM",
+				"_mod": {
+					"*": {
+						"mode": "replaceTxt",
+						"replace": "the vampire",
+						"with": "Elazar",
+						"flags": "i"
+					}
+				}
+			},
+			"hasToken": true,
+			"hasFluffImages": true
+		},
+		{
 			"name": "Hamelia",
 			"source": "HoE",
 			"isNpc": true,
@@ -290,7 +312,7 @@
 						"Meet Hamelia",
 						{
 							"depth": 1,
-							"header": "Encounter: Bats!"
+							"header": "Bats!"
 						},
 						{
 							"depth": 1,
@@ -492,29 +514,7 @@
 								"<style>.ve-night-mode .rd__b-inset--readaloud {background-color: #292229; /*302334*/} .ve-night-mode .rd__h--0, .ve-night-mode .rd__h--1, .ve-night-mode .rd__h--2 {color: #f24a38;} .ve-night-mode .rd__h--1 {border-bottom-color: #f24a38;} .ve-night-mode .hwin .ve-tbl-border {background-color: #942c20;} .ve-night-mode .stats__sect-header-inner {color: #f24a38; border-bottom-color: #942c20;} .ve-night-mode .stats__h-name {color: #f24a38;}</style>"
 							]
 						},
-						{
-							"type": "encounter",
-							"name": "Encounter: TEST!",
-							"id": "encounter block test",
-							"combatants": [
-								{
-									"creature": "{@creature Hamelia|HoE}",
-									"quantity": 1
-								},
-								{
-									"creature": "{@creature Giant Bat|||scaled=2}",
-									"quantity": 2
-								},
-								{
-									"creature": "{@creature Swarm of Bats}",
-									"quantity": 1
-								}
-							],
-							"notes": [
-								"Click the link below to launch the Voice Initiative controller screen for this encounter!"
-							]
-						},
-						"The House of Elazar by Tom Cartos is a spooky one-shot adventure designed for Dungeons & Dragons 5th Edition. The adventure is designed for 3 to 5 players of 3rd level, but its encounters are mechanically balanced for 4 players. This text is written for the Dungeon Master, and it introduces the small town of Hogsbottom (the starting setting of most of my D&D one-shots), the opening narration to help emmerse your players in the setting, and descriptions of each explorable room in the Manor, as well as encounter blocks which describe and help run individual combat encounters.",
+						"The House of Elazar by Tom Cartos is a spooky one-shot adventure designed for Dungeons & Dragons 5th Edition. The adventure is designed for 3 to 5 players of 3rd level, but optimized for 4 players. This text is written for the Dungeon Master, and it introduces the small town of Hogsbottom (the starting setting of most of my D&D one-shots), the opening narration to help emmerse your players in the setting, and descriptions of each explorable room in the Manor, as well as encounter blocks which describe and help run individual combat encounters.",
 						{
 							"type": "entries",
 							"name": "Background",
@@ -589,7 +589,7 @@
 									"page": 1,
 									"id": "prep",
 									"entries": [
-										"You will need to prepare the adventure before running it with players. See the {@quickref Running an Adventure|ODMG|2|0} section of the {@book ODMG|ODMG|2|0}. Once you're prepped, with at least few days notice, instruct your players to build a {@b level 3 character}."
+										"You will need to prepare the adventure before running it with players. See the {@book Running an Adventure|odmg|2|0} section of my {@book Orcnog's DMG|odmg|2|0}. Once you're prepped (and with a few days notice), tell your players to build a {@b level 3 character}."
 									]
 								},
 								{
@@ -598,8 +598,8 @@
 									"page": 1,
 									"id": "in-game",
 									"entries": [
-										"This adventure text is written to be read and executed like a script.  It's very prescriptive, to the point of telling you when to call for a skill check, how to respond to a specific player action or quetsion, when to play a certain sound or playlist, and when/how to launch an encounter. If you start the adventure at the top of {@area Chapter 1|the approach|x}, you should be able to essentially read aloud through thre rest of the text, pausing only for player interaction (which is noted), or to execute the prescribed DM cues.",
-										"Familiarize yourself with the elements of this text, including my own enhancements, to make your in-game experience as efficient and seamless as you can. You'll see the following elements throughout the adventure text:",
+										"This adventure text is written to be read and executed like a theatrical script.  It's very prescriptive, to the point of telling you when to call for a skill check, how to respond to a specific player action or question, when to play a certain sound or playlist, and when/how to launch an encounter. If you start the adventure at the top of {@area Chapter 1|the approach|x}, you should be able to essentially read aloud through thre rest of the text, pausing only for player interaction (which is noted), or to execute the prescribed DM cues.",
+										"Familiarize yourself with the elements of this text, including {@book my own enhancements|ODMG|1|0}, to make your in-game experience as efficient and seamless as you can. You'll see the following elements throughout the adventure text:",
 										{
 											"type": "list",
 											"items": [
@@ -609,7 +609,7 @@
 													"page": 1,
 													"id": "encounter blocks",
 													"entries": [
-														"See {@quickref Encounter Blocks|ODMG|1|0} section of the {@book ODMG|ODMG|1|0}"
+														"See {@book Encounter Blocks|ODMG|1|Encounter Blocks} section of the {@book ODMG|odmg}"
 													]
 												},
 												{
@@ -618,7 +618,7 @@
 													"page": 1,
 													"id": "dm actions cues",
 													"entries": [
-														"See {@quickref DM Actions (Cues)|ODMG|1|1} section of the {@book ODMG|ODMG|1|1}"
+														"See {@book DM Actions (Cues)|ODMG|1|DM Actions (Cues)} section of the {@book ODMG|odmg}"
 													]
 												},
 												{
@@ -627,7 +627,7 @@
 													"page": 1,
 													"id": "dm action blocks",
 													"entries": [
-														"See {@quickref DM Action Blocks|ODMG|1|2} section of the {@book ODMG|ODMG|1|2}"
+														"See {@book DM Action Blocks|ODMG|1|DM Action Blocks} section of the {@book ODMG|odmg}"
 													]
 												},
 												{
@@ -752,25 +752,68 @@
 								},
 								{
 									"type": "entries",
-									"name": "Encounter: Bats!",
-									"id": "encounter bats",
+									"name": "Bats!",
+									"id": "bats",
 									"entries": [
 										{
-											"type": "inset",
+											"type": "encounter",
 											"name": "Encounter: Bats!",
-											"page": 2,
-											"id": "encounter block bats",
-											"entries": [
+											"id": "encounter bats",
+											"varyBy": "Party Size",
+											"variations": [
 												{
-													"type": "list",
-													"style": "list-no-bullets",
-													"items": [
-														"1 x {@creature Hamelia|HoE}",
-														"2 x {@creature Giant Bat}",
-														"2 x {@creature Swarm of Bats}",
-														"{@note Adjusted XP: 300}",
-														"<hr/>",
-														"Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#%7B%22w%22%3A10%2C%22h%22%3A10%2C%22ctc%22%3Atrue%2C%22fs%22%3Afalse%2C%22lk%22%3Afalse%2C%22ps%22%3A%5B%7B%22x%22%3A0%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A9%2C%22y%22%3A0%2C%22w%22%3A1%2C%22h%22%3A10%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A9%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A0%2C%22w%22%3A8%2C%22h%22%3A1%2C%22t%22%3A99%7D%2C%7B%22x%22%3A1%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A51%2C%22s%22%3A%7B%7D%7D%2C%7B%22x%22%3A5%2C%22y%22%3A1%2C%22w%22%3A4%2C%22h%22%3A8%2C%22t%22%3A5%2C%22s%22%3A%7B%22s%22%3A%22NUMBER%22%2C%22d%22%3A%22DESC%22%2C%22ri%22%3Atrue%2C%22m%22%3Afalse%2C%22rg%22%3Afalse%2C%22rri%22%3Afalse%2C%22g%22%3Atrue%2C%22p%22%3Atrue%2C%22a%22%3Afalse%2C%22k%22%3Afalse%2C%22piHp%22%3Afalse%2C%22piHm%22%3Afalse%2C%22piV%22%3Atrue%2C%22piO%22%3Afalse%2C%22c%22%3A%5B%5D%2C%22cndc%22%3A%5B%5D%2C%22r%22%3A%5B%7B%22id%22%3A%2260d7e106-5d6a-46c3-ad7b-9d3a23e0ce49%22%2C%22n%22%3A%22Commoner%22%2C%22n_m%22%3A%22Hamelia%22%2C%22h%22%3A4%2C%22g%22%3A4%2C%22i%22%3A20%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2250d24b16-e4d7-4c94-86d5-f55ab92cd31e%22%2C%22n%22%3A%22Giant%20Bat%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A2%2C%22a%22%3Afalse%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%22d36107b8-e7c3-4cc4-914f-ed2a77e1cd3e%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A1%2C%22k%22%3A%5B%5D%7D%2C%7B%22id%22%3A%2271fa036c-ecb6-448b-a005-5df0ed51a37b%22%2C%22n%22%3A%22Swarm%20of%20Bats%22%2C%22h%22%3A22%2C%22g%22%3A22%2C%22i%22%3A1%2C%22a%22%3Atrue%2C%22s%22%3A%22MM%22%2C%22c%22%3A%5B%5D%2C%22v%22%3Afalse%2C%22o%22%3A2%2C%22k%22%3A%5B%5D%7D%5D%2C%22rdp%22%3A%5B%5D%2C%22n%22%3A1%7D%7D%5D%2C%22ex%22%3A%5B%5D%7D}"
+													"variantName": "3",
+													"combatants": [
+														{
+															"creature": "{@creature Hamelia|HoE}",
+															"quantity": 1,
+															"npc": true
+														},
+														{
+															"creature": "{@creature Giant Bat|||scaled=3}",
+															"quantity": 1
+														},
+														{
+															"creature": "{@creature Swarm of Bats}",
+															"quantity": 1
+														}
+													]
+												},
+												{
+													"variantName": "4",
+													"default": true,
+													"combatants": [
+														{
+															"creature": "{@creature Hamelia|HoE}",
+															"quantity": 1,
+															"npc": true
+														},
+														{
+															"creature": "{@creature Giant Bat|||scaled=2}",
+															"quantity": 2
+														},
+														{
+															"creature": "{@creature Swarm of Bats}",
+															"quantity": 1
+														}
+													]
+												},
+												{
+													"variantName": "5",
+													"combatants": [
+														{
+															"creature": "{@creature Hamelia|HoE}",
+															"quantity": 1,
+															"npc": true
+														},
+														{
+															"creature": "{@creature Giant Bat|||scaled=2}",
+															"quantity": 2
+														},
+														{
+															"creature": "{@creature Swarm of Bats}",
+															"quantity": 2
+														}
 													]
 												}
 											]
@@ -997,22 +1040,61 @@
 										},
 										{
 											"type": "entries",
-											"name": "Encounter: Shadows!",
+											"name": "Shadows Attack!",
+											"id": "shadows attack",
 											"entries": [
 												{
-													"type": "inset",
+													"type": "encounter",
 													"name": "Encounter: Shadows!",
 													"id": "encounter shadows",
-													"collapsed": true,
-													"entries": [
+													"varyBy": "Party Size",
+													"variations": [
 														{
-															"type": "list",
-															"style": "list-no-bullets",
-															"items": [
-																"3 x {@creature Shadow}",
-																"{@note Adjusted XP: 600}",
-																"<hr/>",
-																"Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#}"
+															"variantName": "3",
+															"combatants": [
+																{
+																	"creature": "{@creature Hamelia|HoE}",
+																	"quantity": 1,
+																	"npc": true
+																},
+																{
+																	"creature": "{@creature Shadow}",
+																	"quantity": 2
+																}
+															]
+														},
+														{
+															"variantName": "4",
+															"default": true,
+															"combatants": [
+																{
+																	"creature": "{@creature Hamelia|HoE}",
+																	"quantity": 1,
+																	"npc": true
+																},
+																{
+																	"creature": "{@creature Shadow}",
+																	"quantity": 3
+																}
+															]
+														},
+														{
+															"variantName": "5",
+															"combatants": [
+																{
+																	"creature": "{@creature Hamelia|HoE}",
+																	"quantity": 1,
+																	"npc": true
+																},
+																{
+																	"creature": "{@creature Shadow}",
+																	"quantity": 2
+																},
+																{
+																	"creature": "{@creature Shadow|||scaled=1}",
+																	"quantity": 1,
+																	"note": "This shadow is somehow... darker... than the others."
+																}
 															]
 														}
 													]
@@ -1124,17 +1206,52 @@
 										},
 										"{@cue The moment a player reaches for the double doors to the library... or reaches for the weapons rack...}",
 										{
-											"type": "inset",
+											"type": "encounter",
 											"name": "Encounter: Animated Armors",
-											"entries": [
+											"id": "encounter animated armors",
+											"varyBy": "Party Size",
+											"variations": [
 												{
-													"type": "list",
-													"style": "list-no-bullets",
-													"items": [
-														"2 x {@creature Animated Armor}",
-														"{@note Adjusted XP: 600}",
-														"<hr/>",
-														"Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#}"
+													"variantName": "3",
+													"combatants": [
+														{
+															"creature": "{@creature Hamelia|HoE}",
+															"quantity": 1,
+															"npc": true
+														},
+														{
+															"creature": "{@creature Animated Armor|||scaled=1/2}",
+															"quantity": 2
+														}
+													]
+												},
+												{
+													"variantName": "4",
+													"default": true,
+													"combatants": [
+														{
+															"creature": "{@creature Hamelia|HoE}",
+															"quantity": 1,
+															"npc": true
+														},
+														{
+															"creature": "{@creature Animated Armor|||scaled=1/2}",
+															"quantity": 2
+														}
+													]
+												},
+												{
+													"variantName": "5",
+													"combatants": [
+														{
+															"creature": "{@creature Hamelia|HoE}",
+															"quantity": 1,
+															"npc": true
+														},
+														{
+															"creature": "{@creature Animated Armor}",
+															"quantity": 2
+														}
 													]
 												}
 											]
@@ -1240,17 +1357,45 @@
 										},
 										"{@cue Whatever the players do next...}",
 										{
-											"type": "inset",
+											"type": "encounter",
 											"name": "Encounter: Creepy Doll",
-											"entries": [
+											"id": "encounter creepy doll",
+											"varyBy": "Party Size",
+											"variations": [
 												{
-													"type": "list",
-													"style": "list-no-bullets",
-													"items": [
-														"1 x {@creature Creepy Doll|HoE}",
-														"{@note Adjusted XP: 450}",
-														"<hr/>",
-														"Run: {@5etools DM Screen Initiative Tracker|dmscreen.html#}"
+													"variantName": "3",
+													"combatants": [
+														{
+															"creature": "{@creature Hamelia|HoE}",
+															"npc": true
+														},
+														{
+															"creature": "{@creature Creepy Doll|HoE}"
+														}
+													]
+												},
+												{
+													"variantName": "4",
+													"combatants": [
+														{
+															"creature": "{@creature Hamelia|HoE}",
+															"npc": true
+														},
+														{
+															"creature": "{@creature Creepy Doll|HoE}"
+														}
+													]
+												},
+												{
+													"variantName": "5",
+													"combatants": [
+														{
+															"creature": "{@creature Hamelia|HoE}",
+															"npc": true
+														},
+														{
+															"creature": "{@creature Creepy Doll|HoE}"
+														}
 													]
 												}
 											]
@@ -1478,7 +1623,7 @@
 										"{@cue If the players open another coffin...}",
 										"They see a thrall, which just looks like a decaying corpse. (it doesn't wake up.)",
 										"{@cue If the players opt to attack the thralls...}",
-										"They all wake up and begin to attack the players. All 8 of them. *shrug*"
+										"Okay. They all wake up and begin to attack the players. All 8 of them. *shrug*"
 									]
 								},
 								{
@@ -1503,6 +1648,82 @@
 											"type": "insetReadaloud",
 											"entries": [
 												"Streams of blood flow from sacrificed victims to the pool at the center of the room from elevated plinths on each side. An ornate coffin rests on the far plinth flanked by Gargoyles. Two swords, heirlooms of his house, are displayed. Floating crimson orbs provide the only light. This is where the ritual is being performed. You can see two young boys, one on each side of the large chamber, bound and gagged on the raised plinths. But they appear to be the only ones in the room."
+											]
+										},
+										{
+											"type": "entries",
+											"name": "Boss Fight",
+											"id": "boss fight",
+											"entries": [
+												{
+													"type": "encounter",
+													"name": "Encounter: Boss Fight!",
+													"id": "encounter boss fight",
+													"varyBy": "Party Size",
+													"variations": [
+														{
+															"variantName": "3",
+															"combatants": [
+																{
+																	"creature": "{@creature Hamelia|HoE}",
+																	"npc": true
+																},
+																{
+																	"creature": "{@creature Emmanuel Elazar|HoE}"
+																},
+																{
+																	"creature": "{@creature Flying Dagger|BGDIA|Crest Sword}",
+																	"quantity": 2
+																},
+																{
+																	"creature": "{@creature Zombie||Thrall}",
+																	"quantity": 8
+																}
+															]
+														},
+														{
+															"variantName": "4",
+															"default": true,
+															"combatants": [
+																{
+																	"creature": "{@creature Hamelia|HoE}",
+																	"npc": true
+																},
+																{
+																	"creature": "{@creature Emmanuel Elazar|HoE}"
+																},
+																{
+																	"creature": "{@creature Flying Dagger|BGDIA|Crest Sword}",
+																	"quantity": 2
+																},
+																{
+																	"creature": "{@creature Zombie||Thrall}",
+																	"quantity": 8
+																}
+															]
+														},
+														{
+															"variantName": "5",
+															"combatants": [
+																{
+																	"creature": "{@creature Hamelia|HoE}",
+																	"npc": true
+																},
+																{
+																	"creature": "{@creature Emmanuel Elazar|HoE}"
+																},
+																{
+																	"creature": "{@creature Flying Dagger|BGDIA|Crest Sword}",
+																	"quantity": 2
+																},
+																{
+																	"creature": "{@creature Zombie||Thrall}",
+																	"quantity": 8
+																}
+															]
+														}
+													]
+												}
 											]
 										}
 									]
@@ -1590,14 +1811,16 @@
 							"type": "list",
 							"columns": 2,
 							"items": [
+								"{@creature Hamelia|HoE}",
+								"{@creature Giant Bat|||scaled=2}",
+								"{@creature Giant Bat|||scaled=3}",
+								"{@creature Swarm of Bats}",
+								"{@creature Shadow}",
+								"{@creature Shadow|||scaled=1}",
+								"{@creature Animated Armor|||scaled=1/2}",
 								"{@creature Animated Armor}",
 								"{@creature Creepy Doll|HoE}",
-								"{@creature Giant Bat}",
-								"{@creature Shadow}",
-								"{@creature Swarm of Bats}",
-								"{@creature Flying Dagger|BGDIA|Crest Sword}",
-								"{@creature Vampire Spawn||Elazar}",
-								"{@creature Zombie||Thrall}"
+								"{@creature Emmanuel Elazar|HoE}"
 							]
 						}
 					]

@@ -1,7 +1,16 @@
 // TODO:
-// 1. allow Add a Player option to add HP and Max HP.
-// 2. Add option to Encounter Blocks to make them re-balanceable for different party sizes.
-// 3. Merge in latest changes from source (forked mirror-3) repo
+// 1. Add feature that totals up all encounters in an adventure and displays the total adjusted XP vs Daily Budget.
+// 2. Related to #3, I think! 5et handles for summoned CRs. I haven't bothered... but I feel like I need to eventually support them.
+// 3. Related to #2, I think! Apparently, there are some 5et creatures with CRs set to "0.5" instead of "1/2".  Need to handle for those. See: Aberrant Spirit (TCE).
+// 4. Apparently, some creatures have no CR listed.  Need to handle for those in controller.js AND render.js encounter adj xp calculation.
+// 5a. IDEA: allow monster rows to have "onHalfHealth" and "onZeroHealth" attributes, which can produce popups with text notes as those combatants HP changes.
+// 5b. Support this in the Encounter Block in render.js
+// 5c. Add a context menu option to add / edit these attributes in the controller.js interface. (Don't send this info to the voice app.)
+// 6a. IDEA (related to #5): allow encounters to have "Turn 0" thru "Turn N" popup notes as well.
+// 6b. Support in Encounter Blocks: probably display as nested entries UNDER the Run: Initiative Tracker link.
+// 6c. Support in controller.js interface??  Not sure what that UI/UX would be like.
+// 7. Support Day Mode.
+// 8. Allow for "hidden" combatants in the controller.js side. Might need to support this on the voice app side, as advancing a turn to a hidden creature would have to be handled by probably highlighting no creature in the app.
 
 import { VOICE_APP_PATH } from "./controller-config.js";
 
@@ -23,6 +32,8 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	let isRowHoverEnabled = true;
 	let isMicActive = false;
 	let initTrackerTable;
+	const hpCookieSuffix = "__hp";
+	const maxhpCookieSuffix = "__hpmax";
 
 	// Initialize with empty objects/arrays as fallbacks
 	let themes = [];
@@ -66,18 +77,18 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			} else {
 				lastPeerId = peer.id;
 			}
-			console.debug(`peer.on('open')`);
+			console.log(`peer.on('open')`);
 			checkForKeyAndJoin();
 		});
 		peer.on("connection", function (c) {
-			console.debug(`peer.on('connection')`);
+			console.log(`peer.on('connection')`);
 			c.on("open", function () {
 				c.send("Sender does not accept incoming connections");
 				setTimeout(function () { c.close(); }, 500);
 			});
 		});
 		peer.on("disconnected", function () {
-			console.debug(`peer.on('disconnected')`);
+			console.log(`peer.on('disconnected')`);
 			p2pconnected = false;
 			status.innerHTML = "<span class=\"red\">Connection lost. Please reconnect</span>";
 			document.querySelectorAll(".control-panel").forEach(c => { c.classList.add("closed"); });
@@ -86,7 +97,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			peer.reconnect();
 		});
 		peer.on("close", function () {
-			console.debug(`peer.on('close')`);
+			console.log(`peer.on('close')`);
 			p2pconnected = false;
 			conn = null;
 			status.innerHTML = "<span class=\"red\">Connection destroyed. Please refresh</span>";
@@ -118,14 +129,29 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			});
 		}
 
-		// Now send the signal
-		if (conn && conn.open) {
-			conn.send(sigName);
-			addMessage(cueString + sigName);
-		} else {
-			console.error("No connection found.");
-			showAlert("No connection found.");
-		}
+		// Create a promise to wait for a response
+		return new Promise((resolve) => {
+			// Store the resolve function to call later
+			const handleResponse = (data) => {
+				// Resolve the promise with the received data
+				document.removeEventListener("initiative_tracker_ready", handleResponse);
+				resolve(data);
+			};
+
+			// Add the response handler
+			document.addEventListener("initiative_tracker_ready", handleResponse);
+
+			// Now send the signal
+			if (conn && conn.open) {
+				conn.send(sigName);
+				addMessage(cueString + (typeof sigName === "object" ? JSON.stringify(sigName) : sigName));
+				console.info("Data Sent:", sigName);
+			} else {
+				console.error("No connection found.");
+				showAlert("No connection found.");
+				resolve(null); // Resolve with null if no connection
+			}
+		});
 	}
 
 	function join (forcedPasskey) {
@@ -136,7 +162,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			conn = peer.connect(`orcnog-${passkey}`, { label: "CONTROLLER", reliable: true });
 
 			conn.on("open", function () {
-				console.debug(`conn.on('open')`);
+				console.log(`conn.on("open")`);
 				p2pconnected = true;
 				status.innerHTML = `Connected to: ${conn.peer.split("orcnog-")[1]}`;
 				document.querySelectorAll(".control-panel").forEach(c => { c.classList.remove("closed"); });
@@ -147,8 +173,8 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				});
 			});
 
-			conn.on("data", function (data) {
-				console.debug(`conn.on('data')`);
+			conn.on("data", async (data) => {
+				console.log(`conn.on("data")`, data);
 				// Check for error message
 				if (data?.error === "CONTROLLER_ALREADY_CONNECTED") {
 					p2pconnected = false;
@@ -159,15 +185,17 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				}
 
 				// Handle normal data
-				if (typeof data === "object") {
-					handleDataObject(data);
+				if (typeof data === "object" && "controllerData" in data) {
+					await handleDataObject(data.controllerData);
+					// addMessage(`<span class="peerMsg">Received:</span> ${JSON.stringify(data)}`);
+					console.info("Peer Data Recieved: ", data.controllerData);
 				} else {
-					addMessage(`<span class="peerMsg">Peer:</span> ${data}`);
+					addMessage(`<span class="peerMsg">Peer said:</span> ${data}`);
 				}
 			});
 
 			conn.on("close", function () {
-				console.debug(`conn.on('close')`);
+				console.log(`"conn.on("close")`);
 				p2pconnected = false;
 				// Only show generic close message if it wasn't a duplicate controller error
 				if (!conn.duplicateControllerError) {
@@ -251,8 +279,8 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 							const mon = await get5etMonsterByHash(player.hash);
 							const newHp = await calculateNewHp(mon, 3); // Roll random HP
 							// Store HP in cookies immediately using the generated ID
-							setCookie(`${playerId}__hp`, newHp);
-							setCookie(`${playerId}__hpmax`, newHp);
+							setCookie(`${playerId}${hpCookieSuffix}`, newHp);
+							setCookie(`${playerId}${maxhpCookieSuffix}`, newHp);
 						}
 
 						const playerObjToAdd = getPlayerObjFromMon({
@@ -263,11 +291,19 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 							...(playerId && { id: playerId }), // Only include ID if it was generated
 						});
 						// Add the player
-						signal({ "add_player": playerObjToAdd });
+						// Wait for the signal to complete before continuing
+						try {
+							// console.debug(`Sending add_player signal:`, playerObjToAdd);
+							await signal({ "add_player": playerObjToAdd }).then(() => {
+								// console.debug(`---response received`);
+							});
+						} catch (error) {
+							console.error(`Error adding player ${player.name}:`, error);
+							continue;
+						}
 					}
 
-					// After all players are processed
-					handleDataObject({"controllerData": newInitObj});
+					console.debug("activating row");
 					const activeRow = document.querySelector(".initiative-tracker tr.active");
 					if (activeRow) {
 						displayStatblock(activeRow.dataset.name, activeRow.dataset.id, activeRow.dataset.hash);
@@ -434,36 +470,33 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	}
 
 	async function handleDataObject (data) {
-		if (data.controllerData) {
-			const obj = data.controllerData;
-			console.debug(obj);
+		const obj = data;
 
-			if (obj.hasOwnProperty("debug")) console.log(obj.debug);
-			if (obj.hasOwnProperty("hotMic")) handleMicData(obj);
-			if (obj.hasOwnProperty("currentTheme")) handleCurrentThemeData(obj);
-			if (obj.hasOwnProperty("currentSlideshow")) await handleCurrentSlideshowData(obj);
-			if (obj.hasOwnProperty("currentSlideshowId")) handleCurrentSlideshowIdData(obj);
-			if (obj.hasOwnProperty("currentSlideNum") && typeof obj.currentSlideNum === "number") handleCurrentSlideNumData(obj);
-			if (obj.hasOwnProperty("initiativeActive") && obj.initiativeActive === true) handleInitiativeActiveData();
-			if (obj.hasOwnProperty("currentAppScale")) handleCurrentAppScaleData(obj);
-			if (obj.hasOwnProperty("currentFontSize")) handleCurrentFontSizeData(obj);
-			if (obj.hasOwnProperty("currentCombatPlaylist")) handleCurrentCombatPlaylistData(obj);
-			if (obj.hasOwnProperty("currentMusicPlaylist")) handleCurrentMusicPlaylistData(obj);
-			if (obj.hasOwnProperty("currentMusicTrack")) handleCurrentMusicTrackData(obj);
-			if (obj.hasOwnProperty("currentMusicVolume")) handleCurrentMusicVolumeData(obj);
-			if (obj.hasOwnProperty("musicWillFade")) handleWillFadeData(obj, "music");
-			if (obj.hasOwnProperty("musicIsPlaying")) handleMusicIsPlayingData(obj.musicIsPlaying);
-			if (obj.hasOwnProperty("musicIsLooping")) handleMusicIsLoopingData(obj.musicIsLooping);
-			if (obj.hasOwnProperty("musicIsShuffling")) handleMusicIsShufflingData(obj.musicIsShuffling);
-			if (obj.hasOwnProperty("ambienceIsPlaying")) handleAmbienceIsPlayingData(obj.ambienceIsPlaying);
-			if (obj.hasOwnProperty("currentAmbienceVolume")) handleCurrentAmbienceVolumeData(obj);
-			if (obj.hasOwnProperty("ambienceWillFade")) handleWillFadeData(obj, "ambience");
-			if (obj.hasOwnProperty("currentAmbiencePlaylist")) handleCurrentAmbiencePlaylistData(obj);
-			if (obj.hasOwnProperty("currentAmbienceTrack")) handleCurrentAmbienceTrackData(obj);
-			if (obj.hasOwnProperty("currentPlayers")) await handleCurrentPlayersData(obj);
-			if (obj.hasOwnProperty("currentRound")) handleCurrentRoundData(obj);
-			if (obj.hasOwnProperty("currentTurn")) handleCurrentTurnData(obj);
-		}
+		if (obj.hasOwnProperty("debug")) console.log(obj.debug);
+		if (obj.hasOwnProperty("hotMic")) handleMicData(obj);
+		if (obj.hasOwnProperty("currentTheme")) handleCurrentThemeData(obj);
+		if (obj.hasOwnProperty("currentSlideshow")) await handleCurrentSlideshowData(obj);
+		if (obj.hasOwnProperty("currentSlideshowId")) handleCurrentSlideshowIdData(obj);
+		if (obj.hasOwnProperty("currentSlideNum") && typeof obj.currentSlideNum === "number") handleCurrentSlideNumData(obj);
+		if (obj.hasOwnProperty("initiativeActive") && obj.initiativeActive === true) handleInitiativeActiveData();
+		if (obj.hasOwnProperty("currentAppScale")) handleCurrentAppScaleData(obj);
+		if (obj.hasOwnProperty("currentFontSize")) handleCurrentFontSizeData(obj);
+		if (obj.hasOwnProperty("currentCombatPlaylist")) handleCurrentCombatPlaylistData(obj);
+		if (obj.hasOwnProperty("currentMusicPlaylist")) handleCurrentMusicPlaylistData(obj);
+		if (obj.hasOwnProperty("currentMusicTrack")) handleCurrentMusicTrackData(obj);
+		if (obj.hasOwnProperty("currentMusicVolume")) handleCurrentMusicVolumeData(obj);
+		if (obj.hasOwnProperty("musicWillFade")) handleWillFadeData(obj, "music");
+		if (obj.hasOwnProperty("musicIsPlaying")) handleMusicIsPlayingData(obj.musicIsPlaying);
+		if (obj.hasOwnProperty("musicIsLooping")) handleMusicIsLoopingData(obj.musicIsLooping);
+		if (obj.hasOwnProperty("musicIsShuffling")) handleMusicIsShufflingData(obj.musicIsShuffling);
+		if (obj.hasOwnProperty("ambienceIsPlaying")) handleAmbienceIsPlayingData(obj.ambienceIsPlaying);
+		if (obj.hasOwnProperty("currentAmbienceVolume")) handleCurrentAmbienceVolumeData(obj);
+		if (obj.hasOwnProperty("ambienceWillFade")) handleWillFadeData(obj, "ambience");
+		if (obj.hasOwnProperty("currentAmbiencePlaylist")) handleCurrentAmbiencePlaylistData(obj);
+		if (obj.hasOwnProperty("currentAmbienceTrack")) handleCurrentAmbienceTrackData(obj);
+		if (obj.hasOwnProperty("currentPlayers")) await handleCurrentPlayersData(obj);
+		if (obj.hasOwnProperty("currentRound")) handleCurrentRoundData(obj);
+		if (obj.hasOwnProperty("currentTurn")) handleCurrentTurnData(obj);
 	}
 
 	/*************************************/
@@ -537,6 +570,8 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			// Append the row to the table
 			initTrackerTable.appendChild(row);
 		}
+		const event = new Event("initiative_tracker_ready");
+		document.dispatchEvent(event);
 	}
 
 	function handleCurrentRoundData (obj) {
@@ -655,9 +690,10 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		// UrlUtil.autoEncodeHash(mon)
 
 		// add data-attributes for each of the following, if they exist in the incoming player obj
-		["id", "name", "order", "spoken", "fromapp", "hash", "isNpc", "scaledCr"].forEach(prop => {
+		["id", "name", "spoken", "fromapp", "hash", "isNpc", "scaledCr"].forEach(prop => {
 			if (player[prop] != null) row.dataset[prop] = player[prop];
 		});
+		row.dataset.order = Number(player.order); // ensure order is a number
 
 		if (player.bloodied) row.classList.add("bloodied");
 		if (player.dead) row.classList.add("dead");
@@ -666,10 +702,10 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		const orderCell = document.createElement("td");
 		const orderInput = document.createElement("input");
 		orderInput.type = "text";
-		orderInput.value = player.order;
+		orderInput.value = Number(player.order);
 		orderInput.className = "player-order";
 		orderInput.addEventListener("focus", () => { orderInput.select(); });
-		orderInput.addEventListener("change", () => { signal(`update_player:{"id":"${player.id}","order":${orderInput.value}}`); });
+		orderInput.addEventListener("change", () => { signal(`update_player:{"id":"${player.id}","order":${Number(orderInput.value)}}`); });
 		orderCell.addEventListener("click", async (e) => {
 			e.preventDefault();
 			if (player.hash) {
@@ -679,11 +715,15 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 						const rollAnimationMinMax = {min: await calculateNewInit(mon, 2), max: await calculateNewInit(mon, 1)};
 						const newInit = await calculateNewInit(mon, 3);
 						animateNumber(orderInput, newInit, rollAnimationMinMax).then(() => {
-							signal(`update_player:{"id":"${player.id}","order":${newInit}}`);
+							signal(`update_player:{"id":"${player.id}","order":${Number(newInit)}}`).then(() => {
+								popoverApplyInitiativeToAll(orderInput, newInit, true);
+							});
 						});
 					} else {
 						const newInit = await calculateNewInit(mon, userSelection);
-						signal(`update_player:{"id":"${player.id}","order":${newInit}}`);
+						signal(`update_player:{"id":"${player.id}","order":${Number(newInit)}}`).then(() => {
+							popoverApplyInitiativeToAll(orderInput, newInit, true);
+						});
 					}
 				}
 			}
@@ -722,58 +762,62 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		row.appendChild(lockCell);
 
 		const mon = await get5etMonsterByHash(player.hash, player.scaledCr);
+
 		// For creatures with statblocks...
 		if (mon) {
 			// Identify the row as having a statblock
 			row.classList.add("has-statblock");
 
-			// Create and append the "hp" cell
-			let hp = getCookie(`${player.id}__hp`);
-			if (!hp) {
-				hp = mon?.hp?.average;
-			}
+			// Create the hp and maxhp cells and inputs
 			const hpCell = document.createElement("td");
 			const hpInput = document.createElement("input");
-			const hpCookieSuffix = "__hp";
+			const maxhpCell = document.createElement("td");
+			const maxhpInput = document.createElement("input");
+
+			// HP cell
+			let hp = getCookie(`${player.id}${hpCookieSuffix}`);
+			if (!hp || hp === "null" || hp === "undefined") {
+				hp = await calculateNewHp(mon, 0);
+			}
 			hpInput.type = "text";
 			hpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
 			hpInput.className = "player-hp";
-			hpInput.dataset.cookie = hpCookieSuffix;
-			setPlayerHp(hpInput, player.id, hp, hpCookieSuffix);
 			hpInput.addEventListener("focus", handleHpFocus);
 			hpInput.addEventListener("change", handleHpChange);
 			hpInput.addEventListener("keydown", handleHpKeydown);
+			hpInput.addEventListener("value_update", (e) => {
+				// final rendered value after custom event handling
+				handleHpValuesUpdate(hpInput, maxhpInput);
+			});
 			hpCell.addEventListener("click", () => { hpInput.select(); });
-			hpCell.appendChild(hpInput);
-			row.appendChild(hpCell);
+			hpInput.dataset.cookie = hpCookieSuffix;
+			setPlayerHp(hpInput, player.id, hp, hpCookieSuffix);
 
-			// Create and append the "maxhp" cell
-			let maxhp = getCookie(`${player.id}__hpmax`);
-			if (!maxhp) {
-				maxhp = mon.hp?.average;
+			// Max HP cell
+			let maxhp = getCookie(`${player.id}${maxhpCookieSuffix}`);
+			if (!maxhp || maxhp === "null" || maxhp === "undefined") {
+				maxhp = await calculateNewHp(mon, 0);
 			}
-			const maxhpCell = document.createElement("td");
 			maxhpCell.className = "td-player-maxhp";
-			const maxhpInput = document.createElement("input");
-			const maxhpCookieSuffix = "__hpmax";
 			maxhpInput.type = "text";
 			maxhpInput.setAttribute("pattern", "[\\+\\-]?\\d+");
 			maxhpInput.className = "player-maxhp";
 			maxhpInput.dataset.cookie = maxhpCookieSuffix;
-			setPlayerHp(maxhpInput, player.id, maxhp, maxhpCookieSuffix);
 			maxhpInput.addEventListener("focus", handleHpFocus);
 			maxhpInput.addEventListener("change", handleHpChange);
 			maxhpInput.addEventListener("keydown", handleHpKeydown);
+			maxhpInput.addEventListener("value_update", (e) => {
+				handleHpValuesUpdate(hpInput, maxhpInput);
+			});
 			maxhpInput.addEventListener("click", async (e) => {
 				e.preventDefault();
-				const userSelection = await popoverChooseRollableValue(maxhpInput, "HP");
-				if (userSelection !== null) {
-					const rollAnimationMinMax = userSelection === 3 ? {min: await calculateNewHp(mon, 2), max: await calculateNewHp(mon, 1)} : null;
-					const newHp = await calculateNewHp(mon, userSelection);
-					setPlayerHp(maxhpInput, player.id, newHp, maxhpCookieSuffix, rollAnimationMinMax);
-					popoverSetHpEqualToMaxHp(maxhpInput);
-				}
+				await popoverChooseHpValue(maxhpInput, mon, player.id, false);
 			});
+			setPlayerHp(maxhpInput, player.id, maxhp, maxhpCookieSuffix);
+
+			// Append hp, then maxhp to the table row
+			hpCell.appendChild(hpInput);
+			row.appendChild(hpCell);
 			maxhpCell.appendChild(maxhpInput);
 			row.appendChild(maxhpCell);
 		} else {
@@ -916,7 +960,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			if (isInsertBelow) {
 				// Insert new monster below
 				const newMonsterName = getMonsterNameFromHash(hash);
-				const newPlayerOrder = Number(row.dataset.order) - 1;
+				const newPlayerOrder = Number(row.dataset.order);
 				addNewPlayer(newMonsterName, newPlayerOrder, hash);
 			} else {
 				await assignMonsterToRow(row, hash);
@@ -989,7 +1033,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			}
 		}
 		if (row) {
-			row.classList.add("omnibox-highlight");
+			row.classList.add("soft-select-highlight");
 		}
 		await openOmnibox("in:bestiary ");
 		if (row) {
@@ -1003,7 +1047,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 						.finally(() => {
 						// Clean up event listener and css after assignment completes
 							document.querySelector(`.omni__output`).removeEventListener("click", assignClickedMonsterToRow);
-							row.classList.remove("omnibox-highlight");
+							row.classList.remove("soft-select-highlight");
 						});
 				}
 			};
@@ -1058,8 +1102,10 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	}
 
 	function highlightRow (tr, clazz = "statblock") {
-		[...tr.parentNode.children].forEach(sibling => sibling !== tr && sibling.classList.remove(`${clazz}-highlight`));
-		tr.classList.add(`${clazz}-highlight`);
+		if (tr?.parentNode?.children) {
+			[...tr.parentNode.children].forEach(sibling => sibling !== tr && sibling?.classList?.remove(`${clazz}-highlight`));
+			tr.classList?.add(`${clazz}-highlight`);
+		}
 	}
 
 	function getMonsterNameFromHash (hash) {
@@ -1093,12 +1139,18 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			$("#initiative-statblock-display").html("").append(statblock);
 			$("#initiative-statblock-display").off("cr_update").on("cr_update", (e, scaledMon) => {
 				const cr = Parser?.crToNumber(scaledMon?.cr);
-				signal(`update_player:{"id":"${id}","scaledCr":"${cr}"}`);
-				postProcessStatblockTitle(name, scaledMon);
+				signal(`update_player:{"id":"${id}","scaledCr":"${cr}"}`).then(() => {
+					postProcessStatblockTitle(name, scaledMon);
+					const maxHpField = document.querySelector(`[data-id="${id}"] .player-maxhp`);
+					popoverChooseHpValue(maxHpField, scaledMon, id, true);
+				});
 			});
 			$("#initiative-statblock-display").off("cr_reset").on("cr_reset", (e, resetMon) => {
-				signal(`update_player:{"id":"${id}","scaledCr":null}`);
-				postProcessStatblockTitle(name, resetMon);
+				signal(`update_player:{"id":"${id}","scaledCr":null}`).then(() => {
+					postProcessStatblockTitle(name, resetMon);
+					const maxHpField = document.querySelector(`[data-id="${id}"] .player-maxhp`);
+					popoverChooseHpValue(maxHpField, resetMon, id, true);
+				});
 			});
 			postProcessStatblockTitle(name, mon);
 			window.scrollTo(0, scrollTop);
@@ -1126,6 +1178,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			name: row.dataset.name,
 			id: row.dataset.id,
 			order: row.querySelector(".player-order").value,
+			hadStats: row.classList.contains("has-statblock"),
 		};
 
 		// Get monster data and create player object
@@ -1133,19 +1186,25 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		const playerObjToUpdate = getPlayerObjFromMon({
 			name: player.name,
 			id: player.id,
-			order: player.order,
+			order: Number(player.order),
 			hash: hash,
 			mon: dmon,
 		});
 
-		// Clear max HP cookie and update
-		removeCookie(`${player.id}__hpmax`);
-		signal(`update_player:${JSON.stringify(playerObjToUpdate)}`);
+		// Uncomment to clear max HP before sending the new updated player signal
+		// removeCookie(`${player.id}${maxhpCookieSuffix}`);
 
-		// Close omnibox and update display
-		closeOmnibox();
-		displayStatblock(player.name, player.id, hash);
-		highlightRow(row);
+		// Send the new updated player signal
+		signal(`update_player:${JSON.stringify(playerObjToUpdate)}`).then(() => {
+			if (player.hadStats) {
+				const maxHpField = document.querySelector(`[data-id="${player.id}"] .player-maxhp`);
+				popoverChooseHpValue(maxHpField, dmon, player.id, true);
+			}
+			// Close omnibox and update display
+			closeOmnibox();
+			displayStatblock(player.name, player.id, hash);
+			highlightRow(row);
+		});
 	}
 
 	async function removeMonsterAssignment (row) {
@@ -1160,14 +1219,15 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 		// Get the monster stats
 		const mon = await get5etMonsterByHash(hash, scaledCr);
-		if (!mon?.hp?.average) return;
+		const avgHp = await calculateNewHp(mon, 0);
+		if (avgHp === null) return;
 
 		// Reset both current HP and max HP to the monster's average
 		const hpInput = row.querySelector(".player-hp");
 		const maxHpInput = row.querySelector(".player-maxhp");
 
-		setPlayerHp(hpInput, id, mon.hp.average, "__hp");
-		setPlayerHp(maxHpInput, id, mon.hp.average, "__hpmax");
+		setPlayerHp(hpInput, id, avgHp, hpCookieSuffix);
+		setPlayerHp(maxHpInput, id, avgHp, maxhpCookieSuffix);
 	}
 
 	function addNewPlayer (name, order, hash = null) {
@@ -1326,8 +1386,8 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			if ($(el).is("[data-hash]")) {
 				const playerId = $(el).data("id");
 				signal(`update_player:{"id":"${playerId}","name":""}`);
-				removeCookie(`${playerId}__hp`);
-				removeCookie(`${playerId}__hpmax`);
+				removeCookie(`${playerId}${hpCookieSuffix}`);
+				removeCookie(`${playerId}${maxhpCookieSuffix}`);
 			}
 		});
 	}
@@ -1340,12 +1400,34 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		const cookies = document.cookie.split(";"); // Get all cookies
 		cookies.forEach(cookie => {
 			const cookieName = cookie.split("=")[0].trim(); // Get the cookie name
-			if (cookieName.endsWith("__hp")) {
+			if (cookieName.endsWith(hpCookieSuffix)) {
 				// If the cookie name ends with "__hp", delete it
 				removeCookie(cookieName);
 			}
 		});
 	}
+
+	function getGroupedCreatures (row) {
+		// Get all the creatures that are very similarly named, including numerated creatures (ex: Goblin 1, Goblin 2, etc.)
+		// Get the base name by removing any trailing numbers and whitespace
+		const baseName = row.dataset.name.replace(/\s*\d+$/, "").trim();
+
+		// Get all rows from initiative tracker
+		const rows = Array.from(document.querySelectorAll(".initiative-tracker tr"));
+
+		// Filter rows to find similarly named creatures
+		return rows.filter(r => {
+			// Skip if no name
+			if (!r.dataset.name) return false;
+
+			// Get base name of current row by removing trailing numbers
+			const currBaseName = r.dataset.name.replace(/\s*\d+$/, "").trim();
+
+			// Return true if base names match
+			return currBaseName === baseName;
+		});
+	}
+
 	async function modalChooseCreatureMaxHP (ele) {
 		// Ask user what kinda max HP to set: average, maximum, minimum, or rolled.
 		const userVal = await InputUiUtil.pGetUserGenericButton({
@@ -1377,9 +1459,17 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		});
 		return userVal;
 	}
-
-	async function popoverChooseRollableValue (ele, title) {
+	/**
+	 * This function is used to create a modal for choosing the maximum HP of a creature.
+	 * @param {Element} ele - The element to which the modal is attached.
+	 * @param {String} title - The title of the modal, indicating what rollable value is being chosen (e.g., "Initiative" or "HP").
+	 * @param {Boolean} doFocus - If true, the focus will be set on the chosen btn.
+	 * @returns {Promise} - A promise that resolves with the user's choice of max HP type.
+	 */
+	async function popoverChooseRollableValue (ele, title, doFocus) {
 		return new Promise((resolve) => {
+			ele.classList.add("soft-select-highlight");
+			let focusOnThis;
 			// Create a table to hold the icons
 			const popover = createPopover(ele, "top", "choose-rollable-value", (popover) => {
 				const table = document.createElement("div");
@@ -1395,6 +1485,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 					resolve(0); // Resolve with the value 0 for "average"
 					destroyPopover();
 				});
+				if (doFocus) focusOnThis = cell1;
 				table.appendChild(cell1);
 
 				const cell2 = document.createElement("button");
@@ -1433,6 +1524,8 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				return table;
 			});
 
+			if (doFocus && focusOnThis) focusOnThis.focus();
+
 			function destroyPopover (e) {
 				if (!e || e.relatedTarget === null || (e.relatedTarget !== ele && !popover.contains(e.relatedTarget))) {
 					if (popover && document.body.contains(popover)) {
@@ -1440,42 +1533,54 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 					}
 					ele.removeEventListener("focusout", destroyPopover);
 					ele.removeEventListener("change", destroyPopover);
+					ele.removeEventListener("value_update", destroyPopover);
+					ele.classList.remove("soft-select-highlight");
 					resolve(null); // Resolve with null if the popover is closed without a choice
 				}
 			}
 
 			ele.addEventListener("focusout", destroyPopover);
 			ele.addEventListener("change", destroyPopover);
+			ele.addEventListener("value_update", destroyPopover);
 
 			return popover;
 		});
 	}
 
-	async function popoverSetHpEqualToMaxHp (ele) {
+	async function popoverApplyMaxHpToHp (ele, doFocus) {
+		const maxHpInput = ele;
+		const hpInput = ele.closest("tr")?.querySelector("input.player-hp");
+		if (!maxHpInput || !hpInput) return;
+
+		hpInput.classList.add("soft-select-highlight");
 		const userSelection = await new Promise(resolve => {
-			const popover = createPopover(ele, "left", "hp-to-maxhp", () => {
+			let focusOnThis;
+			const popover = createPopover(hpInput, "top", "hp-to-maxhp", () => {
 				const table = document.createElement("div");
 				table.className = "popover-choose-roll";
 				const cell = document.createElement("button");
 				cell.className = "popover-choose-roll-btn";
-				cell.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>`;
-				cell.title = "Set HP to Max HP";
+				cell.innerHTML = `Apply?`;
+				cell.title = "Set HP equal to Max HP";
 				cell.addEventListener("click", () => {
 					resolve(true);
 					destroyPopover();
 				});
+				if (doFocus) focusOnThis = cell;
 				table.appendChild(cell);
 
 				return table;
 			});
+			if (doFocus && focusOnThis) focusOnThis.focus();
 
 			function destroyPopover (e) {
-				if (!e || e.target === null || (e.target !== ele && !popover.contains(e.target))) {
+				if (!e || e.target === null || (!ele.contains(e.target) && e.target !== ele && !popover.contains(e.target))) {
 					if (popover && document.body.contains(popover)) {
 						document.body.removeChild(popover);
 					}
 					document.body.removeEventListener("mousedown", destroyPopover);
 					document.body.removeEventListener("focusin", destroyPopover);
+					hpInput.classList.remove("soft-select-highlight");
 					resolve(null);
 				}
 			}
@@ -1488,10 +1593,69 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 
 		// Now set the hp to the maxhp
 		if (userSelection === true) {
-			const maxhp = ele.closest("tr").querySelector("input.player-maxhp");
-			const hp = ele.closest("tr").querySelector("input.player-hp");
-			const id = ele.closest("tr").dataset.id;
-			setPlayerHp(hp, id, maxhp.value, "__hp");
+			const id = maxHpInput.closest("tr").dataset.id;
+			setPlayerHp(hpInput, id, maxHpInput.value, hpCookieSuffix);
+		}
+	}
+
+	async function popoverApplyInitiativeToAll (ele, newInitValue, doFocus) {
+		const initiativeSourceInput = ele;
+		const sourceRow = initiativeSourceInput.closest("tr");
+		const groupedCreatureRows = getGroupedCreatures(sourceRow);
+		const topRowOrderInput = groupedCreatureRows[0].querySelector("input.player-order");
+
+		const userSelection = await new Promise(resolve => {
+			let focusOnThis;
+			const popover = createPopover(topRowOrderInput, "top", "apply-initiative-to-all", () => {
+				const table = document.createElement("div");
+				table.className = "popover-choose-roll";
+				const cell = document.createElement("button");
+				cell.className = "popover-choose-roll-btn";
+				cell.innerHTML = `Apply?`;
+				cell.title = "Set initiative of all creatures to the same as the source creature.";
+				cell.addEventListener("click", () => {
+					resolve(true);
+					destroyPopover();
+				});
+				if (doFocus) focusOnThis = cell;
+				table.appendChild(cell);
+				// soft-select-highlight all the rows
+				groupedCreatureRows.forEach(row => {
+					row.querySelector("input.player-order").classList.add("soft-select-highlight");
+				});
+
+				return table;
+			});
+			if (doFocus && focusOnThis) focusOnThis.focus();
+
+			function destroyPopover (e) {
+				if (!e || e.target === null || (!ele.contains(e.target) && e.target !== ele && !popover.contains(e.target))) {
+					if (popover && document.body.contains(popover)) {
+						document.body.removeChild(popover);
+					}
+					document.body.removeEventListener("mousedown", destroyPopover);
+					document.body.removeEventListener("focusin", destroyPopover);
+					initiativeSourceInput.classList.remove("soft-select-highlight");
+					groupedCreatureRows.forEach(row => {
+						row.querySelector("input.player-order").classList.remove("soft-select-highlight");
+					});
+					resolve(null);
+				}
+			}
+
+			document.body.addEventListener("mousedown", destroyPopover);
+			document.body.addEventListener("focusin", destroyPopover);
+
+			return popover;
+		});
+
+		// Now set the hp to the maxhp
+		if (userSelection === true) {
+			for (const row of groupedCreatureRows) {
+				const id = row.dataset.id;
+				row.querySelector("input.player-order").value = newInitValue;
+				await signal(`update_player:{"id":"${id}","order":${newInitValue}}`);
+			}
 		}
 	}
 
@@ -1546,10 +1710,11 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		const initiativeOrder = order !== null ? order : Parser.getAbilityModNumber(mon.dex || 10);
 		return {
 			"name": displayName,
-			"order": initiativeOrder,
+			"order": Number(initiativeOrder),
 			"id": id, // custom
 			"hash": hash, // custom
 			"isNpc": mon.isNpc ? mon.isNpc : null,
+			"scaledCr": mon._isScaledCr ? mon._scaledCr : null,
 		};
 	}
 
@@ -1559,8 +1724,19 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	 * @returns {Number} HP
 	 */
 	async function calculateNewHp (mon, hpType) {
-		if (!mon.hp?.formula) {
-			console.error("`formula` must be defined in `mon`.");
+		if (!mon) {
+			console.error("`mon` must be defined.");
+			return;
+		}
+		let formula = mon.hp?.formula;
+		if (!formula) {
+			if (mon.hp?.average) {
+				return mon.hp.average;
+			}
+			if (mon.hp?.special) {
+				return mon.hp.special;
+			}
+			console.error("HP is not correctly defined in `mon`.");
 			return;
 		}
 		if (hpType === 1) {
@@ -1624,6 +1800,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 			animateNumber(ele, hp, rollAnimationMinMax);
 		} else {
 			hpInput.value = hp; // Set the input value to the new HP
+			hpInput.dispatchEvent(new Event("value_update", { bubbles: true }));
 		}
 
 		// First try to get playerId from parameter
@@ -1692,7 +1869,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		const hpInput = e.target;
 		const raw = hpInput.value.trim();
 		const cur = Number(hpInput.dataset.lastHp); // Ensure cur is a number
-		const cookieSuffix = getDataOrNull(hpInput.dataset.cookie) || "__hp";
+		const cookieSuffix = getDataOrNull(hpInput.dataset.cookie) || hpCookieSuffix
 		const id = hpInput.dataset.id;
 
 		let result; // Variable to hold the new HP value
@@ -1720,7 +1897,7 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 	function handleHpKeydown (e) {
 		const hpInput = e.target;
 		const cur = Number(hpInput.dataset.lastHp); // Get the current HP as a number
-		const cookieSuffix = getDataOrNull(hpInput.dataset.cookie) || "__hp";
+		const cookieSuffix = getDataOrNull(hpInput.dataset.cookie) || hpCookieSuffix;
 		const id = hpInput.dataset.id;
 		let result;
 
@@ -1745,6 +1922,49 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 		} else if (e.key === "Enter") {
 			e.preventDefault();
 			e.target.blur();
+		}
+	}
+
+	function handleHpValuesUpdate (hpInput, maxHpInput) {
+		hpInput.classList.remove("half-hp", "zero-hp", "over-max-hp");
+		if (Number(hpInput.value) <= 0) {
+			// if value is 0, assign class "zero-hp"
+			hpInput.classList.add("zero-hp");
+		} else if (Number(hpInput.value) <= Number(maxHpInput.value) / 2) {
+			// if value is half (or less) of max hp, assign class "half-hp"
+			hpInput.classList.add("half-hp");
+		} else if (Number(hpInput.value) > Number(maxHpInput.value)) {
+			// if value is greater than max hp, assign class "over-max-hp"
+			hpInput.classList.add("over-max-hp");
+		}
+	}
+
+	async function popoverChooseHpValue (maxhpInput, mon, id, doFocus) {
+		if (!mon || !("hp" in mon)) return;
+		const userSelection = await popoverChooseRollableValue(maxhpInput, "HP", doFocus);
+		if (userSelection !== null) {
+			const max = await calculateNewHp(mon, 1);
+			const min = Math.max(await calculateNewHp(mon, 2), 1); // minimum value of 1
+			const rollAnimationMinMax = userSelection === 3 ? { min, max } : null;
+			let newHp;
+
+			switch (userSelection) {
+				case 1:
+					newHp = max;
+					break;
+				case 2:
+					newHp = min;
+					break;
+				case 3:
+					newHp = await calculateNewHp(mon, 3);
+					break;
+				default:
+					// case 0 or null:
+					newHp = await calculateNewHp(mon, 0);
+			}
+
+			setPlayerHp(maxhpInput, id, newHp, maxhpCookieSuffix, rollAnimationMinMax);
+			popoverApplyMaxHpToHp(maxhpInput, true);
 		}
 	}
 
@@ -1957,15 +2177,23 @@ import { VOICE_APP_PATH } from "./controller-config.js";
 				evt.preventDefault();
 				const hash = row.dataset.hash;
 				const id = row.dataset.id;
-				ContextUtil.pOpenMenu(evt, ContextUtil.getMenu([
+				const menuItems = hash ? [
 					new ContextUtil.Action("Rename", () => { renamePlayer(row); }),
-					new ContextUtil.Action("Duplicate", () => { duplicatePlayer(row); }),
-					new ContextUtil.Action(hash ? "Assign new monster" : "Assign a monster", () => { selectMonsterFromOmnibox(row); }),
-					new ContextUtil.Action("Reset HP/Max HP to average", () => { resetHpToAverage(row); }),
+					new ContextUtil.Action("Pick a different monster", () => { selectMonsterFromOmnibox(row); }),
+					new ContextUtil.Action("Reset HP/Max to average", () => { resetHpToAverage(row); }),
 					new ContextUtil.Action("Unassign monster", () => { removeMonsterAssignment(row); }),
+					new ContextUtil.Action("Duplicate", () => { duplicatePlayer(row); }),
 					new ContextUtil.Action("Delete", () => { deletePlayer(row); }),
-				]),
-				{userData: {entity: hash}},
+				] : [
+					new ContextUtil.Action("Rename", () => { renamePlayer(row); }),
+					new ContextUtil.Action("Assign a monster", () => { selectMonsterFromOmnibox(row); }),
+					new ContextUtil.Action("Track HP/Max HP", () => { assignMonsterToRow(row, "commoner_MM"); }),
+					new ContextUtil.Action("Duplicate", () => { duplicatePlayer(row); }),
+					new ContextUtil.Action("Delete", () => { deletePlayer(row); }),
+				];
+
+				ContextUtil.pOpenMenu(evt, ContextUtil.getMenu(menuItems),
+					{userData: {entity: hash}},
 				);
 			}
 		});
