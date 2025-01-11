@@ -321,7 +321,7 @@ class BestiaryPage extends ListPageMultiSource {
 					resist: {name: "Damage Resistances", transform: it => Parser.getFullImmRes(it)},
 					immune: {name: "Damage Immunities", transform: it => Parser.getFullImmRes(it)},
 					conditionImmune: {name: "Condition Immunities", transform: it => Parser.getFullCondImm(it)},
-					_senses: {name: "Senses", transform: mon => Renderer.monster.getSensesPart(mon)},
+					_senses: {name: "Senses", transform: mon => Renderer.monster.getSensesPart(mon, {isForcePassive: true})},
 					languages: {name: "Languages", transform: it => Renderer.monster.getRenderedLanguages(it)},
 					_cr: {name: "CR", transform: mon => Renderer.monster.getChallengeRatingPart(mon)},
 					_trait: {
@@ -344,8 +344,16 @@ class BestiaryPage extends ListPageMultiSource {
 						transform: mon => BestiaryPage._tableView_getEntryPropTransform({mon, fnGet: Renderer.monster.getOrderedReactions}),
 						flex: 3,
 					},
-					legendary: {name: "Legendary Actions", transform: it => (it || []).map(x => Renderer.get().render(x, 2)).join(""), flex: 3},
-					mythic: {name: "Mythic Actions", transform: it => (it || []).map(x => Renderer.get().render(x, 2)).join(""), flex: 3},
+					_legendary: {
+						name: "Legendary Actions",
+						transform: mon => BestiaryPage._tableView_getEntryPropTransform({mon, fnGet: Renderer.monster.getOrderedLegendaryActions}),
+						flex: 3,
+					},
+					_mythic: {
+						name: "Mythic Actions",
+						transform: mon => BestiaryPage._tableView_getEntryPropTransform({mon, fnGet: Renderer.monster.getOrderedMythicActions}),
+						flex: 3,
+					},
 					_lairActions: {
 						name: "Lair Actions",
 						transform: mon => {
@@ -365,6 +373,7 @@ class BestiaryPage extends ListPageMultiSource {
 						flex: 3,
 					},
 					environment: {name: "Environment", transform: it => Renderer.monster.getRenderedEnvironment(it)},
+					treasure: {name: "Treasure", transform: it => Renderer.monster.getRenderedTreasure(it)},
 				},
 			},
 			propEntryData: "monster",

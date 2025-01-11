@@ -6,26 +6,13 @@ class PageFilterBestiary extends PageFilterBase {
 	static _RE_SPELL_TAG = /{@spell ([^}]+)}/g;
 	static _RE_ITEM_TAG = /{@item ([^}]+)}/g;
 	static _WALKER = null;
-	static _BASIC_ENTRY_PROPS = [
-		"trait",
-		"action",
-		"bonus",
-		"reaction",
-		"legendary",
-		"mythic",
-	];
 	static _DRAGON_AGES = ["wyrmling", "young", "adult", "ancient", "greatwyrm", "aspect"];
 
 	// region static
 	static sortMonsters (a, b, o) {
 		if (o.sortBy === "count") return SortUtil.ascSort(a.data.count, b.data.count) || SortUtil.compareListNames(a, b);
-		switch (o.sortBy) {
-			case "name": return SortUtil.compareListNames(a, b);
-			case "type": return SortUtil.ascSort(a.values.type, b.values.type) || SortUtil.compareListNames(a, b);
-			case "source": return SortUtil.ascSort(a.values.source, b.values.source) || SortUtil.compareListNames(a, b);
-			case "cr": return SortUtil.ascSortCr(a.values.cr, b.values.cr) || SortUtil.compareListNames(a, b);
-			case "page": return SortUtil.ascSort(a.values.page, b.values.page) || SortUtil.compareListNames(a, b);
-		}
+		if (o.sortBy === "cr") return SortUtil.ascSortCr(a.values.cr, b.values.cr) || SortUtil.compareListNames(a, b);
+		return SortUtil.listSort(a, b, o);
 	}
 
 	static ascSortMiscFilter (a, b) {
@@ -75,6 +62,8 @@ class PageFilterBestiary extends PageFilterBase {
 	constructor (opts) {
 		super(opts);
 
+		const styleHint = VetoolsConfig.get("styleSwitcher", "style");
+
 		this._crFilter = new RangeFilter({
 			header: "Challenge Rating",
 			isLabelled: true,
@@ -114,17 +103,17 @@ class PageFilterBestiary extends PageFilterBase {
 		this._typeFilter = new Filter({
 			header: "Type",
 			items: [...Parser.MON_TYPES],
-			displayFn: StrUtil.toTitleCase,
+			displayFn: StrUtil.toTitleCase.bind(StrUtil),
 			itemSortFn: SortUtil.ascSortLower,
 		});
-		this._tagFilter = new Filter({header: "Tag", displayFn: StrUtil.toTitleCase});
+		this._tagFilter = new Filter({header: "Tag", displayFn: StrUtil.toTitleCase.bind(StrUtil)});
 		this._sidekickTypeFilter = new Filter({
 			header: "Sidekick Type",
 			items: ["expert", "spellcaster", "warrior"],
-			displayFn: StrUtil.toTitleCase,
+			displayFn: StrUtil.toTitleCase.bind(StrUtil),
 			itemSortFn: SortUtil.ascSortLower,
 		});
-		this._sidekickTagFilter = new Filter({header: "Sidekick Tag", displayFn: StrUtil.toTitleCase});
+		this._sidekickTagFilter = new Filter({header: "Sidekick Tag", displayFn: StrUtil.toTitleCase.bind(StrUtil)});
 		this._alignmentFilter = new Filter({
 			header: "Alignment",
 			items: ["L", "NX", "C", "G", "NY", "E", "N", "U", "A", "No Alignment"],
@@ -217,8 +206,9 @@ class PageFilterBestiary extends PageFilterBase {
 		});
 		this._environmentFilter = new Filter({
 			header: "Environment",
-			items: ["arctic", "coastal", "desert", "forest", "grassland", "hill", "mountain", "none", "swamp", "underdark", "underwater", "urban"],
-			displayFn: StrUtil.uppercaseFirst,
+			headerDisplayName: styleHint === "classic" ? "Environment" : "Habitat",
+			items: [...Parser.ENVIRONMENTS],
+			displayFn: Parser.getEnvironmentDisplayName,
 		});
 		this._vulnerableFilter = FilterCommon.getDamageVulnerableFilter();
 		this._resistFilter = FilterCommon.getDamageResistFilter();
@@ -239,7 +229,7 @@ class PageFilterBestiary extends PageFilterBase {
 		});
 		this._miscFilter = new Filter({
 			header: "Miscellaneous",
-			items: ["Familiar", ...Object.keys(Parser.MON_MISC_TAG_TO_FULL), "Bonus Actions", "Lair Actions", "Legendary", "Mythic", "Adventure NPC", "Spellcaster", ...Object.values(Parser.ATB_ABV_TO_FULL).map(it => `${PageFilterBestiary.MISC_FILTER_SPELLCASTER}${it}`), "Regional Effects", "Reactions", "Reprinted", "Swarm", "Has Variants", "Modified Copy", "Has Alternate Token", "Has Info", "Has Images", "Has Token", "Has Recharge", "Legacy", "AC from Item(s)", "AC from Natural Armor", "AC from Unarmored Defense", "Summoned by Spell", "Summoned by Class"],
+			items: ["Familiar", ...Object.keys(Parser.MON_MISC_TAG_TO_FULL), "Bonus Actions", "Lair Actions", "Legendary", "Mythic", "Adventure NPC", "Spellcaster", ...Object.values(Parser.ATB_ABV_TO_FULL).map(it => `${PageFilterBestiary.MISC_FILTER_SPELLCASTER}${it}`), "Regional Effects", "Reactions", "Reprinted", "Swarm", "Has Variants", "Modified Copy", "Has Alternate Token", "Has Info", "Has Images", "Has Token", "Has Recharge", "Legacy", "AC from Item(s)", "AC from Natural Armor", "AC from Unarmored Defense", "Summoned by Spell", "Summoned by Class", "Reduced Threat"],
 			displayFn: (it) => Parser.monMiscTagToFull(it).uppercaseFirst(),
 			deselFn: (it) => ["Adventure NPC", "Reprinted"].includes(it),
 			itemSortFn: PageFilterBestiary.ascSortMiscFilter,
@@ -262,12 +252,17 @@ class PageFilterBestiary extends PageFilterBase {
 			header: "Dragon Age",
 			items: [...PageFilterBestiary._DRAGON_AGES],
 			itemSortFn: PageFilterBestiary._ascSortDragonAgeFilter,
-			displayFn: (it) => it.toTitleCase(),
+			displayFn: StrUtil.toTitleCase.bind(StrUtil),
 		});
-		this._dragonCastingColor = new Filter({
+		this._dragonCastingColorFilter = new Filter({
 			header: "Dragon Casting Color",
 			items: [...Renderer.monster.dragonCasterVariant.getAvailableColors()],
-			displayFn: (it) => it.toTitleCase(),
+			displayFn: StrUtil.toTitleCase.bind(StrUtil),
+		});
+		this._treasureFilter = new Filter({
+			header: "Treasure",
+			items: [],
+			displayFn: StrUtil.toTitleCase.bind(StrUtil),
 		});
 	}
 
@@ -277,6 +272,7 @@ class PageFilterBestiary extends PageFilterBase {
 		this._mutateForFilters_commonSources(mon);
 
 		this._mutateForFilters_speed(mon);
+		this._mutateForFilters_environment(mon);
 
 		mon._fAc = (mon.ac || []).map(it => it.special ? null : (it.ac || it)).filter(it => it !== null);
 		if (!mon._fAc.length) mon._fAc = null;
@@ -292,7 +288,6 @@ class PageFilterBestiary extends PageFilterBase {
 		} else {
 			mon._fAlign = ["No Alignment"];
 		}
-		mon._fEnvironment = mon.environment || ["none"];
 		mon._fVuln = mon.vulnerable ? PageFilterBestiary.getAllImmRest(mon.vulnerable, "vulnerable") : [];
 		mon._fRes = mon.resist ? PageFilterBestiary.getAllImmRest(mon.resist, "resist") : [];
 		mon._fImm = mon.immune ? PageFilterBestiary.getAllImmRest(mon.immune, "immune") : [];
@@ -319,7 +314,10 @@ class PageFilterBestiary extends PageFilterBase {
 			if (it.from.some(x => x.startsWith("{@item "))) mon._fMisc.push("AC from Item(s)");
 			if (!mon._fMisc.includes("AC from Unarmored Defense") && it.from.includes("Unarmored Defense")) mon._fMisc.push("AC from Unarmored Defense");
 		}
-		if (mon.legendary) mon._fMisc.push("Legendary");
+		if (Renderer.monster.hasLegendaryActions(mon)) mon._fMisc.push("Legendary");
+		if (Renderer.monster.hasMythicActions(mon)) mon._fMisc.push("Mythic");
+		if (Renderer.monster.hasReactions(mon)) mon._fMisc.push("Reactions");
+		if (Renderer.monster.hasBonusActions(mon)) mon._fMisc.push("Bonus Actions");
 		if (mon.familiar) mon._fMisc.push("Familiar");
 		if (mon.type.swarmSize) mon._fMisc.push("Swarm");
 		if (mon.spellcasting) {
@@ -335,19 +333,17 @@ class PageFilterBestiary extends PageFilterBase {
 			if (legGroup.lairActions) mon._fMisc.push("Lair Actions");
 			if (legGroup.regionalEffects) mon._fMisc.push("Regional Effects");
 		}
-		if (mon.reaction) mon._fMisc.push("Reactions");
-		if (mon.bonus) mon._fMisc.push("Bonus Actions");
 		if (mon.variant) mon._fMisc.push("Has Variants");
 		if (mon._isCopy) mon._fMisc.push("Modified Copy");
 		if (mon.altArt) mon._fMisc.push("Has Alternate Token");
 		if (Renderer.monster.hasToken(mon)) mon._fMisc.push("Has Token");
-		if (mon.mythic) mon._fMisc.push("Mythic");
 		if (this._hasFluff(mon)) mon._fMisc.push("Has Info");
 		if (this._hasFluffImages(mon)) mon._fMisc.push("Has Images");
 		if (this._hasRecharge(mon)) mon._fMisc.push("Has Recharge");
 		if (mon._versionBase_isVersion) mon._fMisc.push("Is Variant");
 		if (mon.summonedBySpell) mon._fMisc.push("Summoned by Spell");
 		if (mon.summonedByClass) mon._fMisc.push("Summoned by Class");
+		if (mon._copy_templates?.some(({name, source}) => name === "Reduced Threat" && source === Parser.SRC_TYP)) mon._fMisc.push("Reduced Threat");
 
 		const spellcasterMeta = this._getSpellcasterMeta(mon);
 		if (spellcasterMeta) {
@@ -375,15 +371,21 @@ class PageFilterBestiary extends PageFilterBase {
 		}
 
 		mon._fSpeedType = Object.keys(mon.speed).filter(k => mon.speed[k]);
-		if (mon._fSpeedType.length) mon._fSpeed = mon._fSpeedType.map(k => mon.speed[k].number || mon.speed[k]).filter(it => !isNaN(it)).sort((a, b) => SortUtil.ascSort(b, a))[0];
+		if (mon._fSpeedType.length) mon._fSpeed = Math.max(...Object.values(mon.speed).map(v => v.number || (isNaN(v) ? 0 : v)));
 		else mon._fSpeed = 0;
 		if (mon.speed.canHover) mon._fSpeedType.push("hover");
+	}
+
+	static _mutateForFilters_environment (mon) {
+		if (!mon.environment) return mon._fEnvironment = ["none"];
+		mon._fEnvironment = mon.environment
+			.flatMap(env => Parser.getExpandedEnvironments(env));
 	}
 
 	/* -------------------------------------------- */
 
 	static _getInitWalker () {
-		return PageFilterBestiary._WALKER = PageFilterBestiary._WALKER || MiscUtil.getWalker({isNoModification: true});
+		return PageFilterBestiary._WALKER ||= MiscUtil.getWalker({isNoModification: true});
 	}
 
 	/* -------------------------------------------- */
@@ -423,8 +425,18 @@ class PageFilterBestiary extends PageFilterBase {
 
 	/* -------------------------------------------- */
 
+	static _RECHARGE_ENTRY_PROPS = [
+		"trait",
+		"action",
+		"bonus",
+		"reaction",
+		"legendary",
+		"mythic",
+	];
+
 	static _hasRecharge (mon) {
-		for (const prop of PageFilterBestiary._BASIC_ENTRY_PROPS) {
+		if (mon.spellcasting?.some(ent => ent.recharge)) return true;
+		for (const prop of PageFilterBestiary._RECHARGE_ENTRY_PROPS) {
 			if (!mon[prop]) continue;
 			for (const ent of mon[prop]) {
 				if (!ent?.name) continue;
@@ -436,6 +448,7 @@ class PageFilterBestiary extends PageFilterBase {
 
 	/* -------------------------------------------- */
 
+	// TODO(ESM) switch to using `UtilsEntityCreature.getEquipmentUids`
 	static _getEquipmentList (mon) {
 		const itemSet = new Set(mon.attachedItems || []);
 
@@ -511,7 +524,8 @@ class PageFilterBestiary extends PageFilterBase {
 		this._savingThrowForcedFilterLegendary.addItem(mon.savingThrowForcedLegendary);
 		this._savingThrowForcedFilterSpells.addItem(mon.savingThrowForcedSpell);
 		this._dragonAgeFilter.addItem(mon.dragonAge);
-		this._dragonCastingColor.addItem(mon.dragonCastingColor);
+		this._dragonCastingColorFilter.addItem(mon.dragonCastingColor);
+		this._treasureFilter.addItem(mon.treasure);
 	}
 
 	async _pPopulateBoxOptions (opts) {
@@ -548,11 +562,12 @@ class PageFilterBestiary extends PageFilterBase {
 			this._conditionsInflictedFilter,
 			this._savingThrowForcedFilter,
 			this._dragonAgeFilter,
-			this._dragonCastingColor,
+			this._dragonCastingColorFilter,
 			this._acFilter,
 			this._averageHpFilter,
 			this._abilityScoreFilter,
 			this._spellKnownFilter,
+			this._treasureFilter,
 			this._equipmentFilter,
 		];
 	}
@@ -615,6 +630,7 @@ class PageFilterBestiary extends PageFilterBase {
 				m._fCha,
 			],
 			m._fSpellsKnown,
+			m.treasure,
 			m._fEquipment,
 		);
 	}
@@ -692,6 +708,7 @@ class ModalFilterBestiary extends ModalFilterBase {
 				hash,
 				source,
 				sourceJson: mon.source,
+				page: mon.page,
 				type,
 				cr,
 			},

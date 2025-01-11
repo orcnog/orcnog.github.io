@@ -55,11 +55,11 @@ class PageFilterOptionalFeatures extends PageFilterBase {
 		this._spellFilter = new Filter({
 			header: "Spell",
 			items: [],
-			displayFn: StrUtil.toTitleCase,
+			displayFn: StrUtil.toTitleCase.bind(StrUtil),
 		});
 		this._featureFilter = new Filter({
 			header: "Feature",
-			displayFn: StrUtil.toTitleCase,
+			displayFn: StrUtil.toTitleCase.bind(StrUtil),
 		});
 		this._levelFilter = new Filter({
 			header: "Level",
@@ -241,6 +241,7 @@ class ModalFilterOptionalFeatures extends ModalFilterBase {
 				hash,
 				source,
 				sourceJson: optfeat.source,
+				page: optfeat.page,
 				prerequisite,
 				level,
 				type: optfeat._lFeatureType,

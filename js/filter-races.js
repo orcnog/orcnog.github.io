@@ -100,7 +100,7 @@ class PageFilterRaces extends PageFilterBase {
 		this._creatureTypeFilter = new Filter({
 			header: "Creature Type",
 			items: Parser.MON_TYPES,
-			displayFn: StrUtil.toTitleCase,
+			displayFn: StrUtil.toTitleCase.bind(StrUtil),
 			itemSortFn: SortUtil.ascSortLower,
 		});
 		this._ageFilter = new RangeFilter({
@@ -296,6 +296,7 @@ class ModalFilterRaces extends ModalFilterBase {
 				hash,
 				source,
 				sourceJson: race.source,
+				page: race.page,
 				ability: ability.asTextShort,
 				size,
 				cleanName: PageFilterRaces.getInvertedName(race.name) || "",

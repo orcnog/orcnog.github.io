@@ -110,10 +110,6 @@ class _PageGeneratorConverter extends PageGeneratorGeneric {
 		"render-markdown.js",
 	];
 
-	_scriptsUtilsAdditional = [
-		"utils-proporder.js",
-	];
-
 	_scriptsModules = [
 		"converter.js",
 	];
@@ -242,9 +238,8 @@ class _PageGeneratorLootgen extends PageGeneratorGeneric {
 		"filter-spells.js",
 	];
 
-	_scripts = [
+	_scriptsModules = [
 		"lootgen.js",
-		"lootgen-ui.js",
 	];
 }
 
@@ -268,7 +263,6 @@ class _PageGeneratorMakebrew extends PageGeneratorGeneric {
 	];
 
 	_scriptsUtilsAdditional = [
-		"utils-proporder.js",
 		"filter-spells.js",
 	];
 

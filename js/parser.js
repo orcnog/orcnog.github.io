@@ -274,7 +274,7 @@ Parser.getSpeedString = (ent, {isMetric = false, isSkipZeroWalk = false, isLongF
 
 		if (ent.speed.choose && !ent.speed.hidden?.includes("choose")) {
 			joiner = "; ";
-			stack.push(`${ent.speed.choose.from.sort().joinConjunct(", ", " or ")} ${ent.speed.choose.amount} ${unit}${ent.speed.choose.note ? ` ${ent.speed.choose.note}` : ""}`);
+			stack.push(`${ent.speed.choose.from.sort().map(prop => Parser._getSpeedString_getSpeedName({prop, styleHint})).joinConjunct(", ", " or ")} ${ent.speed.choose.amount} ${unit}${ent.speed.choose.note ? ` ${ent.speed.choose.note}` : ""}`);
 		}
 
 		return stack.join(joiner) + (ent.speed.note ? ` ${ent.speed.note}` : "");
@@ -288,7 +288,7 @@ Parser._getSpeedString_addSpeedMode = ({ent, prop, stack, isMetric, isSkipZeroWa
 	if (ent.speed.alternate && ent.speed.alternate[prop]) ent.speed.alternate[prop].forEach(speed => Parser._getSpeedString_addSpeed({prop, speed, isMetric, unit, stack, styleHint}));
 };
 Parser._getSpeedString_addSpeed = ({prop, speed, isMetric, unit, stack, styleHint}) => {
-	const ptName = prop === "walk" ? "" : `${prop[styleHint === "classic" ? "toString" : "toTitleCase"]()} `;
+	const ptName = Parser._getSpeedString_getSpeedName({prop, styleHint});
 	const ptValue = Parser._getSpeedString_getVal({prop, speed, isMetric});
 	const ptUnit = speed === true ? "" : ` ${unit}`;
 	const ptCondition = Parser._getSpeedString_getCondition({speed});
@@ -304,6 +304,7 @@ Parser._getSpeedString_getVal = ({prop, speed, isMetric}) => {
 	return isMetric ? Parser.metric.getMetricNumber({originalValue: num, originalUnit: Parser.UNT_FEET}) : num;
 };
 Parser._getSpeedString_getCondition = ({speed}) => speed.condition ? ` ${Renderer.get().render(speed.condition)}` : "";
+Parser._getSpeedString_getSpeedName = ({prop, styleHint}) => prop === "walk" ? "" : `${prop[styleHint === "classic" ? "toString" : "toTitleCase"]()} `;
 
 Parser.SPEED_MODES = ["walk", "burrow", "climb", "fly", "swim"];
 
@@ -375,7 +376,7 @@ Parser.crToNumber = function (cr, opts = {}) {
 	if (cr === "Unknown" || cr === "\u2014" || cr == null) return isDefaultNull ? null : VeCt.CR_UNKNOWN;
 	if (cr.cr) return Parser.crToNumber(cr.cr, opts);
 
-	const parts = cr.trim().split("/");
+	const parts = cr.trim().split("/").filter(Boolean);
 	if (!parts.length || parts.length >= 3) return isDefaultNull ? null : VeCt.CR_CUSTOM;
 	if (isNaN(parts[0])) return isDefaultNull ? null : VeCt.CR_CUSTOM;
 
@@ -397,10 +398,11 @@ Parser.numberToCr = function (number, safe) {
 };
 
 Parser.crToPb = function (cr) {
-	if (cr === "Unknown" || cr == null) return 0;
-	cr = cr.cr || cr;
-	if (Parser.crToNumber(cr) < 5) return 2;
-	return Math.ceil(cr / 4) + 1;
+	const crNumber = Parser.crToNumber(cr);
+	if (crNumber === VeCt.CR_UNKNOWN) return 0;
+	if (crNumber === VeCt.CR_CUSTOM || crNumber < 0) return null;
+	if (crNumber < 5) return 2;
+	return Math.ceil(crNumber / 4) + 1;
 };
 
 Parser.levelToPb = function (level) {
@@ -698,7 +700,14 @@ Parser.itemValueToFull = function (item, opts = {isShortForm: false, isSmallUnit
 	return Parser._moneyToFull(item, "value", "valueMult", opts);
 };
 
-Parser.itemValueToFullMultiCurrency = function (item, opts = {isShortForm: false, isSmallUnits: false}) {
+/**
+ * @param item
+ * @param {object} [opts]
+ * @param {?boolean} [opts.isShortForm]
+ * @param {?boolean} [opts.isSmallUnits]
+ * @param {?number} [opts.multiplier]
+ */
+Parser.itemValueToFullMultiCurrency = function (item, opts = {isShortForm: false, isSmallUnits: false, multiplier: null}) {
 	return Parser._moneyToFullMultiCurrency(item, "value", "valueMult", opts);
 };
 
@@ -956,6 +965,7 @@ Parser.ITM_TYP_ABV__VEHICLE_WATER = "SHP";
 Parser.ITM_TYP_ABV__VEHICLE_SPACE = "SPC";
 Parser.ITM_TYP_ABV__TOOL = "T";
 Parser.ITM_TYP_ABV__TACK_AND_HARNESS = "TAH";
+Parser.ITM_TYP_ABV__TRADE_BAR = "TB";
 Parser.ITM_TYP_ABV__TRADE_GOOD = "TG";
 Parser.ITM_TYP_ABV__VEHICLE_LAND = "VEH";
 Parser.ITM_TYP_ABV__WAND = "WD";
@@ -995,6 +1005,22 @@ Parser.ITM_TYP__TACK_AND_HARNESS = "TAH";
 Parser.ITM_TYP__TRADE_GOOD = "TG";
 Parser.ITM_TYP__VEHICLE_LAND = "VEH";
 Parser.ITM_TYP__WAND = "WD|DMG";
+
+Parser.ITM_RARITY_TO_SHORT = {
+	"common": "Com.",
+	"uncommon": "Unc.",
+	"rare": "Rare",
+	"very rare": "V.Rare",
+	"legendary": "Leg.",
+	"artifact": "Art.",
+	"varies": "Var.",
+};
+Parser.itemRarityToShort = function (rarity) {
+	if (!rarity) return rarity;
+	if (Parser.ITM_RARITY_TO_SHORT[rarity]) return Parser.ITM_RARITY_TO_SHORT[rarity];
+	if (rarity.length <= 4) return rarity.toTitleCase();
+	return `${rarity.toTitleCase().slice(0, 3)}.`;
+};
 
 Parser._decimalSeparator = (0.1).toLocaleString().substring(1, 2);
 Parser._numberCleanRegexp = Parser._decimalSeparator === "." ? new RegExp(/[\s,]*/g, "g") : new RegExp(/[\s.]*/g, "g");
@@ -1037,40 +1063,49 @@ Parser.dmgTypeToFull = function (dmgType, {styleHint = null} = {}) {
 Parser.skillProficienciesToFull = function (skillProficiencies, {styleHint = null} = {}) {
 	styleHint ||= VetoolsConfig.get("styleSwitcher", "style");
 
-	function renderSingle (skProf) {
-		if (skProf.any) {
-			skProf = MiscUtil.copyFast(skProf);
-			skProf.choose = {"from": Object.keys(Parser.SKILL_TO_ATB_ABV), "count": skProf.any};
-			delete skProf.any;
-		}
+	const getRenderedSkill = uid => {
+		const unpacked = DataUtil.proxy.unpackUid("skill", uid, "skill");
+		return Renderer.get().render(`{@skill ${unpacked.name.toTitleCase()}|${unpacked.source}}`);
+	};
 
-		const keys = Object.keys(skProf).sort(SortUtil.ascSortLower);
-
-		const ixChoose = keys.indexOf("choose");
-		if (~ixChoose) keys.splice(ixChoose, 1);
-
-		const baseStack = [];
-		keys.filter(k => skProf[k]).forEach(k => baseStack.push(Renderer.get().render(`{@skill ${k.toTitleCase()}}`)));
-
-		const chooseStack = [];
-		if (~ixChoose) {
-			const chObj = skProf.choose;
-			if (chObj.from.length === 18) {
-				chooseStack.push(`choose any ${!chObj.count || chObj.count === 1 ? "skill" : chObj.count}`);
-			} else {
-				chooseStack.push(`choose ${chObj.count || 1} from ${chObj.from.map(it => Renderer.get().render(`{@skill ${it.toTitleCase()}}`)).joinConjunct(", ", " and ")}`);
+	return skillProficiencies
+		.map(skProf => {
+			if (skProf.any) {
+				skProf = MiscUtil.copyFast(skProf);
+				skProf.choose = {"from": Object.keys(Parser.SKILL_TO_ATB_ABV), "count": skProf.any};
+				delete skProf.any;
 			}
-		}
 
-		const base = baseStack.joinConjunct(", ", " and ");
-		const choose = chooseStack.join(""); // this should currently only ever be 1-length
+			const keys = Object.keys(skProf).sort(SortUtil.ascSortLower);
 
-		if (baseStack.length && chooseStack.length) return `${base}; and ${choose}`;
-		else if (baseStack.length) return base;
-		else if (chooseStack.length) return choose;
-	}
+			const ixChoose = keys.indexOf("choose");
+			if (~ixChoose) keys.splice(ixChoose, 1);
 
-	return skillProficiencies.map(renderSingle).join(" <i>or</i> ");
+			const baseStack = [];
+			keys.filter(k => skProf[k]).forEach(k => baseStack.push(getRenderedSkill(k)));
+
+			let ptChoose = "";
+			if (~ixChoose) {
+				const chObj = skProf.choose;
+				const count = chObj.count ?? 1;
+				if (chObj.from.length === 18) {
+					ptChoose = styleHint === "classic"
+						? `choose any ${count === 1 ? "skill" : chObj.count}`
+						: `Choose ${chObj.count}`;
+				} else {
+					ptChoose = styleHint === "classic"
+						? `choose ${count} from ${chObj.from.map(it => getRenderedSkill(it)).joinConjunct(", ", " and ")}`
+						: Renderer.get().render(`{@i Choose ${count}:} ${chObj.from.map(it => getRenderedSkill(it)).joinConjunct(", ", " or ")}`);
+				}
+			}
+
+			const base = baseStack.joinConjunct(", ", " and ");
+
+			if (baseStack.length && ptChoose.length) return `${base}; and ${ptChoose}`;
+			else if (baseStack.length) return base;
+			else if (ptChoose.length) return ptChoose;
+		})
+		.join(` <i>or</i> `);
 };
 
 // sp-prefix functions are for parsing spell data, and shared with the roll20 script
@@ -1355,10 +1390,12 @@ Parser.UNT_LBS = "lbs";
 Parser.UNT_TONS_IMPERIAL = "tns";
 Parser.UNT_TONS_METRIC = "Mg";
 
+Parser.UNT_INCHES = "inches";
 Parser.UNT_FEET = "feet";
 Parser.UNT_YARDS = "yards";
 Parser.UNT_MILES = "miles";
 Parser.SP_DIST_TYPE_TO_FULL = {
+	[Parser.UNT_INCHES]: "Inches",
 	[Parser.UNT_FEET]: "Feet",
 	[Parser.UNT_YARDS]: "Yards",
 	[Parser.UNT_MILES]: "Miles",
@@ -1419,6 +1456,7 @@ Parser.spRangeToShortHtml._renderPoint = function (range) {
 		case Parser.RNG_UNLIMITED_SAME_PLANE:
 		case Parser.RNG_SPECIAL:
 		case Parser.RNG_TOUCH: return `<span class="fas fa-fw ${Parser.spRangeTypeToIcon(dist.type)} help-subtle" title="${Parser.spRangeTypeToFull(dist.type)}"></span>`;
+		case Parser.UNT_INCHES:
 		case Parser.UNT_FEET:
 		case Parser.UNT_YARDS:
 		case Parser.UNT_MILES:
@@ -1458,6 +1496,7 @@ Parser.spRangeToFull._renderPoint = function (range) {
 		case Parser.RNG_UNLIMITED_SAME_PLANE:
 		case Parser.RNG_SPECIAL:
 		case Parser.RNG_TOUCH: return Parser.spRangeTypeToFull(dist.type);
+		case Parser.UNT_INCHES:
 		case Parser.UNT_FEET:
 		case Parser.UNT_YARDS:
 		case Parser.UNT_MILES:
@@ -1480,6 +1519,8 @@ Parser.spRangeToFull._getAreaStyleString = function (range) {
 
 Parser.getSingletonUnit = function (unit, isShort) {
 	switch (unit) {
+		case Parser.UNT_INCHES:
+			return isShort ? "in." : "inch";
 		case Parser.UNT_FEET:
 			return isShort ? "ft." : "foot";
 		case Parser.UNT_YARDS:
@@ -1504,33 +1545,16 @@ Parser._getSingletonUnit_prereleaseBrew = function ({unit, isShort, brewUtil}) {
 	if (fromBrew) return fromBrew;
 };
 
-Parser.RANGE_TYPES = [
-	{type: Parser.RNG_POINT, hasDistance: true, isRequireAmount: false},
+Parser.getInchesToFull = function (inches, {isShort = false} = {}) {
+	const feet = Math.floor(inches / 12);
+	inches = inches % 12;
 
-	{type: Parser.RNG_LINE, hasDistance: true, isRequireAmount: true},
-	{type: Parser.RNG_CUBE, hasDistance: true, isRequireAmount: true},
-	{type: Parser.RNG_CONE, hasDistance: true, isRequireAmount: true},
-	{type: Parser.RNG_EMANATION, hasDistance: true, isRequireAmount: true},
-	{type: Parser.RNG_RADIUS, hasDistance: true, isRequireAmount: true},
-	{type: Parser.RNG_SPHERE, hasDistance: true, isRequireAmount: true},
-	{type: Parser.RNG_HEMISPHERE, hasDistance: true, isRequireAmount: true},
-	{type: Parser.RNG_CYLINDER, hasDistance: true, isRequireAmount: true},
-
-	{type: Parser.RNG_SPECIAL, hasDistance: false, isRequireAmount: false},
-];
-
-Parser.DIST_TYPES = [
-	{type: Parser.RNG_SELF, hasAmount: false},
-	{type: Parser.RNG_TOUCH, hasAmount: false},
-
-	{type: Parser.UNT_FEET, hasAmount: true},
-	{type: Parser.UNT_YARDS, hasAmount: true},
-	{type: Parser.UNT_MILES, hasAmount: true},
-
-	{type: Parser.RNG_SIGHT, hasAmount: false},
-	{type: Parser.RNG_UNLIMITED_SAME_PLANE, hasAmount: false},
-	{type: Parser.RNG_UNLIMITED, hasAmount: false},
-];
+	return [
+		feet ? `${feet} ${isShort ? `ft.` : !feet ? Parser.getSingletonUnit(Parser.UNT_FEET) : Parser.UNT_FEET}` : null,
+		inches ? `${Parser.numberToVulgar(inches)} ${isShort ? `in.` : !inches ? Parser.getSingletonUnit(Parser.UNT_INCHES) : Parser.UNT_INCHES}` : null,
+	].filter(Boolean)
+		.join(" ");
+};
 
 Parser.spComponentsToFull = function (comp, level, {isPlainText = false} = {}) {
 	if (!comp) return "None";
@@ -1554,32 +1578,13 @@ Parser.spEndTypeToFull = function (type) {
 	return Parser._parse_aToB(Parser.SP_END_TYPE_TO_FULL, type);
 };
 
-Parser.spDurationToFull = function (dur) {
-	let hasSubOr = false;
+Parser.spDurationToFull = function (durations, {isPlainText = false, styleHint} = {}) {
+	styleHint ||= VetoolsConfig.get("styleSwitcher", "style");
 
-	const outParts = dur
-		.map(d => {
-			const ptCondition = d.condition ? ` (${d.condition})` : "";
+	const entriesMeta = Renderer.generic.getRenderableDurationEntriesMeta(durations, {styleHint});
 
-			switch (d.type) {
-				case "special":
-					if (d.concentration) return `Concentration${ptCondition}`;
-					return `Special${ptCondition}`;
-				case "instant":
-					return `Instantaneous${ptCondition}`;
-				case "timed":
-					return `${d.concentration ? "Concentration, " : ""}${d.concentration ? "u" : d.duration.upTo ? "U" : ""}${d.concentration || d.duration.upTo ? "p to " : ""}${d.duration.amount} ${d.duration.amount === 1 ? d.duration.type : `${d.duration.type}s`}${ptCondition}`;
-				case "permanent": {
-					if (!d.ends) return `Permanent${ptCondition}`;
-
-					const endsToJoin = d.ends.map(m => Parser.spEndTypeToFull(m));
-					hasSubOr = hasSubOr || endsToJoin.length > 1;
-					return `Until ${endsToJoin.joinConjunct(", ", " or ")}${ptCondition}`;
-				}
-			}
-		});
-
-	return `${outParts.joinConjunct(hasSubOr ? "; " : ", ", " or ")}${dur.length > 1 ? " (see below)" : ""}`;
+	if (isPlainText) return Renderer.stripTags(entriesMeta.entryDuration);
+	return Renderer.get().render(entriesMeta.entryDuration);
 };
 
 Parser.DURATION_TYPES = [
@@ -1814,57 +1819,67 @@ Parser.monTypeFromPlural = function (type) {
 	return Parser._parse_bToA(Parser.MON_TYPE_TO_PLURAL, type);
 };
 
-Parser.getFullImmRes = function (toParse, {isPlainText = false, isTitleCase = false} = {}) {
-	if (!toParse?.length) return "";
+/* -------------------------------------------- */
 
-	let maxDepth = 0;
-
-	const renderString = (str, {isTitleCase = false} = {}) => {
-		if (isTitleCase) str = str.toTitleCase();
-		return isPlainText ? Renderer.stripTags(`${str}`) : Renderer.get().render(`${str}`);
-	};
-
-	const render = (val, depth = 0) => {
-		maxDepth = Math.max(maxDepth, depth);
-		if (typeof val === "string") return renderString(val, {isTitleCase});
-
-		if (val.special) return renderString(val.special);
-
-		const stack = [];
-
-		if (val.preNote) stack.push(renderString(val.preNote));
-
-		const prop = val.immune ? "immune" : val.resist ? "resist" : val.vulnerable ? "vulnerable" : null;
-		if (prop) {
-			const toJoin = val[prop].length === Parser.DMG_TYPES.length && CollectionUtil.deepEquals(Parser.DMG_TYPES, val[prop])
-				? ["all damage"[isTitleCase ? "toTitleCase" : "toString"]()]
-				: val[prop].map(nxt => render(nxt, depth + 1));
-			stack.push(renderString(depth ? toJoin.join(maxDepth ? "; " : ", ") : toJoin.joinConjunct(", ", " and ")));
-		}
-
-		if (val.note) stack.push(renderString(val.note));
-
-		return stack.join(" ");
-	};
-
-	const arr = toParse.map(it => render(it));
-
-	if (arr.length <= 1) return arr.join("");
-
-	let out = "";
-	for (let i = 0; i < arr.length - 1; ++i) {
-		const it = arr[i];
-		const nxt = arr[i + 1];
-
-		const orig = toParse[i];
-		const origNxt = toParse[i + 1];
-
-		out += it;
-		out += (it.includes(",") || nxt.includes(",") || (orig && orig.cond) || (origNxt && origNxt.cond)) ? "; " : ", ";
-	}
-	out += arr.last();
-	return out;
+Parser._getFullImmRes_isSimpleTerm = val => {
+	if (typeof val === "string" || val.special) return true;
+	const prop = Parser._getFullImmRes_getNextProp(val);
+	return prop == null;
 };
+
+Parser._getFullImmRes_getNextProp = obj => obj.immune ? "immune" : obj.resist ? "resist" : obj.vulnerable ? "vulnerable" : null;
+
+Parser._getFullImmRes_getRenderedString = (str, {isPlainText = false, isTitleCase = false} = {}) => {
+	if (isTitleCase) str = str.toTitleCase();
+	return isPlainText ? Renderer.stripTags(`${str}`) : Renderer.get().render(`${str}`);
+};
+
+Parser._getFullImmRes_getRenderedObject = (obj, {isPlainText = false, isTitleCase = false} = {}) => {
+	const stack = [];
+
+	if (obj.preNote) stack.push(Parser._getFullImmRes_getRenderedString(obj.preNote, {isPlainText}));
+
+	const prop = Parser._getFullImmRes_getNextProp(obj);
+	if (prop) stack.push(Parser._getFullImmRes_getRenderedArray(obj[prop], {isPlainText, isTitleCase, isGroup: true}));
+
+	if (obj.note) stack.push(Parser._getFullImmRes_getRenderedString(obj.note, {isPlainText}));
+
+	return stack.join(" ");
+};
+
+Parser._getFullImmRes_getRenderedArray = (values, {isPlainText = false, isTitleCase = false, isGroup = false} = {}) => {
+	if (values.length === Parser.DMG_TYPES.length && CollectionUtil.deepEquals(Parser.DMG_TYPES, values)) {
+		return "all damage"[isTitleCase ? "toTitleCase" : "toString"]();
+	}
+
+	return values
+		.map((val, i, arr) => {
+			const isSimpleCur = Parser._getFullImmRes_isSimpleTerm(val);
+
+			const rendCur = isSimpleCur
+				? val.special
+					? Parser._getFullImmRes_getRenderedString(val.special, {isPlainText, isTitleCase: false})
+					: Parser._getFullImmRes_getRenderedString(val, {isPlainText, isTitleCase})
+				: Parser._getFullImmRes_getRenderedObject(val, {isPlainText, isTitleCase});
+
+			if (i === arr.length - 1) return rendCur;
+
+			const isSimpleNxt = Parser._getFullImmRes_isSimpleTerm(arr[i + 1]);
+
+			if (!isSimpleCur || !isSimpleNxt) return `${rendCur}; `;
+			if (!isGroup || i !== arr.length - 2 || arr.length < 2) return `${rendCur}, `;
+			if (arr.length === 2) return `${rendCur} and `;
+			return `${rendCur}, and `;
+		})
+		.join("");
+};
+
+Parser.getFullImmRes = function (values, {isPlainText = false, isTitleCase = false} = {}) {
+	if (!values?.length) return "";
+	return Parser._getFullImmRes_getRenderedArray(values, {isPlainText, isTitleCase});
+};
+
+/* -------------------------------------------- */
 
 Parser.getFullCondImm = function (condImm, {isPlainText = false, isEntry = false, isTitleCase = false} = {}) {
 	if (isPlainText && isEntry) throw new Error(`Options "isPlainText" and "isEntry" are mutually exclusive!`);
@@ -1974,6 +1989,160 @@ Parser.monLanguageTagToFull = function (tag) {
 
 Parser.ENVIRONMENTS = ["arctic", "coastal", "desert", "forest", "grassland", "hill", "mountain", "swamp", "underdark", "underwater", "urban"];
 
+Parser.ENVIRONMENT__PLANAR_FEYWILD = "planar, feywild";
+Parser.ENVIRONMENT__PLANAR_SHADOWFELL = "planar, shadowfell";
+
+Parser.ENVIRONMENT__PLANAR_WATER = "planar, water";
+Parser.ENVIRONMENT__PLANAR_EARTH = "planar, earth";
+Parser.ENVIRONMENT__PLANAR_FIRE = "planar, fire";
+Parser.ENVIRONMENT__PLANAR_AIR = "planar, air";
+
+Parser.ENVIRONMENT__PLANAR_OOZE = "planar, ooze";
+Parser.ENVIRONMENT__PLANAR_MAGMA = "planar, magma";
+Parser.ENVIRONMENT__PLANAR_ASH = "planar, ash";
+Parser.ENVIRONMENT__PLANAR_ICE = "planar, ice";
+
+Parser.ENVIRONMENT__PLANAR_ETHEREAL = "planar, ethereal";
+Parser.ENVIRONMENT__PLANAR_ASTRAL = "planar, astral";
+
+Parser.ENVIRONMENT__PLANAR_ARBOREA = "planar, arborea";
+Parser.ENVIRONMENT__PLANAR_ARCADIA = "planar, arcadia";
+Parser.ENVIRONMENT__PLANAR_BEASTLANDS = "planar, beastlands";
+Parser.ENVIRONMENT__PLANAR_BYTOPIA = "planar, bytopia";
+Parser.ENVIRONMENT__PLANAR_ELYSIUM = "planar, elysium";
+Parser.ENVIRONMENT__PLANAR_MOUNT_CELESTIA = "planar, mount celestia";
+Parser.ENVIRONMENT__PLANAR_YSGARD = "planar, ysgard";
+
+Parser.ENVIRONMENT__PLANAR_ABYSS = "planar, abyss";
+Parser.ENVIRONMENT__PLANAR_ACHERON = "planar, acheron";
+Parser.ENVIRONMENT__PLANAR_CARCERI = "planar, carceri";
+Parser.ENVIRONMENT__PLANAR_GEHENNA = "planar, gehenna";
+Parser.ENVIRONMENT__PLANAR_HADES = "planar, hades";
+Parser.ENVIRONMENT__PLANAR_NINE_HELLS = "planar, nine hells";
+Parser.ENVIRONMENT__PLANAR_PANDEMONIUM = "planar, pandemonium";
+
+Parser.ENVIRONMENT__PLANAR_LIMBO = "planar, limbo";
+Parser.ENVIRONMENT__PLANAR_MECHANUS = "planar, mechanus";
+Parser.ENVIRONMENT__PLANAR_OUTLANDS = "planar, outlands";
+
+Parser.ENVIRONMENT__GROUP_PLANAR = "planar";
+Parser.ENVIRONMENT__GROUP_PLANAR_TRANSITIVE = "planar, transitive";
+Parser.ENVIRONMENT__GROUP_PLANAR_ELEMENTAL = "planar, elemental";
+Parser.ENVIRONMENT__GROUP_PLANAR_INNER = "planar, inner";
+Parser.ENVIRONMENT__GROUP_PLANAR_UPPER = "planar, upper";
+Parser.ENVIRONMENT__GROUP_PLANAR_LOWER = "planar, lower";
+
+Parser.ENVIRONMENT_GROUPS = {
+	[Parser.ENVIRONMENT__GROUP_PLANAR_TRANSITIVE]: [
+		Parser.ENVIRONMENT__PLANAR_ETHEREAL,
+		Parser.ENVIRONMENT__PLANAR_ASTRAL,
+	],
+	[Parser.ENVIRONMENT__GROUP_PLANAR_ELEMENTAL]: [
+		Parser.ENVIRONMENT__PLANAR_WATER,
+		Parser.ENVIRONMENT__PLANAR_EARTH,
+		Parser.ENVIRONMENT__PLANAR_FIRE,
+		Parser.ENVIRONMENT__PLANAR_AIR,
+	],
+	[Parser.ENVIRONMENT__GROUP_PLANAR_INNER]: [
+		Parser.ENVIRONMENT__PLANAR_WATER,
+		Parser.ENVIRONMENT__PLANAR_EARTH,
+		Parser.ENVIRONMENT__PLANAR_FIRE,
+		Parser.ENVIRONMENT__PLANAR_AIR,
+
+		Parser.ENVIRONMENT__PLANAR_OOZE,
+		Parser.ENVIRONMENT__PLANAR_MAGMA,
+		Parser.ENVIRONMENT__PLANAR_ASH,
+		Parser.ENVIRONMENT__PLANAR_ICE,
+	],
+	[Parser.ENVIRONMENT__GROUP_PLANAR_UPPER]: [
+		Parser.ENVIRONMENT__PLANAR_ARBOREA,
+		Parser.ENVIRONMENT__PLANAR_ARCADIA,
+		Parser.ENVIRONMENT__PLANAR_BEASTLANDS,
+		Parser.ENVIRONMENT__PLANAR_BYTOPIA,
+		Parser.ENVIRONMENT__PLANAR_ELYSIUM,
+		Parser.ENVIRONMENT__PLANAR_MOUNT_CELESTIA,
+		Parser.ENVIRONMENT__PLANAR_YSGARD,
+	],
+	[Parser.ENVIRONMENT__GROUP_PLANAR_LOWER]: [
+		Parser.ENVIRONMENT__PLANAR_ABYSS,
+		Parser.ENVIRONMENT__PLANAR_ACHERON,
+		Parser.ENVIRONMENT__PLANAR_CARCERI,
+		Parser.ENVIRONMENT__PLANAR_GEHENNA,
+		Parser.ENVIRONMENT__PLANAR_HADES,
+		Parser.ENVIRONMENT__PLANAR_NINE_HELLS,
+		Parser.ENVIRONMENT__PLANAR_PANDEMONIUM,
+	],
+};
+Parser.ENVIRONMENT_GROUPS[Parser.ENVIRONMENT__GROUP_PLANAR] = [
+	...Parser.ENVIRONMENT_GROUPS[Parser.ENVIRONMENT__GROUP_PLANAR_TRANSITIVE],
+	...Parser.ENVIRONMENT_GROUPS[Parser.ENVIRONMENT__GROUP_PLANAR_INNER],
+	...Parser.ENVIRONMENT_GROUPS[Parser.ENVIRONMENT__GROUP_PLANAR_UPPER],
+	...Parser.ENVIRONMENT_GROUPS[Parser.ENVIRONMENT__GROUP_PLANAR_LOWER],
+	Parser.ENVIRONMENT__PLANAR_LIMBO,
+	Parser.ENVIRONMENT__PLANAR_MECHANUS,
+	Parser.ENVIRONMENT__PLANAR_OUTLANDS,
+];
+
+Parser.getExpandedEnvironments = function (env) {
+	if (!Parser.ENVIRONMENT_GROUPS[env]) return env;
+	return [...Parser.ENVIRONMENT_GROUPS[env]];
+};
+
+Parser.ENVIRONMENT_DISPLAY_NAMES = {
+	[Parser.ENVIRONMENT__PLANAR_FEYWILD]: "Planar (Feywild)",
+	[Parser.ENVIRONMENT__PLANAR_SHADOWFELL]: "Planar (Shadowfell)",
+
+	[Parser.ENVIRONMENT__PLANAR_WATER]: "Planar (Elemental Plane of Water)",
+	[Parser.ENVIRONMENT__PLANAR_EARTH]: "Planar (Elemental Plane of Earth)",
+	[Parser.ENVIRONMENT__PLANAR_FIRE]: "Planar (Elemental Plane of Fire)",
+	[Parser.ENVIRONMENT__PLANAR_AIR]: "Planar (Elemental Plane of Air)",
+
+	[Parser.ENVIRONMENT__PLANAR_OOZE]: "Planar (Para-elemental Plane of Ooze)",
+	[Parser.ENVIRONMENT__PLANAR_MAGMA]: "Planar (Para-elemental Plane of Magma)",
+	[Parser.ENVIRONMENT__PLANAR_ASH]: "Planar (Para-elemental Plane of Ash)",
+	[Parser.ENVIRONMENT__PLANAR_ICE]: "Planar (Para-elemental Plane of Ice)",
+
+	[Parser.ENVIRONMENT__PLANAR_ETHEREAL]: "Planar (Ethereal Plane)",
+	[Parser.ENVIRONMENT__PLANAR_ASTRAL]: "Planar (Astral Plane)",
+
+	[Parser.ENVIRONMENT__PLANAR_ARBOREA]: "Planar (Arborea)",
+	[Parser.ENVIRONMENT__PLANAR_ARCADIA]: "Planar (Arcadia)",
+	[Parser.ENVIRONMENT__PLANAR_BEASTLANDS]: "Planar (Beastlands)",
+	[Parser.ENVIRONMENT__PLANAR_BYTOPIA]: "Planar (Bytopia)",
+	[Parser.ENVIRONMENT__PLANAR_ELYSIUM]: "Planar (Elysium)",
+	[Parser.ENVIRONMENT__PLANAR_MOUNT_CELESTIA]: "Planar (Mount Celestia)",
+	[Parser.ENVIRONMENT__PLANAR_YSGARD]: "Planar (Ysgard)",
+
+	[Parser.ENVIRONMENT__PLANAR_ABYSS]: "Planar (Abyss)",
+	[Parser.ENVIRONMENT__PLANAR_ACHERON]: "Planar (Acheron)",
+	[Parser.ENVIRONMENT__PLANAR_CARCERI]: "Planar (Carceri)",
+	[Parser.ENVIRONMENT__PLANAR_GEHENNA]: "Planar (Gehenna)",
+	[Parser.ENVIRONMENT__PLANAR_HADES]: "Planar (Hades)",
+	[Parser.ENVIRONMENT__PLANAR_NINE_HELLS]: "Planar (Nine Hells)",
+	[Parser.ENVIRONMENT__PLANAR_PANDEMONIUM]: "Planar (Pandemonium)",
+
+	[Parser.ENVIRONMENT__PLANAR_LIMBO]: "Planar (Limbo)",
+	[Parser.ENVIRONMENT__PLANAR_MECHANUS]: "Planar (Mechanus)",
+
+	[Parser.ENVIRONMENT__PLANAR_OUTLANDS]: "Planar (Outlands)",
+
+	[Parser.ENVIRONMENT__GROUP_PLANAR_TRANSITIVE]: "Planar (Transitive Planes)",
+	[Parser.ENVIRONMENT__GROUP_PLANAR_ELEMENTAL]: "Planar (Elemental Planes)",
+	[Parser.ENVIRONMENT__GROUP_PLANAR_INNER]: "Planar (Inner Planes)",
+	[Parser.ENVIRONMENT__GROUP_PLANAR_UPPER]: "Planar (Upper Planes)",
+	[Parser.ENVIRONMENT__GROUP_PLANAR_LOWER]: "Planar (Lower Planes)",
+};
+
+Parser.getEnvironmentDisplayName = function (env) {
+	return Parser.ENVIRONMENT_DISPLAY_NAMES[env] || env.toTitleCase();
+};
+
+Parser.TREASURE_TYPES = ["arcana", "armaments", "implements", "relics"];
+
+Parser.getTreasureTypeEntry = function (typ) {
+	return typ.toTitleCase();
+};
+
 // psi-prefix functions are for parsing psionic data, and shared with the roll20 script
 Parser.PSI_ABV_TYPE_TALENT = "T";
 Parser.PSI_ABV_TYPE_DISCIPLINE = "D";
@@ -2029,7 +2198,10 @@ Parser.FEAT_CATEGORY_TO_FULL = {
 };
 
 Parser.featCategoryToFull = (category) => {
-	return Parser._parse_aToB(Parser.FEAT_CATEGORY_TO_FULL, category) || category;
+	if (Parser.FEAT_CATEGORY_TO_FULL[category]) return Parser.FEAT_CATEGORY_TO_FULL[category];
+	if (PrereleaseUtil.getMetaLookup("featCategories")?.[category]) return PrereleaseUtil.getMetaLookup("featCategories")[category];
+	if (BrewUtil2.getMetaLookup("featCategories")?.[category]) return BrewUtil2.getMetaLookup("featCategories")[category];
+	return category;
 };
 
 Parser.featCategoryFromFull = (full) => {
@@ -2214,6 +2386,29 @@ Parser.CAT_ID_SENSES = 51;
 Parser.CAT_ID_DECK = 52;
 Parser.CAT_ID_CARD = 53;
 Parser.CAT_ID_ITEM_MASTERY = 54;
+
+Parser.CAT_ID_GROUPS = {
+	"optionalfeature": [
+		Parser.CAT_ID_ELDRITCH_INVOCATION,
+		Parser.CAT_ID_METAMAGIC,
+		Parser.CAT_ID_MANEUVER_BATTLEMASTER,
+		Parser.CAT_ID_MANEUVER_CAVALIER,
+		Parser.CAT_ID_ARCANE_SHOT,
+		Parser.CAT_ID_OPTIONAL_FEATURE_OTHER,
+		Parser.CAT_ID_FIGHTING_STYLE,
+		Parser.CAT_ID_PACT_BOON,
+		Parser.CAT_ID_ELEMENTAL_DISCIPLINE,
+		Parser.CAT_ID_ARTIFICER_INFUSION,
+		Parser.CAT_ID_ONOMANCY_RESONANT,
+		Parser.CAT_ID_RUNE_KNIGHT_RUNE,
+		Parser.CAT_ID_ALCHEMICAL_FORMULA,
+		Parser.CAT_ID_MANEUVER,
+	],
+	"vehicleUpgrade": [
+		Parser.CAT_ID_SHIP_UPGRADE,
+		Parser.CAT_ID_INFERNAL_WAR_MACHINE_UPGRADE,
+	],
+};
 
 Parser.CAT_ID_TO_FULL = {};
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_CREATURE] = "Bestiary";
@@ -2481,17 +2676,24 @@ Parser.TRAP_HAZARD_TYPE_TO_FULL = {
 	WLD: "Wilderness Hazard",
 	GEN: "Generic",
 	EST: "Eldritch Storm",
+	TRP: "Trap",
 };
 
-Parser.tierToFullLevel = function (tier) {
-	return Parser._parse_aToB(Parser.TIER_TO_FULL_LEVEL, tier);
+Parser._TIER_TO_LEVEL_RANGE = {
+	"1": [1, 4],
+	"2": [5, 10],
+	"3": [11, 16],
+	"4": [17, 20],
 };
+Parser.tierToFullLevel = function (tier, {styleHint} = {}) {
+	const range = Parser._parse_aToB(Parser._TIER_TO_LEVEL_RANGE, tier);
+	if (!range) return `Tier ${tier}`;
 
-Parser.TIER_TO_FULL_LEVEL = {};
-Parser.TIER_TO_FULL_LEVEL[1] = "1st\u20134th Level";
-Parser.TIER_TO_FULL_LEVEL[2] = "5th\u201310th Level";
-Parser.TIER_TO_FULL_LEVEL[3] = "11th\u201316th Level";
-Parser.TIER_TO_FULL_LEVEL[4] = "17th\u201320th Level";
+	styleHint ||= VetoolsConfig.get("styleSwitcher", "style");
+
+	if (styleHint === "classic") return `${range.map(n => Parser.getOrdinalForm(n)).join("\u2013")} Level`;
+	return `Levels ${range.join("\u2013")}`;
+};
 
 Parser.trapInitToFull = function (init) {
 	return Parser._parse_aToB(Parser.TRAP_INIT_TO_FULL, init);
@@ -2506,14 +2708,25 @@ Parser.ATK_TYPE_TO_FULL = {};
 Parser.ATK_TYPE_TO_FULL["MW"] = "Melee Weapon Attack";
 Parser.ATK_TYPE_TO_FULL["RW"] = "Ranged Weapon Attack";
 
-Parser.bookOrdinalToAbv = (ordinal, preNoSuff) => {
+Parser.bookOrdinalToAbv = (ordinal, {isPreNoSuff = false, isPlainText = false} = {}) => {
 	if (ordinal === undefined) return "";
 	switch (ordinal.type) {
-		case "part": return `${preNoSuff ? " " : ""}Part ${ordinal.identifier}${preNoSuff ? "" : " \u2014 "}`;
-		case "chapter": return `${preNoSuff ? " " : ""}Ch. ${ordinal.identifier}${preNoSuff ? "" : ": "}`;
-		case "episode": return `${preNoSuff ? " " : ""}Ep. ${ordinal.identifier}${preNoSuff ? "" : ": "}`;
-		case "appendix": return `${preNoSuff ? " " : ""}App.${ordinal.identifier != null ? ` ${ordinal.identifier}` : ""}${preNoSuff ? "" : ": "}`;
-		case "level": return `${preNoSuff ? " " : ""}Level ${ordinal.identifier}${preNoSuff ? "" : ": "}`;
+		case "part": return `${isPreNoSuff ? " " : ""}${Parser._bookOrdinalToAbv_getPt({ordinal, isPlainText})} ${ordinal.identifier}${isPreNoSuff ? "" : " \u2014 "}`;
+		case "chapter": return `${isPreNoSuff ? " " : ""}${Parser._bookOrdinalToAbv_getPt({ordinal, isPlainText})} ${ordinal.identifier}${isPreNoSuff ? "" : ": "}`;
+		case "episode": return `${isPreNoSuff ? " " : ""}${Parser._bookOrdinalToAbv_getPt({ordinal, isPlainText})} ${ordinal.identifier}${isPreNoSuff ? "" : ": "}`;
+		case "appendix": return `${isPreNoSuff ? " " : ""}${Parser._bookOrdinalToAbv_getPt({ordinal, isPlainText})}${ordinal.identifier != null ? ` ${ordinal.identifier}` : ""}${isPreNoSuff ? "" : ": "}`;
+		case "level": return `${isPreNoSuff ? " " : ""}${Parser._bookOrdinalToAbv_getPt({ordinal, isPlainText})} ${ordinal.identifier}${isPreNoSuff ? "" : ": "}`;
+		default: throw new Error(`Unhandled ordinal type "${ordinal.type}"`);
+	}
+};
+
+Parser._bookOrdinalToAbv_getPt = ({ordinal, isPlainText = false}) => {
+	switch (ordinal.type) {
+		case "part": return `Part`;
+		case "chapter": return isPlainText ? `Ch.` : `<span title="Chapter">Ch.</span>`;
+		case "episode": return isPlainText ? `Ep.` : `<span title="Episode">Ep.</span>`;
+		case "appendix": return isPlainText ? `App.` : `<span title="Appendix">App.</span>`;
+		case "level": return `Level`;
 		default: throw new Error(`Unhandled ordinal type "${ordinal.type}"`);
 	}
 };
@@ -3912,6 +4125,8 @@ Parser.metric = {
 	FEET_TO_METRES: 0.3, // 5 ft = 1.5 m
 	YARDS_TO_METRES: 0.9, // (as above)
 	POUNDS_TO_KILOGRAMS: 0.5, // 2 lb = 1 kg
+	// Other additions
+	INCHES_TO_CENTIMETERS: 2.5, // 1 in = 2.5 cm
 
 	getMetricNumber ({originalValue, originalUnit, toFixed = null}) {
 		if (originalValue == null || isNaN(originalValue)) return originalValue;
@@ -3921,6 +4136,7 @@ Parser.metric = {
 
 		let out = null;
 		switch (originalUnit) {
+			case "in.": case "in": case Parser.UNT_INCHES: out = originalValue * Parser.metric.INCHES_TO_CENTIMETERS; break;
 			case "ft.": case "ft": case Parser.UNT_FEET: out = originalValue * Parser.metric.FEET_TO_METRES; break;
 			case "yd.": case "yd": case Parser.UNT_YARDS: out = originalValue * Parser.metric.YARDS_TO_METRES; break;
 			case "mi.": case "mi": case Parser.UNT_MILES: out = originalValue * Parser.metric.MILES_TO_KILOMETRES; break;
@@ -3933,6 +4149,7 @@ Parser.metric = {
 
 	getMetricUnit ({originalUnit, isShortForm = false, isPlural = true}) {
 		switch (originalUnit) {
+			case "in.": case "in": case Parser.UNT_INCHES: return isShortForm ? "cm" : `centimeter`[isPlural ? "toPlural" : "toString"]();
 			case "ft.": case "ft": case Parser.UNT_FEET: return isShortForm ? "m" : `meter`[isPlural ? "toPlural" : "toString"]();
 			case "yd.": case "yd": case Parser.UNT_YARDS: return isShortForm ? "m" : `meter`[isPlural ? "toPlural" : "toString"]();
 			case "mi.": case "mi": case Parser.UNT_MILES: return isShortForm ? "km" : `kilometre`[isPlural ? "toPlural" : "toString"]();
