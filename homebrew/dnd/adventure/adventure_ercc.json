@@ -211,6 +211,18 @@
 				"name": "Kobold Scale Sorcerer",
 				"source": "MPMM",
 				"_mod": {
+					"action": [
+						{
+							"mode": "replaceArr",
+							"replace": "Dagger",
+							"items": {
+								"name": "Carrot Dagger",
+								"entries": [
+									"{@atk mw,rw} {@hit 4} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 ({@damage 1d4 + 2}) piercing damage."
+								]
+							}
+						}
+					],
 					"spellcasting": [
 						{
 							"mode": "removeSpells",
@@ -235,6 +247,28 @@
 			"speed": {
 				"walk": 30,
 				"fly": 30
+			}
+		},
+		{
+			"name": "Kobold Minion",
+			"source": "ERCC",
+			"_copy": {
+				"name": "Kobold",
+				"source": "MM",
+				"_mod": {
+					"action": [
+						{
+							"mode": "replaceArr",
+							"replace": "Dagger",
+							"items": {
+								"name": "Carrot Dagger",
+								"entries": [
+									"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d4 + 2}) piercing damage."
+								]
+							}
+						}
+					]
+				}
 			}
 		}
 	],
@@ -435,6 +469,7 @@
 							]
 						},
 						"Time-permitting, let the players dick around in the village if they like.  Eventually, they need to follow the trail.",
+						"{@cue DC 10 Survival} - The tiny footprints are kobold tracks.  The huge footprints were made by a single large bipedal beast.",
 						"{@cue DC 10 Survival} - The tiny footprints are kobold tracks.  The huge footprints were made by a single large bipedal beast.",
 						"{@cue DC 10 Insight} - There's no obvious reason the village should be empty at this time of day (approaching dusk).}",
 						"{@cue DC 10 Investigation of the surrounding village} - Read the following:",
@@ -665,7 +700,7 @@
 									"variantName": "3",
 									"combatants": [
 										{
-											"creature": "{@creature kobold}",
+											"creature": "{@creature kobold minion|ERCC}",
 											"quantity": 4
 										},
 										{
@@ -679,7 +714,7 @@
 									"variantName": "4",
 									"combatants": [
 										{
-											"creature": "{@creature kobold}",
+											"creature": "{@creature kobold minion|ERCC}",
 											"quantity": 6
 										},
 										{
@@ -693,7 +728,7 @@
 									"variantName": "5",
 									"combatants": [
 										{
-											"creature": "{@creature kobold}",
+											"creature": "{@creature kobold minion|ERCC}",
 											"quantity": 7
 										},
 										{
@@ -764,7 +799,7 @@
 									"variantName": "3",
 									"combatants": [
 										{
-											"creature": "{@creature kobold}",
+											"creature": "{@creature kobold minion|ERCC}",
 											"quantity": 2
 										},
 										{
@@ -777,7 +812,7 @@
 									"variantName": "4",
 									"combatants": [
 										{
-											"creature": "{@creature kobold}",
+											"creature": "{@creature kobold minion|ERCC}",
 											"quantity": 2
 										},
 										{
@@ -790,7 +825,7 @@
 									"variantName": "5",
 									"combatants": [
 										{
-											"creature": "{@creature kobold}",
+											"creature": "{@creature kobold minion|ERCC}",
 											"quantity": 2
 										},
 										{
@@ -1075,7 +1110,7 @@
 							"columns": 2,
 							"items": [
 								"{@creature The Easter Bunny|ERCC}",
-								"{@creature Kobold}",
+								"{@creature Kobold Minion|ERCC}",
 								"{@creature Kobold Scale Sorcerer|MPMM}",
 								"{@creature Wolf|||scaled=1/8}",
 								"{@creature Wolf}",
