@@ -21,7 +21,7 @@
 		"_dateLastModifiedHash": "e5f748a123",
 		"dependencies": {
 			"monster": [
-				"MM"
+				"MM", "SKT"
 			]
 		},
 		"internalCopies": [
@@ -29,6 +29,48 @@
 		],
 		"edition": "classic"
 	},
+	"feat": [
+		{
+			"name": "Soul of the Storm Giant",
+			"source": "SKT2",
+			"prerequisite": [
+				{
+					"level": 4
+				}
+			],
+			"ability": [
+				{
+					"choose": {
+						"from": [
+							"str",
+							"dex",
+							"con",
+							"int",
+							"wis",
+							"cha"
+						],
+						"amount": 1
+					}
+				}
+			],
+			"entries": [
+				"You've manifested the tempest magic emblematic of storm giants, granting you the following benefits:",
+				{
+					"type": "list",
+					"style": "list-hang-notitle",
+					"items": [
+						{
+							"type": "item",
+							"name": "Maelstrom Aura",
+							"entries": [
+								"Once per short rest as a bonus action, you surround yourself with an aura of magical wind and lightning that extends 10 feet from you in every direction but not through total cover. The aura lasts until the start of your next turn or until you are incapacitated. While the aura is active, you have resistance to lightning and thunder damage, and your AC increases by 1. In addition, attack rolls against you have disadvantage."
+							]
+						}
+					]
+				}
+			]
+		}
+	],
 	"monster": [
 		{
 			"name": "Iymrith",
