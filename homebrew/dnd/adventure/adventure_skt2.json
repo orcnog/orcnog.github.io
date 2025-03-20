@@ -1,5 +1,3 @@
-
-
 {
 	"$schema": "https://raw.githubusercontent.com/TheGiddyLimit/5etools-utils/master/schema/brew-fast/homebrew.json",
 	"_meta": {
@@ -21,7 +19,8 @@
 		"_dateLastModifiedHash": "e5f748a123",
 		"dependencies": {
 			"monster": [
-				"MM", "SKT"
+				"MM",
+				"SKT"
 			]
 		},
 		"internalCopies": [
@@ -89,7 +88,7 @@
 								"1e": [
 									{
 										"replace": "{@spell stone shape}",
-										"with":"{@spell mislead}"
+										"with": "{@spell mislead}"
 									}
 								]
 							}
@@ -212,7 +211,10 @@
 			"int": 18,
 			"wis": 17,
 			"cha": 21,
-			"alignment": ["L", "E"],
+			"alignment": [
+				"L",
+				"E"
+			],
 			"traitTags": [
 				"Amphibious",
 				"Legendary Resistances"

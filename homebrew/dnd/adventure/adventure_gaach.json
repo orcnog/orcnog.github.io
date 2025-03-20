@@ -714,13 +714,13 @@
 				},
 				{
 					"name": "The McCallister House",
-					"headers": [						
+					"headers": [
 						"General Features"
 					]
 				},
 				{
 					"name": "Room Descriptions",
-					"headers": [						
+					"headers": [
 						"1 - Main Entrance",
 						"2 - Foyer",
 						"3 - Main Entryway",
@@ -748,7 +748,7 @@
 				},
 				{
 					"name": "Traps",
-					"headers": [						
+					"headers": [
 						"Ball Bearings",
 						"Caltrops",
 						"Crushing Cart",
@@ -767,7 +767,7 @@
 				},
 				{
 					"name": "Encounters",
-					"headers": [						
+					"headers": [
 						"The Scary Furnace",
 						"Creepy Homeless Bird Lady",
 						"Old Man Marley",
@@ -814,7 +814,7 @@
 							"type": "entries",
 							"name": "Running the Adventure",
 							"entries": [
-								"Taking notes from the popular holiday film, Home Alone, Gnome Alone pits the characters against Nevin McCallister, a tricky gnome kid that's taken over the McCallister home. He will use his wile to lead characters through traps, hazards, and other \"goodies”\" he has set up to ensure that they don't rob the place of all its valuable art objects. To play this adventure, use the adventure hook above. Make sure you understand where all the rooms in the house are and be sure to plot out Nevin's escape routes. Plus, don't forget to load it up with traps (see the Traps section below).",
+								"Taking notes from the popular holiday film, Home Alone, Gnome Alone pits the characters against Nevin McCallister, a tricky gnome kid that's taken over the McCallister home. He will use his wile to lead characters through traps, hazards, and other \"goodies\" he has set up to ensure that they don't rob the place of all its valuable art objects. To play this adventure, use the adventure hook above. Make sure you understand where all the rooms in the house are and be sure to plot out Nevin's escape routes. Plus, don't forget to load it up with traps (see the Traps section below).",
 								"{@i Gnome Alone is a one-shot Fifth Edition adventure for 4-5 characters of 2nd level.}",
 								{
 									"type": "entries",
@@ -1048,7 +1048,7 @@
 								{
 									"type": "entries",
 									"name": "General Features",
-									"entries": [		
+									"entries": [
 										{
 											"type": "entries",
 											"entries": [
@@ -1617,7 +1617,7 @@
 							"entries": [
 								"Several combat and social encounters may be possible throughout this adventure.  Below are a list of balanced encounters which can be applied to most rooms in the house as the DM sees fit, or applied to the {@area Tension Pool Complications Table|tpc|x} as needed.",
 								"The suggested use of these encounters, however, is as follows:",
-								 {
+								{
 									"type": "list",
 									"items": [
 										"{@b {@i Basement.}} If 3 or more players venture together into the basement of the house, run the {@area The Scary Furnace|furnace|x} encounter.",
@@ -1668,7 +1668,6 @@
 												"{@footnote Medium Fight for 4 x Level 2 PCs|1 x {@creature Crazy Bird Lady|GA}, CR 2 (reskinned {@creature pendragon beestinger|AI}, homeless themed spells)<br/>Reduce Cloud of Daggers damage to {@dice 2d4} per round<br/>Adjusted XP: 450<br/>Difficulty: Medium}"
 											]
 										}
-												
 									]
 								},
 								{
@@ -1724,7 +1723,6 @@
 												"{@footnote Trivial Fight for 4 x Level 2 PCs|1 x {@creature security guard|GA|Security Guard}, CR 1/4 (reskinned {@creature goblin|MM})<br/>2 x {@creature caroler|GA|Carolers}, CR 0 (reskinned {@creature commoner|MM|commoners})<br/>Adjusted XP: 140<br/>Difficulty: Trivial}"
 											]
 										}
-												
 									]
 								},
 								{
@@ -1749,7 +1747,6 @@
 												"{@i If one or more characters give chase, be sure to subtract 5 from their passive perception and/or apply disadvantage to any perception checks made to notice traps if they are hurrying to catch Nevin. If they take their time and do not hurry, Nevin is long gone by the time they poke their head out the swinging door.}"
 											]
 										}
-												
 									]
 								},
 								{

@@ -2277,6 +2277,13 @@ globalThis.Renderer = function () {
 				this._recursiveRender(text, textStack, meta);
 				textStack[0] += `</i>`;
 				break;
+            case "@cue":
+                let [toDisplay, color] = Renderer.splitTagByPipe(text);
+                let ptColor = this._renderString_renderTag_getCueColorPart(color);
+                textStack[0] += `<i class="ve-dm-action" style="color: ${ptColor}">`;
+                this._recursiveRender(toDisplay, textStack, meta);
+                textStack[0] += `</i>`;
+                break;
 			case "@tip": {
 				const [displayText, titielText] = Renderer.splitTagByPipe(text);
 				textStack[0] += `<span title="${titielText.qq()}">`;
