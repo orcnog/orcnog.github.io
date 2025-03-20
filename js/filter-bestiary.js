@@ -40,20 +40,6 @@ class PageFilterBestiary extends PageFilterBase {
 		return SortUtil.ascSortLower(a, b);
 	}
 
-	static getAllImmRest (toParse, key) {
-		const out = [];
-		for (const it of toParse) this._getAllImmRest_recurse(it, key, out); // Speed > safety
-		return out;
-	}
-
-	static _getAllImmRest_recurse (it, key, out, conditional) {
-		if (typeof it === "string") {
-			out.push(conditional ? `${it} (Conditional)` : it);
-		} else if (it[key]) {
-			it[key].forEach(nxt => this._getAllImmRest_recurse(nxt, key, out, !!it.cond));
-		}
-	}
-
 	static _getDamageTagDisplayText (tag) { return Parser.dmgTypeToFull(tag).toTitleCase(); }
 	static _getConditionDisplayText (uid) { return uid.split("|")[0].toTitleCase(); }
 	static _getAbilitySaveDisplayText (abl) { return `${abl.uppercaseFirst()} Save`; }
@@ -246,8 +232,8 @@ class PageFilterBestiary extends PageFilterBase {
 			max: 9,
 			displayFn: it => Parser.getOrdinalForm(it),
 		});
-		this._spellKnownFilter = new SearchableFilter({header: "Spells Known", displayFn: (it) => it.split("|")[0].toTitleCase(), itemSortFn: SortUtil.ascSortLower});
-		this._equipmentFilter = new SearchableFilter({header: "Equipment", displayFn: (it) => it.split("|")[0].toTitleCase(), itemSortFn: SortUtil.ascSortLower});
+		this._spellKnownFilter = new SearchableFilter({header: "Spells Known", displayFn: (it) => it.toTitleCase(), itemSortFn: SortUtil.ascSortLower});
+		this._equipmentFilter = new SearchableFilter({header: "Equipment", displayFn: (it) => it.toTitleCase(), itemSortFn: SortUtil.ascSortLower});
 		this._dragonAgeFilter = new Filter({
 			header: "Dragon Age",
 			items: [...PageFilterBestiary._DRAGON_AGES],
@@ -263,6 +249,10 @@ class PageFilterBestiary extends PageFilterBase {
 			header: "Treasure",
 			items: [],
 			displayFn: StrUtil.toTitleCase.bind(StrUtil),
+		});
+		this._groupFilter = new Filter({
+			header: "Group",
+			items: [],
 		});
 	}
 
@@ -288,10 +278,8 @@ class PageFilterBestiary extends PageFilterBase {
 		} else {
 			mon._fAlign = ["No Alignment"];
 		}
-		mon._fVuln = mon.vulnerable ? PageFilterBestiary.getAllImmRest(mon.vulnerable, "vulnerable") : [];
-		mon._fRes = mon.resist ? PageFilterBestiary.getAllImmRest(mon.resist, "resist") : [];
-		mon._fImm = mon.immune ? PageFilterBestiary.getAllImmRest(mon.immune, "immune") : [];
-		mon._fCondImm = mon.conditionImmune ? PageFilterBestiary.getAllImmRest(mon.conditionImmune, "conditionImmune") : [];
+		FilterCommon.mutateForFilters_damageVulnResImmune(mon);
+		FilterCommon.mutateForFilters_conditionImmune(mon);
 		mon._fSave = mon.save ? Object.keys(mon.save) : [];
 		mon._fSkill = mon.skill ? Object.keys(mon.skill) : [];
 		mon._fPassive = !isNaN(mon.passive) ? Number(mon.passive) : null;
@@ -416,9 +404,7 @@ class PageFilterBestiary extends PageFilterBase {
 
 	static _getSpellcasterMeta_stringHandler (spellSet, str) {
 		str.replace(PageFilterBestiary._RE_SPELL_TAG, (...m) => {
-			const parts = m[1].split("|").slice(0, 2);
-			parts[1] = parts[1] || Parser.SRC_PHB;
-			spellSet.add(parts.join("|").toLowerCase());
+			spellSet.add(DataUtil.proxy.unpackUid("spell", m[1], "spell", {isLower: true}).name);
 			return "";
 		});
 	}
@@ -476,8 +462,7 @@ class PageFilterBestiary extends PageFilterBase {
 	static _getEquipmentList_stringHandler (itemSet, str) {
 		str
 			.replace(PageFilterBestiary._RE_ITEM_TAG, (...m) => {
-				const unpacked = DataUtil.proxy.unpackUid("item", m[1], "item", {isLower: true});
-				itemSet.add(DataUtil.proxy.getUid("item", unpacked));
+				itemSet.add(DataUtil.proxy.unpackUid("item", m[1], "item", {isLower: true}).name);
 				return "";
 			});
 	}
@@ -526,6 +511,7 @@ class PageFilterBestiary extends PageFilterBase {
 		this._dragonAgeFilter.addItem(mon.dragonAge);
 		this._dragonCastingColorFilter.addItem(mon.dragonCastingColor);
 		this._treasureFilter.addItem(mon.treasure);
+		this._groupFilter.addItem(mon.group);
 	}
 
 	async _pPopulateBoxOptions (opts) {
@@ -541,6 +527,7 @@ class PageFilterBestiary extends PageFilterBase {
 			this._tagFilter,
 			this._sidekickTypeFilter,
 			this._sidekickTagFilter,
+			this._groupFilter,
 			this._environmentFilter,
 			this._defenseFilter,
 			this._conditionImmuneFilter,
@@ -581,6 +568,7 @@ class PageFilterBestiary extends PageFilterBase {
 			m._pTypes.tags,
 			m._pTypes.typeSidekick,
 			m._pTypes.tagsSidekick,
+			m.group,
 			m._fEnvironment,
 			[
 				m._fVuln,

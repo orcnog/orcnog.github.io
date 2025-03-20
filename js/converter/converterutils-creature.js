@@ -42,16 +42,18 @@ export class AcConvert {
 			// region Handle alternates of the form:
 			//   - `natural armor; 22 in shield form`
 			//   - `natural armor; 16 while flying`
+			//   - `natural armor; 16 when flying`
 			//   - `natural armor; 18 with hardened by flame`
 			//   - `shield; ac 12 without shield`
 			fromClean = fromClean
-				.replace(/^(?<from>.+); (?:(?:ac )?(?<nxtVal>\d+) (?<nxtCond>in .*? form|while .*?|includes .*?|without .*?|with .*?))$/i, (...m) => {
+				.replace(/^(?:(?<from>.+); )?(?:(?:ac )?(?<nxtVal>\d+) (?<nxtCond>in .*? form|while .*?|when .*?|includes .*?|without .*?|with .*?))$/i, (...m) => {
+					const {from, nxtVal, nxtCond} = m.at(-1);
 					nuAcTail.push({
-						ac: Number(m.last().nxtVal),
-						condition: m.last().nxtCond,
+						ac: Number(nxtVal),
+						condition: nxtCond,
 						braces: true,
 					});
-					return m.last().from;
+					return from || "";
 				});
 			// endregion
 
@@ -100,9 +102,9 @@ export class AcConvert {
 				.trim();
 			// endregion
 
-			// region Handle "while ..." parts
+			// region Handle "while ..."/"when ..." parts
 			fromClean = fromClean
-				.replace(/^while .*$/, (...m) => {
+				.replace(/^(while|when) .*$/, (...m) => {
 					if (cur.condition) throw new Error(`Multiple AC conditions! "${cur.condition}" and "${m[0]}"`);
 					cur.condition = m[0].trim().toLowerCase();
 					return "";
@@ -279,6 +281,9 @@ export class AcConvert {
 			case "psionic power armor":
 			case "precog reflexes":
 			case "pathfinder's boots":
+				return fromLow;
+			// Humblewood Tales
+			case "shadowed leather armor":
 				return fromLow;
 				// endregion
 
@@ -598,6 +603,12 @@ export class TagCreatureSubEntryInto {
 					{
 						string: (str) => {
 							return str
+								// "Trigger: ..."
+								.replace(/^(Trigger:)(?= )/g, (...m) => `{@actTrigger}`)
+								// "Response: ..."
+								.replace(/(?<=^|[.!?;] )(Response:)(?= )/g, (...m) => `{@actResponse}`)
+								.replace(/(?<=^|[.!?;] )(Response[-\u2012-\u2014])(?=[A-Z])/g, (...m) => `{@actResponse d}`)
+
 								// "Melee Weapon Attack: ..."
 								// "Melee Attack Roll: ..."
 								.replace(/^(?<text>(?:(?:[A-Z][a-z]*|or) )*Attack(?: Roll)?:)(?= )/g, (...m) => {
@@ -621,11 +632,10 @@ export class TagCreatureSubEntryInto {
 								// "Success: ..."
 								.replace(/(?<=^|[.!?;] )(Success:)(?= )/g, (...m) => `{@actSaveSuccess}`)
 								// "Failure: ..."
+								.replace(/(?<=^|[.!?;] )(?<ordinal>First|Second|Third|Fourth|Fifth|Sixth|Seventh|Eighth|Ninth|Tenth) (?:Failure:)(?= )/g, (...m) => {
+									return `{@actSaveFail ${Parser.textToNumber(m.at(-1).ordinal)}}`;
+								})
 								.replace(/(?<=^|[.!?;] )(Failure:)(?= )/g, (...m) => `{@actSaveFail}`)
-								// "Trigger: ..."
-								.replace(/^(Trigger:)(?= )/g, (...m) => `{@actTrigger}`)
-								// "Response: ..."
-								.replace(/(?<=^|[.!?;] )(Response:)(?= )/g, (...m) => `{@actResponse}`)
 							;
 						},
 					},
@@ -1317,7 +1327,7 @@ export class MiscTag {
 			.map(it => new RegExp(`(^|\\W)(${it.name.escapeRegexp()})(\\W|$)`, "gi"));
 
 		this._THROWN_WEAPON_MATCHERS = weaponsBase
-			.filter(it => (it.property || []).some(uid => DataUtil.itemProperty.unpackUid(uid).abbreviation === Parser.ITM_PROP_ABV__THROWN))
+			.filter(it => (it.property || []).some(property => DataUtil.itemProperty.unpackUid(property?.uid || property).abbreviation === Parser.ITM_PROP_ABV__THROWN))
 			.map(it => new RegExp(`(^|\\W)(${it.name.escapeRegexp()})(\\W|$)`, "gi"));
 	}
 
@@ -1951,6 +1961,7 @@ export class SpellcastingTraitHiddenConvert {
 
 	static _getSpellUidsExisting ({stats}) {
 		const spellUidsExisting = new Set();
+		if (!stats.spellcasting?.length) return spellUidsExisting;
 
 		this._WALKER.walk(stats.spellcasting, {string: str => {
 			[...str.matchAll(this._RE_SPELL)]
@@ -1960,20 +1971,38 @@ export class SpellcastingTraitHiddenConvert {
 		return spellUidsExisting;
 	}
 
+	static _mutStatblockProp_getSpellcastingSameAbility ({stats, entSub}) {
+		let spellcastingTraitNameLower = null;
+		this._WALKER.walk(entSub.entries, {string: str => {
+			const mUsesTheSame = /using the same spellcasting ability as (?<name>[^.!?]+)/i.exec(str);
+			if (mUsesTheSame) return spellcastingTraitNameLower = mUsesTheSame.groups.name.trim().toLowerCase();
+		}});
+		if (!spellcastingTraitNameLower) return null;
+
+		return stats.spellcasting?.find(entExisting => entExisting.name.toLowerCase().trim() === spellcastingTraitNameLower);
+	}
+
+	static _mutStatblockProp_getOtherAbility ({stats, entSub}) {
+		let abil = null;
+		this._WALKER.walk(entSub.entries, {string: str => {
+			const mUsing = /using (?<abilRaw>\w+) as the spellcasting ability/i.exec(str);
+			if (!mUsing) return;
+
+			return abil = mUsing.groups.abilRaw.toLowerCase().slice(0, 3);
+		}});
+		return abil;
+	}
+
 	static _mutStatblockProp ({stats, prop, spellUidsExisting}) {
 		stats[prop] = stats[prop]
 			.map(entSub => {
 				if (!entSub.name || !entSub.entries?.length) return entSub;
 
-				let spellcastingTraitNameLower = null;
-				this._WALKER.walk(entSub.entries, {string: str => {
-					const mUsesTheSame = /using the same spellcasting ability as (?<name>[^.!?]+)/i.exec(str);
-					if (mUsesTheSame) return spellcastingTraitNameLower = mUsesTheSame.groups.name.trim().toLowerCase();
-				}});
-				if (!spellcastingTraitNameLower) return entSub;
+				const entSpellcastingTraitAbility = this._mutStatblockProp_getSpellcastingSameAbility({stats, entSub});
+				const abilityOther = this._mutStatblockProp_getOtherAbility({stats, entSub});
 
-				const abilitySpellcastingTrait = stats.spellcasting.find(entExisting => entExisting.name.toLowerCase().trim() === spellcastingTraitNameLower);
-				if (!abilitySpellcastingTrait) return entSub;
+				if (!entSpellcastingTraitAbility && !abilityOther) return entSub;
+				const ability = entSpellcastingTraitAbility?.ability || abilityOther;
 
 				const spellTags = [];
 
@@ -1994,7 +2023,7 @@ export class SpellcastingTraitHiddenConvert {
 					type: "spellcasting",
 					name: entSub.name,
 					headerEntries: entSub.entries,
-					ability: abilitySpellcastingTrait.ability,
+					ability,
 					displayAs: prop,
 				};
 
@@ -2003,14 +2032,14 @@ export class SpellcastingTraitHiddenConvert {
 				entSpellcasting.hidden = [usagePath[0]];
 				MiscUtil.set(entSpellcasting, ...usagePath, spellTags.unique());
 
-				stats.spellcasting.push(entSpellcasting);
+				(stats.spellcasting ||= []).push(entSpellcasting);
 
 				return null;
 			})
 			.filter(Boolean);
 	}
 
-	static mutStatblock ({stats, props}) {
+	static mutStatblock ({stats, props, styleHint}) {
 		if (!stats.spellcasting?.length) return;
 
 		this._WALKER ||= MiscUtil.getWalker({isNoModification: true, isBreakOnReturn: true});
@@ -2139,18 +2168,30 @@ export class SpeedConvert {
 
 			prevSpeed = mode;
 			if (condition) {
+				if (out[mode]) {
+					// e.g. Werebear (XMM)
+					return ((out.alternate ||= {})[mode] ||= []).push({
+						number: feet,
+						condition: condition.trim(),
+					});
+				}
+
 				return out[mode] = {
 					number: feet,
 					condition: condition.trim(),
 				};
 			}
+
+			if (out[mode] && out.alternate?.[mode]) return setByHand();
+			if (out[mode]) return ((out.alternate ||= {})[mode] ||= []).push(feet);
 			return out[mode] = feet;
 		});
 
 		// flag speed as invalid
 		if (
-			Object.values(out)
-				.filter(s => {
+			Object.entries(out)
+				.filter(([k, s]) => {
+					if (k === "alternate") return false;
 					const val = s.number ?? s.amount ?? s;
 					return val % 5 !== 0;
 				}).length
@@ -2359,10 +2400,15 @@ export class CreatureSavingThrowTagger extends _PrimaryLegendarySpellsTaggerBase
 	static _PROP_LEGENDARY = "savingThrowForcedLegendary";
 
 	static _handleString ({m = null, str, outSet}) {
-		str.replace(/{@dc (?<save>[^|}]+)(?:\|[^}]+)?}\s+(?<abil>Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma) saving throw/i, (...m) => {
-			outSet.add(m.last().abil.toLowerCase());
-			return "";
-		});
+		str
+			.replace(/{@dc (?<save>[^|}]+)(?:\|[^}]+)?}\s+(?<abil>Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma) saving throw/i, (...m) => {
+				outSet.add(m.last().abil.toLowerCase());
+				return "";
+			})
+			.replace(/{@actSave (?<abil>str|dex|con|int|wis|cha)}/g, (...m) => {
+				outSet.add(Parser.attAbvToFull(m.at(-1).abil.toLowerCase()).toLowerCase());
+			})
+		;
 	}
 
 	static _handleSpell ({spell, outSet}) {

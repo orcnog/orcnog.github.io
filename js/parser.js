@@ -31,82 +31,106 @@ Parser.attrChooseToFull = function (attList) {
 	}
 };
 
-Parser.numberToText = function (number) {
+Parser.numberToText = function (number, {isOrdinalForm = false} = {}) {
 	if (number == null) throw new TypeError(`undefined or null object passed to parser`);
-	if (Math.abs(number) >= 100) return `${number}`;
+	if (Math.abs(number) >= 100) return isOrdinalForm ? Parser.getOrdinalForm(number) : `${number}`;
 
-	return `${number < 0 ? "negative " : ""}${Parser.numberToText._getPositiveNumberAsText(Math.abs(number))}`;
+	return `${number < 0 ? "negative " : ""}${Parser.numberToText._getPositiveNumberAsText({number: Math.abs(number), isOrdinalForm})}`;
 };
 
-Parser.numberToText._getPositiveNumberAsText = num => {
-	const [preDotRaw, postDotRaw] = `${num}`.split(".");
+Parser.numberToText._getPositiveNumberAsText = ({number, isOrdinalForm}) => {
+	const [preDotRaw, postDotRaw] = `${number}`.split(".");
 
-	if (!postDotRaw) return Parser.numberToText._getPositiveIntegerAsText(num);
+	if (!postDotRaw) return Parser.numberToText._getPositiveIntegerAsText({number, isOrdinalForm});
 
-	let preDot = preDotRaw === "0" ? "" : `${Parser.numberToText._getPositiveIntegerAsText(Math.trunc(num))} and `;
+	if (isOrdinalForm) return `${preDotRaw}.${Parser.getOrdinalForm(postDotRaw)}`;
 
+	const {str: strPostDot, isPretty: isPrettyPostDot} = Parser.numberToText._getPostDot({postDotRaw});
+
+	if (!isPrettyPostDot) return `${number}`;
+
+	return preDotRaw === "0"
+		? strPostDot
+		: `${Parser.numberToText._getPositiveIntegerAsText({number: Math.trunc(number), isOrdinalForm})} and ${strPostDot}`;
+};
+
+Parser.numberToText._getPostDot = ({postDotRaw}) => {
 	// See also: `Parser.numberToVulgar`
 	switch (postDotRaw) {
-		case "125": return `${preDot}one-eighth`;
-		case "2": return `${preDot}one-fifth`;
-		case "25": return `${preDot}one-quarter`;
-		case "375": return `${preDot}three-eighths`;
-		case "4": return `${preDot}two-fifths`;
-		case "5": return `${preDot}one-half`;
-		case "6": return `${preDot}three-fifths`;
-		case "625": return `${preDot}five-eighths`;
-		case "75": return `${preDot}three-quarters`;
-		case "8": return `${preDot}four-fifths`;
-		case "875": return `${preDot}seven-eighths`;
+		case "125": return {str: `one-eighth`, isPretty: true};
+		case "2": return {str: `one-fifth`, isPretty: true};
+		case "25": return {str: `one-quarter`, isPretty: true};
+		case "375": return {str: `three-eighths`, isPretty: true};
+		case "4": return {str: `two-fifths`, isPretty: true};
+		case "5": return {str: `one-half`, isPretty: true};
+		case "6": return {str: `three-fifths`, isPretty: true};
+		case "625": return {str: `five-eighths`, isPretty: true};
+		case "75": return {str: `three-quarters`, isPretty: true};
+		case "8": return {str: `four-fifths`, isPretty: true};
+		case "875": return {str: `seven-eighths`, isPretty: true};
 
 		default: {
 			// Handle recursive
 			const asNum = Number(`0.${postDotRaw}`);
 
-			if (asNum.toFixed(2) === (1 / 3).toFixed(2)) return `${preDot}one-third`;
-			if (asNum.toFixed(2) === (2 / 3).toFixed(2)) return `${preDot}two-thirds`;
+			if (asNum.toFixed(2) === (1 / 3).toFixed(2)) return {str: `one-third`, isPretty: true};
+			if (asNum.toFixed(2) === (2 / 3).toFixed(2)) return {str: `two-thirds`, isPretty: true};
 
-			if (asNum.toFixed(2) === (1 / 6).toFixed(2)) return `${preDot}one-sixth`;
-			if (asNum.toFixed(2) === (5 / 6).toFixed(2)) return `${preDot}five-sixths`;
+			if (asNum.toFixed(2) === (1 / 6).toFixed(2)) return {str: `one-sixth`, isPretty: true};
+			if (asNum.toFixed(2) === (5 / 6).toFixed(2)) return {str: `five-sixths`, isPretty: true};
+
+			return {str: `${postDotRaw}`, isPretty: false};
 		}
 	}
 };
 
-Parser.numberToText._getPositiveIntegerAsText = num => {
-	switch (num) {
-		case 0: return "zero";
-		case 1: return "one";
-		case 2: return "two";
-		case 3: return "three";
-		case 4: return "four";
-		case 5: return "five";
-		case 6: return "six";
-		case 7: return "seven";
-		case 8: return "eight";
-		case 9: return "nine";
-		case 10: return "ten";
-		case 11: return "eleven";
-		case 12: return "twelve";
-		case 13: return "thirteen";
-		case 14: return "fourteen";
-		case 15: return "fifteen";
-		case 16: return "sixteen";
-		case 17: return "seventeen";
-		case 18: return "eighteen";
-		case 19: return "nineteen";
-		case 20: return "twenty";
-		case 30: return "thirty";
-		case 40: return "forty";
-		case 50: return "fifty";
-		case 60: return "sixty";
-		case 70: return "seventy";
-		case 80: return "eighty";
-		case 90: return "ninety";
+Parser.numberToText._getPositiveIntegerAsText = ({number, isOrdinalForm}) => {
+	switch (number) {
+		case 0: return Parser.numberToText._getOptionallyOrdinal({number, str: "zero", isOrdinalForm});
+		case 1: return Parser.numberToText._getOptionallyOrdinal({number, str: "one", isOrdinalForm});
+		case 2: return Parser.numberToText._getOptionallyOrdinal({number, str: "two", isOrdinalForm});
+		case 3: return Parser.numberToText._getOptionallyOrdinal({number, str: "three", isOrdinalForm});
+		case 4: return Parser.numberToText._getOptionallyOrdinal({number, str: "four", isOrdinalForm});
+		case 5: return Parser.numberToText._getOptionallyOrdinal({number, str: "five", isOrdinalForm});
+		case 6: return Parser.numberToText._getOptionallyOrdinal({number, str: "six", isOrdinalForm});
+		case 7: return Parser.numberToText._getOptionallyOrdinal({number, str: "seven", isOrdinalForm});
+		case 8: return Parser.numberToText._getOptionallyOrdinal({number, str: "eight", isOrdinalForm});
+		case 9: return Parser.numberToText._getOptionallyOrdinal({number, str: "nine", isOrdinalForm});
+		case 10: return Parser.numberToText._getOptionallyOrdinal({number, str: "ten", isOrdinalForm});
+		case 11: return Parser.numberToText._getOptionallyOrdinal({number, str: "eleven", isOrdinalForm});
+		case 12: return Parser.numberToText._getOptionallyOrdinal({number, str: "twelve", isOrdinalForm});
+		case 13: return Parser.numberToText._getOptionallyOrdinal({number, str: "thirteen", isOrdinalForm});
+		case 14: return Parser.numberToText._getOptionallyOrdinal({number, str: "fourteen", isOrdinalForm});
+		case 15: return Parser.numberToText._getOptionallyOrdinal({number, str: "fifteen", isOrdinalForm});
+		case 16: return Parser.numberToText._getOptionallyOrdinal({number, str: "sixteen", isOrdinalForm});
+		case 17: return Parser.numberToText._getOptionallyOrdinal({number, str: "seventeen", isOrdinalForm});
+		case 18: return Parser.numberToText._getOptionallyOrdinal({number, str: "eighteen", isOrdinalForm});
+		case 19: return Parser.numberToText._getOptionallyOrdinal({number, str: "nineteen", isOrdinalForm});
+		case 20: return Parser.numberToText._getOptionallyOrdinal({number, str: "twenty", isOrdinalForm});
+		case 30: return Parser.numberToText._getOptionallyOrdinal({number, str: "thirty", isOrdinalForm});
+		case 40: return Parser.numberToText._getOptionallyOrdinal({number, str: "forty", isOrdinalForm});
+		case 50: return Parser.numberToText._getOptionallyOrdinal({number, str: "fifty", isOrdinalForm});
+		case 60: return Parser.numberToText._getOptionallyOrdinal({number, str: "sixty", isOrdinalForm});
+		case 70: return Parser.numberToText._getOptionallyOrdinal({number, str: "seventy", isOrdinalForm});
+		case 80: return Parser.numberToText._getOptionallyOrdinal({number, str: "eighty", isOrdinalForm});
+		case 90: return Parser.numberToText._getOptionallyOrdinal({number, str: "ninety", isOrdinalForm});
 		default: {
-			const str = String(num);
-			return `${Parser.numberToText._getPositiveIntegerAsText(Number(`${str[0]}0`))}-${Parser.numberToText._getPositiveIntegerAsText(Number(str[1]))}`;
+			const str = String(number);
+			return `${Parser.numberToText._getPositiveIntegerAsText({number: Number(`${str[0]}0`)})}-${Parser.numberToText._getPositiveIntegerAsText({number: Number(str[1]), isOrdinalForm})}`;
 		}
 	}
+};
+
+Parser.numberToText._getOptionallyOrdinal = ({number, str, isOrdinalForm}) => {
+	if (!isOrdinalForm) return str;
+	switch (number) {
+		case 1: return "first";
+		case 2: return "second";
+		case 3: return "third";
+	}
+	if (str.endsWith("y")) return `${str.slice(0, -1)}ieth`;
+	if (str.endsWith("ve")) return `${str.slice(0, -2)}fth`;
+	return `${str}th`;
 };
 
 Parser.textToNumber = function (str) {
@@ -114,16 +138,16 @@ Parser.textToNumber = function (str) {
 	if (!isNaN(str)) return Number(str);
 	switch (str) {
 		case "zero": return 0;
-		case "one": case "a": case "an": return 1;
-		case "two": case "double": return 2;
-		case "three": case "triple": return 3;
-		case "four": case "quadruple": return 4;
-		case "five": return 5;
-		case "six": return 6;
-		case "seven": return 7;
-		case "eight": return 8;
-		case "nine": return 9;
-		case "ten": return 10;
+		case "one": case "a": case "an": case "first": return 1;
+		case "two": case "double": case "second": return 2;
+		case "three": case "triple": case "third": return 3;
+		case "four": case "quadruple": case "fourth": return 4;
+		case "five": case "fifth": return 5;
+		case "six": case "sixth": return 6;
+		case "seven": case "seventh": return 7;
+		case "eight": case "eighth": return 8;
+		case "nine": case "ninth": return 9;
+		case "ten": case "tenth": return 10;
 		case "eleven": return 11;
 		case "twelve": return 12;
 		case "thirteen": return 13;
@@ -1394,6 +1418,25 @@ Parser.UNT_INCHES = "inches";
 Parser.UNT_FEET = "feet";
 Parser.UNT_YARDS = "yards";
 Parser.UNT_MILES = "miles";
+
+Parser.UNT_CUBIC_FEET = "cubic feet";
+
+Parser.getNormalizedUnit = function (unit) {
+	if (unit == null) return unit;
+
+	unit = unit.toLowerCase().trim();
+
+	switch (unit) {
+		case "inch": case "in.": case "in": case Parser.UNT_INCHES: return Parser.UNT_INCHES;
+		case "foot": case "ft.": case "ft": case Parser.UNT_FEET: return Parser.UNT_FEET;
+		case "yard": case "yd.": case "yd": case Parser.UNT_YARDS: return Parser.UNT_YARDS;
+		case "mile": case "mi.": case "mi": case Parser.UNT_MILES: return Parser.UNT_MILES;
+
+		case "pound": case "pounds": case "lbs.": case "lb.": case "lb": case Parser.UNT_LBS: return Parser.UNT_LBS;
+		default: return unit;
+	}
+};
+
 Parser.SP_DIST_TYPE_TO_FULL = {
 	[Parser.UNT_INCHES]: "Inches",
 	[Parser.UNT_FEET]: "Feet",
@@ -2002,6 +2045,8 @@ Parser.ENVIRONMENT__PLANAR_MAGMA = "planar, magma";
 Parser.ENVIRONMENT__PLANAR_ASH = "planar, ash";
 Parser.ENVIRONMENT__PLANAR_ICE = "planar, ice";
 
+Parser.ENVIRONMENT__PLANAR_ELEMENTAL_CHAOS = "planar, elemental chaos";
+
 Parser.ENVIRONMENT__PLANAR_ETHEREAL = "planar, ethereal";
 Parser.ENVIRONMENT__PLANAR_ASTRAL = "planar, astral";
 
@@ -2053,6 +2098,8 @@ Parser.ENVIRONMENT_GROUPS = {
 		Parser.ENVIRONMENT__PLANAR_MAGMA,
 		Parser.ENVIRONMENT__PLANAR_ASH,
 		Parser.ENVIRONMENT__PLANAR_ICE,
+
+		Parser.ENVIRONMENT__PLANAR_ELEMENTAL_CHAOS,
 	],
 	[Parser.ENVIRONMENT__GROUP_PLANAR_UPPER]: [
 		Parser.ENVIRONMENT__PLANAR_ARBOREA,
@@ -2101,6 +2148,8 @@ Parser.ENVIRONMENT_DISPLAY_NAMES = {
 	[Parser.ENVIRONMENT__PLANAR_MAGMA]: "Planar (Para-elemental Plane of Magma)",
 	[Parser.ENVIRONMENT__PLANAR_ASH]: "Planar (Para-elemental Plane of Ash)",
 	[Parser.ENVIRONMENT__PLANAR_ICE]: "Planar (Para-elemental Plane of Ice)",
+
+	[Parser.ENVIRONMENT__PLANAR_ELEMENTAL_CHAOS]: "Planar (Elemental Chaos)",
 
 	[Parser.ENVIRONMENT__PLANAR_ETHEREAL]: "Planar (Ethereal Plane)",
 	[Parser.ENVIRONMENT__PLANAR_ASTRAL]: "Planar (Astral Plane)",
@@ -2189,6 +2238,7 @@ Parser.prereqPatronToShort = function (patron) {
 };
 
 Parser.FEAT_CATEGORY_TO_FULL = {
+	"D": "Dragonmark",
 	"G": "General",
 	"O": "Origin",
 	"FS": "Fighting Style",
@@ -2666,17 +2716,18 @@ Parser.trapHazTypeToFull = function (type) {
 };
 
 Parser.TRAP_HAZARD_TYPE_TO_FULL = {
-	MECH: "Mechanical Trap",
-	MAG: "Magical Trap",
-	SMPL: "Simple Trap",
-	CMPX: "Complex Trap",
-	HAZ: "Hazard",
-	WTH: "Weather",
-	ENV: "Environmental Hazard",
-	WLD: "Wilderness Hazard",
-	GEN: "Generic",
-	EST: "Eldritch Storm",
-	TRP: "Trap",
+	"MECH": "Mechanical Trap",
+	"MAG": "Magical Trap",
+	"SMPL": "Simple Trap",
+	"CMPX": "Complex Trap",
+	"HAZ": "Hazard",
+	"WTH": "Weather",
+	"ENV": "Environmental Hazard",
+	"WLD": "Wilderness Hazard",
+	"GEN": "Generic",
+	"EST": "Eldritch Storm",
+	"TRP": "Trap",
+	"HAUNT": "Haunted Trap",
 };
 
 Parser._TIER_TO_LEVEL_RANGE = {
@@ -3082,8 +3133,6 @@ Parser.SRC_QftIS = "QftIS";
 Parser.SRC_VEoR = "VEoR";
 Parser.SRC_GHLoE = "GHLoE";
 Parser.SRC_DoDk = "DoDk";
-Parser.SRC_HWCS = "HWCS";
-Parser.SRC_HWAitW = "HWAitW";
 Parser.SRC_ToB1_2023 = "ToB1-2023";
 Parser.SRC_TD = "TD";
 Parser.SRC_SCREEN = "Screen";
@@ -3264,8 +3313,6 @@ Parser.SOURCE_JSON_TO_FULL[Parser.SRC_QftIS] = "Quests from the Infinite Stairca
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_VEoR] = "Vecna: Eve of Ruin";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_GHLoE] = "Grim Hollow: Lairs of Etharis";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_DoDk] = "Dungeons of Drakkenheim";
-Parser.SOURCE_JSON_TO_FULL[Parser.SRC_HWCS] = "Humblewood Campaign Setting";
-Parser.SOURCE_JSON_TO_FULL[Parser.SRC_HWAitW] = "Humblewood: Adventure in the Wood";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_ToB1_2023] = "Tome of Beasts 1 (2023 Edition)";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_TD] = "Tarot Deck";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_SCREEN] = "Dungeon Master's Screen";
@@ -3421,8 +3468,6 @@ Parser.SOURCE_JSON_TO_ABV[Parser.SRC_QftIS] = "QftIS";
 Parser.SOURCE_JSON_TO_ABV[Parser.SRC_VEoR] = "VEoR";
 Parser.SOURCE_JSON_TO_ABV[Parser.SRC_GHLoE] = "GHLoE";
 Parser.SOURCE_JSON_TO_ABV[Parser.SRC_DoDk] = "DoDk";
-Parser.SOURCE_JSON_TO_ABV[Parser.SRC_HWCS] = "HWCS";
-Parser.SOURCE_JSON_TO_ABV[Parser.SRC_HWAitW] = "HWAitW";
 Parser.SOURCE_JSON_TO_ABV[Parser.SRC_ToB1_2023] = "ToB1'23";
 Parser.SOURCE_JSON_TO_ABV[Parser.SRC_TD] = "TD";
 Parser.SOURCE_JSON_TO_ABV[Parser.SRC_SCREEN] = "Screen";
@@ -3577,8 +3622,6 @@ Parser.SOURCE_JSON_TO_DATE[Parser.SRC_QftIS] = "2024-07-16";
 Parser.SOURCE_JSON_TO_DATE[Parser.SRC_VEoR] = "2024-05-21";
 Parser.SOURCE_JSON_TO_DATE[Parser.SRC_GHLoE] = "2023-11-30";
 Parser.SOURCE_JSON_TO_DATE[Parser.SRC_DoDk] = "2023-12-21";
-Parser.SOURCE_JSON_TO_DATE[Parser.SRC_HWCS] = "2019-06-17";
-Parser.SOURCE_JSON_TO_DATE[Parser.SRC_HWAitW] = "2019-06-17";
 Parser.SOURCE_JSON_TO_DATE[Parser.SRC_ToB1_2023] = "2023-05-31";
 Parser.SOURCE_JSON_TO_DATE[Parser.SRC_TD] = "2022-05-24";
 Parser.SOURCE_JSON_TO_DATE[Parser.SRC_SCREEN] = "2015-01-20";
@@ -3712,7 +3755,6 @@ Parser.SOURCES_ADVENTURES = new Set([
 	Parser.SRC_HFStCM,
 	Parser.SRC_GHLoE,
 	Parser.SRC_DoDk,
-	Parser.SRC_HWAitW,
 
 	Parser.SRC_AWM,
 ]);
@@ -3774,8 +3816,6 @@ Parser.SOURCES_PARTNERED_WOTC = new Set([
 	Parser.SRC_HftT,
 	Parser.SRC_GHLoE,
 	Parser.SRC_DoDk,
-	Parser.SRC_HWCS,
-	Parser.SRC_HWAitW,
 	Parser.SRC_ToB1_2023,
 	Parser.SRC_TD,
 	Parser.SRC_LRDT,
@@ -3867,8 +3907,6 @@ Parser.SOURCES_NON_FR = new Set([
 	Parser.SRC_LK,
 	Parser.SRC_GHLoE,
 	Parser.SRC_DoDk,
-	Parser.SRC_HWCS,
-	Parser.SRC_HWAitW,
 	Parser.SRC_ToB1_2023,
 	Parser.SRC_LRDT,
 ]);
@@ -3912,7 +3950,6 @@ Parser.SOURCES_AVAILABLE_DOCS_BOOK = {};
 	Parser.SRC_HFFotM,
 	Parser.SRC_BMT,
 	Parser.SRC_DMTCRG,
-	Parser.SRC_HWCS,
 	Parser.SRC_ToB1_2023,
 	Parser.SRC_TD,
 ].forEach(src => {
@@ -4009,7 +4046,6 @@ Parser.SOURCES_AVAILABLE_DOCS_ADVENTURE = {};
 	Parser.SRC_HFStCM,
 	Parser.SRC_GHLoE,
 	Parser.SRC_DoDk,
-	Parser.SRC_HWAitW,
 	Parser.SRC_QftIS,
 	Parser.SRC_LRDT,
 	Parser.SRC_VEoR,
@@ -4041,6 +4077,7 @@ Parser.PROP_TO_TAG = {
 };
 Parser.getPropTag = function (prop) {
 	if (Parser.PROP_TO_TAG[prop]) return Parser.PROP_TO_TAG[prop];
+	if (prop?.endsWith("Fluff")) return null;
 	return prop;
 };
 
@@ -4127,7 +4164,13 @@ Parser.metric = {
 	POUNDS_TO_KILOGRAMS: 0.5, // 2 lb = 1 kg
 	// Other additions
 	INCHES_TO_CENTIMETERS: 2.5, // 1 in = 2.5 cm
+	CUBIC_FEET_TO_LIBRES: 28, // 1 ft³ = 28 L
 
+	/**
+	 * @param {number} originalValue
+	 * @param {string} originalUnit
+	 * @param {?boolean} toFixed
+	 */
 	getMetricNumber ({originalValue, originalUnit, toFixed = null}) {
 		if (originalValue == null || isNaN(originalValue)) return originalValue;
 
@@ -4135,25 +4178,32 @@ Parser.metric = {
 		if (!originalValue) return originalValue;
 
 		let out = null;
-		switch (originalUnit) {
-			case "in.": case "in": case Parser.UNT_INCHES: out = originalValue * Parser.metric.INCHES_TO_CENTIMETERS; break;
-			case "ft.": case "ft": case Parser.UNT_FEET: out = originalValue * Parser.metric.FEET_TO_METRES; break;
-			case "yd.": case "yd": case Parser.UNT_YARDS: out = originalValue * Parser.metric.YARDS_TO_METRES; break;
-			case "mi.": case "mi": case Parser.UNT_MILES: out = originalValue * Parser.metric.MILES_TO_KILOMETRES; break;
-			case "lb.": case "lb": case Parser.UNT_LBS: out = originalValue * Parser.metric.POUNDS_TO_KILOGRAMS; break;
+		switch (Parser.getNormalizedUnit(originalUnit)) {
+			case Parser.UNT_INCHES: out = originalValue * Parser.metric.INCHES_TO_CENTIMETERS; break;
+			case Parser.UNT_FEET: out = originalValue * Parser.metric.FEET_TO_METRES; break;
+			case Parser.UNT_YARDS: out = originalValue * Parser.metric.YARDS_TO_METRES; break;
+			case Parser.UNT_MILES: out = originalValue * Parser.metric.MILES_TO_KILOMETRES; break;
+			case Parser.UNT_LBS: out = originalValue * Parser.metric.POUNDS_TO_KILOGRAMS; break;
+			case Parser.UNT_CUBIC_FEET: out = originalValue * Parser.metric.CUBIC_FEET_TO_LIBRES; break;
 			default: return originalValue;
 		}
 		if (toFixed != null) return NumberUtil.toFixedNumber(out, toFixed);
 		return out;
 	},
 
+	/**
+	 * @param {number} originalValue
+	 * @param {boolean} isShortForm
+	 * @param {isPlural} isShortForm
+	 */
 	getMetricUnit ({originalUnit, isShortForm = false, isPlural = true}) {
-		switch (originalUnit) {
-			case "in.": case "in": case Parser.UNT_INCHES: return isShortForm ? "cm" : `centimeter`[isPlural ? "toPlural" : "toString"]();
-			case "ft.": case "ft": case Parser.UNT_FEET: return isShortForm ? "m" : `meter`[isPlural ? "toPlural" : "toString"]();
-			case "yd.": case "yd": case Parser.UNT_YARDS: return isShortForm ? "m" : `meter`[isPlural ? "toPlural" : "toString"]();
-			case "mi.": case "mi": case Parser.UNT_MILES: return isShortForm ? "km" : `kilometre`[isPlural ? "toPlural" : "toString"]();
-			case "lb.": case "lb": case Parser.UNT_LBS: return isShortForm ? "kg" : `kilogram`[isPlural ? "toPlural" : "toString"]();
+		switch (Parser.getNormalizedUnit(originalUnit)) {
+			case Parser.UNT_INCHES: return isShortForm ? "cm" : `centimeter`[isPlural ? "toPlural" : "toString"]();
+			case Parser.UNT_FEET: return isShortForm ? "m" : `meter`[isPlural ? "toPlural" : "toString"]();
+			case Parser.UNT_YARDS: return isShortForm ? "m" : `meter`[isPlural ? "toPlural" : "toString"]();
+			case Parser.UNT_MILES: return isShortForm ? "km" : `kilometer`[isPlural ? "toPlural" : "toString"]();
+			case Parser.UNT_LBS: return isShortForm ? "kg" : `kilogram`[isPlural ? "toPlural" : "toString"]();
+			case Parser.UNT_CUBIC_FEET: return isShortForm ? "L" : `liter`[isPlural ? "toPlural" : "toString"]();
 			default: return originalUnit;
 		}
 	},
