@@ -31,7 +31,8 @@ class RendererMarkdown {
 
 	static _fnPostProcess (str) {
 		return str
-			.trim()
+			.replace(/^\s+/, "")
+			.replace(/\n+$/, "\n")
 			.replace(/\n\n+/g, "\n\n")
 			.replace(/(>\n>\n)+/g, ">\n");
 	}
@@ -711,10 +712,15 @@ class RendererMarkdown {
 				break;
 			case "@actSave": textStack[0] += `*${Parser.attAbvToFull(text)} Saving Throw:*`; break;
 			case "@actSaveSuccess": textStack[0] += `*Success:*`; break;
-			case "@actSaveFail": textStack[0] += `*Failure:*`; break;
+			case "@actSaveFail": {
+				const [ordinal] = Renderer.splitTagByPipe(text);
+				if (ordinal) textStack[0] += `*${Parser.numberToText(ordinal, {isOrdinalForm: true}).toTitleCase()} Failure:*`;
+				else textStack[0] += `*Failure:*`;
+				break;
+			}
 			case "@actSaveSuccessOrFail": textStack[0] += `*Failure or Success:*`; break;
 			case "@actTrigger": textStack[0] += `*Trigger:*`; break;
-			case "@actResponse": textStack[0] += `*Response:*`; break;
+			case "@actResponse": textStack[0] += `*Response${text.includes("d") ? "\u2014" : ":"}*`; break;
 			case "@h": textStack[0] += `*Hit:* `; break;
 			case "@m": textStack[0] += `*Miss:* `; break;
 			case "@hom": textStack[0] += `*Hit or Miss:* `; break;
@@ -914,6 +920,7 @@ RendererMarkdown.monster = class {
 
 		const legendaryGroupLairPart = legendaryGroup?.lairActions ? `\n>### Lair Actions\n${RendererMarkdown.monster._getRenderedSection({prop: "lairaction", entries: legendaryGroup.lairActions, depth: -1, meta, prefix: ">"})}` : "";
 		const legendaryGroupRegionalPart = legendaryGroup?.regionalEffects ? `\n>### Regional Effects\n${RendererMarkdown.monster._getRenderedSection({prop: "regionaleffect", entries: legendaryGroup.regionalEffects, depth: -1, meta, prefix: ">"})}` : "";
+		const variantsPart = Renderer.monster.getRenderedVariants(mon, {renderer: RendererMarkdown.get()});
 
 		const footerPart = mon.footer ? `\n${RendererMarkdown.monster._getRenderedSectionEntries({sectionEntries: mon.footer, sectionDepth: 0, meta, prefix: ">"})}` : "";
 
@@ -931,7 +938,7 @@ ${abilityScorePart}
 ${pbPart ? `>- **Proficiency Bonus** ${pbPart}` : ""}
 >___`;
 
-		let breakablePart = `${traitsPart}${actionsPart}${bonusActionsPart}${reactionsPart}${legendaryActionsPart}${mythicActionsPart}${legendaryGroupLairPart}${legendaryGroupRegionalPart}${footerPart}`;
+		let breakablePart = `${traitsPart}${actionsPart}${bonusActionsPart}${reactionsPart}${legendaryActionsPart}${mythicActionsPart}${legendaryGroupLairPart}${legendaryGroupRegionalPart}${variantsPart}${footerPart}`;
 
 		if (VetoolsConfig.get("markdown", "isAddColumnBreaks")) {
 			let charAllowanceFirstCol = 2200 - unbreakablePart.length;
@@ -1200,6 +1207,18 @@ RendererMarkdown.item = class {
 			item.tier ? `${item.tier} tier` : "",
 		];
 	}
+};
+
+RendererMarkdown.baseitem = class {
+	static getCompactRenderedString (...args) { return RendererMarkdown.item.getCompactRenderedString(...args); }
+};
+
+RendererMarkdown.magicvariant = class {
+	static getCompactRenderedString (...args) { return RendererMarkdown.item.getCompactRenderedString(...args); }
+};
+
+RendererMarkdown.itemGroup = class {
+	static getCompactRenderedString (...args) { return RendererMarkdown.item.getCompactRenderedString(...args); }
 };
 
 RendererMarkdown.legendaryGroup = class {
@@ -2531,6 +2550,15 @@ class MarkdownConverter {
 			const maxWidth = Math.max((tbl.colLabels || []).length, ...tbl.rows.map(it => it.length));
 			tbl.rows.forEach(row => {
 				while (row.length < maxWidth) row.push("");
+			});
+		})();
+
+		(function normalizeRanges () {
+			tbl.rows.forEach(row => {
+				if (!row[0] || typeof row[0] !== "string") return;
+
+				// Collapse "1 - 2" to "1-2"
+				row[0] = row[0].replace(/^(\d+)\s+([-\u2012-\u2014\u2212])\s+(\d+)$/, "$1$2$3");
 			});
 		})();
 

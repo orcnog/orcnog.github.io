@@ -10,8 +10,8 @@ class _RenderBestiaryImplBase {
 	 * @param [opts]
 	 * @param {jQuery} [opts.$btnScaleCr]
 	 * @param {jQuery} [opts.$btnResetScaleCr]
-	 * @param {HTMLElementModified} [opts.selSummonSpellLevel]
-	 * @param {HTMLElementModified} [opts.selSummonClassLevel]
+	 * @param {HTMLElementExtended} [opts.selSummonSpellLevel]
+	 * @param {HTMLElementExtended} [opts.selSummonClassLevel]
 	 * @param {boolean} [opts.isSkipExcludesRender]
 	 * @param {boolean} [opts.isSkipTokenRender]
 	 *
@@ -37,8 +37,8 @@ class _RenderBestiaryImplBase {
 	 * @param opts
 	 * @param {jQuery} [opts.$btnScaleCr]
 	 * @param {jQuery} [opts.$btnResetScaleCr]
-	 * @param {HTMLElementModified} [opts.selSummonSpellLevel]
-	 * @param {HTMLElementModified} [opts.selSummonClassLevel]
+	 * @param {HTMLElementExtended} [opts.selSummonSpellLevel]
+	 * @param {HTMLElementExtended} [opts.selSummonClassLevel]
 	 * @param {boolean} [opts.isSkipExcludesRender]
 	 * @param {boolean} [opts.isSkipTokenRender]
 	 * @param {Renderer} renderer
@@ -92,13 +92,11 @@ class _RenderBestiaryImplBase {
 
 			case "legendary":
 			case "mythic": {
-				const cpy = MiscUtil.copy(entries).map(it => {
-					if (it.name && it.entries) {
-						it.name = `${it.name}.`;
-						it.type = it.type || "item";
-					}
-					return it;
-				});
+				const cpy = MiscUtil.copy(entries)
+					.map(it => {
+						if (it.name && it.entries) it.type ||= "item";
+						return it;
+					});
 				const toRender = {type: "list", style: "list-hang-notitle", items: cpy};
 				renderer.setFirstSection(true).recursiveRender(toRender, renderStack, {depth: depth});
 				break;
@@ -553,7 +551,7 @@ class _RenderBestiaryImplClassic extends _RenderBestiaryImplBase {
 		</tr>
 
 		<tr>${opts.selSummonSpellLevel ? $$`<td colspan="6"><strong class="mr-2">Spell Level</strong> ${opts.selSummonSpellLevel}</td>` : ""}</tr>
-		<tr>${opts.selSummonClassLevel ? $$`<td colspan="6"><strong class="mr-2">Class Level</strong> ${opts.selSummonClassLevel}</td>` : ""}</tr>
+		<tr>${opts.selSummonClassLevel ? $$`<td colspan="6"><strong class="mr-2">${opts.classLevelScalerClass ? "Class Level" : "Level"}</strong> ${opts.selSummonClassLevel}</td>` : ""}</tr>
 
 		${htmlPtTraits}
 		${htmlPtActions}

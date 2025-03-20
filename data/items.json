@@ -1703,6 +1703,12 @@
 			"wondrous": true,
 			"entries": [
 				"This piece of polished amber is engraved with many tiny runes. As a bonus action, you can mentally command the stone to shed bright light in a 15-foot radius and dim light for an additional 15 feet. The light is sunlight. While the light persists, you can also use a bonus action to expand or reduce its radius of bright and dim light by 5 feet each, to a maximum of 30 feet each or a minimum of 10 feet each."
+			],
+			"light": [
+				{
+					"bright": 15,
+					"dim": 30
+				}
 			]
 		},
 		{
@@ -2215,6 +2221,12 @@
 							"The rear hatch closes and seals."
 						]
 					]
+				}
+			],
+			"light": [
+				{
+					"bright": 30,
+					"dim": 60
 				}
 			],
 			"lootTables": [
@@ -3145,6 +3157,12 @@
 						"Azuredge is sworn to protect Waterdeep, and it desires to be wielded by a law-abiding person willing to dedicate everything to the city's defense. The weapon is patient and takes its time finding its ideal wielder.",
 						"If someone tries to use Azuredge against its will, the axe can become ten times heavier than normal, and can magically adhere to any Medium or larger object or surface it comes into contact with. Once it does so, the axe can't be wielded. Nothing short of a {@spell wish} spell can separate the axe from the item or surface to which it is adhered without destroying one or the other, though the axe can choose to end the effect at any time."
 					]
+				}
+			],
+			"light": [
+				{
+					"bright": 30,
+					"dim": 60
 				}
 			],
 			"attachedSpells": [
@@ -5860,6 +5878,12 @@
 					]
 				}
 			],
+			"light": [
+				{
+					"bright": 10,
+					"dim": 20
+				}
+			],
 			"hasFluffImages": true
 		},
 		{
@@ -6040,6 +6064,12 @@
 					]
 				}
 			],
+			"light": [
+				{
+					"bright": 20,
+					"dim": 40
+				}
+			],
 			"attachedSpells": [
 				"dimension door",
 				"compulsion"
@@ -6217,79 +6247,6 @@
 			],
 			"lootTables": [
 				"Magic Item Table F"
-			],
-			"hasFluffImages": true
-		},
-		{
-			"name": "Borealus",
-			"source": "HWCS",
-			"page": 213,
-			"immune": [
-				"cold"
-			],
-			"resist": [
-				"fire"
-			],
-			"tier": "major",
-			"rarity": "artifact",
-			"reqAttune": true,
-			"weaponCategory": "simple",
-			"property": [
-				"V"
-			],
-			"dmg1": "1d6",
-			"dmgType": "B",
-			"dmg2": "1d8",
-			"staff": true,
-			"entries": [
-				"This legendary artifact was created by a powerful wizard, crafted from the finger of a towering, ancient elemental aspect of frost. It is so cold to the touch that it numbs any skin it comes into contact with, although an attuned character is immune to this effect.",
-				{
-					"name": "Gifts of the Rime",
-					"type": "entries",
-					"entries": [
-						"As long as you are attuned to the Borealus, you gain the following benefits:",
-						{
-							"type": "list",
-							"items": [
-								"You are resistant to fire damage",
-								"You are immune to cold damage",
-								"You learn the {@spell ray of frost} cantrip"
-							]
-						}
-					]
-				},
-				{
-					"name": "Breath of Winter",
-					"type": "entries",
-					"entries": [
-						"While holding the staff you can use your action to unleash an icy-cold blizzard from your open mouth. A 100-foot-cone of hoarfrost blasts forth in a direction of your choice, dealing {@damage 9d8} cold damage to all creatures within the cone if they fail a {@dc 18} Constitution saving throw, or half as much on a success. You can't use this property again until the next dawn."
-					]
-				},
-				{
-					"name": "Glacial Prison",
-					"type": "entries",
-					"entries": [
-						"By using your action to touch the staff to a surface, you can cause a barrier of ice to spring into existence from a point you can see along this surface within 200 feet of you. This effect is otherwise identical to a {@spell wall of ice} spell cast at 6th level, with a {@dc 18} for all saving throws related to the effect. You can't use this property again until 3 days have passed."
-					]
-				},
-				{
-					"name": "Cruel Winds",
-					"type": "entries",
-					"entries": [
-						"Wherever the staff goes, a bitterly cold boreal wind accompanies it. The wind gusts intermittently within 30 feet of the attuned character and extinguishes all non-magical flames it comes into contact with."
-					]
-				},
-				{
-					"name": "Destroying the Staff",
-					"type": "entries",
-					"entries": [
-						"The staff can be destroyed through exposure to flames from a fire elemental of equal power to the being it was crafted from. After centuries of exposure, it will melt away into nothing."
-					]
-				}
-			],
-			"attachedSpells": [
-				"ray of frost",
-				"wall of ice"
 			],
 			"hasFluffImages": true
 		},
@@ -6868,6 +6825,13 @@
 			"value": 1000,
 			"entries": [
 				"A bullseye lantern casts bright light in a 60-foot cone and dim light for an additional 60 feet. Once lit, it burns for 6 hours on a flask (1 pint) of oil."
+			],
+			"light": [
+				{
+					"bright": 60,
+					"dim": 120,
+					"shape": "cone"
+				}
 			]
 		},
 		{
@@ -7215,6 +7179,15 @@
 			"value": 1,
 			"entries": [
 				"For 1 hour, a candle sheds bright light in a 5-foot radius and dim light for an additional 5 feet."
+			],
+			"light": [
+				{
+					"bright": 5,
+					"dim": 10
+				}
+			],
+			"miscTags": [
+				"CNS"
 			]
 		},
 		{
@@ -7231,6 +7204,12 @@
 			"bonusWeapon": "+1",
 			"entries": [
 				"You have a +1 bonus to attack and damage rolls made with this magic weapon. The head of this mace sheds bright light in a 5-foot-radius and dim light for an additional 5 feet. When you wield this mace, you can extinguish or ignite its light as an action."
+			],
+			"light": [
+				{
+					"bright": 5,
+					"dim": 10
+				}
 			]
 		},
 		{
@@ -7296,6 +7275,11 @@
 				"The candle's magic is activated when the candle is lit, which requires an action. After burning for 4 hours, the candle is destroyed. You can snuff it out early for use at a later time. Deduct the time it burned in increments of 1 minute from the candle's total burn time.",
 				"While lit, the candle sheds dim light in a 30-foot radius. Any creature within that light whose alignment matches that of the candle makes attack rolls, saving throws, and ability checks with advantage. In addition, a cleric or druid in the light whose alignment matches the candle's can cast 1st-level spells he or she has prepared without expending spell slots, though the spell's effect is as if cast with a 1st-level slot.",
 				"Alternatively, when you light the candle for the first time, you can cast the {@spell gate} spell with it. Doing so destroys the candle."
+			],
+			"light": [
+				{
+					"dim": 30
+				}
 			],
 			"attachedSpells": [
 				"gate"
@@ -9054,6 +9038,11 @@
 			"wondrous": true,
 			"entries": [
 				"This scintillating copper coin sheds dim light in a 5-foot radius. If dropped a distance greater than 5 feet, the coin issues a melodious ringing sound when it hits a surface. Any creature that can hear the chime can determine the distance the coin dropped based on the tone."
+			],
+			"light": [
+				{
+					"dim": 5
+				}
 			]
 		},
 		{
@@ -10014,6 +10003,12 @@
 					]
 				}
 			],
+			"light": [
+				{
+					"bright": 15,
+					"dim": 30
+				}
+			],
 			"attachedSpells": [
 				"crusader's mantle"
 			]
@@ -10657,6 +10652,15 @@
 					]
 				}
 			],
+			"light": [
+				{
+					"bright": 60,
+					"dim": 120
+				},
+				{
+					"dim": 5
+				}
+			],
 			"attachedSpells": [
 				"reverse gravity",
 				"disintegrate",
@@ -10746,6 +10750,12 @@
 						"Forged by ancient sun worshippers, Dawnbringer is meant to bring light into darkness and to fight creatures of darkness. It is kind and compassionate to those in need, but fierce and destructive to its enemies.",
 						"Long years lost in darkness have made Dawnbringer frightened of both the dark and abandonment. It prefers that its blade always be present and shedding light in areas of darkness, and it strongly resists being parted from its wielder for any length of time."
 					]
+				}
+			],
+			"light": [
+				{
+					"bright": 15,
+					"dim": 30
 				}
 			],
 			"attachedSpells": [
@@ -15089,6 +15099,12 @@
 				"While the radiant head is active, you gain a +2 bonus to attack and damage rolls made with this magic weapon, and attacks with the weapon deal radiant damage instead of bludgeoning damage. An undead creature hit by the weapon takes an extra {@damage 1d8} radiant damage.",
 				"While you are holding Duskcrusher and its radiant head is active, you can use an action to cast the {@spell sunbeam} spell (save {@dc 15}) from the weapon, and this action can't be used again until the next dawn."
 			],
+			"light": [
+				{
+					"bright": 15,
+					"dim": 30
+				}
+			],
 			"attachedSpells": [
 				"sunbeam"
 			],
@@ -16304,6 +16320,13 @@
 			"wondrous": true,
 			"entries": [
 				"This bullseye lantern contains an Eberron dragonshard that sheds light comparable to that produced by a {@spell continual flame} spell. An everbright lantern sheds light in a 120-foot cone; the closest 60 feet is bright light, and the farthest 60 feet is dim light."
+			],
+			"light": [
+				{
+					"bright": 60,
+					"dim": 120,
+					"shape": "cone"
+				}
 			]
 		},
 		{
@@ -16848,76 +16871,6 @@
 			"entries": [
 				"This small metal disk is inscribed with the image of a feather. When you fall at least 20 feet while the token is on your person, you descend 60 feet per round and take no damage from falling. The token's magic is expended after you land, whereupon the disk becomes nonmagical."
 			]
-		},
-		{
-			"name": "Feathered Helm",
-			"source": "HWCS",
-			"page": 213,
-			"rarity": "rare",
-			"reqAttune": true,
-			"wondrous": true,
-			"recharge": "dawn",
-			"rechargeAmount": "{@dice 1d3}",
-			"charges": 3,
-			"entries": [
-				"The helm itself is simple leather, hide, scale, or plate, but the magic imbued into it comes from the feather. The birdfolk races of Humblewood consider the giving of a feather to be one of the highest honors one can bestow, and it represents an eternal bond or deep appreciation.",
-				"The helm has 3 charges that, while wearing it, you can use to activate its abilities. The helm has different properties based on the race of the birdfolk who gifted the feather.",
-				{
-					"name": "Corvum",
-					"type": "entries",
-					"entries": [
-						"You can use a charge to cast {@spell Tasha's hideous laughter} (save {@dc 16}) and two charges to cast {@spell detect thoughts} (save {@dc 16})."
-					]
-				},
-				{
-					"name": "Gallus",
-					"type": "entries",
-					"entries": [
-						"You can use a charge to cast {@spell bless} and two charges to cast {@spell aid}."
-					]
-				},
-				{
-					"name": "Luma",
-					"type": "entries",
-					"entries": [
-						"You can use a charge to cast a random 1st-level spell from the {@filter sorcerer spell list|spells|level=1|class=sorcerer}, then roll a {@dice d20}. On a roll of 20, you may use this ability again without expending a charge. On a roll of 1, the spell also targets you, unless you are its only target, in which case the spell fizzles to no effect. Any spell cast using this helm that requires a saving throw has a save DC of 16."
-					]
-				},
-				{
-					"name": "Raptor",
-					"type": "entries",
-					"entries": [
-						"You can use a charge to cast {@spell hunter's mark} and two charges to cast {@spell magic weapon}."
-					]
-				},
-				{
-					"name": "Strig",
-					"type": "entries",
-					"entries": [
-						"You can use a charge to cast {@spell divine favor} and two charges to cast {@spell pass without trace}."
-					]
-				},
-				"The helm regains {@dice 1d3} charges each day at dawn.",
-				{
-					"type": "inset",
-					"name": "A True Gift",
-					"entries": [
-						"Whether you are playing through the Humblewood adventure, or playing your own campaign in the Wood, look for organic relationships between a character and the races of birdfolk. If one stands out, use that to decide what type of feather is offered to the player in this helm.",
-						"Additionally, a player whose character is a birdfolk may want to make this gift themselves. Make sure to create a narrative bond between this character and who they share a feather with\u2014the gift of a feather is not something which should be given lightly."
-					]
-				}
-			],
-			"attachedSpells": [
-				"tasha's hideous laughter",
-				"detect thoughts",
-				"bless",
-				"aid",
-				"hunter's mark",
-				"magic weapon",
-				"divine favor",
-				"pass without trace"
-			],
-			"hasFluffImages": true
 		},
 		{
 			"name": "Feathered mantle with emerald clasp (Sun Empire)",
@@ -17946,6 +17899,12 @@
 			"entries": [
 				"You can use a bonus action to speak this magic sword's command word, causing flames to erupt from the blade. These flames shed bright light in a 40-foot radius and dim light for an additional 40 feet. While the sword is ablaze, it deals an extra {@damage 2d6} fire damage to any target it hits. The flames last until you use a bonus action to speak the command word again or until you drop or sheathe the sword.",
 				"While you are attuned to this sword you can use an action to mentally command it to detect gems and jewels. You learn the kind and number of such objects within 60 feet of the sword."
+			],
+			"light": [
+				{
+					"bright": 40,
+					"dim": 80
+				}
 			]
 		},
 		{
@@ -17990,6 +17949,12 @@
 					"entries": [
 						"Your {@quickref attunement|DMG|1|0} to the lantern lasts until you choose to end it, or until you anger the elemental (by dousing the lantern in water, attacking another nonhostile elemental being, and so forth). You can attempt to attune to the lantern again and repeat the check to bond with the elemental during a {@quickref resting|PHB|2|0|short or long rest}, but you make this check with {@quickref Advantage and Disadvantage|PHB|2|0|disadvantage} until you have made amends to the spirit, as the GM determines."
 					]
+				}
+			],
+			"light": [
+				{
+					"bright": 60,
+					"dim": 120
 				}
 			],
 			"attachedSpells": [
@@ -18563,6 +18528,11 @@
 					]
 				}
 			],
+			"light": [
+				{
+					"dim": 5
+				}
+			],
 			"miscTags": [
 				"TT"
 			]
@@ -18696,6 +18666,12 @@
 				},
 				"When all of the gem's charges are expended, the gem becomes a nonmagical jewel worth 50 gp."
 			],
+			"light": [
+				{
+					"bright": 30,
+					"dim": 60
+				}
+			],
 			"lootTables": [
 				"Magic Item Table F"
 			],
@@ -18740,6 +18716,12 @@
 				"If you fall {@condition unconscious} within 10 feet of the lantern, the spirit emerges from it, magically stabilizes you with a touch, and then quickly returns to the lantern.",
 				"The spirit is bound to the lantern and can't be harmed, turned, or raised from the dead.",
 				"Casting a {@spell dispel evil and good} spell on the lantern releases the spirit to the afterlife and renders the lantern nonmagical."
+			],
+			"light": [
+				{
+					"bright": 30,
+					"dim": 60
+				}
 			],
 			"attachedSpells": [
 				"mage hand"
@@ -20097,6 +20079,12 @@
 				"Gunpowder is chiefly used to propel a bullet out of the barrel of a pistol or rifle, or it is formed into a bomb. Gunpowder is sold in small wooden kegs or in water-resistant powder horns.",
 				"Setting fire to a container full of gunpowder can cause it to explode, dealing fire damage to creatures within 10 feet of it ({@damage 3d6} for a powder horn). A successful {@dc 12} Dexterity saving throw halves the damage. Setting fire to an ounce of gunpowder causes it to flare for 1 round, shedding bright light in a 30-foot radius and dim light for an additional 30 feet."
 			],
+			"light": [
+				{
+					"bright": 30,
+					"dim": 60
+				}
+			],
 			"miscTags": [
 				"CNS"
 			]
@@ -20113,6 +20101,12 @@
 			"entries": [
 				"Gunpowder is chiefly used to propel a bullet out of the barrel of a pistol or rifle, or it is formed into a bomb. Gunpowder is sold in small wooden kegs or in water-resistant powder horns.",
 				"Setting fire to a container full of gunpowder can cause it to explode, dealing fire damage to creatures within 10 feet of it ({@damage 7d6} for a keg). A successful {@dc 12} Dexterity saving throw halves the damage. Setting fire to an ounce of gunpowder causes it to flare for 1 round, shedding bright light in a 30-foot radius and dim light for an additional 30 feet."
+			],
+			"light": [
+				{
+					"bright": 30,
+					"dim": 60
+				}
 			],
 			"miscTags": [
 				"CNS"
@@ -20728,6 +20722,15 @@
 					]
 				},
 				"Roll a {@dice d20} if you are wearing the helm and take fire damage as a result of failing a saving throw against a spell. On a roll of 1, the helm emits beams of light from its remaining gems. Each creature within 60 feet of the helm other than you must succeed on a {@dc 17} Dexterity saving throw or be struck by a beam, taking radiant damage equal to the number of gems in the helm. The helm and its gems are then destroyed."
+			],
+			"light": [
+				{
+					"dim": 30
+				},
+				{
+					"bright": 10,
+					"dim": 20
+				}
 			],
 			"attachedSpells": [
 				"daylight",
@@ -21596,6 +21599,12 @@
 					]
 				}
 			],
+			"light": [
+				{
+					"bright": 30,
+					"dim": 60
+				}
+			],
 			"hasFluffImages": true
 		},
 		{
@@ -21751,6 +21760,15 @@
 			"value": 500,
 			"entries": [
 				"A hooded lantern casts bright light in a 30-foot radius and dim light for an additional 30 feet. Once lit, it burns for 6 hours on a flask (1 pint) of oil. As an action, you can lower the hood, reducing the light to dim light in a 5-foot radius."
+			],
+			"light": [
+				{
+					"bright": 30,
+					"dim": 60
+				},
+				{
+					"dim": 5
+				}
 			]
 		},
 		{
@@ -22831,6 +22849,12 @@
 						"These holy relics of the Sacred Flame were wielded by Saint Vitruvio and are kept in several religious sites throughout Drakkenheim. The Knights of the Silver Order and the Followers of the Falling Fire now seek these relics. Not only do both factions revere Saint Vitruvio, both wish to use these relics to help advance their goals in Drakkenheim.",
 						"A character attuned to three Relics of Saint Vitruvio may cast the {@spell heal} spell three times per day, after which they must finish a long rest before they may do so again. In addition, that character gains the ability to attune to two additional magic items so long as those magic items are both Relics of Saint Vitruvio."
 					]
+				}
+			],
+			"light": [
+				{
+					"bright": 40,
+					"dim": 80
 				}
 			],
 			"attachedSpells": [
@@ -24690,6 +24714,12 @@
 					]
 				}
 			],
+			"light": [
+				{
+					"bright": 15,
+					"dim": 30
+				}
+			],
 			"attachedSpells": [
 				"invisibility"
 			],
@@ -25182,6 +25212,12 @@
 					]
 				}
 			],
+			"light": [
+				{
+					"bright": 30,
+					"dim": 60
+				}
+			],
 			"attachedSpells": [
 				"guiding bolt",
 				"sunbeam",
@@ -25551,6 +25587,12 @@
 			"value": 50,
 			"entries": [
 				"A lamp casts bright light in a 15-foot radius and dim light for an additional 30 feet. Once lit, it burns for 6 hours on a flask (1 pint) of oil."
+			],
+			"light": [
+				{
+					"bright": 15,
+					"dim": 45
+				}
 			]
 		},
 		{
@@ -25586,6 +25628,15 @@
 			"weight": 2,
 			"entries": [
 				"While lit, this {@item hooded lantern|phb} burns for 6 hours on 1 pint of oil, shedding bright light in a 30-foot radius and dim light for an additional 30 feet. {@condition Invisible} creatures and objects are visible as long as they are in the lantern's bright light. You can use an action to lower the hood, reducing the light to dim light in a 5-foot radius."
+			],
+			"light": [
+				{
+					"bright": 30,
+					"dim": 60
+				},
+				{
+					"dim": 5
+				}
 			],
 			"optionalfeatures": [
 				"replicate magic item|tce"
@@ -25657,6 +25708,12 @@
 							"Undead"
 						]
 					]
+				}
+			],
+			"light": [
+				{
+					"bright": 30,
+					"dim": 60
 				}
 			]
 		},
@@ -26967,6 +27024,12 @@
 				"When you hit a fiend or an undead with this magic weapon, that creature takes an extra {@damage 2d6} radiant damage. If the target has 25 hit points or fewer after taking this damage, it must succeed on a {@dc 15} Wisdom saving throw or be destroyed. On a successful save, the creature becomes {@condition frightened} of you until the end of your next turn.",
 				"While you hold this weapon, it sheds bright light in a 20-foot radius and dim light for an additional 20 feet."
 			],
+			"light": [
+				{
+					"bright": 20,
+					"dim": 40
+				}
+			],
 			"lootTables": [
 				"Magic Item Table G"
 			],
@@ -27117,6 +27180,12 @@
 					"entries": [
 						"The Arms of the Betrayers advance in power in the same manner as the Vestiges of Divergence. In its dormant state, each of these artifacts has one {@table Artifact Properties; Minor Beneficial Properties|dmg|minor beneficial} property and one {@table Artifact Properties; Minor Detrimental Properties|dmg|minor detrimental} property. When the artifact attains an awakened state, it gains an additional {@table Artifact Properties; Minor Beneficial Properties|dmg|minor beneficial} property and an additional {@table Artifact Properties; Minor Detrimental Properties|dmg|minor detrimental} property. When the item reaches its exalted state, it gains a {@table Artifact Properties; Major Beneficial Properties|dmg|major beneficial} property. See \"Artifact Properties\" in chapter 7 of the Dungeon Master's Guide for more information."
 					]
+				}
+			],
+			"light": [
+				{
+					"bright": 40,
+					"dim": 80
 				}
 			],
 			"hasFluffImages": true
@@ -29462,97 +29531,6 @@
 			"value": 250000
 		},
 		{
-			"name": "Necronomicon Ex Corvis",
-			"source": "HWCS",
-			"page": 213,
-			"rarity": "artifact",
-			"reqAttune": true,
-			"wondrous": true,
-			"ability": {
-				"int": 2
-			},
-			"entries": [
-				"This legendary tome of dark necromancy was penned by the mad corvum necromancer Lathrus, of the Night's Call. The book is one of a kind and contains terrible necromantic secrets.",
-				"The {@i Necronomicon Ex Corvis} is a {@item spellbook|phb}, and as such only wizards can truly benefit from studying the dark secrets within.",
-				{
-					"name": "Abyssal Secrets",
-					"type": "entries",
-					"entries": [
-						"By spending a full week studying the dark secrets in this tome, your Intelligence score increases by 2. These secrets gnaw at your mind, however, and your Wisdom score decreases by 1."
-					]
-				},
-				{
-					"name": "Grasp of Shadows",
-					"type": "entries",
-					"entries": [
-						"By spending at least a minute reciting a ritual listed in this book, you can summon forth {@dice 1d4 + 2} {@creature shadow|mm|shadows}. These creatures are loyal to you and can understand any instructions you give them. They will carry out these instructions to the best of their ability. This property can only be used once per week."
-					]
-				},
-				{
-					"name": "Knowledge Beyond Reason",
-					"type": "entries",
-					"entries": [
-						"You may add the spells listed below into your spellbook. However, the tome removes the restriction that requires you to be able to prepare and cast these spells. In effect, you can copy these spells to your spellbook now, though they will only be available to prepare once you reach a level at which you can cast them.",
-						"Additionally, rather than pay gold pieces to copy any spell within into your spellbook, you may deal one point of damage to yourself and take one level of {@condition exhaustion} to scribe the spell in your own blood.",
-						{
-							"type": "table",
-							"colLabels": [
-								"Level",
-								"Spell"
-							],
-							"colStyles": [
-								"col-1",
-								"col-11"
-							],
-							"rows": [
-								[
-									"3rd",
-									"{@spell animate dead}, {@spell bestow curse}, {@spell vampiric touch}"
-								],
-								[
-									"4th",
-									"{@spell blight}"
-								],
-								[
-									"6th",
-									"{@spell circle of death}, {@spell magic jar}"
-								],
-								[
-									"7th",
-									"{@spell finger of death}"
-								]
-							]
-						}
-					]
-				},
-				{
-					"name": "The Corvum's Curse",
-					"type": "entries",
-					"entries": [
-						"After copying at least one spell from this tome into your spellbook, you must succeed on a {@dc 16} Wisdom saving throw or become cursed (as {@spell bestow curse}), with the effect of the curse being decided by the GM.",
-						"The curse persists for {@dice 2d4} days, but its duration resets anytime you copy a spell from this book. Otherwise, only a {@spell remove curse} spell cast using a 5th level or higher spell slot can rid you of this effect."
-					]
-				},
-				{
-					"name": "Destroying the Book",
-					"type": "entries",
-					"entries": [
-						"Unlike other artifacts, the book is not immune to damage. Pages removed from the book will lose their magic within a day. Additionally, exposing the book to direct sunlight for at least 8 hours will cause the dark magic within to dissipate, rendering it useless."
-					]
-				}
-			],
-			"attachedSpells": [
-				"animate dead",
-				"bestow curse",
-				"vampiric touch",
-				"blight",
-				"circle of death",
-				"magic jar",
-				"finger of death"
-			],
-			"hasFluffImages": true
-		},
-		{
 			"name": "Necrotic Absorbing Tattoo",
 			"source": "TCE",
 			"page": 119,
@@ -29656,20 +29634,6 @@
 						"In its lifetime, the sword has beheaded thousands of criminals, not all of whom were guilty of the crimes for which they were convicted. The sword cannot distinguish the guilty from the innocent. With each beheading, it hungers for more justice and blood. The sword is corrupt and irredeemable."
 					]
 				}
-			],
-			"hasFluffImages": true
-		},
-		{
-			"name": "Nest Charm",
-			"source": "HWCS",
-			"page": 214,
-			"rarity": "uncommon",
-			"reqAttune": true,
-			"wondrous": true,
-			"entries": [
-				"This charm is a sphere of intricate metal branches, interwoven to form a sort of nest.",
-				"By placing the charm on the ground and speaking its command word, you can cause it to unfold, creating a 30-foot-diameter circular platform of interwoven branches. Once the platform has reached its full size, a magical tree grows beneath it, lifting the platform 50 feet into the air, carrying any passengers and items along with it.",
-				"This perch lasts up to 8 hours, at which point the tree will retreat into the ground and the platform will shrink, eventually curling back into the small charm. At any time the command word can be spoken again to dismiss the perch in a similar fashion. Once the nest charm's power has been used, it can't be used again until the next dawn."
 			],
 			"hasFluffImages": true
 		},
@@ -30064,6 +30028,9 @@
 			"value": 10,
 			"entries": [
 				"Oil usually comes in a clay flask that holds 1 pint. As an action, you can splash the oil in this flask onto a creature within 5 feet of you or throw it up to 20 feet, shattering it on impact. Make a ranged attack against a target creature or object, treating the oil as an improvised weapon. On a hit, the target is covered in oil. If the target takes any fire damage before the oil dries (after 1 minute), the target takes an additional 5 fire damage from the burning oil. You can also pour a flask of oil on the ground to cover a 5-foot-square area, provided that the surface is level. If lit, the oil burns for 2 rounds and deals 5 fire damage to any creature that enters the area or ends its turn in the area. A creature can take this damage only once per turn."
+			],
+			"miscTags": [
+				"CNS"
 			]
 		},
 		{
@@ -33943,6 +33910,23 @@
 					]
 				}
 			],
+			"light": [
+				{
+					"dim": 5
+				},
+				{
+					"bright": 5,
+					"dim": 10
+				},
+				{
+					"bright": 10,
+					"dim": 20
+				},
+				{
+					"bright": 15,
+					"dim": 30
+				}
+			],
 			"hasFluffImages": true
 		},
 		{
@@ -34078,6 +34062,12 @@
 						"While Pyremaul is in a dormant state, you gain a +1 bonus to attack rolls made with this magic weapon. When you hit with an attack using this weapon, the target takes an extra {@damage 1d6} fire damage.",
 						"Additionally, you can choose to have this weapon shed bright light in a 30-foot radius and dim light for an additional 30 feet (no action required)."
 					]
+				}
+			],
+			"light": [
+				{
+					"bright": 30,
+					"dim": 60
 				}
 			],
 			"hasFluffImages": true
@@ -34475,6 +34465,11 @@
 			"entries": [
 				"While holding this wand, you gain a +1 bonus to spell attack rolls. In addition, you ignore {@quickref Cover||3||half cover} when making a spell attack. Radiance is in the form of an exquisite golden hand mirror.",
 				"While surrounded by darkness, it sheds dim light in a 5-foot radius. A creature that is attuned to Radiance can use a bonus action while holding the mirror to cast the {@spell enhance ability} spell, choosing itself and no other creature as the spell's target. Once this property of the wand is used, it can't be used again until the next dawn."
+			],
+			"light": [
+				{
+					"dim": 5
+				}
 			],
 			"attachedSpells": [
 				"enhance ability"
@@ -34944,6 +34939,11 @@
 			"entries": [
 				"You have a +1 bonus to attack and damage rolls made with this weapon, which doesn't make noise when it hits or cuts something.",
 				"The name \"Reszur\" is graven on the dagger's pommel. If the wielder speaks the name, the blade gives off a faint, cold glow, shedding dim light in a 10-foot radius until the wielder speaks the name again."
+			],
+			"light": [
+				{
+					"dim": 10
+				}
 			]
 		},
 		{
@@ -35669,6 +35669,11 @@
 					]
 				}
 			],
+			"light": [
+				{
+					"dim": 30
+				}
+			],
 			"attachedSpells": [
 				"dancing lights",
 				"faerie fire",
@@ -36102,6 +36107,12 @@
 			"entries": [
 				"This robe has 3 charges, and it regains {@dice 1d3} expended charges daily at dawn. While you wear it, you can use an action and expend 1 charge to cause the garment to display a shifting pattern of dazzling hues until the end of your next turn. During this time, the robe sheds bright light in a 30-foot radius and dim light for an additional 30 feet. Creatures that can see you have disadvantage on attack rolls against you. In addition, any creature in the bright light that can see you when the robe's power is activated must succeed on a {@dc 15} Wisdom saving throw or become {@condition stunned} until the effect ends."
 			],
+			"light": [
+				{
+					"bright": 30,
+					"dim": 60
+				}
+			],
 			"lootTables": [
 				"Magic Item Table H"
 			]
@@ -36391,6 +36402,12 @@
 						"As an action, you can plant the haft end of the rod in the ground, whereupon the rod's head sheds bright light in a 60-foot radius and dim light for an additional 60 feet. While in that bright light, you and any creature that is friendly to you gain a +1 bonus to AC and saving throws and can sense the location of any {@condition invisible} hostile creature that is also in the bright light.",
 						"The rod's head stops glowing and the effect ends after 10 minutes, or when a creature uses an action to pull the rod from the ground. This property can't be used again until the next dawn."
 					]
+				}
+			],
+			"light": [
+				{
+					"bright": 60,
+					"dim": 120
 				}
 			],
 			"attachedSpells": [
@@ -37619,6 +37636,12 @@
 				"The essence of Markovia's saintliness passed partly into her bones as the rest of her body decomposed. Her remaining thighbone is imbued with power that inflicts grievous injury on the undead.",
 				"{@item Mace of Disruption}. When you hit a fiend or an undead with this magic weapon, that creature takes an extra {@damage 2d6} radiant damage. If the target has 25 hit points or fewer after taking this damage, it must succeed on a {@dc 15} Wisdom saving throw or be destroyed. On a successful save, the creature becomes {@condition frightened} of you until the end of your next turn.",
 				"While you hold this weapon, it sheds bright light in a 20-foot radius and dim light for an additional 20 feet."
+			],
+			"light": [
+				{
+					"bright": 20,
+					"dim": 40
+				}
 			],
 			"hasFluffImages": true
 		},
@@ -40807,6 +40830,12 @@
 					]
 				}
 			],
+			"light": [
+				{
+					"bright": 15,
+					"shape": "cone"
+				}
+			],
 			"miscTags": [
 				"TT"
 			]
@@ -43277,6 +43306,12 @@
 					]
 				}
 			],
+			"light": [
+				{
+					"bright": 20,
+					"dim": 40
+				}
+			],
 			"attachedSpells": [
 				"faerie fire"
 			],
@@ -44037,6 +44072,12 @@
 			"wondrous": true,
 			"entries": [
 				"This magic pennant bears the symbol of Strixhaven or one of its colleges: Lorehold, Prismari, Quandrix, Silverquill, or Witherbloom. While you wave the pennant, the symbol on it glitters, and the pennant sheds bright light in a 10-foot-radius and dim light for an additional 10 feet."
+			],
+			"light": [
+				{
+					"bright": 10,
+					"dim": 20
+				}
 			]
 		},
 		{
@@ -44111,6 +44152,12 @@
 				"You gain a +2 bonus to attack and damage rolls made with this weapon, which deals radiant damage instead of slashing damage. When you hit an undead with it, that target takes an extra {@damage 1d8} radiant damage.",
 				"The sword's luminous blade emits bright light in a 15-foot radius and dim light for an additional 15 feet. The light is sunlight. While the blade persists, you can use an action to expand or reduce its radius of bright and dim light by 5 feet each, to a maximum of 30 feet each or a minimum of 10 feet each."
 			],
+			"light": [
+				{
+					"bright": 15,
+					"dim": 30
+				}
+			],
 			"lootTables": [
 				"Magic Item Table G"
 			],
@@ -44174,6 +44221,12 @@
 					"entries": [
 						"As a bonus action, you can cause the staff to glow with sunlight. While glowing, the staff sheds {@quickref Vision and Light||2||bright light} in a 15-foot radius and {@quickref Vision and Light||2||dim light} for an additional 15 feet. The light lasts until you use another bonus action to extinguish it."
 					]
+				}
+			],
+			"light": [
+				{
+					"bright": 15,
+					"dim": 30
 				}
 			]
 		},
@@ -44257,6 +44310,12 @@
 					"entries": [
 						"The Sunsword's special purpose is to destroy Strahd, not so much because it wants to free the land of Barovia from evil but because it wants revenge for the loss of its crystal blade. The weapon secretly fears its own destruction."
 					]
+				}
+			],
+			"light": [
+				{
+					"bright": 15,
+					"dim": 30
 				}
 			],
 			"hasFluffImages": true
@@ -45003,6 +45062,16 @@
 					]
 				}
 			],
+			"light": [
+				{
+					"bright": 5,
+					"dim": 10
+				},
+				{
+					"bright": 15,
+					"dim": 30
+				}
+			],
 			"hasFluffImages": true
 		},
 		{
@@ -45266,6 +45335,12 @@
 				"When you attack a creature with this weapon and roll a 20 on the attack roll, that target takes an extra 14 slashing damage. Then roll another {@dice d20}. If you roll a 20, you lop off one of the target's limbs, with the effect of such loss determined by the DM. If the creature has no limb to sever, you lop off a portion of its body instead.",
 				"{@note Note: According to the SRD, it is an extra {@damage 4d6} slashing damage, although {@link this is incorrect|https://rpg.stackexchange.com/a/174522/53884}}.",
 				"In addition, you can speak the sword's command to cause the blade to shed bright light in a 10-foot radius and dim light for an additional 10 feet. Speaking the command word again or sheathing the sword puts out the light."
+			],
+			"light": [
+				{
+					"bright": 10,
+					"dim": 20
+				}
 			],
 			"attachedSpells": [
 				"fly",
@@ -47129,6 +47204,15 @@
 			"value": 1,
 			"entries": [
 				"A torch burns for 1 hour, providing bright light in a 20-foot radius and dim light for an additional 20 feet. If you make a melee attack with a burning torch and hit, it deals 1 fire damage."
+			],
+			"light": [
+				{
+					"bright": 20,
+					"dim": 40
+				}
+			],
+			"miscTags": [
+				"CNS"
 			]
 		},
 		{
@@ -51405,25 +51489,6 @@
 			"hasFluffImages": true
 		},
 		{
-			"name": "Wing Crest Shield",
-			"source": "HWCS",
-			"page": 214,
-			"type": "S",
-			"rarity": "uncommon",
-			"reqAttune": true,
-			"wondrous": true,
-			"ac": 2,
-			"bonusAc": "+1",
-			"entries": [
-				"While wielding this shield, you gain a +1 bonus to your AC.",
-				"As an action, you can speak the command word to cast {@spell gust of wind} (save {@dc 15}). Once the shield has been used to cast this spell, it can't be used to cast this spell again until the next dawn."
-			],
-			"attachedSpells": [
-				"gust of wind"
-			],
-			"hasFluffImages": true
-		},
-		{
 			"name": "Winged Boots",
 			"source": "DMG",
 			"page": 214,
@@ -52093,6 +52158,12 @@
 			"value": 100,
 			"entries": [
 				"These fist-sized nuts grow on wukka trees, which are popular haunts for {@creature jaculi|ToA}, {@creature su-monster|ToA|su-monsters}, and {@creature zorbo|ToA|zorbos}. A wukka nut rattles when shaken, causing its shell to shed bright light in a 10-foot radius and dim light for an additional 10 feet. This magical light fades after 1 minute, but shaking the nut again causes the light to reappear. If the shell of the nut is cracked open, it loses its magic."
+			],
+			"light": [
+				{
+					"bright": 10,
+					"dim": 20
+				}
 			]
 		},
 		{
@@ -52335,6 +52406,12 @@
 					"entries": [
 						"Any creature that touches the globe of the mythallar must make a {@dc 22} Constitution saving throw, taking 180 ({@damage 20d10 + 70}) radiant damage on a failed save, or half as much damage on a successful one. Undead have disadvantage on this saving throw. Any object that touches the globe, other than an artifact or the mythallar's cradle, is disintegrated instantly (no save)."
 					]
+				}
+			],
+			"light": [
+				{
+					"bright": 300,
+					"dim": 600
 				}
 			],
 			"attachedSpells": [

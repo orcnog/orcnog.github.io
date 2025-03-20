@@ -2,6 +2,8 @@ import {VetoolsConfig} from "./utils-config/utils-config-config.js";
 import {RenderClassesSidebar} from "./render-class.js";
 import {SITE_STYLE__CLASSIC} from "./consts.js";
 
+import {OmnisearchUtilsUi} from "./omnisearch/omnisearch-utils-ui.js";
+
 class UtilClassesPage {
 	static getColorStyleClasses (entry, {isForceStandardSource, prefix, isSubclass} = {}) {
 		if (isSubclass) {
@@ -335,7 +337,7 @@ class ClassesPage extends MixinComponentGlobalState(MixinBaseComponent(MixinProx
 			BrewUtil2.pInit(),
 		]);
 		await ExcludeUtil.pInitialise();
-		Omnisearch.addScrollTopFloat();
+		OmnisearchUtilsUi.addScrollTopFloat();
 		const data = await DataUtil.class.loadJSON();
 
 		const $btnReset = $("#reset");
@@ -1655,7 +1657,22 @@ class ClassesPage extends MixinComponentGlobalState(MixinBaseComponent(MixinProx
 				${$dispName}
 				${$dispSource}
 			</button>`
-			.click(() => this._state[stateKey] = !this._state[stateKey])
+			.click(evt => {
+				if (evt.shiftKey) {
+					this._proxyAssignSimple(
+						"state",
+						Object.fromEntries(
+							cls.subclasses
+								.map(sc => {
+									const stateKeySc = UrlUtil.getStateKeySubclass(sc);
+									return [stateKeySc, stateKeySc === stateKey];
+								}),
+						),
+					);
+					return;
+				}
+				this._state[stateKey] = !this._state[stateKey];
+			})
 			.contextmenu(evt => {
 				evt.preventDefault();
 				this._state[stateKey] = !this._state[stateKey];
