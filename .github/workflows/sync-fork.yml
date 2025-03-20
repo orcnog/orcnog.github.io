@@ -1,8 +1,9 @@
 name: Sync Fork
 
 on:
-  schedule:
-    - cron: '0 0 * * 0' # Runs every Sunday at midnight (UTC)
+#   removing the trigger for this. it just keeps failing and lighting up my inbox with notifications. Sync Fork stuff can 
+#   schedule:
+#     - cron: '0 0 * * 0' # Runs every Sunday at midnight (UTC)
   workflow_dispatch: # Allows manual trigger
 
 jobs:
