@@ -3,10 +3,10 @@
 	"_meta": {
 		"sources": [
 			{
-				"json": "HoE",
-				"abbreviation": "HoE",
+				"json": "THoE",
+				"abbreviation": "THoE",
 				"full": "The House of Elazar",
-				"url": "https://5e.orcnog.com/homebrew/dnd/adventure/adventure_hoe.json",
+				"url": "https://5e.orcnog.com/homebrew/dnd/adventure/adventure_thoe.json",
 				"convertedBy": [
 					"orcnog"
 				],
@@ -27,7 +27,7 @@
 	"item": [
 		{
 			"name": "Potion of Mana",
-			"source": "HoE",
+			"source": "THoE",
 			"page": 1,
 			"rarity": "rare",
 			"wondrous": true,
@@ -37,7 +37,7 @@
 		},
 		{
 			"name": "The Vampiric Rite of Sepins",
-			"source": "HoE",
+			"source": "THoE",
 			"page": 1,
 			"rarity": "artifact",
 			"wondrous": true,
@@ -47,7 +47,7 @@
 		},
 		{
 			"name": "Elazar's Violin",
-			"source": "HoE",
+			"source": "THoE",
 			"page": 1,
 			"rarity": "artifact",
 			"wondrous": true,
@@ -60,7 +60,7 @@
 	"monster": [
 		{
 			"name": "Creepy Doll",
-			"source": "HoE",
+			"source": "THoE",
 			"page": 1,
 			"size": [
 				"S"
@@ -182,7 +182,7 @@
 			"name": "Emmanuel Elazar",
 			"isNpc": true,
 			"isNamedCreature": true,
-			"source": "HoE",
+			"source": "THoE",
 			"page": 1,
 			"_copy": {
 				"name": "Vampire Spawn",
@@ -201,7 +201,7 @@
 		},
 		{
 			"name": "Hamelia",
-			"source": "HoE",
+			"source": "THoE",
 			"isNpc": true,
 			"isNamedCreature": true,
 			"page": 1,
@@ -246,7 +246,7 @@
 	"trap": [
 		{
 			"name": "Mirror Trap",
-			"source": "HoE",
+			"source": "THoE",
 			"page": 1,
 			"trapHazType": "CMPX",
 			"tier": 2,
@@ -281,8 +281,8 @@
 	"adventure": [
 		{
 			"name": "The House of Elazar",
-			"source": "HoE",
-			"id": "HoE",
+			"source": "THoE",
+			"id": "THoE",
 			"group": "homebrew",
 			"author": "Tom Cartos",
 			"published": "2024-10-15",
@@ -499,8 +499,8 @@
 	],
 	"adventureData": [
 		{
-			"id": "HoE",
-			"source": "HoE",
+			"id": "THoE",
+			"source": "THoE",
 			"data": [
 				{
 					"type": "section",
@@ -551,7 +551,7 @@
 									"items": [
 										"Players meet a village girl, Hamelia, outside the manor, who will accompany them inside.",
 										"Players should find a secret passageway in the kitchen pantry, but realize it's sealed by a magical barrier.",
-										"Players should find a book, {@item The Vampiric Rite of Sepins|HoE}, in the library giving them the passkey to break the barrier.",
+										"Players should find a book, {@item The Vampiric Rite of Sepins|THoE}, in the library giving them the passkey to break the barrier.",
 										"Players descend into the bowels of the manor, and find Elazar about to perform the ritual.",
 										"Players must decide if they should kill him, help him, or something else, before his horde of thralls engulfs them."
 									]
@@ -674,7 +674,7 @@
 										"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky hogsbottom2.webp"
 									},
 									"title": "Hogsbottom",
-									"credit": "Credit: orcnog & chatgpt"
+									"credit": "orcnog & chatgpt"
 								},
 								"{@cue Show: Spooky Hogsbottom image|media}",
 								"Read the following aloud to your players:",
@@ -692,8 +692,8 @@
 										"type": "external",
 										"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky missing children.webp"
 									},
-									"title": "Hogsbottom",
-									"credit": "Credit: orcnog & chatgpt"
+									"title": "Missing Children!",
+									"credit": "orcnog & chatgpt"
 								},
 								"{@cue Show: Missing Children image|media}",
 								{
@@ -709,8 +709,8 @@
 										"type": "external",
 										"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky cornfield1.webp"
 									},
-									"title": "Hogsbottom",
-									"credit": "Credit: orcnog & chatgpt"
+									"title": "Corn Field",
+									"credit": "orcnog & chatgpt"
 								},
 								"{@cue Show: Creepy Cornfield image|media}",
 								{
@@ -726,10 +726,10 @@
 									"type": "image",
 									"href": {
 										"type": "external",
-										"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky manor2.webp"
+										"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky manor3.jpg"
 									},
-									"title": "Hogsbottom",
-									"credit": "Credit: orcnog & chatgpt"
+									"title": "The Elazar Manor",
+									"credit": "orcnog & chatgpt"
 								},
 								"{@cue Show: Spooky Manor image|media}"
 							]
@@ -740,7 +740,7 @@
 							"page": 2,
 							"id": "meet hamelia",
 							"entries": [
-								"Suddenly, a young village girl's presence spooks the adventurers.  And Hamelia is introduced to the party in the context of an encounter. See Hamelia's {@area biography|hamelia|x} and {@creature Hamelia|HoE|statblock} for more info.",
+								"Suddenly, a young village girl's presence spooks the adventurers.  And Hamelia is introduced to the party in the context of an encounter. See Hamelia's {@area biography|hamelia|x} and {@creature Hamelia|THoE|statblock} for more info.",
 								"Read the following aloud:",
 								{
 									"type": "insetReadaloud",
@@ -765,7 +765,7 @@
 													"variantName": "3",
 													"combatants": [
 														{
-															"creature": "{@creature Hamelia|HoE}",
+															"creature": "{@creature Hamelia|THoE}",
 															"quantity": 1,
 															"npc": true
 														},
@@ -784,7 +784,7 @@
 													"default": true,
 													"combatants": [
 														{
-															"creature": "{@creature Hamelia|HoE}",
+															"creature": "{@creature Hamelia|THoE}",
 															"quantity": 1,
 															"npc": true
 														},
@@ -802,7 +802,7 @@
 													"variantName": "5",
 													"combatants": [
 														{
-															"creature": "{@creature Hamelia|HoE}",
+															"creature": "{@creature Hamelia|THoE}",
 															"quantity": 1,
 															"npc": true
 														},
@@ -914,8 +914,8 @@
 												"type": "external",
 												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky manor inside.webp"
 											},
-											"title": "Hogsbottom",
-											"credit": "Credit: orcnog & chatgpt"
+											"title": "Lobby",
+											"credit": "orcnog & chatgpt"
 										},
 										"{@cue Show: Spooky Manor Inside image|media}",
 										{
@@ -1005,7 +1005,7 @@
 										"{@cue TRAP! - It's blood! If a character drinks the red liquid...}",
 										"If a character drinks one of the goblets, make a DC 10 Constitution save or take {@dice 1d6} psychic damage.",
 										"{@cue LOOT! - If the piano is played or investigated with a DC 5 {@skill Performance} / DC 10 {@skill History} / DC 10 {@skill Investigation} check...}",
-										"An investigation reveals that there's one extra piano key at the very low end of the keyboard that shouldn't exist. If pressed, a drawer pops open on the buffet, containing a {@item Potion of Mana|HoE} - regain one spell slot (up to level 2)."
+										"An investigation reveals that there's one extra piano key at the very low end of the keyboard that shouldn't exist. If pressed, a drawer pops open on the buffet, containing a {@item Potion of Mana|THoE} - regain one spell slot (up to level 2)."
 									]
 								},
 								{
@@ -1020,8 +1020,8 @@
 												"type": "external",
 												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky picture gallery2.webp"
 											},
-											"title": "Hogsbottom",
-											"credit": "Credit: orcnog & chatgpt"
+											"title": "Portrait Gallery",
+											"credit": "orcnog & chatgpt"
 										},
 										"{@cue Show: Spooky Picture Gallery image|media}",
 										{
@@ -1053,7 +1053,7 @@
 															"variantName": "3",
 															"combatants": [
 																{
-																	"creature": "{@creature Hamelia|HoE}",
+																	"creature": "{@creature Hamelia|THoE}",
 																	"quantity": 1,
 																	"npc": true
 																},
@@ -1068,7 +1068,7 @@
 															"default": true,
 															"combatants": [
 																{
-																	"creature": "{@creature Hamelia|HoE}",
+																	"creature": "{@creature Hamelia|THoE}",
 																	"quantity": 1,
 																	"npc": true
 																},
@@ -1082,7 +1082,7 @@
 															"variantName": "5",
 															"combatants": [
 																{
-																	"creature": "{@creature Hamelia|HoE}",
+																	"creature": "{@creature Hamelia|THoE}",
 																	"quantity": 1,
 																	"npc": true
 																},
@@ -1142,8 +1142,8 @@
 												"type": "external",
 												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky secret passage.webp"
 											},
-											"title": "Hogsbottom",
-											"credit": "Credit: orcnog & chatgpt"
+											"title": "Secret Passage",
+											"credit": "orcnog & chatgpt"
 										},
 										"{@cue Show: Spooky Secret Passage image|media}",
 										{
@@ -1215,7 +1215,7 @@
 													"variantName": "3",
 													"combatants": [
 														{
-															"creature": "{@creature Hamelia|HoE}",
+															"creature": "{@creature Hamelia|THoE}",
 															"quantity": 1,
 															"npc": true
 														},
@@ -1230,7 +1230,7 @@
 													"default": true,
 													"combatants": [
 														{
-															"creature": "{@creature Hamelia|HoE}",
+															"creature": "{@creature Hamelia|THoE}",
 															"quantity": 1,
 															"npc": true
 														},
@@ -1244,7 +1244,7 @@
 													"variantName": "5",
 													"combatants": [
 														{
-															"creature": "{@creature Hamelia|HoE}",
+															"creature": "{@creature Hamelia|THoE}",
 															"quantity": 1,
 															"npc": true
 														},
@@ -1285,7 +1285,7 @@
 												"This guest bedroom seems tidy but unused. The window is slightly ajar, letting in a cold draft which gently blows the window curtain every so often, casting a long, waving shadow across the floor. Gazing around, you notice that the large gold mirror looks out of place. Glancing back at the curtain's shadow, you see a new shadow emerge... the figure of a woman... she's holding a baby and appears to be shushing it. As the curtain gently falls back toward the window, its receding shadow erases the eerie shadow of the woman and her baby from the room."
 											]
 										},
-										"{@cue TRAP! - If anyone looks at their reflection in the mirror, use the {@trap Mirror Trap|HoE}.}",
+										"{@cue TRAP! - If anyone looks at their reflection in the mirror, use the {@trap Mirror Trap|THoE}.}",
 										"{@cue LOOT! - If the armoire is searched, a DC 10 {@skill Investigation} check reveals a hidden compartment with a {@item Ring of X-ray Vision}.}"
 									]
 								},
@@ -1302,7 +1302,7 @@
 												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky bedroom.jpg"
 											},
 											"title": "Master Bedroom",
-											"credit": "Credit: orcnog & chatgpt"
+											"credit": "Tom Cartos (I think)"
 										},
 										"{@cue Show: Spooky Bedroom image|media}",
 										{
@@ -1312,8 +1312,8 @@
 											]
 										},
 										"{@cue PLOT / INVESTIGATION: Trapdoor down to {@area 21|21 trapdoor down to 10} is hidden beneath a pile of suitcases and boxes.}",
-										"{@cue TRAP! - If anyone looks at their reflection in the mirror on the wall, use the {@trap Mirror Trap|HoE}.}",
-										"{@cue LOOT! - The violin has magical properties. See {@item Elazar's Violin|HoE}.}"
+										"{@cue TRAP! - If anyone looks at their reflection in the mirror on the wall, use the {@trap Mirror Trap|THoE}.}",
+										"{@cue LOOT! - The violin has magical properties. See {@item Elazar's Violin|THoE}.}"
 									]
 								},
 								{
@@ -1344,7 +1344,7 @@
 												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky toy room.webp"
 											},
 											"title": "Toy Room",
-											"credit": "Credit: orcnog & chatgpt"
+											"credit": "orcnog & chatgpt"
 										},
 										"{@cue Show: Spooky Toy Room image|media}",
 										{
@@ -1366,11 +1366,11 @@
 													"variantName": "3",
 													"combatants": [
 														{
-															"creature": "{@creature Hamelia|HoE}",
+															"creature": "{@creature Hamelia|THoE}",
 															"npc": true
 														},
 														{
-															"creature": "{@creature Creepy Doll|HoE}"
+															"creature": "{@creature Creepy Doll|THoE}"
 														}
 													]
 												},
@@ -1378,11 +1378,11 @@
 													"variantName": "4",
 													"combatants": [
 														{
-															"creature": "{@creature Hamelia|HoE}",
+															"creature": "{@creature Hamelia|THoE}",
 															"npc": true
 														},
 														{
-															"creature": "{@creature Creepy Doll|HoE}"
+															"creature": "{@creature Creepy Doll|THoE}"
 														}
 													]
 												},
@@ -1390,11 +1390,11 @@
 													"variantName": "5",
 													"combatants": [
 														{
-															"creature": "{@creature Hamelia|HoE}",
+															"creature": "{@creature Hamelia|THoE}",
 															"npc": true
 														},
 														{
-															"creature": "{@creature Creepy Doll|HoE}"
+															"creature": "{@creature Creepy Doll|THoE}"
 														}
 													]
 												}
@@ -1415,7 +1415,7 @@
 												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky library.webp"
 											},
 											"title": "The Library",
-											"credit": "Credit: orcnog & chatgpt"
+											"credit": "orcnog & chatgpt"
 										},
 										"{@cue Show: Spooky Library image|media}",
 										{
@@ -1424,8 +1424,8 @@
 												"The shelves in this library are filled with dusty books and alchemical equipment, much of it stained with a strange, sticky red substance. Five tall mirrors are arranged in a circle around an ornate rug. A sixth mirror lay on the floor, shattered, its jagged edges catching the dim light. A cold draft from the darkened corners of the room carries the faint scent of decay. On the far wall, a torch sconce sits conspicuously empty. The room feels off, as if it's waiting for something to be set in motion."
 											]
 										},
-										"{@cue PLOT / SECRET: If a character does something clever, like putting a lit torch in the holster, minor illustioning a mirror to replace the missing one, etc., the torchlight reflects and refracts between all the mirrors to form a focused point of light on one book on the shelf: {@item The Vampiric Rite of Sepins|HoE}.}",
-										"{@cue TRAP! - If anyone looks at their reflection in the mirror on the floor, use the {@trap Mirror Trap|HoE}.}",
+										"{@cue PLOT / SECRET: If a character does something clever, like putting a lit torch in the holster, minor illustioning a mirror to replace the missing one, etc., the torchlight reflects and refracts between all the mirrors to form a focused point of light on one book on the shelf: {@item The Vampiric Rite of Sepins|THoE}.}",
+										"{@cue TRAP! - If anyone looks at their reflection in the mirror on the floor, use the {@trap Mirror Trap|THoE}.}",
 										"{@cue LOOT! - If the bookshelves are searched, a spellcaster character can find one of the following:}",
 										{
 											"type": "list",
@@ -1451,7 +1451,7 @@
 												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky study1.webp"
 											},
 											"title": "The Study",
-											"credit": "Credit: orcnog & chatgpt"
+											"credit": "orcnog & chatgpt"
 										},
 										"{@cue Show: Spooky Study image|media}",
 										{
@@ -1464,7 +1464,7 @@
 										{
 											"type": "insetReadaloud",
 											"entries": [
-												"As you search through the scattered notes on the desk, one stands out. It references a particular tome: {@item The Vampiric Rite of Sepins|HoE}. A note jotted in the margin reads: \"replace the torch\"."
+												"As you search through the scattered notes on the desk, one stands out. It references a particular tome: {@item The Vampiric Rite of Sepins|THoE}. A note jotted in the margin reads: \"replace the torch\"."
 											]
 										},
 										"{@cue What did you roll? Okay...}",
@@ -1639,7 +1639,7 @@
 												"url": "https://d20.orcnog.com/slideshow/house_of_elazar/spooky ritual chamber.jpg"
 											},
 											"title": "Ritual Chamber",
-											"credit": "Credit: Tom Cartos",
+											"credit": "Tom Cartos",
 											"altText": "See: https://www.tomcartos.com/house-of-elazar-vampire-lair"
 										},
 										"{@cue Show: Spooky Ritual Chamber image|media}",
@@ -1665,11 +1665,11 @@
 															"variantName": "3",
 															"combatants": [
 																{
-																	"creature": "{@creature Hamelia|HoE}",
+																	"creature": "{@creature Hamelia|THoE}",
 																	"npc": true
 																},
 																{
-																	"creature": "{@creature Emmanuel Elazar|HoE}"
+																	"creature": "{@creature Emmanuel Elazar|THoE}"
 																},
 																{
 																	"creature": "{@creature Flying Dagger|BGDIA|Crest Sword}",
@@ -1686,11 +1686,11 @@
 															"default": true,
 															"combatants": [
 																{
-																	"creature": "{@creature Hamelia|HoE}",
+																	"creature": "{@creature Hamelia|THoE}",
 																	"npc": true
 																},
 																{
-																	"creature": "{@creature Emmanuel Elazar|HoE}"
+																	"creature": "{@creature Emmanuel Elazar|THoE}"
 																},
 																{
 																	"creature": "{@creature Flying Dagger|BGDIA|Crest Sword}",
@@ -1706,11 +1706,11 @@
 															"variantName": "5",
 															"combatants": [
 																{
-																	"creature": "{@creature Hamelia|HoE}",
+																	"creature": "{@creature Hamelia|THoE}",
 																	"npc": true
 																},
 																{
-																	"creature": "{@creature Emmanuel Elazar|HoE}"
+																	"creature": "{@creature Emmanuel Elazar|THoE}"
 																},
 																{
 																	"creature": "{@creature Flying Dagger|BGDIA|Crest Sword}",
@@ -1793,9 +1793,9 @@
 								"{@item Cloak of Protection}",
 								"{@item Dark Shard Amulet|XGE}",
 								"{@item Potion of Healing}",
-								"{@item Potion of Mana|HoE}",
+								"{@item Potion of Mana|THoE}",
 								"{@item Ring of X-ray Vision}",
-								"{@item The Vampiric Rite of Sepins|HoE}"
+								"{@item The Vampiric Rite of Sepins|THoE}"
 							]
 						}
 					]
@@ -1811,7 +1811,7 @@
 							"type": "list",
 							"columns": 2,
 							"items": [
-								"{@creature Hamelia|HoE}",
+								"{@creature Hamelia|THoE}",
 								"{@creature Giant Bat|||scaled=2}",
 								"{@creature Giant Bat|||scaled=3}",
 								"{@creature Swarm of Bats}",
@@ -1819,8 +1819,8 @@
 								"{@creature Shadow|||scaled=1}",
 								"{@creature Animated Armor|||scaled=1/2}",
 								"{@creature Animated Armor}",
-								"{@creature Creepy Doll|HoE}",
-								"{@creature Emmanuel Elazar|HoE}"
+								"{@creature Creepy Doll|THoE}",
+								"{@creature Emmanuel Elazar|THoE}"
 							]
 						}
 					]
@@ -1836,7 +1836,7 @@
 							"type": "list",
 							"columns": 1,
 							"items": [
-								"{@trap Mirror Trap|HoE}"
+								"{@trap Mirror Trap|THoE}"
 							]
 						}
 					]
