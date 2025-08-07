@@ -5115,7 +5115,7 @@
 				},
 				{
 					"type": "ingredient",
-					"entry": "{=amount1/v} cup unsulfured molasses (not blackstrap)",
+					"entry": "{=amount1/v} cup unsulphured molasses (not blackstrap)",
 					"amount1": 0.33
 				},
 				{
@@ -6975,12 +6975,12 @@
 			"ingredients": [
 				{
 					"type": "ingredient",
-					"entry": "{=amount1/v} pounds semifirm or firm cheese, such as Manchego, Asiago Fresco, Gruyère, Comté, Jarlsberg, Gouda, Monterey Jack, or Cheddar, cut into bite-size cubes",
+					"entry": "{=amount1/v} pounds semi-firm or firm cheese, such as Manchego, Asiago Fresco, Gruyère, Comté, Jarlsberg, Gouda, Monterey Jack, or Cheddar, cut into bite-size cubes",
 					"amount1": 1.25
 				},
 				{
 					"type": "ingredient",
-					"entry": "{=amount1/v} ounces hard salami; cured sausage, such as hard chorizo, Calabrese, pepperoni, or sopressata; or beef or turkey jerky cut into bite-size pieces",
+					"entry": "{=amount1/v} ounces hard salami; cured sausage, such as hard chorizo, Calabrese, pepperoni, or soppressata; or beef or turkey jerky cut into bite-size pieces",
 					"amount1": 10
 				},
 				{
@@ -7974,7 +7974,7 @@
 						},
 						{
 							"type": "ingredient",
-							"entry": "{=amount1/v} ounces firm or semifirm cheese (such as a young Cheddar, Colby, Monterey Jack, Fontina, Havarti, Gouda, or Baby Swiss), coarsely grated",
+							"entry": "{=amount1/v} ounces firm or semi-firm cheese (such as a young Cheddar, Colby, Monterey Jack, Fontina, Havarti, Gouda, or Baby Swiss), coarsely grated",
 							"amount1": 8
 						},
 						{
@@ -8554,7 +8554,7 @@
 				"Bake the loaf until it is firm to the touch on top, a toothpick inserted into the center comes out clean, and the onion mixture on the surface is browned with some crisp edges, 45 to 50 minutes, rotating halfway through. Let cool in the gratin dish for about 10 minutes, then transfer the bread to a wire rack to cool to room temperature. Slice with a serrated knife before serving."
 			],
 			"noteCook": [
-				"An oval baking dish helps the loaf keep an oblong, grublike shape as it bakes and expands.",
+				"An oval baking dish helps the loaf keep an oblong, grub-like shape as it bakes and expands.",
 				"Some of the onion mixture will burn in the dish and may stick to the bottom of the loaf, but you can just brush off any burnt bits.",
 				"The onion loaf can be wrapped tightly in plastic wrap and stored at room temperature for up to 2 days."
 			],

@@ -40,7 +40,7 @@ class SpellsSublistManager extends SublistManager {
 		const school = Parser.spSchoolAndSubschoolsAbvsShort(spell.school, spell.subschools);
 		const time = PageFilterSpells.getTblTimeStr(spell.time[0]);
 		const concentration = spell._isConc ? "×" : "";
-		const range = Parser.spRangeToFull(spell.range);
+		const range = Parser.spRangeToFull(spell.range, {isDisplaySelfArea: true});
 
 		const cellsText = [
 			spell.name,
@@ -253,14 +253,23 @@ class SpellsPage extends ListPageMultiSource {
 						name: "Classes",
 						transform: (sp) => {
 							const [current] = Parser.spClassesToCurrentAndLegacy(Renderer.spell.getCombinedClasses(sp, "fromClassList"));
-							return Parser.spMainClassesToFull(current);
+							return Parser.spMainClassesToFull(current, {isIncludeSource: true});
 						},
 					},
 					_classesVariant: {
 						name: "Optional/Variant Classes",
 						transform: (sp) => {
 							const [current] = Parser.spVariantClassesToCurrentAndLegacy(Renderer.spell.getCombinedClasses(sp, "fromClassListVariant"));
-							return Parser.spMainClassesToFull(current);
+							return Parser.spMainClassesToFull(current, {isIncludeSource: true});
+						},
+					},
+					_subclasses: {
+						name: "Subclasses",
+						transform: (sp, additionalData) => {
+							const fromSubclass = Renderer.spell.getCombinedClasses(sp, "fromSubclass");
+							if (!fromSubclass.length) return "";
+							const [current] = Parser.spSubclassesToCurrentAndLegacyFull(sp, additionalData.subclassLookup, {isIncludeSource: true});
+							return current;
 						},
 					},
 					entries: {name: "Text", transform: (it) => Renderer.get().render({type: "entries", entries: it}, 1), flex: 3},
@@ -278,6 +287,12 @@ class SpellsPage extends ListPageMultiSource {
 		this._lastFilterValues = null;
 		this._subclassLookup = {};
 		this._bookViewLastOrder = null;
+	}
+
+	async _pGetTableViewAdditionalData () {
+		return {
+			subclassLookup: await DataUtil.class.pGetSubclassLookup(),
+		};
 	}
 
 	get _bindOtherButtonsOptions () {
@@ -312,7 +327,7 @@ class SpellsPage extends ListPageMultiSource {
 		const time = PageFilterSpells.getTblTimeStr(spell.time[0]);
 		const school = Parser.spSchoolAndSubschoolsAbvsShort(spell.school, spell.subschools);
 		const concentration = spell._isConc ? "×" : "";
-		const range = Parser.spRangeToFull(spell.range);
+		const range = Parser.spRangeToFull(spell.range, {isDisplaySelfArea: true});
 
 		const eleLi = e_({
 			tag: "div",
@@ -340,7 +355,6 @@ class SpellsPage extends ListPageMultiSource {
 						e_({
 							tag: "span",
 							clazz: `ve-col-1-7 ve-text-center ${Parser.sourceJsonToSourceClassname(spell.source)} pl-1 pr-0`,
-							style: Parser.sourceJsonToStylePart(spell.source),
 							title: `${Parser.sourceJsonToFull(spell.source)}${Renderer.utils.getSourceSubText(spell)}`,
 							text: source,
 						}),

@@ -273,7 +273,7 @@ class BestiaryPage extends ListPageMultiSource {
 	static _tableView_getEntryPropTransform ({mon, fnGet}) {
 		const fnGetSpellTraits = Renderer.monster.getSpellcastingRenderedTraits.bind(Renderer.monster, Renderer.get());
 		const allEntries = fnGet(mon, {fnGetSpellTraits});
-		return (allEntries || []).map(it => it.rendered || Renderer.get().render(it, 2)).join("");
+		return (allEntries || []).map(it => it.rendered || Renderer.get().render(it, 2)).join("\n");
 	}
 
 	constructor () {
@@ -452,7 +452,6 @@ class BestiaryPage extends ListPageMultiSource {
 						e_({
 							tag: "span",
 							clazz: `ve-col-2 ve-text-center ${Parser.sourceJsonToSourceClassname(mon.source)} pl-1 pr-0`,
-							style: Parser.sourceJsonToStylePart(mon.source),
 							title: `${Parser.sourceJsonToFull(mon.source)}${Renderer.utils.getSourceSubText(mon)}`,
 							text: source,
 						}),
@@ -470,9 +469,7 @@ class BestiaryPage extends ListPageMultiSource {
 				source,
 				type,
 				cr,
-				group: mon.group ? [mon.group].flat().join(",") : "",
-				alias: (mon.alias || []).map(it => `"${it}"`).join(","),
-				page: mon.page,
+				...ListItem.getCommonValues(mon),
 			},
 			{
 				isExcluded,

@@ -139,10 +139,10 @@ class NavBar {
 		this._addElement_divider(NavBar._CAT_UTILITIES);
 		this._addElement_li(NavBar._CAT_UTILITIES, "plutonium.html", "Plutonium (Foundry Module) Features");
 		this._addElement_divider(NavBar._CAT_UTILITIES);
-		this._addElement_li(NavBar._CAT_UTILITIES, "https://wiki.tercept.net/en/betteR20", "Roll20 Script Help", {isExternal: true});
+		this._addElement_li(NavBar._CAT_UTILITIES, "https://wiki.tercept.net/en/betteR20", "Roll20 Script Help", {isExternal: true, isExternalMark: true});
 		this._addElement_divider(NavBar._CAT_UTILITIES);
 		this._addElement_li(NavBar._CAT_UTILITIES, "changelog.html", "Changelog");
-		this._addElement_li(NavBar._CAT_UTILITIES, NavBar._getCurrentWikiHelpPage(), "Help", {isExternal: true});
+		this._addElement_li(NavBar._CAT_UTILITIES, NavBar._getCurrentWikiHelpPage(), "Page Help", {isExternal: true, isExternalMark: true});
 		this._addElement_divider(NavBar._CAT_UTILITIES);
 		this._addElement_li(NavBar._CAT_UTILITIES, "privacy-policy.html", "Privacy Policy");
 
@@ -234,6 +234,8 @@ class NavBar {
 				title: "Remove all preloaded data, and clear away any caches.",
 			},
 		);
+
+		this._addElement_li(null, "https://wiki.tercept.net/en/5eTools", "Help", {isRoot: true, isExternal: true});
 	}
 
 	static _getNode (category) {
@@ -376,7 +378,9 @@ class NavBar {
 	 * @param [opts.aHash] - Optional hash to be appended to the base href
 	 * @param [opts.isRoot] - If the item is a root navbar element.
 	 * @param [opts.isExternal] - If the item is an external link.
+	 * @param [opts.isExternalMark] - If an "external link" icon should be shown.
 	 * @param [opts.date] - A date to prefix the list item with.
+	 * @param [opts.title] - Title for this nav item.
 	 * @param [opts.isAddDateSpacer] - True if this item has no date, but is in a list of items with dates.
 	 * @param [opts.source] - A source associated with this item, which should be displayed as a colored marker.
 	 * @param [opts.isInAccordion] - True if this item is inside an accordion.
@@ -403,6 +407,7 @@ class NavBar {
 			li.onmouseenter = function () { NavBar._handleItemMouseEnter(this); };
 			li.onclick = function () { NavBar._dropdowns.forEach(ele => NavBar._closeDropdownElement(ele)); };
 		}
+		if (opts.title) li.setAttribute("title", opts.title);
 
 		const a = document.createElement("a");
 		a.href = href;
@@ -412,6 +417,9 @@ class NavBar {
 
 		if (opts.isExternal) {
 			a.setAttribute("target", "_blank");
+			a.setAttribute("rel", "noopener noreferrer");
+		}
+		if (opts.isExternalMark) {
 			a.classList.add("inline-split-v-center");
 			a.classList.add("w-100");
 			a.innerHTML = `<span>${aText}</span><span class="glyphicon glyphicon-new-window"></span>`;
@@ -482,11 +490,11 @@ class NavBar {
 	}
 
 	static _addElement_getDatePrefix ({date, isAddDateSpacer}) { return `${(date != null || isAddDateSpacer) ? `<div class="ve-small mr-2 page__nav-date inline-block ve-text-right inline-block" aria-hidden="true">${date || ""}</div>` : ""}`; }
-	static _addElement_getSourcePrefix ({source}) { return `${source != null ? `<div class="nav2-list__disp-source ${Parser.sourceJsonToSourceClassname(source)}" ${Parser.sourceJsonToStyle(source)}></div>` : ""}`; }
+	static _addElement_getSourcePrefix ({source}) { return `${source != null ? `<div class="nav2-list__disp-source ${Parser.sourceJsonToSourceClassname(source)}"></div>` : ""}`; }
 
 	static _addElement_getSourceSuffix ({source}) {
 		if (source == null) return "";
-		return Parser.sourceJsonToMarkerHtml(source, {isList: false, additionalStyles: "ml-1 nav2-list__disp-legacy-marker"});
+		return Parser.sourceJsonToMarkerHtml(source, {isAddBrackets: true, additionalStyles: "ml-1 nav2-list__disp-legacy-marker"});
 	}
 
 	static _addElement_divider (parentCategory) {
@@ -861,21 +869,6 @@ NavBar._timerMousePos = {};
 NavBar._cachedInstallEvent = null;
 
 NavBar.InteractionManager = class {
-	static _onClick_button_dayNight (evt) {
-		evt.preventDefault();
-		styleSwitcher.cycleDayNightMode();
-	}
-
-	static _onContext_button_dayNight (evt) {
-		evt.preventDefault();
-		styleSwitcher.cycleDayNightMode(-1);
-	}
-
-	static _onClick_button_wideMode (evt) {
-		evt.preventDefault();
-		styleSwitcher.toggleWide();
-	}
-
 	static async _pOnClick_button_saveStateFile (evt) {
 		evt.preventDefault();
 		const sync = StorageUtil.syncGetDump();
@@ -905,6 +898,16 @@ NavBar.InteractionManager = class {
 
 	static async _pOnClick_button_addApp (evt) {
 		evt.preventDefault();
+
+		// Unavailable on Firefox
+		// See:
+		//  - https://developer.mozilla.org/en-US/docs/Web/API/BeforeInstallPromptEvent
+		//  - https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeinstallprompt_event
+		if (!NavBar._cachedInstallEvent) {
+			JqueryUtil.doToast({type: "warning", content: `Could not install app! Your browser may not support this feature.`});
+			return;
+		}
+
 		try {
 			NavBar._cachedInstallEvent.prompt();
 		} catch (e) {
