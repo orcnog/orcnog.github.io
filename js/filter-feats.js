@@ -75,7 +75,7 @@ class PageFilterFeats extends PageFilterBase {
 				.filter(it => it.level != null)
 				.map(it => `Level ${it.level.level ?? it.level}`)
 			: [];
-		feat._fBenifits = [
+		feat._fBenefits = [
 			...(feat.traitTags || []),
 			feat.resist ? "Damage Resistance" : null,
 			feat.immune ? "Damage Immunity" : null,
@@ -88,9 +88,9 @@ class PageFilterFeats extends PageFilterBase {
 			feat.languageProficiencies ? "Language Proficiency" : null,
 		].filter(it => it);
 		if (feat.skillToolLanguageProficiencies?.length) {
-			if (feat.skillToolLanguageProficiencies.some(it => (it.choose || []).some(x => x.from || [].includes("anySkill")))) feat._fBenifits.push("Skill Proficiency");
-			if (feat.skillToolLanguageProficiencies.some(it => (it.choose || []).some(x => x.from || [].includes("anyTool")))) feat._fBenifits.push("Tool Proficiency");
-			if (feat.skillToolLanguageProficiencies.some(it => (it.choose || []).some(x => x.from || [].includes("anyLanguage")))) feat._fBenifits.push("Language Proficiency");
+			if (feat.skillToolLanguageProficiencies.some(it => (it.choose || []).some(x => x.from || [].includes("anySkill")))) feat._fBenefits.push("Skill Proficiency");
+			if (feat.skillToolLanguageProficiencies.some(it => (it.choose || []).some(x => x.from || [].includes("anyTool")))) feat._fBenefits.push("Tool Proficiency");
+			if (feat.skillToolLanguageProficiencies.some(it => (it.choose || []).some(x => x.from || [].includes("anyLanguage")))) feat._fBenefits.push("Language Proficiency");
 		}
 		this._mutateForFilters_commonMisc(feat);
 		if (feat.repeatable != null) feat._fMisc.push(feat.repeatable ? "Repeatable" : "Not Repeatable");
@@ -113,7 +113,7 @@ class PageFilterFeats extends PageFilterBase {
 		this._resistFilter.addItem(feat._fRes);
 		this._immuneFilter.addItem(feat._fImm);
 		this._conditionImmuneFilter.addItem(feat._fCondImm);
-		this._benefitsFilter.addItem(feat._fBenifits);
+		this._benefitsFilter.addItem(feat._fBenefits);
 		this._miscFilter.addItem(feat._fMisc);
 	}
 
@@ -140,7 +140,7 @@ class PageFilterFeats extends PageFilterBase {
 				ft._fPrereqOther,
 				ft._fPrereqLevel,
 			],
-			ft._fBenifits,
+			ft._fBenefits,
 			[
 				ft._fVuln,
 				ft._fRes,
@@ -205,7 +205,7 @@ class ModalFilterFeats extends ModalFilterBase {
 			<div class="ve-col-4 px-1 ${feat._versionBase_isVersion ? "italic" : ""} ${this._getNameStyle()}">${feat._versionBase_isVersion ? `<span class="px-3"></span>` : ""}${feat.name}</div>
 			<span class="ve-col-3 px-1 ${feat._slAbility === VeCt.STR_NONE ? "italic" : ""}">${feat._slAbility}</span>
 			<span class="ve-col-3 px-1 ${feat._slPrereq === VeCt.STR_NONE ? "italic" : ""}">${feat._slPrereq}</span>
-			<div class="ve-col-1 pl-1 pr-0 ve-flex-h-center ${Parser.sourceJsonToSourceClassname(feat.source)}" title="${Parser.sourceJsonToFull(feat.source)}" ${Parser.sourceJsonToStyle(feat.source)}>${source}${Parser.sourceJsonToMarkerHtml(feat.source)}</div>
+			<div class="ve-col-1 pl-1 pr-0 ve-flex-h-center ${Parser.sourceJsonToSourceClassname(feat.source)}" title="${Parser.sourceJsonToFull(feat.source)}">${source}${Parser.sourceJsonToMarkerHtml(feat.source, {isList: true})}</div>
 		</div>`;
 
 		const btnShowHidePreview = eleRow.firstElementChild.children[1].firstElementChild;
@@ -218,7 +218,7 @@ class ModalFilterFeats extends ModalFilterBase {
 				hash,
 				source,
 				sourceJson: feat.source,
-				page: feat.page,
+				...ListItem.getCommonValues(feat),
 				ability: feat._slAbility,
 				prerequisite: feat._slPrereq,
 			},

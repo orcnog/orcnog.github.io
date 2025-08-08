@@ -673,40 +673,17 @@ Parser.sourceJsonToDate = function (source) {
 	if (typeof BrewUtil2 !== "undefined" && BrewUtil2.hasSourceJson(source)) return BrewUtil2.sourceJsonToDate(source);
 	return Parser._parse_aToB(Parser.SOURCE_JSON_TO_DATE, source, null);
 };
-Parser.sourceJsonToColor = function (source) {
-	source = Parser._getSourceStringFromSource(source);
-	if (Parser.hasSourceAbv(source)) return "";
-	if (typeof PrereleaseUtil !== "undefined" && PrereleaseUtil.hasSourceJson(source)) return PrereleaseUtil.sourceJsonToColor(source);
-	if (typeof BrewUtil2 !== "undefined" && BrewUtil2.hasSourceJson(source)) return BrewUtil2.sourceJsonToColor(source);
-	return "";
+
+Parser.sourceJsonToSourceClassname = function (source, {sourceJson = null} = {}) {
+	sourceJson ||= Parser.sourceJsonToJson(source);
+	return `source__${sourceJson.replace(/[^A-Za-z0-9-_]/g, "_")}`;
 };
 
-Parser.sourceJsonToSourceClassname = function (source) {
-	const sourceCased = Parser.sourceJsonToJson(source);
-	return `source__${sourceCased}`;
-};
-
-Parser.sourceJsonToStyle = function (source) {
-	source = Parser._getSourceStringFromSource(source);
-	if (Parser.hasSourceJson(source)) return "";
-	if (typeof PrereleaseUtil !== "undefined" && PrereleaseUtil.hasSourceJson(source)) return PrereleaseUtil.sourceJsonToStyle(source);
-	if (typeof BrewUtil2 !== "undefined" && BrewUtil2.hasSourceJson(source)) return BrewUtil2.sourceJsonToStyle(source);
-	return "";
-};
-
-Parser.sourceJsonToStylePart = function (source) {
-	source = Parser._getSourceStringFromSource(source);
-	if (Parser.hasSourceJson(source)) return "";
-	if (typeof PrereleaseUtil !== "undefined" && PrereleaseUtil.hasSourceJson(source)) return PrereleaseUtil.sourceJsonToStylePart(source);
-	if (typeof BrewUtil2 !== "undefined" && BrewUtil2.hasSourceJson(source)) return BrewUtil2.sourceJsonToStylePart(source);
-	return "";
-};
-
-Parser.sourceJsonToMarkerHtml = function (source, {isList = true, isAddBrackets = null, additionalStyles = ""} = {}) {
+Parser.sourceJsonToMarkerHtml = function (source, {isList = false, isStatsName = false, isAddBrackets = false, additionalStyles = ""} = {}) {
 	source = Parser._getSourceStringFromSource(source);
 	// TODO(Future) consider enabling this
-	// if (SourceUtil.isPartneredSourceWotc(source)) return `<span class="help-subtle ve-source-marker ${isList ? `ve-source-marker--list` : ""} ve-source-marker--partnered ${additionalStyles}" title="D&amp;D Partnered Source">${isList ? "" : "["}✦${isList ? "" : "]"}</span>`;
-	if (SourceUtil.isLegacySourceWotc(source)) return `<span class="help-subtle ve-source-marker ${isList ? `ve-source-marker--list` : ""} ve-source-marker--legacy ${additionalStyles}" title="Legacy Source">${isList && !isAddBrackets ? "" : "["}ʟ${isList && !isAddBrackets ? "" : "]"}</span>`;
+	// if (SourceUtil.isPartneredSourceWotc(source)) return `<span class="help-subtle ve-source-marker ${isList ? `ve-source-marker--list` : ""} ${isStatsName ? `ve-source-marker--stats-name` : ""} ve-source-marker--partnered ${additionalStyles}" title="D&amp;D Partnered Source">${isList ? "" : "["}✦${isList ? "" : "]"}</span>`;
+	if (SourceUtil.isLegacySourceWotc(source)) return `<span class="help-subtle ve-source-marker ${isList ? `ve-source-marker--list` : ""} ${isStatsName ? `ve-source-marker--stats-name` : ""} ve-source-marker--legacy ${additionalStyles}" title="Legacy Source">${isAddBrackets ? "[" : ""}ʟ${isAddBrackets ? "]" : ""}</span>`;
 	return "";
 };
 
@@ -1466,9 +1443,9 @@ Parser.SP_RANGE_TO_ICON = {
 	[Parser.RNG_CYLINDER]: "fa-database",
 	[Parser.RNG_SELF]: "fa-street-view",
 	[Parser.RNG_SIGHT]: "fa-eye",
-	[Parser.RNG_UNLIMITED_SAME_PLANE]: "fa-globe-americas",
+	[Parser.RNG_UNLIMITED_SAME_PLANE]: "fa-earth-americas",
 	[Parser.RNG_UNLIMITED]: "fa-infinity",
-	[Parser.RNG_TOUCH]: "fa-hand-paper",
+	[Parser.RNG_TOUCH]: "fa-hand",
 };
 
 Parser.spRangeTypeToIcon = function (range) {
@@ -1515,7 +1492,9 @@ Parser.spRangeToShortHtml._getAreaStyleString = function (range) {
 	return `<span class="fas fa-fw ${Parser.spRangeTypeToIcon(range.type)} help-subtle" title="${Parser.spRangeTypeToFull(range.type)}"></span>`;
 };
 
-Parser.spRangeToFull = function (range) {
+Parser.spRangeToFull = function (range, {styleHint, isDisplaySelfArea = false} = {}) {
+	styleHint ||= VetoolsConfig.get("styleSwitcher", "style");
+
 	switch (range.type) {
 		case Parser.RNG_SPECIAL: return Parser.spRangeTypeToFull(range.type);
 		case Parser.RNG_POINT: return Parser.spRangeToFull._renderPoint(range);
@@ -1527,7 +1506,7 @@ Parser.spRangeToFull = function (range) {
 		case Parser.RNG_SPHERE:
 		case Parser.RNG_HEMISPHERE:
 		case Parser.RNG_CYLINDER:
-			return Parser.spRangeToFull._renderArea(range);
+			return Parser.spRangeToFull._renderArea({range, styleHint, isDisplaySelfArea});
 	}
 };
 Parser.spRangeToFull._renderPoint = function (range) {
@@ -1547,7 +1526,8 @@ Parser.spRangeToFull._renderPoint = function (range) {
 			return `${dist.amount} ${dist.amount === 1 ? Parser.getSingletonUnit(dist.type) : dist.type}`;
 	}
 };
-Parser.spRangeToFull._renderArea = function (range) {
+Parser.spRangeToFull._renderArea = function ({range, styleHint, isDisplaySelfArea = false}) {
+	if (styleHint !== "classic" && !isDisplaySelfArea) return "Self";
 	const size = range.distance;
 	return `Self (${size.amount}-${Parser.getSingletonUnit(size.type)}${Parser.spRangeToFull._getAreaStyleString(range)}${range.type === Parser.RNG_CYLINDER ? `${size.amountSecondary != null && size.typeSecondary != null ? `, ${size.amountSecondary}-${Parser.getSingletonUnit(size.typeSecondary)}-high` : ""} cylinder` : ""})`;
 };
@@ -1655,23 +1635,27 @@ Parser.spClassesToFull = function (sp, {isTextOnly = false, subclassLookup = {}}
 	return `${Parser.spMainClassesToFull(fromClassList, {isTextOnly})}${fromSubclasses ? `, ${fromSubclasses}` : ""}`;
 };
 
-Parser.spMainClassesToFull = function (fromClassList, {isTextOnly = false} = {}) {
+Parser.spMainClassesToFull = function (fromClassList, {isTextOnly = false, isIncludeSource = false} = {}) {
 	return fromClassList
 		.map(clsStub => ({hash: UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_CLASSES](clsStub), clsStub}))
 		.filter(it => !ExcludeUtil.isInitialised || !ExcludeUtil.isExcluded(it.hash, "class", it.clsStub.source))
 		.sort((a, b) => SortUtil.ascSort(a.clsStub.name, b.clsStub.name))
 		.map(it => {
-			if (isTextOnly) return it.clsStub.name;
+			if (isTextOnly) {
+				if (isIncludeSource) return `${it.clsStub.name} (${Parser.sourceJsonToAbv(it.clsStub.source)})`;
+				return it.clsStub.name;
+			}
 
 			const definedInSource = it.clsStub.definedInSource || it.clsStub.source;
 			const ptLink = Renderer.get().render(`{@class ${it.clsStub.name}|${it.clsStub.source}}`);
+			const ptSource = isIncludeSource ? ` (${Parser.sourceJsonToAbv(it.clsStub.source)})` : "";
 			const ptTitle = definedInSource === it.clsStub.source ? `Class source/spell list defined in: ${Parser.sourceJsonToFull(definedInSource)}.` : `Class source: ${Parser.sourceJsonToFull(it.clsStub.source)}. Spell list defined in: ${Parser.sourceJsonToFull(definedInSource)}.`;
-			return `<span title="${ptTitle.qq()}">${ptLink}</span>`;
+			return `<span title="${ptTitle.qq()}">${ptLink}${ptSource}</span>`;
 		})
 		.join(", ") || "";
 };
 
-Parser.spSubclassesToFull = function (fromSubclassList, {isTextOnly = false, subclassLookup = {}} = {}) {
+Parser.spSubclassesToFull = function (fromSubclassList, {isTextOnly = false, isIncludeSource = false, subclassLookup = {}} = {}) {
 	return fromSubclassList
 		.filter(mt => {
 			if (!ExcludeUtil.isInitialised) return true;
@@ -1694,19 +1678,23 @@ Parser.spSubclassesToFull = function (fromSubclassList, {isTextOnly = false, sub
 			const byName = SortUtil.ascSort(a.class.name, b.class.name);
 			return byName || SortUtil.ascSort(a.subclass.name, b.subclass.name);
 		})
-		.map(c => Parser._spSubclassItem({fromSubclass: c, isTextOnly}))
+		.map(c => Parser._spSubclassItem({fromSubclass: c, isTextOnly, isIncludeSource}))
 		.join(", ") || "";
 };
 
-Parser._spSubclassItem = function ({fromSubclass, isTextOnly}) {
+Parser._spSubclassItem = function ({fromSubclass, isTextOnly = false, isIncludeSource = false}) {
 	const c = fromSubclass.class;
 	const sc = fromSubclass.subclass;
 	const text = `${sc.shortName}${sc.subSubclass ? ` (${sc.subSubclass})` : ""}`;
-	if (isTextOnly) return text;
+	if (isTextOnly) {
+		if (isIncludeSource) return `${text} (${Parser.sourceJsonToAbv(sc.source)})`;
+		return text;
+	}
 
-	const classPart = `<span title="Source: ${Parser.sourceJsonToFull(c.source)}${c.definedInSource ? ` From a class spell list defined in: ${Parser.sourceJsonToFull(c.definedInSource)}` : ""}">${Renderer.get().render(`{@class ${c.name}|${c.source}}`)}</span>`;
+	const ptClass = `<span title="Source: ${Parser.sourceJsonToFull(c.source)}${c.definedInSource ? ` From a class spell list defined in: ${Parser.sourceJsonToFull(c.definedInSource)}` : ""}">${Renderer.get().render(`{@class ${c.name}|${c.source}}`)}</span>`;
+	const ptSource = isIncludeSource ? ` (${Parser.sourceJsonToAbv(sc.source)})` : "";
 
-	return `<span class="italic" title="Source: ${Parser.sourceJsonToFull(fromSubclass.subclass.source)}">${Renderer.get().render(`{@class ${c.name}|${c.source}|${text}|${sc.shortName}|${sc.source}}`)}</span> ${classPart}`;
+	return `<span class="italic" title="Source: ${Parser.sourceJsonToFull(fromSubclass.subclass.source)}">${Renderer.get().render(`{@class ${c.name}|${c.source}|${text}|${sc.shortName}|${sc.source}}`)}</span>${isIncludeSource ? ptSource : ""} ${ptClass}`;
 };
 
 Parser.SPELL_ATTACK_TYPE_TO_FULL = {};
@@ -2403,7 +2391,7 @@ Parser.CAT_ID_CULT = 19;
 Parser.CAT_ID_BOON = 20;
 Parser.CAT_ID_DISEASE = 21;
 Parser.CAT_ID_METAMAGIC = 22;
-Parser.CAT_ID_MANEUVER_BATTLEMASTER = 23;
+Parser.CAT_ID_MANEUVER_BATTLE_MASTER = 23;
 Parser.CAT_ID_TABLE = 24;
 Parser.CAT_ID_TABLE_GROUP = 25;
 Parser.CAT_ID_MANEUVER_CAVALIER = 26;
@@ -2441,7 +2429,7 @@ Parser.CAT_ID_GROUPS = {
 	"optionalfeature": [
 		Parser.CAT_ID_ELDRITCH_INVOCATION,
 		Parser.CAT_ID_METAMAGIC,
-		Parser.CAT_ID_MANEUVER_BATTLEMASTER,
+		Parser.CAT_ID_MANEUVER_BATTLE_MASTER,
 		Parser.CAT_ID_MANEUVER_CAVALIER,
 		Parser.CAT_ID_ARCANE_SHOT,
 		Parser.CAT_ID_OPTIONAL_FEATURE_OTHER,
@@ -2483,7 +2471,7 @@ Parser.CAT_ID_TO_FULL[Parser.CAT_ID_CULT] = "Cult";
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_BOON] = "Boon";
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_DISEASE] = "Disease";
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_METAMAGIC] = "Metamagic";
-Parser.CAT_ID_TO_FULL[Parser.CAT_ID_MANEUVER_BATTLEMASTER] = "Maneuver; Battlemaster";
+Parser.CAT_ID_TO_FULL[Parser.CAT_ID_MANEUVER_BATTLE_MASTER] = "Maneuver; Battle Master";
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_TABLE] = "Table";
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_TABLE_GROUP] = "Table";
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_MANEUVER_CAVALIER] = "Maneuver; Cavalier";
@@ -2550,7 +2538,7 @@ Parser.CAT_ID_TO_PROP[Parser.CAT_ID_ARCANE_SHOT] = "optionalfeature";
 Parser.CAT_ID_TO_PROP[Parser.CAT_ID_OPTIONAL_FEATURE_OTHER] = "optionalfeature";
 Parser.CAT_ID_TO_PROP[Parser.CAT_ID_FIGHTING_STYLE] = "optionalfeature";
 Parser.CAT_ID_TO_PROP[Parser.CAT_ID_METAMAGIC] = "optionalfeature";
-Parser.CAT_ID_TO_PROP[Parser.CAT_ID_MANEUVER_BATTLEMASTER] = "optionalfeature";
+Parser.CAT_ID_TO_PROP[Parser.CAT_ID_MANEUVER_BATTLE_MASTER] = "optionalfeature";
 Parser.CAT_ID_TO_PROP[Parser.CAT_ID_PACT_BOON] = "optionalfeature";
 Parser.CAT_ID_TO_PROP[Parser.CAT_ID_ELEMENTAL_DISCIPLINE] = "optionalfeature";
 Parser.CAT_ID_TO_PROP[Parser.CAT_ID_ARTIFICER_INFUSION] = "optionalfeature";
@@ -2599,18 +2587,19 @@ Parser.spClassesToCurrentAndLegacy = function (fromClassList) {
  *
  * @param sp a spell
  * @param subclassLookup Data loaded from `generated/gendata-subclass-lookup.json`. Of the form: `{PHB: {Barbarian: {PHB: {Berserker: "Path of the Berserker"}}}}`
+ * @param isIncludeSource
  * @returns {*[]} A two-element array. First item is a string of all the current subclasses, second item a string of
  * all the legacy/superseded subclasses
  */
-Parser.spSubclassesToCurrentAndLegacyFull = function (sp, subclassLookup) {
-	return Parser._spSubclassesToCurrentAndLegacyFull({sp, subclassLookup, prop: "fromSubclass"});
+Parser.spSubclassesToCurrentAndLegacyFull = function (sp, subclassLookup, {isIncludeSource = false} = {}) {
+	return Parser._spSubclassesToCurrentAndLegacyFull({sp, subclassLookup, prop: "fromSubclass", isIncludeSource});
 };
 
-Parser.spVariantSubclassesToCurrentAndLegacyFull = function (sp, subclassLookup) {
-	return Parser._spSubclassesToCurrentAndLegacyFull({sp, subclassLookup, prop: "fromSubclassVariant"});
+Parser.spVariantSubclassesToCurrentAndLegacyFull = function (sp, subclassLookup, {isIncludeSource = false} = {}) {
+	return Parser._spSubclassesToCurrentAndLegacyFull({sp, subclassLookup, prop: "fromSubclassVariant", isIncludeSource});
 };
 
-Parser._spSubclassesToCurrentAndLegacyFull = ({sp, subclassLookup, prop}) => {
+Parser._spSubclassesToCurrentAndLegacyFull = ({sp, subclassLookup, prop, isIncludeSource = false}) => {
 	const fromSubclass = Renderer.spell.getCombinedClasses(sp, prop);
 	if (!fromSubclass.length) return ["", ""];
 
@@ -2651,7 +2640,7 @@ Parser._spSubclassesToCurrentAndLegacyFull = ({sp, subclassLookup, prop}) => {
 			const nm = c.subclass.name;
 			const src = c.subclass.source;
 
-			const toAdd = Parser._spSubclassItem({fromSubclass: c, isTextOnly: false});
+			const toAdd = Parser._spSubclassItem({fromSubclass: c, isTextOnly: false, isIncludeSource});
 
 			const fromLookup = MiscUtil.get(
 				subclassLookup,
@@ -2767,6 +2756,7 @@ Parser.bookOrdinalToAbv = (ordinal, {isPreNoSuff = false, isPlainText = false} =
 		case "episode": return `${isPreNoSuff ? " " : ""}${Parser._bookOrdinalToAbv_getPt({ordinal, isPlainText})} ${ordinal.identifier}${isPreNoSuff ? "" : ": "}`;
 		case "appendix": return `${isPreNoSuff ? " " : ""}${Parser._bookOrdinalToAbv_getPt({ordinal, isPlainText})}${ordinal.identifier != null ? ` ${ordinal.identifier}` : ""}${isPreNoSuff ? "" : ": "}`;
 		case "level": return `${isPreNoSuff ? " " : ""}${Parser._bookOrdinalToAbv_getPt({ordinal, isPlainText})} ${ordinal.identifier}${isPreNoSuff ? "" : ": "}`;
+		case "section": return `${isPreNoSuff ? " " : ""}${Parser._bookOrdinalToAbv_getPt({ordinal, isPlainText})} ${ordinal.identifier}${isPreNoSuff ? "" : ": "}`;
 		default: throw new Error(`Unhandled ordinal type "${ordinal.type}"`);
 	}
 };
@@ -2777,6 +2767,7 @@ Parser._bookOrdinalToAbv_getPt = ({ordinal, isPlainText = false}) => {
 		case "chapter": return isPlainText ? `Ch.` : `<span title="Chapter">Ch.</span>`;
 		case "episode": return isPlainText ? `Ep.` : `<span title="Episode">Ep.</span>`;
 		case "appendix": return isPlainText ? `App.` : `<span title="Appendix">App.</span>`;
+		case "section": return isPlainText ? `Sec.` : `<span title="Section">Sec.</span>`;
 		case "level": return `Level`;
 		default: throw new Error(`Unhandled ordinal type "${ordinal.type}"`);
 	}
@@ -3131,9 +3122,6 @@ Parser.SRC_BMT = "BMT";
 Parser.SRC_DMTCRG = "DMTCRG";
 Parser.SRC_QftIS = "QftIS";
 Parser.SRC_VEoR = "VEoR";
-Parser.SRC_GHLoE = "GHLoE";
-Parser.SRC_DoDk = "DoDk";
-Parser.SRC_ToB1_2023 = "ToB1-2023";
 Parser.SRC_TD = "TD";
 Parser.SRC_SCREEN = "Screen";
 Parser.SRC_SCREEN_WILDERNESS_KIT = "ScreenWildernessKit";
@@ -3311,9 +3299,6 @@ Parser.SOURCE_JSON_TO_FULL[Parser.SRC_BMT] = "The Book of Many Things";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_DMTCRG] = "The Deck of Many Things: Card Reference Guide";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_QftIS] = "Quests from the Infinite Staircase";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_VEoR] = "Vecna: Eve of Ruin";
-Parser.SOURCE_JSON_TO_FULL[Parser.SRC_GHLoE] = "Grim Hollow: Lairs of Etharis";
-Parser.SOURCE_JSON_TO_FULL[Parser.SRC_DoDk] = "Dungeons of Drakkenheim";
-Parser.SOURCE_JSON_TO_FULL[Parser.SRC_ToB1_2023] = "Tome of Beasts 1 (2023 Edition)";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_TD] = "Tarot Deck";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_SCREEN] = "Dungeon Master's Screen";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_SCREEN_WILDERNESS_KIT] = "Dungeon Master's Screen: Wilderness Kit";
@@ -3321,7 +3306,7 @@ Parser.SOURCE_JSON_TO_FULL[Parser.SRC_SCREEN_DUNGEON_KIT] = "Dungeon Master's Sc
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_SCREEN_SPELLJAMMER] = "Dungeon Master's Screen: Spelljammer";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_HF] = "Heroes' Feast";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_HFFotM] = "Heroes' Feast: Flavors of the Multiverse";
-Parser.SOURCE_JSON_TO_FULL[Parser.SRC_HFStCM] = "Heroes' Feast: Saving the Childrens Menu";
+Parser.SOURCE_JSON_TO_FULL[Parser.SRC_HFStCM] = "Heroes' Feast: Saving the Children's Menu";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_CM] = "Candlekeep Mysteries";
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_NRH] = Parser.NRH_NAME;
 Parser.SOURCE_JSON_TO_FULL[Parser.SRC_NRH_TCMC] = `${Parser.NRH_NAME}: The Candy Mountain Caper`;
@@ -3466,9 +3451,6 @@ Parser.SOURCE_JSON_TO_ABV[Parser.SRC_BMT] = "BMT";
 Parser.SOURCE_JSON_TO_ABV[Parser.SRC_DMTCRG] = "DMTCRG";
 Parser.SOURCE_JSON_TO_ABV[Parser.SRC_QftIS] = "QftIS";
 Parser.SOURCE_JSON_TO_ABV[Parser.SRC_VEoR] = "VEoR";
-Parser.SOURCE_JSON_TO_ABV[Parser.SRC_GHLoE] = "GHLoE";
-Parser.SOURCE_JSON_TO_ABV[Parser.SRC_DoDk] = "DoDk";
-Parser.SOURCE_JSON_TO_ABV[Parser.SRC_ToB1_2023] = "ToB1'23";
 Parser.SOURCE_JSON_TO_ABV[Parser.SRC_TD] = "TD";
 Parser.SOURCE_JSON_TO_ABV[Parser.SRC_SCREEN] = "Screen";
 Parser.SOURCE_JSON_TO_ABV[Parser.SRC_SCREEN_WILDERNESS_KIT] = "ScWild";
@@ -3620,9 +3602,6 @@ Parser.SOURCE_JSON_TO_DATE[Parser.SRC_BMT] = "2023-11-14";
 Parser.SOURCE_JSON_TO_DATE[Parser.SRC_DMTCRG] = "2023-11-14";
 Parser.SOURCE_JSON_TO_DATE[Parser.SRC_QftIS] = "2024-07-16";
 Parser.SOURCE_JSON_TO_DATE[Parser.SRC_VEoR] = "2024-05-21";
-Parser.SOURCE_JSON_TO_DATE[Parser.SRC_GHLoE] = "2023-11-30";
-Parser.SOURCE_JSON_TO_DATE[Parser.SRC_DoDk] = "2023-12-21";
-Parser.SOURCE_JSON_TO_DATE[Parser.SRC_ToB1_2023] = "2023-05-31";
 Parser.SOURCE_JSON_TO_DATE[Parser.SRC_TD] = "2022-05-24";
 Parser.SOURCE_JSON_TO_DATE[Parser.SRC_SCREEN] = "2015-01-20";
 Parser.SOURCE_JSON_TO_DATE[Parser.SRC_SCREEN_WILDERNESS_KIT] = "2020-11-17";
@@ -3753,8 +3732,6 @@ Parser.SOURCES_ADVENTURES = new Set([
 	Parser.SRC_VNotEE,
 	Parser.SRC_LRDT,
 	Parser.SRC_HFStCM,
-	Parser.SRC_GHLoE,
-	Parser.SRC_DoDk,
 
 	Parser.SRC_AWM,
 ]);
@@ -3814,9 +3791,6 @@ Parser.SOURCES_PARTNERED_WOTC = new Set([
 	Parser.SRC_CRCotN,
 	Parser.SRC_TDCSR,
 	Parser.SRC_HftT,
-	Parser.SRC_GHLoE,
-	Parser.SRC_DoDk,
-	Parser.SRC_ToB1_2023,
 	Parser.SRC_TD,
 	Parser.SRC_LRDT,
 ]);
@@ -3905,9 +3879,6 @@ Parser.SOURCES_NON_FR = new Set([
 	Parser.SRC_MPP,
 	Parser.SRC_MCV4EC,
 	Parser.SRC_LK,
-	Parser.SRC_GHLoE,
-	Parser.SRC_DoDk,
-	Parser.SRC_ToB1_2023,
 	Parser.SRC_LRDT,
 ]);
 
@@ -3950,7 +3921,6 @@ Parser.SOURCES_AVAILABLE_DOCS_BOOK = {};
 	Parser.SRC_HFFotM,
 	Parser.SRC_BMT,
 	Parser.SRC_DMTCRG,
-	Parser.SRC_ToB1_2023,
 	Parser.SRC_TD,
 ].forEach(src => {
 	Parser.SOURCES_AVAILABLE_DOCS_BOOK[src] = src;
@@ -4044,8 +4014,6 @@ Parser.SOURCES_AVAILABLE_DOCS_ADVENTURE = {};
 	Parser.SRC_PiP,
 	Parser.SRC_DitLCoT,
 	Parser.SRC_HFStCM,
-	Parser.SRC_GHLoE,
-	Parser.SRC_DoDk,
 	Parser.SRC_QftIS,
 	Parser.SRC_LRDT,
 	Parser.SRC_VEoR,
@@ -4144,12 +4112,15 @@ Parser.DMGTYPE_JSON_TO_FULL = {
 Parser.DMG_TYPES = ["acid", "bludgeoning", "cold", "fire", "force", "lightning", "necrotic", "piercing", "poison", "psychic", "radiant", "slashing", "thunder"];
 Parser.CONDITIONS = ["blinded", "charmed", "deafened", "exhaustion", "frightened", "grappled", "incapacitated", "invisible", "paralyzed", "petrified", "poisoned", "prone", "restrained", "stunned", "unconscious"];
 
-Parser.SENSES = [
+Parser._SENSES = [
 	{"name": "blindsight", "source": Parser.SRC_PHB},
 	{"name": "darkvision", "source": Parser.SRC_PHB},
 	{"name": "tremorsense", "source": Parser.SRC_MM},
 	{"name": "truesight", "source": Parser.SRC_PHB},
 ];
+Parser.getSenses = function () {
+	return Parser._SENSES;
+};
 
 Parser.NUMBERS_ONES = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
 Parser.NUMBERS_TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];

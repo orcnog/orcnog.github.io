@@ -734,6 +734,8 @@ class _DataTypeLoader {
 	async pGetPostCacheData ({siteData = null, prereleaseData = null, brewData = null, lockToken2}) { /* Implement as required */ }
 
 	async _pGetPostCacheData_obj_withCache ({obj, propCache, lockToken2, loadspace}) {
+		if (obj == null) return null;
+
 		this._cache_pPostCaches[propCache] = this._cache_pPostCaches[propCache] || this._pGetPostCacheData_obj({obj, lockToken2, loadspace});
 		return this._cache_pPostCaches[propCache];
 	}
@@ -1024,6 +1026,15 @@ class _DataTypeLoaderRaceFluff extends _DataTypeLoaderPredefined {
 	static IS_FLUFF = true;
 
 	_loader = "raceFluff";
+}
+
+class _DataTypeLoaderRaceFeature extends _DataTypeLoaderPredefined {
+	static PROPS = ["raceFeature"];
+
+	_loader = "raceFeature";
+	_loadJsonArgs = {isAddBaseRaces: true};
+	_loadPrereleaseArgs = {isAddBaseRaces: true};
+	_loadBrewArgs = {isAddBaseRaces: true};
 }
 
 class _DataTypeLoaderDeity extends _DataTypeLoaderPredefined {
@@ -1412,7 +1423,7 @@ class _DataTypeLoaderCustomItem extends _DataTypeLoader {
 		Renderer.item.addPrereleaseBrewPropertiesAndTypesFrom({data});
 	}
 
-	async _pGetPostCacheData_obj ({siteData, obj, lockToken2, loadspace}) {
+	async _pGetPostCacheData_obj ({obj, lockToken2, loadspace}) {
 		if (!obj) return null;
 
 		const out = {};
@@ -1428,8 +1439,7 @@ class _DataTypeLoaderCustomItem extends _DataTypeLoader {
 	async pGetPostCacheData ({siteData = null, prereleaseData = null, brewData = null, lockToken2}) {
 		return {
 			siteDataPostCache: await this._pGetPostCacheData_obj_withCache({
-				obj:
-				siteData,
+				obj: siteData,
 				lockToken2,
 				propCache: "site",
 				loadspace: _DataLoaderConst.LOADSPACE_SITE,
@@ -1845,6 +1855,7 @@ class DataLoader {
 
 		// region Predefined
 		_DataTypeLoaderRace.register({fnRegister});
+		_DataTypeLoaderRaceFeature.register({fnRegister});
 		_DataTypeLoaderDeity.register({fnRegister});
 		_DataTypeLoaderVariantrule.register({fnRegister});
 		_DataTypeLoaderTable.register({fnRegister});

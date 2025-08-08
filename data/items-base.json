@@ -294,6 +294,9 @@
 		},
 		{
 			"name": "Crystal",
+			"group": [
+				"Arcane Focus"
+			],
 			"source": "PHB",
 			"page": 151,
 			"srd": true,
@@ -1125,6 +1128,9 @@
 		},
 		{
 			"name": "Orb",
+			"group": [
+				"Arcane Focus"
+			],
 			"source": "PHB",
 			"page": 151,
 			"srd": true,
@@ -1335,6 +1341,9 @@
 		},
 		{
 			"name": "Rod",
+			"group": [
+				"Arcane Focus"
+			],
 			"source": "PHB",
 			"page": 151,
 			"srd": true,
@@ -1616,6 +1625,9 @@
 		},
 		{
 			"name": "Staff",
+			"group": [
+				"Arcane Focus"
+			],
 			"source": "PHB",
 			"page": 151,
 			"srd": true,
@@ -1662,6 +1674,9 @@
 		},
 		{
 			"name": "Thelarr",
+			"alias": [
+				"Whistlecane"
+			],
 			"source": "SCAG",
 			"page": 124,
 			"type": "INS",
@@ -1714,6 +1729,9 @@
 		},
 		{
 			"name": "Wand",
+			"group": [
+				"Arcane Focus"
+			],
 			"source": "PHB",
 			"page": 151,
 			"srd": true,
@@ -1790,6 +1808,9 @@
 		},
 		{
 			"name": "Wooden Staff",
+			"group": [
+				"Druidic Focus"
+			],
 			"source": "PHB",
 			"page": 151,
 			"srd": true,

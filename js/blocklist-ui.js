@@ -376,7 +376,7 @@ class BlocklistUi {
 		// endregion
 
 		// Utility controls
-		const $btnSendToFoundry = !IS_VTT && ExtensionUtil.ACTIVE
+		const $btnSendToFoundry = !globalThis.IS_VTT && ExtensionUtil.ACTIVE
 			? $(`<button title="Send to Foundry" class="ve-btn ve-btn-xs ve-btn-default mr-2"><span class="glyphicon glyphicon-send"></span></button>`)
 				.click(evt => this._pDoSendToFoundry({isTemp: !!evt.shiftKey}))
 			: null;
@@ -739,6 +739,16 @@ class BlocklistUi {
 globalThis.BlocklistUi = BlocklistUi;
 
 BlocklistUi.Component = class extends BaseComponent {
+	constructor () {
+		super();
+
+		const hkNonNameChange = () => {
+			this._state.name = {hash: "*", name: "*", category: this._state.category};
+		};
+		this._addHookBase("source", hkNonNameChange);
+		this._addHookBase("category", hkNonNameChange);
+	}
+
 	get source () { return this._state.source; }
 	get category () { return this._state.category; }
 	get name () { return this._state.name; }

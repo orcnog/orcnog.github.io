@@ -641,7 +641,8 @@
 				"One with the Blade|Monk||Kensei|XGE|6",
 				"Sharpen the Blade|Monk||Kensei|XGE|11",
 				"Unerring Accuracy|Monk||Kensei|XGE|17"
-			]
+			],
+			"hasFluff": true
 		},
 		{
 			"name": "Way of the Sun Soul",
@@ -676,7 +677,8 @@
 				"Searing Arc Strike|Monk||Sun Soul|XGE|6",
 				"Searing Sunburst|Monk||Sun Soul|XGE|11",
 				"Sun Shield|Monk||Sun Soul|XGE|17"
-			]
+			],
+			"hasFluff": true
 		},
 		{
 			"name": "Way of Mercy",
@@ -1760,7 +1762,7 @@
 			"subclassSource": "PHB",
 			"level": 3,
 			"entries": [
-				"Monks of the Way of Shadow follow a tradition that values stealth and subterfuge. These monks might be called ninjas or shadowdancers, and they serve as spies and assassins. Sometimes the members of a ninja monastery are family members, forming a clan sworn to secrecy about their arts and missions. Other monasteries are more like thieves' guilds, hiring out their services to nobles, rich merchants, or anyone else who can pay their fees. Regardless of their methods, the heads of these monasteries expect the unquestioning obedience of their students.",
+				"Monks of the Way of Shadow follow a tradition that values stealth and subterfuge. These monks might be called ninjas or shadow dancers, and they serve as spies and assassins. Sometimes the members of a ninja monastery are family members, forming a clan sworn to secrecy about their arts and missions. Other monasteries are more like thieves' guilds, hiring out their services to nobles, rich merchants, or anyone else who can pay their fees. Regardless of their methods, the heads of these monasteries expect the unquestioning obedience of their students.",
 				{
 					"type": "refSubclassFeature",
 					"subclassFeature": "Shadow Arts|Monk||Shadow||3"
@@ -2577,7 +2579,7 @@
 					"type": "entries",
 					"name": "Kensei Weapons",
 					"entries": [
-						"Choose two types of weapons to be your kensei weapons: one melee weapon and one ranged weapon. Each of these weapons can be any {@filter simple or martial weapon|items|source=phb|category=basic|type=martial weapon;simple weapon} that lacks the heavy and special properties. The longbow is also a valid choice. You gain proficiency with these weapons if you don't already have it. Weapons of the chosen types are monk weapons for you. Many of this tradition's features work only with your kensei weapons. When you reach 6th, 11th, and 17th level in this class, you can choose another type of weapon\u2014either melee or ranged\u2014to be a kensei weapon for you, following the criteria above."
+						"Choose two types of weapons to be your kensei weapons: one melee weapon and one ranged weapon. Each of these weapons can be any {@filter simple or martial weapon that lacks the heavy and special properties|items|source=phb|type=simple weapon;martial weapon|property=!heavy;!special|category=basic}. The longbow is also a valid choice. You gain proficiency with these weapons if you don't already have it. Weapons of the chosen types are monk weapons for you. Many of this tradition's features work only with your kensei weapons. When you reach 6th, 11th, and 17th level in this class, you can choose another type of weapon\u2014either melee or ranged\u2014to be a kensei weapon for you, following the criteria above."
 					]
 				},
 				{
