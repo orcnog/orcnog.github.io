@@ -661,7 +661,7 @@ class ModalFilterSpells extends ModalFilterBase {
 		const time = PageFilterSpells.getTblTimeStr(spell.time[0]);
 		const school = Parser.spSchoolAndSubschoolsAbvsShort(spell.school, spell.subschools);
 		const concentration = spell._isConc ? "×" : "";
-		const range = Parser.spRangeToFull(spell.range);
+		const range = Parser.spRangeToFull(spell.range, {isDisplaySelfArea: true});
 
 		eleRow.innerHTML = `<div class="w-100 ve-flex-vh-center lst__row-border veapp__list-row no-select lst__wrp-cells">
 			<div class="ve-col-0-5 pl-0 ve-flex-vh-center">${this._isRadio ? `<input type="radio" name="radio" class="no-events">` : `<input type="checkbox" class="no-events">`}</div>
@@ -676,7 +676,7 @@ class ModalFilterSpells extends ModalFilterBase {
 			<div class="ve-col-1 px-1 sp__school-${spell.school} ve-text-center" title="${Parser.spSchoolAndSubschoolsAbvsToFull(spell.school, spell.subschools)}" ${Parser.spSchoolAbvToStyle(spell.school)}>${school}</div>
 			<div class="ve-col-0-5 px-1 ve-text-center" title="Concentration">${concentration}</div>
 			<div class="ve-col-2 px-1 ve-text-right">${range}</div>
-			<div class="ve-col-1 pl-1 pr-0 ve-flex-h-center ${Parser.sourceJsonToSourceClassname(spell.source)}" title="${Parser.sourceJsonToFull(spell.source)}" ${Parser.sourceJsonToStyle(spell.source)}>${source}${Parser.sourceJsonToMarkerHtml(spell.source)}</div>
+			<div class="ve-col-1 pl-1 pr-0 ve-flex-h-center ${Parser.sourceJsonToSourceClassname(spell.source)}" title="${Parser.sourceJsonToFull(spell.source)}">${source}${Parser.sourceJsonToMarkerHtml(spell.source, {isList: true})}</div>
 		</div>`;
 
 		const btnShowHidePreview = eleRow.firstElementChild.children[1].firstElementChild;
@@ -689,7 +689,7 @@ class ModalFilterSpells extends ModalFilterBase {
 				hash,
 				source,
 				sourceJson: spell.source,
-				page: spell.page,
+				...ListItem.getCommonValues(spell),
 				level: spell.level,
 				time,
 				school: Parser.spSchoolAbvToFull(spell.school),

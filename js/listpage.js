@@ -195,7 +195,7 @@ class SublistManager {
 	async _pBindSublistResizeHandlers () {
 		const STORAGE_KEY = "SUBLIST_RESIZE";
 
-		const $handle = $(`<div class="sublist__ele-resize mobile__hidden">...</div>`).appendTo(this._$wrpContainer);
+		const eleHandle = ee`<div class="sublist__ele-resize mobile__hidden">...</div>`.appendTo(this._$wrpContainer[0]);
 
 		let mousePos;
 		const resize = (evt) => {
@@ -206,9 +206,9 @@ class SublistManager {
 			this._$wrpContainer.css("height", parseInt(this._$wrpContainer.css("height")) + dx);
 		};
 
-		$handle
-			.on("mousedown", (evt) => {
-				if (evt.which !== 1) return;
+		eleHandle
+			.onn("mousedown", (evt) => {
+				if (evt.button !== 0) return;
 
 				evt.preventDefault();
 				mousePos = evt.clientY;
@@ -217,7 +217,7 @@ class SublistManager {
 			});
 
 		document.addEventListener("mouseup", evt => {
-			if (evt.which !== 1) return;
+			if (evt.button !== 0) return;
 
 			document.removeEventListener("mousemove", resize);
 			StorageUtil.pSetForPage(STORAGE_KEY, this._$wrpContainer.css("height"));
@@ -288,6 +288,7 @@ class SublistManager {
 				? new ContextUtil.Action(
 					"Send to Foundry",
 					() => this._pDoSendSublistToFoundry(),
+					{title: "A Rivet import will be run for each entry."},
 				)
 				: undefined,
 			null,
@@ -1240,11 +1241,13 @@ class ListPage {
 		});
 	}
 
+	async _pGetTableViewAdditionalData () { return null; }
+
 	_pOnLoad_tableView () {
 		if (!this._tableViewOptions) return;
 
-		$(`#btn-show-table`)
-			.click(() => {
+		es(`#btn-show-table`)
+			.onn("click", async () => {
 				const sublisted = this._sublistManager.getSublistedEntities();
 				UtilsTableview.show({
 					entities: sublisted.length
@@ -1253,6 +1256,7 @@ class ListPage {
 							.map(list => list.visibleItems.map(({ix}) => this._dataList[ix]))
 							.flat(),
 					sorter: (a, b) => SortUtil.ascSort(a.name, b.name) || SortUtil.ascSort(a.source, b.source),
+					additionalData: await this._pGetTableViewAdditionalData(),
 					...this._tableViewOptions,
 				});
 			});
@@ -1974,6 +1978,14 @@ class ListPage {
 		return this._pHandleUnknownHash_doSourceReload({source});
 	}
 
+	_pHandleUnknownHash_isRequireReload ({source}) {
+		return [
+			PrereleaseUtil,
+			BrewUtil2,
+		]
+			.some(brewUtil => brewUtil.hasSourceJson(source) && brewUtil.isReloadRequired());
+	}
+
 	_pHandleUnknownHash_doSourceReload ({source}) {
 		return [
 			PrereleaseUtil,
@@ -1981,8 +1993,7 @@ class ListPage {
 		]
 			.some(brewUtil => {
 				if (
-					brewUtil.hasSourceJson(source)
-					&& brewUtil.isReloadRequired()
+					this._pHandleUnknownHash_isRequireReload({source})
 				) {
 					brewUtil.doLocationReload();
 					return true;
@@ -2147,7 +2158,9 @@ class ListPage {
 	static _OFFSET_WINDOW_EXPORT_AS_IMAGE = 17;
 
 	_pHandleClick_exportAsImage_mutOptions ({$ele, optsDomToImage}) {
-		// See: https://github.com/1904labs/dom-to-image-more/issues/146
+		// See:
+		//  - https://github.com/1904labs/dom-to-image-more/issues/146
+		//  - https://github.com/1904labs/dom-to-image-more/issues/160
 		if (BrowserUtil.isFirefox()) {
 			const bcr = $ele[0].getBoundingClientRect();
 			optsDomToImage.width = bcr.width;
@@ -2155,6 +2168,8 @@ class ListPage {
 		}
 	}
 
+	// FIXME(Future)
+	//  - `table > caption` causes issues: https://github.com/1904labs/dom-to-image-more/issues/209
 	async _pHandleClick_exportAsImage ({evt, isFast, $eleCopyEffect}) {
 		if (typeof domtoimage === "undefined") await import("../lib/dom-to-image-more.min.js");
 

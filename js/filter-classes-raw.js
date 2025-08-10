@@ -24,10 +24,6 @@ class PageFilterClassesRaw extends PageFilterClassesBase {
 		this._sourceFilter.addItem(cls.source);
 		this._miscFilter.addItem(cls._fMisc);
 
-		if (cls.fluff) cls.fluff.forEach(it => this._addEntrySourcesToFilter(it));
-
-		cls.classFeatures.forEach(feature => feature.loadeds.forEach(ent => this._addEntrySourcesToFilter(ent.entity)));
-
 		cls.subclasses.forEach(sc => {
 			const isScExcluded = (subclassExclusions[sc.source] || {})[sc.name] || false;
 			if (!isScExcluded) {
@@ -1030,7 +1026,7 @@ class ModalFilterClasses extends ModalFilterBase {
 
 		eleLabel.innerHTML = `<div class="ve-col-1 pl-0 ve-flex-vh-center"><div class="fltr-cls__tgl"></div></div>
 		<div class="bold ve-col-9 ${cls._versionBase_isVersion ? "italic" : ""}">${cls._versionBase_isVersion ? `<span class="px-3"></span>` : ""}${cls.name}</div>
-		<div class="ve-col-2 pr-0 ve-flex-h-center ${Parser.sourceJsonToSourceClassname(cls.source)}" title="${Parser.sourceJsonToFull(cls.source)}" ${Parser.sourceJsonToStyle(cls.source)}>${source}${Parser.sourceJsonToMarkerHtml(cls.source)}</div>`;
+		<div class="ve-col-2 pr-0 ve-flex-h-center ${Parser.sourceJsonToSourceClassname(cls.source)}" title="${Parser.sourceJsonToFull(cls.source)}">${source}${Parser.sourceJsonToMarkerHtml(cls.source, {isList: true})}</div>`;
 
 		return new ListItem(
 			clsI,
@@ -1038,7 +1034,7 @@ class ModalFilterClasses extends ModalFilterBase {
 			`${cls.name} -- ${cls.source}`,
 			{
 				source: `${source} -- ${cls.name}`,
-				page: cls.page,
+				...ListItem.getCommonValues(cls),
 			},
 			{
 				ixClass: clsI,
@@ -1055,7 +1051,7 @@ class ModalFilterClasses extends ModalFilterBase {
 
 		eleLabel.innerHTML = `<div class="ve-col-1 pl-0 ve-flex-vh-center"><div class="fltr-cls__tgl"></div></div>
 		<div class="ve-col-9 pl-1 ve-flex-v-center ${sc._versionBase_isVersion ? "italic" : ""}">${sc._versionBase_isVersion ? `<span class="px-3"></span>` : ""}<span class="mx-3">\u2014</span> ${sc.name}</div>
-		<div class="ve-col-2 pr-0 ve-flex-h-center ${Parser.sourceJsonToSourceClassname(sc.source)}" title="${Parser.sourceJsonToFull(sc.source)}" ${Parser.sourceJsonToStyle(sc.source)}>${source}${Parser.sourceJsonToMarkerHtml(sc.source)}</div>`;
+		<div class="ve-col-2 pr-0 ve-flex-h-center ${Parser.sourceJsonToSourceClassname(sc.source)}" title="${Parser.sourceJsonToFull(sc.source)}">${source}${Parser.sourceJsonToMarkerHtml(sc.source, {isList: true})}</div>`;
 
 		return new ListItem(
 			`${clsI}--${scI}`,
@@ -1063,7 +1059,7 @@ class ModalFilterClasses extends ModalFilterBase {
 			`${cls.name} -- ${cls.source} -- ${sc.name} -- ${sc.source}`,
 			{
 				source: `${cls.source} -- ${cls.name} -- ${source} -- ${sc.name}`,
-				page: sc.page,
+				...ListItem.getCommonValues(sc),
 			},
 			{
 				ixClass: clsI,

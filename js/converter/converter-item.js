@@ -1,4 +1,4 @@
-import {AttachedSpellTag, BasicTextClean, BonusTag, ChargeTag, ConditionImmunityTag, DamageImmunityTag, DamageResistanceTag, DamageVulnerabilityTag, ItemMiscTag, ItemOtherTagsTag, ItemSpellcastingFocusTag, LightTag, RechargeAmountTag, RechargeTypeTag, ReqAttuneTagTag} from "./converterutils-item.js";
+import {AttachedSpellChargesTag, AttachedSpellTag, BasicTextClean, BonusTag, ChargeTag, ConditionImmunityTag, DamageImmunityTag, DamageResistanceTag, DamageVulnerabilityTag, ItemMiscTag, ItemOtherTagsTag, ItemSpellcastingFocusTag, LightTag, RechargeAmountTag, RechargeTypeTag, ReqAttuneTagTag} from "./converterutils-item.js";
 import {ConverterBase} from "./converter-base.js";
 import {ArtifactPropertiesTag, TagCondition} from "./converterutils-tags.js";
 import {TagJsons} from "./converterutils-entries.js";
@@ -126,6 +126,7 @@ export class ConverterItem extends ConverterBase {
 		ConditionImmunityTag.tryRun(stats, {cbMan: () => options.cbWarning(`${manName}Condition immunity tagging requires manual conversion`)});
 		ReqAttuneTagTag.tryRun(stats, {cbMan: () => options.cbWarning(`${manName}Attunement requirement tagging requires manual conversion`)});
 		AttachedSpellTag.tryRun(stats);
+		AttachedSpellChargesTag.tryRun(stats);
 		LightTag.tryRun(stats);
 
 		// TODO
@@ -435,7 +436,7 @@ export class ConverterItem extends ConverterBase {
 			"source",
 			"srd",
 			"basicRules",
-			"freeRules2024",
+			"basicRules2024",
 			"srd52",
 			"page",
 		]);
@@ -557,7 +558,8 @@ export class ConverterItem extends ConverterBase {
 		delete cpyStatsQuarterstaff.srd;
 		delete cpyStatsQuarterstaff.srd52;
 		delete cpyStatsQuarterstaff.basicRules;
-		delete cpyStatsQuarterstaff.freeRules2024;
+		delete cpyStatsQuarterstaff.basicRules2024;
+		delete cpyStatsQuarterstaff.reprintedAs;
 
 		Object.entries(cpyStatsQuarterstaff)
 			.filter(([k]) => !k.startsWith("_"))

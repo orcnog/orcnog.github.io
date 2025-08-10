@@ -327,7 +327,7 @@
 									"page": 10,
 									"id": "01d",
 									"entries": [
-										"See the {@hazard avalanche|idrotf} entry."
+										"See the {@hazard avalanche|IDRotF} entry."
 									]
 								},
 								{
@@ -336,7 +336,7 @@
 									"page": 10,
 									"id": "01e",
 									"entries": [
-										"See the {@hazard blizzard|idrotf} entry.",
+										"See the {@hazard blizzard|IDRotF} entry.",
 										{
 											"type": "image",
 											"href": {
@@ -2211,7 +2211,7 @@
 												"\"I'm getting the feeling Grynsk doesn't like me very much. Or anyone who steps between him and the gold swimming in this lake. I'm Tali. I'm studying the local animal life here in Icewind Dale. I just couldn't stay silent and watch another crew fall victim to the monster of Maer Dualdon.\""
 											]
 										},
-										"Tali is a neutral good half-elf researcher ({@creature scout}) who is in Icewind Dale to study how changes in climate alter the nature of the animal wildlife. Tali presents as neither male nor female and requests to be referred to as \"they\" or by name in conversation. Tali speaks with a soft voice and tends to go on longwinded tangents about the fauna that live in Icewind Dale.",
+										"Tali is a neutral good half-elf researcher ({@creature scout}) who is in Icewind Dale to study how changes in climate alter the nature of the animal wildlife. Tali presents as neither male nor female and requests to be referred to as \"they\" or by name in conversation. Tali speaks with a soft voice and tends to go on long-winded tangents about the fauna that live in Icewind Dale.",
 										"When Tali heard reports of a creature in Maer Dualdon that was attacking the Bremen fishing parties, the half-elf decided to investigate and found that boats from Bremen were the only vessels to suffer these attacks. After deducing this, Tali began frequenting the docks to warn any uninformed people looking to venture out onto the lake about the danger waiting there.",
 										"Descriptions of the monster vary wildly; some witnesses say it's the size of an ox, while others say it's closer to the size of a house. Some say the monster might be a whale or a large fish, and others describe it as more lizard-like in appearance, with scaly skin and a long neck. If the characters ask about Grynsk's damaged boat, Tali explains that it was actually found adrift, its crew presumably lost to the lake monster.",
 										"Being a researcher, Tali would like to better understand the monster, which has only recently become a threat. \"Perhaps this unending winter has affected its eating habits or demeanor in some way,\" speculates the half-elf.",
@@ -3280,7 +3280,7 @@
 							"id": "0bb",
 							"entries": [
 								"{@i Closed inn}",
-								"At the south end of town is Caer-Dineval's inn, a drafty old building with boarded-up windows and a crooked weathervane shaped like a rearing dragon. The place has been out of business for almost a year.",
+								"At the south end of town is Caer-Dineval's inn, a drafty old building with boarded-up windows and a crooked weather vane shaped like a rearing dragon. The place has been out of business for almost a year.",
 								"Six {@creature duergar} hide inside the ramshackle inn and remain out of sight until Xardorok's chardalyn dragon attacks the town (see {@adventure chapter 4|IDRotF|14})."
 							]
 						},
@@ -8231,7 +8231,7 @@
 									"page": 58,
 									"id": "157",
 									"entries": [
-										"Hilda married her older brother, who was a hunter. He passed away a few years ago but left behind some magic boots he won from a wayward adventurer he bested in a drinking contest. If one or both of her children are returned safely, Hilda gives the characters her husband's {@item boots of the winterlands} as a thank-you."
+										"Hilda married her older brother, who was a hunter. He passed away a few years ago but left behind some magic boots he won from a wayward adventurer he bested in a drinking contest. If one or both of her children are returned safely, Hilda gives the characters her husband's {@item Boots of the Winterlands} as a thank-you."
 									]
 								}
 							]
@@ -22822,7 +22822,7 @@
 					"page": 101,
 					"id": "27d",
 					"entries": [
-						"This chapter takes the adventure beyond Ten-Towns into the far reaches of Icewind Dale, to places the adventurers might visit as they investigate tall tales or undertake quests. These adventure locations are scattered across Icewind Dale, as shown on {@adventure map 2.1|IDRotF|12|Map 2.1: icewind dale}. Also marked on this map are the remote locations featured in {@adventure chapters 3|IDRotF|13}, {@adventure 6|IDRotF|16}, and {@adventure 7|IDRotF|17}.",
+						"This chapter takes the adventure beyond Ten-Towns into the far reaches of Icewind Dale, to places the adventurers might visit as they investigate tall tales or undertake quests. These adventure locations are scattered across Icewind Dale, as shown on {@adventure map 2.1|IDRotF|12|Map 2.1: Icewind Dale}. Also marked on this map are the remote locations featured in {@adventure chapters 3|IDRotF|13}, {@adventure 6|IDRotF|16}, and {@adventure 7|IDRotF|17}.",
 						{
 							"type": "entries",
 							"name": "Character Advancement",
@@ -23004,7 +23004,7 @@
 									"id": "287",
 									"entries": [
 										"Karkolohk quest (see \"{@area Karkolohk|389|x}\")",
-										"A goblin messenger from Karkolohk was recently captured in Bryn Shander and found to be carrying a declaration of peace from Chief Yarb-Gnock, addressed to Speaker Duvessa Shane. Yarb-Gnock would like Speaker Shane to send delegates to Karkolohk to conduct \"treaty negotiations.\" Sherriff Markham Southwell doesn't believe a word of Yarb-Gnock's message and offers a reward of 300 gp for the goblin chieftain's head.",
+										"A goblin messenger from Karkolohk was recently captured in Bryn Shander and found to be carrying a declaration of peace from Chief Yarb-Gnock, addressed to Speaker Duvessa Shane. Yarb-Gnock would like Speaker Shane to send delegates to Karkolohk to conduct \"treaty negotiations.\" Sheriff Markham Southwell doesn't believe a word of Yarb-Gnock's message and offers a reward of 300 gp for the goblin chieftain's head.",
 										"Upon arriving at Karkolohk, the characters discover that the declaration of peace is either a genuine attempt to end hostilities with Ten-Towns, or a desperate ploy by Yarb-Gnock to lure adventurers to Karkolohk to that they can help him escape. As the DM, you get to determine Yarb-Gnock's true intentions (see \"{@area Gnome Diplomacy|38d|x}\" for more information)."
 									]
 								},
@@ -23016,7 +23016,7 @@
 									"entries": [
 										"Lost Spire of Netheril quest (see \"{@area Lost Spire of Netheril|3a8|x}\")",
 										"Yeti are growing bold and striking closer to Ten-Towns than ever before, going so far as to venture onto frozen lakes to attack ice fishers. Local merchants who earn a living selling yeti hides and meat are offering up to 100 gp for every dead yeti brought back to Ten-Towns.",
-										"A hunter named Mylbor Tafferac (neutral evil human {@creature gladiator} with {@skill Survival} +7) has been scouring the tundra for the Red Yeti\u2014a yeti so terrifying and cruel that its fur is stained red with the blood of its kills. One night at a tavern, Mylbor bets the characters 300 gp that he'll find and kill the Red Yeti before they can. If the characters take the bet, the contest sparks excitement in taverns across Ten-Towns, leading to all sorts of side-betting.",
+										"A hunter named Mylbor Tafferac (neutral evil human {@creature gladiator} with {@skill Survival} {@skillCheck survival 7}) has been scouring the tundra for the Red Yeti\u2014a yeti so terrifying and cruel that its fur is stained red with the blood of its kills. One night at a tavern, Mylbor bets the characters 300 gp that he'll find and kill the Red Yeti before they can. If the characters take the bet, the contest sparks excitement in taverns across Ten-Towns, leading to all sorts of side-betting.",
 										"The characters' search for the Red Yeti leads to the accidental discovery of the Lost Spire of Netheril. Only after the characters explore the lost spire and return to Ten-Towns do they discover the Red Yeti is dead\u2014found and killed by the incomparable Mylbor Tafferac."
 									]
 								},
@@ -30515,7 +30515,7 @@
 									"page": 132,
 									"id": "347",
 									"entries": [
-										"Seven days ago, spacefaring mind flayers hoping to capture some interesting species for study crashed their ship\u2014a nautiloid called the {@i Id Ascendant}\u2014while trying to fly it through a blizzard. The ship's cocaptains, Vorryn Q'uuol and Dredavex Sinfiz, are chaotic neutral gnome ceremorphs, which are smaller-than-normal mind flayers spawned from gnome hosts. Their crew consists of three gnome squidlings named Rin, Rix, and Zglarrd. See the \"Mind Flayers\" entry in {@adventure appendix C|IDRotF|21} for more information about gnome ceremorphs and squidlings.",
+										"Seven days ago, spacefaring mind flayers hoping to capture some interesting species for study crashed their ship\u2014a nautiloid called the {@i Id Ascendant}\u2014while trying to fly it through a blizzard. The ship's co-captains, Vorryn Q'uuol and Dredavex Sinfiz, are chaotic neutral gnome ceremorphs, which are smaller-than-normal mind flayers spawned from gnome hosts. Their crew consists of three gnome squidlings named Rin, Rix, and Zglarrd. See the \"Mind Flayers\" entry in {@adventure appendix C|IDRotF|21} for more information about gnome ceremorphs and squidlings.",
 										"The illithids are stuck unless they can find a {@item psi crystal|IDRotF} (see {@adventure appendix D|IDRotF|22}) to jump-start the ship's propulsion system. Vorryn and Dredavex are expending considerable effort to keep their ship functional and thus cannot conduct the search themselves. They also can't trust the moronic squidlings to accomplish such a delicate task. For these reasons, the gnome ceremorphs need help. They have built a device that can detect the presence of {@item Psi Crystal|IDRotF|psi crystals} in a 5-mile radius but haven't found any. The characters might have harvested a {@item psi crystal|IDRotF} from the gem mine near Termalaine (see \"{@area A Beautiful Mine|24d|x}\"), in which case the gnome ceremorphs would be very interested in acquiring it.",
 										"Complicating matters is the damage done by the crash to the nautiloid's life support system, for once this system shuts down, the illithids are at risk of freezing to death. If the shutdown occurs before they acquire a {@item psi crystal|IDRotF}, the gnome ceremorphs' back-up plan is to activate the nautiloid's self-destruct system (see {@area area N7|363|x}) before abandoning ship and making their way toward Ten-Towns with the gnome squidlings in tow.",
 										{
@@ -30545,7 +30545,7 @@
 											"page": 133,
 											"id": "34a",
 											"entries": [
-												"After the {@i Id Ascendant} crashed, the gnome ceremorphs activated a distress signal meant to be heard only by creatures that have telepathy, including any character who is attuned to the {@i psi crystal} found in the gem mine outside Termalaine (see \"{@area A Beautiful Mine|24d|x}\"). The signal's technology hasn't been perfected yet, such that nontelepathic creatures have been known to pick up the signal as well. You get to decide whether a nontelepathic creature can sense the signal or not.",
+												"After the {@i Id Ascendant} crashed, the gnome ceremorphs activated a distress signal meant to be heard only by creatures that have telepathy, including any character who is attuned to the {@i psi crystal} found in the gem mine outside Termalaine (see \"{@area A Beautiful Mine|24d|x}\"). The signal's technology hasn't been perfected yet, such that non-telepathic creatures have been known to pick up the signal as well. You get to decide whether a non-telepathic creature can sense the signal or not.",
 												"The psionic transmitter broadcasts on an endless loop until Vorryn or Dredavex decides to shut it off, or until the transmitter is disabled or destroyed (see {@area area N7|363|x}).",
 												"The signal has a range of 50 miles. Those lucky few who can detect it and set out for the source can feel it guiding them toward the downed nautiloid. The signal is a sequence of words in Deep Speech with a buzzing undertone. Any creature that understands Deep Speech and is sensitive to the signal can translate the message:",
 												{
@@ -32569,7 +32569,7 @@
 									"type": "list",
 									"items": [
 										"The characters learn about the goblin fortress while they're in Ten-Towns (see \"{@area Tall Tales in Ten-Towns|27f|x}\").",
-										"Sherriff Markham Southwell of Bryn Shander hires the characters to bring him the head of the goblin chief, Yarb-Gnock (see \"{@area Peace Out|287|x}\" and \"{@area Gnome Diplomacy|38d|x}\" below).",
+										"Sheriff Markham Southwell of Bryn Shander hires the characters to bring him the head of the goblin chief, Yarb-Gnock (see \"{@area Peace Out|287|x}\" and \"{@area Gnome Diplomacy|38d|x}\" below).",
 										"The characters follow a goblin wagon heading back to Karkolohk (see \"{@area Foaming Mugs|0a1|x}\").",
 										"The characters find a shield guardian's amulet in the Lost Spire of Netheril (see \"{@area Lost Spire of Netheril|3a8|x}\") and use its tracking feature, which leads them to Karkolohk, where the shield guardian is found."
 									]
@@ -36996,7 +36996,7 @@
 											"id": "40f",
 											"entries": [
 												"The prisoners are kept in these unlit cells behind barred gates that can be opened only from area R18. The gates are too secure to be forced open using brute strength or weapons, and magical attempts to open or bypass them are thwarted by permanent antimagic fields. Each field encompasses one cell and its gate. Spells and other magical effects, except those created by an artifact or a deity, are suppressed in an antimagic field and can't protrude into it. While an effect is suppressed, it doesn't function, but the time it spends suppressed counts against its duration.",
-												"Bolted to the back wall of each cell is an iron bunkbed with a thin mattress atop it and a waste bucket nearby. Prisoners take their meals in their cells.",
+												"Bolted to the back wall of each cell is an iron bunk bed with a thin mattress atop it and a waste bucket nearby. Prisoners take their meals in their cells.",
 												{
 													"type": "entries",
 													"name": "Prisoners",
@@ -37104,8 +37104,8 @@
 											"id": "414",
 											"entries": [
 												"Characters who climb the spiral staircase come to a door 100 feet above the prison roof. The staircase continues beyond this door to the tower's higher levels.",
-												"The door opens into a room filled with wooden bunkbeds. Areas to the north, west, and south can be scanned through 4-foot-tall, 1-foot-wide arrow slits. The {@spell continual flame} spells that light the room can be dimmed or brightened by uttering a command word (\"lights\").",
-												"When the prison is not on high alert, fifty guards ({@creature Veteran||veterans} without armor or weapons) sleep in the bunks. The guards keep their armor and weapons within easy reach. Other belongings are kept in unlocked footlockers tucked under the bunkbeds.",
+												"The door opens into a room filled with wooden bunk beds. Areas to the north, west, and south can be scanned through 4-foot-tall, 1-foot-wide arrow slits. The {@spell continual flame} spells that light the room can be dimmed or brightened by uttering a command word (\"lights\").",
+												"When the prison is not on high alert, fifty guards ({@creature Veteran||veterans} without armor or weapons) sleep in the bunks. The guards keep their armor and weapons within easy reach. Other belongings are kept in unlocked footlockers tucked under the bunk beds.",
 												"The guards need 10 minutes to don their armor. If the prison is put on high alert, the guards take the time to put on their armor before making their way down to area R18."
 											]
 										},
@@ -40398,7 +40398,7 @@
 											"id": "454",
 											"entries": [
 												"These 10-foot-high caves are the quarters of the chieftain and the best warriors of the clan. Ogolai claims the southernmost cave, where the tribe's valuables are kept (see \"Treasure\" below).",
-												"The northernmost cave contains a wounded {@creature aarakocra} named Sikki-kree, who is being tended to by a {@creature goliath warrior|IDRotF} named {@creature Aruk Thundercaller Thuunlakalaga|IDRotF}, who has {@skill Insight} +4 and {@skill Medicine} +4. Sikki-kree crashed in the mountains when she was caught in a blizzard and was rescued by goliath hunters. Aruk has been nursing the aarakocra back to health, but he can do only so much. Although Sikki-kree's minor wounds have healed, she has a broken wing that requires at least 10 hit points of magical healing to be mended. The goliaths of Wyrmdoom Crag have no such magic at their disposal. Any character who helps Sikki-kree regain her ability to fly earns the aarakocra's gratitude and the respect of the Wyrmdoom goliaths.",
+												"The northernmost cave contains a wounded {@creature aarakocra} named Sikki-kree, who is being tended to by a {@creature goliath warrior|IDRotF} named {@creature Aruk Thundercaller Thuunlakalaga|IDRotF}, who has {@skill Insight} {@skillCheck insight 4} and {@skill Medicine} {@skillCheck medicine 4}. Sikki-kree crashed in the mountains when she was caught in a blizzard and was rescued by goliath hunters. Aruk has been nursing the aarakocra back to health, but he can do only so much. Although Sikki-kree's minor wounds have healed, she has a broken wing that requires at least 10 hit points of magical healing to be mended. The goliaths of Wyrmdoom Crag have no such magic at their disposal. Any character who helps Sikki-kree regain her ability to fly earns the aarakocra's gratitude and the respect of the Wyrmdoom goliaths.",
 												"Once Sikki-kree can fly again, she thanks the characters for their help before getting Ogolai's permission to depart. Ogolai is indebted to the characters for helping the aarakocra, enough that she will agree to a meeting with the chieftain of the Skytower goliaths if the characters request one.",
 												{
 													"type": "entries",
@@ -40487,7 +40487,7 @@
 										"\"Our militia captured one of the duergar and forced it to divulge the location of their mountain stronghold. Therein you will find a duergar warlord named {@creature Xardorok Sunblight|IDRotF}. He aims to conquer Icewind Dale and destroy us all. For the good of Ten-Towns, will you penetrate the duergar fortress, slay this evil warlord, and destroy his terrible weapon?\""
 									]
 								},
-								"If the characters accept this quest, the speaker provides them with a map of Icewind Dale that marks the location of the duergar fortress, as shown on map 2.1 (see \"{@adventure Map 2.1 Icewind Dale|IDRotF|12|Map 2.1: icewind dale}\"). For the benefit of your players, you can point to the fortress's location using the poster map of Icewind Dale.",
+								"If the characters accept this quest, the speaker provides them with a map of Icewind Dale that marks the location of the duergar fortress, as shown on map 2.1 (see \"{@adventure Map 2.1 Icewind Dale|IDRotF|12|Map 2.1: Icewind Dale}\"). For the benefit of your players, you can point to the fortress's location using the poster map of Icewind Dale.",
 								"If the characters ask to speak with the captured duergar, the speaker informs them that the duergar was put to death following the interrogation, to keep him escaping and warning his kin. If the characters insist on seeing the duergar, the speaker takes them to a cellar where the body is being kept. Any character who casts a {@spell speak with dead} spell on the dead duergar can validate the information that the speaker has already imparted.",
 								"The speaker has little to offer the characters as recompense beyond hospitality and friendship. If the characters insist on a more tangible reward, the speaker scowls, apologizes for misjudging them, and lets them go about their business. Their reputation takes a blow if they decline to help. Regardless of the meeting's outcome, the speaker's next task is to prepare the settlement for what will surely be the fight of its life, in the event that Xardorok's construct attacks Ten-Towns."
 							]
@@ -41345,6 +41345,1360 @@
 															2574
 														]
 													]
+												},
+												{
+													"area": "4ce",
+													"points": [
+														[
+															2426,
+															3644
+														],
+														[
+															2426,
+															3485
+														],
+														[
+															2523,
+															3485
+														],
+														[
+															2523,
+															3397
+														],
+														[
+															2941,
+															3397
+														],
+														[
+															2941,
+															3481
+														],
+														[
+															3029,
+															3481
+														],
+														[
+															3029,
+															3644
+														]
+													]
+												},
+												{
+													"area": "4d9",
+													"points": [
+														[
+															2951,
+															3745
+														],
+														[
+															3035,
+															3745
+														],
+														[
+															3035,
+															3780
+														],
+														[
+															3071,
+															3780
+														],
+														[
+															3123,
+															3829
+														],
+														[
+															3123,
+															3916
+														],
+														[
+															3070,
+															3965
+														],
+														[
+															3019,
+															3965
+														],
+														[
+															3019,
+															4002
+														],
+														[
+															2951,
+															4002
+														]
+													]
+												},
+												{
+													"area": "4dd",
+													"points": [
+														[
+															3239,
+															3693
+														],
+														[
+															3278,
+															3693
+														],
+														[
+															3297,
+															3741
+														],
+														[
+															3323,
+															3693
+														],
+														[
+															3361,
+															3693
+														],
+														[
+															3387,
+															3741
+														],
+														[
+															3415,
+															3693
+														],
+														[
+															3451,
+															3693
+														],
+														[
+															3473,
+															3745
+														],
+														[
+															3503,
+															3693
+														],
+														[
+															3542,
+															3693
+														],
+														[
+															3558,
+															3741
+														],
+														[
+															3558,
+															4002
+														],
+														[
+															3535,
+															4052
+														],
+														[
+															3492,
+															4052
+														],
+														[
+															3470,
+															4007
+														],
+														[
+															3447,
+															4055
+														],
+														[
+															3403,
+															4055
+														],
+														[
+															3383,
+															4004
+														],
+														[
+															3358,
+															4058
+														],
+														[
+															3321,
+															4058
+														],
+														[
+															3297,
+															4001
+														],
+														[
+															3271,
+															4057
+														],
+														[
+															3233,
+															4057
+														],
+														[
+															3217,
+															3997
+														],
+														[
+															3217,
+															3745
+														]
+													]
+												},
+												{
+													"area": "4c5",
+													"points": [
+														[
+															1811,
+															4538
+														],
+														[
+															1953,
+															4538
+														],
+														[
+															1953,
+															4493
+														],
+														[
+															1991,
+															4493
+														],
+														[
+															1991,
+															4538
+														],
+														[
+															2062,
+															4538
+														],
+														[
+															2062,
+															4706
+														],
+														[
+															1811,
+															4706
+														]
+													]
+												},
+												{
+													"area": "4c8",
+													"points": [
+														[
+															2081,
+															4535
+														],
+														[
+															2081,
+															4701
+														],
+														[
+															2247,
+															4701
+														],
+														[
+															2247,
+															4535
+														]
+													]
+												},
+												{
+													"area": "4d2",
+													"points": [
+														[
+															2423,
+															4356
+														],
+														[
+															2423,
+															4522
+														],
+														[
+															2681,
+															4522
+														],
+														[
+															2681,
+															4356
+														]
+													]
+												},
+												{
+													"area": "4d7",
+													"points": [
+														[
+															2777,
+															4357
+														],
+														[
+															3036,
+															4357
+														],
+														[
+															3036,
+															4573
+														],
+														[
+															3004,
+															4612
+														],
+														[
+															2945,
+															4612
+														],
+														[
+															2929,
+															4599
+														],
+														[
+															2892,
+															4599
+														],
+														[
+															2875,
+															4618
+														],
+														[
+															2817,
+															4618
+														],
+														[
+															2777,
+															4577
+														]
+													]
+												},
+												{
+													"area": "4cc",
+													"points": [
+														[
+															2462,
+															3825
+														],
+														[
+															2518,
+															3828
+														],
+														[
+															2606,
+															3825
+														],
+														[
+															2679,
+															3826
+														],
+														[
+															2679,
+															3917
+														],
+														[
+															2518,
+															3917
+														],
+														[
+															2492,
+															3919
+														],
+														[
+															2463,
+															3914
+														]
+													]
+												},
+												{
+													"area": "4bc",
+													"points": [
+														[
+															1327,
+															3306
+														],
+														[
+															1375,
+															3306
+														],
+														[
+															1375,
+															3261
+														],
+														[
+															1975,
+															3261
+														],
+														[
+															1975,
+															3306
+														],
+														[
+															2023,
+															3306
+														],
+														[
+															2023,
+															3383
+														],
+														[
+															1327,
+															3383
+														]
+													]
+												},
+												{
+													"area": "4b7",
+													"points": [
+														[
+															1487,
+															4039
+														],
+														[
+															1487,
+															4241
+														],
+														[
+															1686,
+															4241
+														],
+														[
+															1686,
+															4039
+														]
+													]
+												},
+												{
+													"area": "4b8",
+													"points": [
+														[
+															1457,
+															4357
+														],
+														[
+															1457,
+															4532
+														],
+														[
+															1723,
+															4532
+														],
+														[
+															1723,
+															4357
+														]
+													]
+												},
+												{
+													"area": "4bf",
+													"points": [
+														[
+															1817,
+															4273
+														],
+														[
+															1817,
+															4525
+														],
+														[
+															2241,
+															4525
+														],
+														[
+															2241,
+															4273
+														]
+													]
+												},
+												{
+													"area": "4ba",
+													"points": [
+														[
+															1467,
+															4583
+														],
+														[
+															1715,
+															4583
+														],
+														[
+															1715,
+															4828
+														],
+														[
+															1635,
+															4828
+														],
+														[
+															1635,
+															4842
+														],
+														[
+															1543,
+															4842
+														],
+														[
+															1543,
+															4826
+														],
+														[
+															1467,
+															4826
+														]
+													]
+												},
+												{
+													"area": "4a8",
+													"points": [
+														[
+															759,
+															4097
+														],
+														[
+															759,
+															4439
+														],
+														[
+															1364,
+															4439
+														],
+														[
+															1364,
+															4097
+														]
+													]
+												},
+												{
+													"area": "4ae",
+													"points": [
+														[
+															759,
+															4452
+														],
+														[
+															759,
+															4701
+														],
+														[
+															926,
+															4701
+														],
+														[
+															926,
+															4452
+														]
+													]
+												},
+												{
+													"area": "4ac",
+													"points": [
+														[
+															1201,
+															4449
+														],
+														[
+															1201,
+															4701
+														],
+														[
+															1367,
+															4701
+														],
+														[
+															1367,
+															4449
+														]
+													]
+												},
+												{
+													"area": "4b0",
+													"points": [
+														[
+															940,
+															4453
+														],
+														[
+															940,
+															4705
+														],
+														[
+															1190,
+															4705
+														],
+														[
+															1190,
+															4453
+														]
+													]
+												},
+												{
+													"area": "4a7",
+													"points": [
+														[
+															932,
+															3834
+														],
+														[
+															932,
+															4074
+														],
+														[
+															1188,
+															4074
+														],
+														[
+															1188,
+															3834
+														]
+													]
+												},
+												{
+													"area": "4b6",
+													"points": [
+														[
+															1547,
+															3741
+														],
+														[
+															1547,
+															4001
+														],
+														[
+															2070,
+															4001
+														],
+														[
+															2070,
+															3741
+														]
+													]
+												},
+												{
+													"area": "4b3",
+													"points": [
+														[
+															1266,
+															3641
+														],
+														[
+															1178,
+															3783
+														],
+														[
+															1216,
+															3783
+														],
+														[
+															1291,
+															3673
+														]
+													]
+												},
+												{
+													"area": "4a2",
+													"points": [
+														[
+															749,
+															3207
+														],
+														[
+															822,
+															3215
+														],
+														[
+															869,
+															3220
+														],
+														[
+															906,
+															3213
+														],
+														[
+															938,
+															3229
+														],
+														[
+															973,
+															3241
+														],
+														[
+															997,
+															3271
+														],
+														[
+															1010,
+															3311
+														],
+														[
+															1018,
+															3362
+														],
+														[
+															1018,
+															3391
+														],
+														[
+															1022,
+															3442
+														],
+														[
+															1027,
+															3468
+														],
+														[
+															1037,
+															3521
+														],
+														[
+															1035,
+															3618
+														],
+														[
+															995,
+															3665
+														],
+														[
+															946,
+															3674
+														],
+														[
+															898,
+															3621
+														],
+														[
+															888,
+															3538
+														],
+														[
+															910,
+															3468
+														],
+														[
+															934,
+															3439
+														],
+														[
+															923,
+															3383
+														],
+														[
+															922,
+															3324
+														],
+														[
+															904,
+															3301
+														],
+														[
+															862,
+															3289
+														],
+														[
+															806,
+															3279
+														],
+														[
+															750,
+															3290
+														],
+														[
+															712,
+															3281
+														]
+													]
+												},
+												{
+													"area": "4a5",
+													"points": [
+														[
+															752,
+															3501
+														],
+														[
+															723,
+															3487
+														],
+														[
+															656,
+															3482
+														],
+														[
+															613,
+															3474
+														],
+														[
+															605,
+															3436
+														],
+														[
+															587,
+															3409
+														],
+														[
+															581,
+															3476
+														],
+														[
+															494,
+															3476
+														],
+														[
+															482,
+															3447
+														],
+														[
+															466,
+															3449
+														],
+														[
+															453,
+															3476
+														],
+														[
+															341,
+															3487
+														],
+														[
+															317,
+															3501
+														],
+														[
+															355,
+															3508
+														],
+														[
+															429,
+															3511
+														],
+														[
+															448,
+															3521
+														],
+														[
+															451,
+															3601
+														],
+														[
+															446,
+															3647
+														],
+														[
+															416,
+															3644
+														],
+														[
+															406,
+															3609
+														],
+														[
+															384,
+															3564
+														],
+														[
+															374,
+															3612
+														],
+														[
+															365,
+															3653
+														],
+														[
+															344,
+															3629
+														],
+														[
+															331,
+															3575
+														],
+														[
+															315,
+															3599
+														],
+														[
+															314,
+															3658
+														],
+														[
+															267,
+															3647
+														],
+														[
+															250,
+															3575
+														],
+														[
+															234,
+															3612
+														],
+														[
+															234,
+															3644
+														],
+														[
+															182,
+															3674
+														],
+														[
+															203,
+															3692
+														],
+														[
+															274,
+															3690
+														],
+														[
+															350,
+															3693
+														],
+														[
+															365,
+															3701
+														],
+														[
+															381,
+															3759
+														],
+														[
+															368,
+															3813
+														],
+														[
+															363,
+															3828
+														],
+														[
+															317,
+															3826
+														],
+														[
+															310,
+															3754
+														],
+														[
+															293,
+															3740
+														],
+														[
+															290,
+															3781
+														],
+														[
+															286,
+															3828
+														],
+														[
+															230,
+															3829
+														],
+														[
+															227,
+															3793
+														],
+														[
+															213,
+															3769
+														],
+														[
+															208,
+															3823
+														],
+														[
+															163,
+															3844
+														],
+														[
+															200,
+															3869
+														],
+														[
+															235,
+															3857
+														],
+														[
+															237,
+															3903
+														],
+														[
+															248,
+															3937
+														],
+														[
+															259,
+															3901
+														],
+														[
+															272,
+															3866
+														],
+														[
+															363,
+															3866
+														],
+														[
+															366,
+															3917
+														],
+														[
+															373,
+															3957
+														],
+														[
+															394,
+															4002
+														],
+														[
+															400,
+															3937
+														],
+														[
+															432,
+															3951
+														],
+														[
+															453,
+															3977
+														],
+														[
+															445,
+															4020
+														],
+														[
+															427,
+															4073
+														],
+														[
+															416,
+															4081
+														],
+														[
+															400,
+															4159
+														],
+														[
+															326,
+															4177
+														],
+														[
+															315,
+															4121
+														],
+														[
+															309,
+															4029
+														],
+														[
+															315,
+															3970
+														],
+														[
+															293,
+															3941
+														],
+														[
+															282,
+															3978
+														],
+														[
+															286,
+															4004
+														],
+														[
+															197,
+															4005
+														],
+														[
+															165,
+															4023
+														],
+														[
+															187,
+															4045
+														],
+														[
+															235,
+															4044
+														],
+														[
+															280,
+															4049
+														],
+														[
+															286,
+															4109
+														],
+														[
+															286,
+															4167
+														],
+														[
+															234,
+															4169
+														],
+														[
+															219,
+															4117
+														],
+														[
+															206,
+															4082
+														],
+														[
+															197,
+															4133
+														],
+														[
+															198,
+															4165
+														],
+														[
+															144,
+															4181
+														],
+														[
+															163,
+															4197
+														],
+														[
+															221,
+															4201
+														],
+														[
+															286,
+															4210
+														],
+														[
+															309,
+															4226
+														],
+														[
+															302,
+															4276
+														],
+														[
+															218,
+															4273
+														],
+														[
+															170,
+															4290
+														],
+														[
+															195,
+															4308
+														],
+														[
+															253,
+															4306
+														],
+														[
+															312,
+															4317
+														],
+														[
+															314,
+															4364
+														],
+														[
+															258,
+															4364
+														],
+														[
+															234,
+															4373
+														],
+														[
+															243,
+															4389
+														],
+														[
+															312,
+															4401
+														],
+														[
+															288,
+															4412
+														],
+														[
+															210,
+															4417
+														],
+														[
+															187,
+															4362
+														],
+														[
+															179,
+															4415
+														],
+														[
+															141,
+															4425
+														],
+														[
+															165,
+															4437
+														],
+														[
+															221,
+															4439
+														],
+														[
+															318,
+															4439
+														],
+														[
+															301,
+															4455
+														],
+														[
+															274,
+															4474
+														],
+														[
+															310,
+															4485
+														],
+														[
+															314,
+															4537
+														],
+														[
+															323,
+															4575
+														],
+														[
+															344,
+															4549
+														],
+														[
+															347,
+															4514
+														],
+														[
+															402,
+															4505
+														],
+														[
+															347,
+															4477
+														],
+														[
+															352,
+															4441
+														],
+														[
+															357,
+															4388
+														],
+														[
+															349,
+															4327
+														],
+														[
+															414,
+															4308
+														],
+														[
+															470,
+															4281
+														],
+														[
+															488,
+															4125
+														],
+														[
+															512,
+															4010
+														],
+														[
+															498,
+															3986
+														],
+														[
+															480,
+															3940
+														],
+														[
+															450,
+															3911
+														],
+														[
+															411,
+															3903
+														],
+														[
+															406,
+															3860
+														],
+														[
+															474,
+															3868
+														],
+														[
+															534,
+															3855
+														],
+														[
+															491,
+															3831
+														],
+														[
+															488,
+															3775
+														],
+														[
+															453,
+															3786
+														],
+														[
+															456,
+															3831
+														],
+														[
+															410,
+															3823
+														],
+														[
+															398,
+															3695
+														],
+														[
+															573,
+															3692
+														],
+														[
+															582,
+															3644
+														],
+														[
+															550,
+															3607
+														],
+														[
+															574,
+															3599
+														],
+														[
+															590,
+															3569
+														],
+														[
+															624,
+															3597
+														],
+														[
+															648,
+															3573
+														],
+														[
+															677,
+															3569
+														],
+														[
+															677,
+															3596
+														],
+														[
+															715,
+															3602
+														],
+														[
+															739,
+															3586
+														],
+														[
+															750,
+															3556
+														]
+													]
 												}
 											],
 											"hrefThumbnail": {
@@ -41447,7 +42801,7 @@
 												"A low stone table flanked by stone benches dominates this room, which is heated and illuminated by braziers of glowing-hot coals. Through the hazy smoke, you see featureless stone doors lining the walls."
 											]
 										},
-										"A female {@creature duergar} guard stands in front of an arrow slit that peers into area X2. Additionally, eight {@creature duergar} guards rest in the smaller rooms attached to this one. Each of these 10-foot-square rooms has three stone bunkbeds protruding from its walls.",
+										"A female {@creature duergar} guard stands in front of an arrow slit that peers into area X2. Additionally, eight {@creature duergar} guards rest in the smaller rooms attached to this one. Each of these 10-foot-square rooms has three stone bunk beds protruding from its walls.",
 										{
 											"type": "entries",
 											"name": "Secret Door",
@@ -42205,7 +43559,7 @@
 											"entries": [
 												"Xardorok deals an extra 5 ({@dice 1d10}) psychic damage to any creature he hits with a weapon attack, and he regains a number of hit points equal to the amount of psychic damage dealt.",
 												"A character who succeeds on a {@dc 20} Intelligence ({@skill Religion}) check recognizes the statue as a depiction of Deep Duerra (see the \"Deep Duerra\" sidebar). Dwarves have advantage on this check. The flame rising from the statue's head symbolizes Deep Duerra's destructive, all-consuming mind. If a creature uses an action to extinguish this fire, Xardorok loses his Psychic Conquest trait.",
-												"The creature chained to the statue's base is a {@creature mind flayer} with 9 hit points and no armor (AC 11). Klondorn, the duergar priest (see area X31), has amputated its face-tentacles and removed the part of its brain that enables the mind flayer to use its psionic powers. Consequently, it has no innate spellcasting abilities and no effective attacks. It retains its Magic Resistance and its telepathy, however. Its challenge rating is 0 (0 XP).",
+												"The creature chained to the statue's base is a {@creature mind flayer} with 9 hit points and no armor (AC 11). Klondorn, the duergar priest (see {@area area X31|4c8|x}), has amputated its face-tentacles and removed the part of its brain that enables the mind flayer to use its psionic powers. Consequently, it has no innate spellcasting abilities and no effective attacks. It retains its Magic Resistance and its telepathy, however. Its challenge rating is 0 (0 XP).",
 												"The mind flayer doesn't expect sympathy from the characters and shies away from them. If the characters question it, the mind flayer shares the following information with one of them telepathically:",
 												{
 													"type": "list",
@@ -42354,7 +43708,7 @@
 											"page": 184,
 											"id": "4d1",
 											"entries": [
-												"Each of the smaller rooms has three stone bunkbeds protruding from its walls."
+												"Each of the smaller rooms has three stone bunk beds protruding from its walls."
 											]
 										}
 									]
@@ -42482,8 +43836,8 @@
 												"{@b Chest 1} contains a dozen stoppered gourds, each holding a pint of a fiercely hot liquor made from fire lichen, which grows in the Underdark. Each gourd can be sold to a tavernkeeper in Ten-Towns for 10 gp.",
 												"{@b Chest 2} holds a gold mask shaped like the visage of a male drow (750 gp), lying on a bed of 350 gp.",
 												"{@b Chest 3} contains a silver chalice shaped in the likeness of a spider and inlaid with eight obsidian eyes (250 gp).",
-												"{@b Chest 4} holds a bundled-up gray spider-silk robe sewn with darkmantle eyes, wrapped inside which is a {@item wand of web}.",
-												"{@b Chest 5} contains a folded {@item Piwafwi (Cloak of Elvenkind)|OotA|piwafwi}\u2014a dark spider-silk cloak made by drow. This item has the properties of a {@item cloak of elvenkind} but loses its magic if it's exposed to sunlight for 1 hour without interruption.",
+												"{@b Chest 4} holds a bundled-up gray spider silk robe sewn with darkmantle eyes, wrapped inside which is a {@item wand of web}.",
+												"{@b Chest 5} contains a folded {@item Piwafwi (Cloak of Elvenkind)|OotA|piwafwi}\u2014a dark spider silk cloak made by drow. This item has the properties of a {@item cloak of elvenkind} but loses its magic if it's exposed to sunlight for 1 hour without interruption.",
 												"{@b Chest 6} holds an amber headdress set with three large purple pearls (2,500 gp).",
 												"{@b Chest 7} contains a 2-foot-tall stone statuette of Demogorgon that weighs 50 pounds. Anyone who looks into the statue's eyes must succeed on a {@dc 14} Charisma saving throw or contract a random form of short-term madness (see \"{@variantrule Madness}\" in the {@book Dungeon Master's Guide|DMG}). A creature can be affected only once by the statue, after which it becomes immune to the effect.",
 												"{@b Chest 8} houses an inanimate svirfneblin skeleton encrusted with {@hazard yellow mold} (see \"{@book Dungeon Hazards|DMG|5|Dungeon Hazards}\" in the {@book Dungeon Master's Guide|DMG}). The mold releases its spores as soon as the chest's lid is opened. Embedded in one of the skull's eye sockets is a false eye made of moonstone (75 gp)."
@@ -43289,7 +44643,7 @@
 							"type": "list",
 							"items": [
 								"Netheril was a vast human empire ruled by wizards, whose mastery of the Weave remains unsurpassed to this day.",
-								"Some of what the Netherese wizards learned came from the elves. The rest came from the study of artifacts called the {@i Nethe}{@i r Scrolls}.",
+								"Some of what the Netherese wizards learned came from the elves. The rest came from the study of artifacts called the {@i Nether Scrolls}.",
 								"The Netherese created magic that was more powerful than a {@spell wish} spell and used it to accomplish the impossible. Their magic could shear the tops of mountains and lift entire cities into the sky.",
 								"To hold Ythryn aloft, the Netherese wizards would have needed a powerful magic item called a {@item Ythryn Mythallar|IDRotF|mythallar}. It likely survived the crash and might have other properties as well, including the ability to change the weather. (\"Think of what that could mean for Icewind Dale!\" Vellynne adds excitedly.)"
 							]
@@ -44128,7 +45482,7 @@
 										},
 										"This area is a graveyard where Auril displays creatures that have died on the island from the extreme cold. Each creature is encased in a thick coat of ice, preserving its remains. Amid scores of humanoid cadavers\u2014pirates, hunters, adventurers, worshipers, and others who fell prey to Auril's cold embrace\u2014are the frozen forms of hares, foxes, and other small animals.",
 										"An {@creature ice troll|IDRotF} (see {@adventure appendix C|IDRotF|21}) found its way here and destroyed parts of the outer wall. It has also been gnawing on some of the corpses. Auril isn't concerned about the intrusion, since this place is much less important to her than her ice statues are. If the characters loiter in the garden, the ice troll attacks and fights to the death.",
-										"{@creature Vellynne Harpell|IDRotF} and Nass Lantomir are both aware of the magical properties of ice troll hearts (as described in the \"{@creature Ice Troll|idrotf}\" entry in appendix C) and can share this information with the characters once the ice troll is killed.",
+										"{@creature Vellynne Harpell|IDRotF} and Nass Lantomir are both aware of the magical properties of ice troll hearts (as described in the \"{@creature Ice Troll|IDRotF}\" entry in appendix C) and can share this information with the characters once the ice troll is killed.",
 										{
 											"type": "image",
 											"href": {
@@ -47338,7 +48692,7 @@
 												"type": "internal",
 												"path": "adventure/IDRotF/167-05-004.scorecard.webp"
 											},
-											"title": "Scorecard table with the following column titles: Party Memeber | Test of Cruelty | Test of Endurance | Test of Isolation | Test of Preservation",
+											"title": "Scorecard table with the following column titles: Party Member | Test of Cruelty | Test of Endurance | Test of Isolation | Test of Preservation",
 											"width": 3000,
 											"height": 1458
 										}
@@ -53080,7 +54434,7 @@
 													"type": "insetReadaloud",
 													"id": "5e4",
 													"entries": [
-														"This dead-end cave contains a half dozen mounds of snow that rise up and assume vaguely bipedel forms. Wide smiles appear on their otherwise featureless heads."
+														"This dead-end cave contains a half dozen mounds of snow that rise up and assume vaguely bipedal forms. Wide smiles appear on their otherwise featureless heads."
 													]
 												},
 												"These creatures are six {@creature Snow Golem|IDRotF|snow golems} (see {@adventure appendix C|IDRotF|21}). They are hostile toward all trespassers but don't pursue intruders beyond the confines of the three caves that comprise area H18."
@@ -53413,7 +54767,7 @@
 											"type": "insetReadaloud",
 											"id": "609",
 											"entries": [
-												"A flat sheet of cloudy ice forms one wall of this forty-foot-high cavern. Something dark and humungous shifts behind the wall, its tentacles waving unimpeded. You become aware you are not alone inside your mind. Somehow, this horror from another world has wormed its way inside you."
+												"A flat sheet of cloudy ice forms one wall of this forty-foot-high cavern. Something dark and humongous shifts behind the wall, its tentacles waving unimpeded. You become aware you are not alone inside your mind. Somehow, this horror from another world has wormed its way inside you."
 											]
 										},
 										"Something beyond mortal comprehension exists partially inside the wall of ice and partially within some distant, horrific demiplane. As this otherworldly entity peers into the cavern, visitors risk losing their sanity to its influence.",
@@ -53569,35 +54923,35 @@
 													"rows": [
 														[
 															"1\u20132",
-															"Charm of {@spell Druidcraft}. This charm allows you to cast the {@spell druidcraft} cantrip as an action, no components required. Once used three times, this charm vanishes from you."
+															"{@reward Charm of Druidcraft|IDRotF}. This charm allows you to cast the {@spell druidcraft} cantrip as an action, no components required. Once used three times, this charm vanishes from you."
 														],
 														[
 															"3\u20135",
-															"Charm of {@spell Vicious Mockery}. This charm allows you to cast the {@spell vicious mockery} cantrip (5th-level version; save {@dc 15}) as an action. Once used three times, this charm vanishes from you."
+															"{@reward Charm of Vicious Mockery|IDRotF}. This charm allows you to cast the {@spell vicious mockery} cantrip (5th-level version; save {@dc 15}) as an action. Once used three times, this charm vanishes from you."
 														],
 														[
 															"6\u20138",
-															"Charm of {@spell Invisibility}. This charm allows you to cast the {@spell invisibility} spell as an action, no components required. Once used three times, this charm vanishes from you."
+															"{@reward Charm of Invisibility|IDRotF}. This charm allows you to cast the {@spell invisibility} spell as an action, no components required. Once used three times, this charm vanishes from you."
 														],
 														[
 															"9\u201311",
-															"Charm of {@spell Sending}. This charm allows you to cast the {@spell sending} spell as an action, no components required. Once used, this charm vanishes from you."
+															"{@reward Charm of Sending|IDRotF}. This charm allows you to cast the {@spell sending} spell as an action, no components required. Once used, this charm vanishes from you."
 														],
 														[
 															"12\u201314",
-															"Charm of {@spell Cure Wounds}. This charm allows you to cast the {@spell cure wounds} spell (3rd-level version) as an action, no components required. Your spellcasting ability for this charm is Wisdom. Once used, this charm vanishes from you."
+															"{@reward Charm of Cure Wounds|IDRotF}. This charm allows you to cast the {@spell cure wounds} spell (3rd-level version) as an action, no components required. Your spellcasting ability for this charm is Wisdom. Once used, this charm vanishes from you."
 														],
 														[
 															"15\u201317",
-															"Charm of {@spell Lightning Bolt}. This charm allows you to cast the {@spell lightning bolt} spell (save {@dc 15}) as an action, no components required. Once used, this charm vanishes from you."
+															"{@reward Charm of Lightning Bolt|IDRotF}. This charm allows you to cast the {@spell lightning bolt} spell (save {@dc 15}) as an action, no components required. Once used, this charm vanishes from you."
 														],
 														[
 															"18\u201319",
-															"Charm of Purplemancy. This charm allows you to cast the {@spell faerie fire} spell (violet light only; save {@dc 15}) as a bonus action instead of an action, no components required. Once used three times, this charm vanishes from you."
+															"{@reward Charm of Purplemancy|IDRotF}. This charm allows you to cast the {@spell faerie fire} spell (violet light only; save {@dc 15}) as a bonus action instead of an action, no components required. Once used three times, this charm vanishes from you."
 														],
 														[
 															"20",
-															"Charm of Restoration. This charm has 6 charges. You can use an action to expend some of its charges to cast one of the following spells: {@spell greater restoration} (4 charges) or {@spell lesser restoration} (2 charges). Once all its charges have been expended, this charm vanishes from you."
+															"{@reward Charm of Restoration}. This charm has 6 charges. You can use an action to expend some of its charges to cast one of the following spells: {@spell greater restoration} (4 charges) or {@spell lesser restoration} (2 charges). Once all its charges have been expended, this charm vanishes from you."
 														]
 													]
 												}
@@ -53708,7 +55062,7 @@
 						"type": "internal",
 						"path": "adventure/IDRotF/177-07-000.intro-splash.webp"
 					},
-					"title": "Ythryn is haunted by nothics who were once powerful netherese spellcasters",
+					"title": "Ythryn is haunted by nothics who were once powerful Netherese spellcasters",
 					"width": 1700,
 					"height": 2255
 				},
@@ -56832,7 +58186,7 @@
 									"page": 249,
 									"id": "692",
 									"entries": [
-										"A 7-foot-tall, 4-foot-wide window at the north end of area Y19b overlooks a 35-foot-wide gap in the spire's superstructure. On the far side of this gap, a similar window opens into the Chamber of Sorcery (area Y19j). Between these windows stretches a magical, invisible 5-foot-wide plane of force that serves as a bridge. (On {@adventure map 7.3|IDRotF|17|Map 7.3: spire of iriolarthas}, this bridge is marked by a pair of dashed lines.) This invisible bridge, which is safe to cross, is suppressed by the activation of the spindle in area Y19n."
+										"A 7-foot-tall, 4-foot-wide window at the north end of area Y19b overlooks a 35-foot-wide gap in the spire's superstructure. On the far side of this gap, a similar window opens into the Chamber of Sorcery (area Y19j). Between these windows stretches a magical, invisible 5-foot-wide plane of force that serves as a bridge. (On {@adventure map 7.3|IDRotF|17|Map 7.3: spire of Iriolarthas}, this bridge is marked by a pair of dashed lines.) This invisible bridge, which is safe to cross, is suppressed by the activation of the spindle in area Y19n."
 									]
 								},
 								{
@@ -56911,7 +58265,7 @@
 											]
 										},
 										"A hemispherical wall of force, its outside coated with a thin layer of ice, covers the shaft leading down to area Y19j. This barrier was created by a {@spell wall of force} spell and is maintained by the glowing green crystal set above the doorway (see \"Green Crystal\" below). As long as this crystal is glowing, the wall of force can't be dispelled.",
-										"Two {@creature living blade of disaster|idrotf|living blades of disaster} (see {@adventure appendix C|IDRotF|21}) guard the double door that blocks the way to area Y19l. The blades attack intruders that move in range of their {@sense blindsight} (30 feet), and the blades can pass right through the wall of force.",
+										"Two {@creature living blade of disaster|IDRotF|living blades of disaster} (see {@adventure appendix C|IDRotF|21}) guard the double door that blocks the way to area Y19l. The blades attack intruders that move in range of their {@sense blindsight} (30 feet), and the blades can pass right through the wall of force.",
 										{
 											"type": "entries",
 											"name": "Green Crystal",
@@ -56938,7 +58292,7 @@
 												"Lining the far wall of this hall are eight doors, each marked with a different arcane symbol. On the wall above them is etched an inscription in Draconic."
 											]
 										},
-										"A magical trap (marked T on {@adventure map 7.3|IDRotF|17|Map 7.3: spire of iriolarthas}) fills the 10-foot-square area immediately south of the double door to area Y19k and triggers whenever a creature that is neither a construct nor undead enters the area for the first time. Any creature that triggers the trap is targeted by a {@spell flesh to stone} spell (save {@dc 17}). A creature can't set off the trap more than once. After it's triggered three times, the trap vanishes.",
+										"A magical trap (marked T on {@adventure map 7.3|IDRotF|17|Map 7.3: spire of Iriolarthas}) fills the 10-foot-square area immediately south of the double door to area Y19k and triggers whenever a creature that is neither a construct nor undead enters the area for the first time. Any creature that triggers the trap is targeted by a {@spell flesh to stone} spell (save {@dc 17}). A creature can't set off the trap more than once. After it's triggered three times, the trap vanishes.",
 										{
 											"type": "entries",
 											"name": "Draconic Inscription",
@@ -57278,7 +58632,7 @@
 												"Beneath the great spire, a luminous fifty-foot-diameter crystal sphere rests on an ornate stand."
 											]
 										},
-										"See {@adventure appendix D|IDRotF|22} for a description of the {@item Ythryn mythallar|IDRotF} and its magical properties. The first time a creature tries to attune to the {@i mythallar}, its meditation is disturbed by the arrival of a {@creature tomb tapper|IDRotF} (see {@adventure appendix C|IDRotF|21}), which tunnels up from belowground to attack anyone present. The tomb tapper fights to the death to defend the {@item Ythryn mythallar|IDRotF}.",
+										"See {@adventure appendix D|IDRotF|22} for a description of the {@item Ythryn mythallar|IDRotF} and its magical properties. The first time a creature tries to attune to the {@i mythallar}, its meditation is disturbed by the arrival of a {@creature tomb tapper|IDRotF} (see {@adventure appendix C|IDRotF|21}), which tunnels up from below ground to attack anyone present. The tomb tapper fights to the death to defend the {@item Ythryn mythallar|IDRotF}.",
 										"Unless Iriolarthas is destroyed, the demilich is already attuned to the {@i mythallar}. If Iriolarthas senses that another creature is trying to use the {@i mythallar}, it always disallows the attempt and flies to the {@i mythallar}'s location to discourage any further tampering with the device. Only by destroying the {@creature demilich} can the characters use the {@i mythallar}'s properties unimpeded. The {@i mythallar}'s power to control the weather can undo the everlasting winter that Auril has cast over Icewind Dale (see \"{@adventure Epilogue|IDRotF|18}\")."
 									]
 								},
@@ -58100,7 +59454,7 @@
 			"entries": [
 				"This appendix describes new creatures that appear in the adventure, presenting them in alphabetical order. The introduction of the {@book Monster Manual|MM} explains how to interpret a creature's stat block.",
 				"Several of the creatures in this appendix are common beasts\u2014foxes, hares, mountain goats, seals, sperm whales, and walruses\u2014that live among other beasts from the {@book Monster Manual|MM}, such as polar bears, deer, elk, {@creature reindeer|IDRotF} (use the {@creature elk} stat block), killer whales, mammoths, moose (use the {@creature giant goat} stat block), saber-toothed tigers, snowy owls, woolly rhinoceroses, and wolves. And then there's the notoriously ugly knucklehead trout, without which there would be no Ten-Towns.",
-				"If the adventuring party includes a wizard who can prepare the {@spell find familiar} spell, consider allowing the wizard to add the fox and the hare to the spell's list of eligible familiars.",
+				"If the adventuring party includes a wizard who can prepare the {@spell find familiar} spell, consider allowing the wizard to add the {@creature fox|IDRotF} and the {@creature hare|IDRotF} to the spell's list of eligible familiars.",
 				{
 					"type": "image",
 					"href": {
@@ -58639,7 +59993,7 @@
 									"type": "item",
 									"name": "Interior Illustrators",
 									"entries": [
-										"Mark Behm, Eric Belisle, Zoltan Boros, Christopher Burdett, Paul Scott Canavan, Sidharth Chaturvedi, Jedd Chevrier, David René Christensen, CoupleOfKooks, Nikki Dawes, Axel Defois, Olga Drebas, Jesper Ejsing, Jason A. Engle, Caroline Gariba, Lars Grant- West, Leesha Hannigan, Sam Keiser, Julian Kok, Olly Lawson, Titus Lunter, Andrew Mar, Marcela Medeiros, Robson Michel, Scott Murphy, Irina Nordsol, Stephen Oakley, Robin Olausson, Claudio Pozas, Livia Prima, April Prime, David Sladek, Craig J Spearing, Brian Valeza, Svetlin Velinov, Richard Whitters, Shawn Wood, Zuzanna Wuzyk"
+										"Mark Behm, Eric Belisle, Zoltan Boros, Christopher Burdett, Paul Scott Canavan, Sidharth Chaturvedi, Jedd Chevrier, David René Christensen, CoupleOfKooks, Nikki Dawes, Axel Defois, Olga Drebas, Jesper Ejsing, Jason A. Engle, Caroline Gariba, Lars Grant- West, Leesha Hannigan, Sam Keiser, Julian Kok, Olly Lawson, Titus Lunter, Andrew Mar, Marcela Medeiros, Robson Michel, Scott Murphy, Irina Nordsol, Stephen Oakley, Robin Olausson, Claudio Pozas, Livia Prima, April Prime, David Sladek, Craig J Spearing, Brian Valeza, Svetlin Velinov, Richard Whitters, Shawn Wood, Zuzanna Wužyk"
 									]
 								},
 								{

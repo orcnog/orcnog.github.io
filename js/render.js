@@ -17,9 +17,13 @@
  * $("#myElement").html(toDisplay.join(""));
  */
 globalThis.Renderer = function () {
-    this.wrapperTag = "div"
-    this.baseUrl = ""
-    this.baseMediaUrls = {}
+	this.wrapperTag = "div";
+	this.baseUrl = "";
+	this.baseMediaUrls = {};
+
+	if (globalThis.RENDERER_BASE_URL) {
+		this.baseUrl = globalThis.RENDERER_BASE_URL;
+	}
 
     if (globalThis.DEPLOYED_IMG_ROOT) {
         this.baseMediaUrls["img"] = globalThis.DEPLOYED_IMG_ROOT
@@ -191,7 +195,7 @@ globalThis.Renderer = function () {
 
     this.setPartPageExpandCollapseDisabled = function (val) { this._isPartPageExpandCollapseDisabled = !!val; return this }
 
-    /** Bind function which apply exta CSS classes to entry/list renders.  */
+    /** Bind function which apply extra CSS classes to entry/list renders.  */
     this.setFnGetStyleClasses = function (identifier, fn) {
         if (fn == null) {
             delete this._fnsGetStyleClasses[identifier]
@@ -591,7 +595,7 @@ globalThis.Renderer = function () {
 
             textStack[0] += `<div class="rd__image-title">`
 
-            const isDynamicViewer = entry.mapRegions && !IS_VTT
+			const isDynamicViewer = entry.mapRegions && !globalThis.IS_VTT;
 
             if (entry.title && !isDynamicViewer) textStack[0] += `<div class="rd__image-title-inner">${this.render(entry.title)}</div>`
 
@@ -1055,23 +1059,24 @@ globalThis.Renderer = function () {
         return dataString
     }
 
-    this._renderEntriesSubtypes_getHeaderSpan = function ({
-        entry,
-        textStack,
-        meta,
-        options,
-        displayName,
-        headerTag,
-        pagePart = "",
-        partPageExpandCollapse = "",
-        isAddPeriod = false,
-    }) {
-        if (!displayName) return ""
+	this._renderEntriesSubtypes_getHeaderSpan = function ({
+		entry,
+		textStack,
+		meta,
+		options,
+		displayName,
+		headerTag,
+		pagePart = "",
+		partPageExpandCollapse = "",
+		isAddPeriod = false,
+		isInset = false,
+	}) {
+		if (!displayName) return "";
 
         const type = entry.type || "entries"
 
-        const headerClass = `rd__h--${meta.depth + 1}` // adjust as the CSS is 0..4 rather than -1..3
-        const pluginDataNamePrefix = this._applyPlugins_getAll(`${type}_namePrefix`, { textStack, meta, options }, { input: entry })
+		const headerClass = `rd__h--${meta.depth + 1}${isInset ? "-inset" : ""}`; // adjust as the CSS is 0..4 rather than -1..3
+		const pluginDataNamePrefix = this._applyPlugins_getAll(`${type}_namePrefix`, {textStack, meta, options}, {input: entry});
 
         const ptText = `${pluginDataNamePrefix.join("")}${this.render({ type: "inline", entries: [displayName] })}${isAddPeriod ? "." : ""}`
 
@@ -1126,28 +1131,29 @@ globalThis.Renderer = function () {
     }
 
 	this._renderList = function (entry, textStack, meta, options) {
-		if (entry.items) {
-			const tag = entry.start != null ? "ol" : "ul";
-			const cssClasses = this._renderList_getListCssClasses(entry, textStack, meta, options);
-			textStack[0] += `<${tag} ${cssClasses ? `class="${cssClasses}"` : ""} ${entry.start != null ? `start="${entry.start}"` : ""}>`;
-			if (entry.name) textStack[0] += `<li class="rd__list-name">${entry.name}</li>`;
-			const isListHang = entry.style && entry.style.split(" ").includes("list-hang");
-			const len = entry.items.length;
-			for (let i = 0; i < len; ++i) {
-				const item = entry.items[i];
-				// Special case for child lists -- avoid wrapping in LI tags to avoid double-bullet
-				if (item.type !== "list") {
-					const className = `${this._getStyleClass(entry.type, item)}${item.type === "itemSpell" ? " rd__li-spell" : ""}`;
-					textStack[0] += `<li class="rd__li ${className}">`;
-				}
-				// If it's a raw string in a hanging list, wrap it in a div to allow for the correct styling
-				if (isListHang && typeof item === "string") textStack[0] += "<div>";
-				this._recursiveRender(item, textStack, meta);
-				if (isListHang && typeof item === "string") textStack[0] += "</div>";
-				if (item.type !== "list") textStack[0] += "</li>";
+		if (!entry.items) return;
+
+		const start = (entry.start ?? 1) + (entry.name ? -1 : 0);
+		const tag = start !== 1 ? "ol" : "ul";
+		const cssClasses = this._renderList_getListCssClasses(entry, textStack, meta, options);
+		textStack[0] += `<${tag} ${cssClasses ? `class="${cssClasses}"` : ""} ${start !== 1 ? `start="${start}"` : ""}>`;
+		if (entry.name) textStack[0] += `<li class="rd__list-name">${this.render({type: "inline", entries: [entry.name]})}</li>`;
+		const isListHang = entry.style && entry.style.split(" ").includes("list-hang");
+		const len = entry.items.length;
+		for (let i = 0; i < len; ++i) {
+			const item = entry.items[i];
+			// Special case for child lists -- avoid wrapping in LI tags to avoid double-bullet
+			if (item.type !== "list") {
+				const className = `${this._getStyleClass(entry.type, item)}${item.type === "itemSpell" ? " rd__li-spell" : ""}`;
+				textStack[0] += `<li class="rd__li ${className}">`;
 			}
-			textStack[0] += `</${tag}>`;
+			// If it's a raw string in a hanging list, wrap it in a div to allow for the correct styling
+			if (isListHang && typeof item === "string") textStack[0] += "<div>";
+			this._recursiveRender(item, textStack, meta);
+			if (isListHang && typeof item === "string") textStack[0] += "</div>";
+			if (item.type !== "list") textStack[0] += "</li>";
 		}
+		textStack[0] += `</${tag}>`;
 	};
 
     this._getPtExpandCollapse = function () {
@@ -1190,12 +1196,28 @@ globalThis.Renderer = function () {
 		const partExpandCollapse = !this._isPartPageExpandCollapseDisabled ? this._getPtExpandCollapseSpecial() : "";
 		const partPageExpandCollapse = `<span class="ve-flex-vh-center">${[pagePart, partExpandCollapse].filter(Boolean).join("")}</span>`;
 
-        if (entry.name != null) {
-            if (Renderer.ENTRIES_WITH_ENUMERATED_TITLES_LOOKUP[entry.type]) this._handleTrackTitles(entry.name)
-            textStack[0] += `<span class="rd__h rd__h--2-inset" data-title-index="${this._headerIndex++}" ${this._getEnumeratedTitleRel(entry.name)}><h4 class="entry-title-inner">${entry.name}</h4>${partPageExpandCollapse}</span>`
-        } else {
-            textStack[0] += `<span class="rd__h rd__h--2-inset rd__h--2-inset-no-name">${partPageExpandCollapse}</span>`
-        }
+		if (entry.name != null) {
+			if (Renderer.ENTRIES_WITH_ENUMERATED_TITLES_LOOKUP[entry.type]) this._handleTrackTitles(entry.name);
+
+			const cacheDepth = meta.depth;
+			meta.depth = 1;
+			const headerSpan = this._renderEntriesSubtypes_getHeaderSpan({
+				entry,
+				textStack,
+				meta,
+				options,
+				displayName: entry.name,
+				headerTag: `h4`,
+				pagePart,
+				partPageExpandCollapse,
+				isInset: true,
+			});
+			meta.depth = cacheDepth;
+
+			textStack[0] += headerSpan;
+		} else {
+			textStack[0] += `<span class="rd__h rd__h--2-inset rd__h--2-inset-no-name">${partPageExpandCollapse}</span>`;
+		}
 
 		if (entry.entries) {
 			const len = entry.entries.length;
@@ -1222,12 +1244,28 @@ globalThis.Renderer = function () {
 		const partExpandCollapse = !this._isPartPageExpandCollapseDisabled ? this._getPtExpandCollapseSpecial() : "";
 		const partPageExpandCollapse = `<span class="ve-flex-vh-center">${[pagePart, partExpandCollapse].filter(Boolean).join("")}</span>`;
 
-        if (entry.name != null) {
-            if (Renderer.ENTRIES_WITH_ENUMERATED_TITLES_LOOKUP[entry.type]) this._handleTrackTitles(entry.name)
-            textStack[0] += `<span class="rd__h rd__h--2-inset" data-title-index="${this._headerIndex++}" ${this._getEnumeratedTitleRel(entry.name)}><h4 class="entry-title-inner">${entry.name}</h4>${this._getPagePart(entry, true)}</span>`
-        } else {
-            textStack[0] += `<span class="rd__h rd__h--2-inset rd__h--2-inset-no-name">${partPageExpandCollapse}</span>`
-        }
+		if (entry.name != null) {
+			if (Renderer.ENTRIES_WITH_ENUMERATED_TITLES_LOOKUP[entry.type]) this._handleTrackTitles(entry.name);
+
+			const cacheDepth = meta.depth;
+			meta.depth = 1;
+			const headerSpan = this._renderEntriesSubtypes_getHeaderSpan({
+				entry,
+				textStack,
+				meta,
+				options,
+				displayName: entry.name,
+				headerTag: `h4`,
+				pagePart,
+				partPageExpandCollapse,
+				isInset: true,
+			});
+			meta.depth = cacheDepth;
+
+			textStack[0] += headerSpan;
+		} else {
+			textStack[0] += `<span class="rd__h rd__h--2-inset rd__h--2-inset-no-name">${partPageExpandCollapse}</span>`;
+		}
 
 		const len = entry.entries.length;
 		for (let i = 0; i < len; ++i) {
@@ -1560,31 +1598,48 @@ globalThis.Renderer = function () {
         })
     }
 
-    this._renderVariant = function (entry, textStack, meta, options) {
-        const dataString = this._renderEntriesSubtypes_getDataString(entry)
+	this._renderVariant = function (entry, textStack, meta, options) {
+		const dataString = this._renderEntriesSubtypes_getDataString(entry);
 
-        if (entry.name != null && Renderer.ENTRIES_WITH_ENUMERATED_TITLES_LOOKUP[entry.type]) this._handleTrackTitles(entry.name)
-        const cachedLastDepthTrackerProps = MiscUtil.copyFast(this._lastDepthTrackerInheritedProps)
-        this._handleTrackDepth(entry, 1)
+		if (entry.name != null && Renderer.ENTRIES_WITH_ENUMERATED_TITLES_LOOKUP[entry.type]) this._handleTrackTitles(entry.name);
+		const cachedLastDepthTrackerProps = MiscUtil.copyFast(this._lastDepthTrackerInheritedProps);
+		this._handleTrackDepth(entry, 1);
 
-        const pagePart = this._getPagePart(entry, true)
-        const partExpandCollapse = !this._isPartPageExpandCollapseDisabled ? this._getPtExpandCollapseSpecial() : ""
-        const partPageExpandCollapse = `<span class="ve-flex-vh-center">${[pagePart, partExpandCollapse].filter(Boolean).join("")}</span>`
+		const pagePart = this._getPagePart(entry, true);
+		const partExpandCollapse = !this._isPartPageExpandCollapseDisabled ? this._getPtExpandCollapseSpecial() : "";
+		const partPageExpandCollapse = `<span class="ve-flex-vh-center">${[pagePart, partExpandCollapse].filter(Boolean).join("")}</span>`;
 
-        textStack[0] += `<${this.wrapperTag} class="rd__b-special rd__b-inset" ${dataString}>`
-        textStack[0] += `<span class="rd__h rd__h--2-inset" data-title-index="${this._headerIndex++}" ${this._getEnumeratedTitleRel(entry.name)}><h4 class="entry-title-inner">Variant: ${entry.name}</h4>${partPageExpandCollapse}</span>`
-        const len = entry.entries.length
-        for (let i = 0; i < len; ++i) {
-            const cacheDepth = meta.depth
-            meta.depth = 2
-            this._recursiveRender(entry.entries[i], textStack, meta, { prefix: "<p>", suffix: "</p>" })
-            meta.depth = cacheDepth
-        }
-        if (entry.source) textStack[0] += Renderer.utils.getSourceAndPageTrHtml({ source: entry.source, page: entry.page })
-        textStack[0] += `</${this.wrapperTag}>`
+		textStack[0] += `<${this.wrapperTag} class="rd__b-special rd__b-inset" ${dataString}>`;
 
-        this._lastDepthTrackerInheritedProps = cachedLastDepthTrackerProps
-    }
+		const cacheDepth = meta.depth;
+		meta.depth = 1;
+		const headerSpan = this._renderEntriesSubtypes_getHeaderSpan({
+			entry,
+			textStack,
+			meta,
+			options,
+			displayName: entry.name ? `Variant: ${entry.name}` : "Variant",
+			headerTag: `h4`,
+			pagePart,
+			partPageExpandCollapse,
+			isInset: true,
+		});
+		meta.depth = cacheDepth;
+
+		textStack[0] += headerSpan;
+
+		const len = entry.entries.length;
+		for (let i = 0; i < len; ++i) {
+			const cacheDepth = meta.depth;
+			meta.depth = 2;
+			this._recursiveRender(entry.entries[i], textStack, meta, {prefix: "<p>", suffix: "</p>"});
+			meta.depth = cacheDepth;
+		}
+		if (entry.source) textStack[0] += Renderer.utils.getSourceAndPageTrHtml({source: entry.source, page: entry.page});
+		textStack[0] += `</${this.wrapperTag}>`;
+
+		this._lastDepthTrackerInheritedProps = cachedLastDepthTrackerProps;
+	};
 
     this._renderVariantInner = function (entry, textStack, meta, options) {
         const dataString = this._renderEntriesSubtypes_getDataString(entry)
@@ -1882,30 +1937,31 @@ globalThis.Renderer = function () {
         this._renderSuffix(entry, textStack, meta, options)
     }
 
-    this._renderItem = function (entry, textStack, meta, options) {
-        this._renderPrefix(entry, textStack, meta, options)
-        textStack[0] += `<p class="rd__p-list-item" ${entry.name ? `data-roll-name-ancestor="${Renderer.stripTags(entry.name).qq()}"` : ""}>`
-        if (entry.name) {
-            textStack[0] += `<span class="${this._getMutatedStyleString(entry.style) || "bold"} rd__list-item-name">${this.render(entry.name)}${this._renderItem_isAddPeriod(entry) ? "." : ""}</span> `
-        }
-        if (entry.entry) this._recursiveRender(entry.entry, textStack, meta)
-        else if (entry.entries) {
-            const len = entry.entries.length
-            for (let i = 0; i < len; ++i) this._recursiveRender(entry.entries[i], textStack, meta, { prefix: i > 0 ? `<span class="rd__p-cont-indent">` : "", suffix: i > 0 ? "</span>" : "" })
-        }
-        textStack[0] += "</p>"
-        this._renderSuffix(entry, textStack, meta, options)
-    }
+	this._renderItemSubtypes = function (entry, textStack, meta, options) {
+		this._renderPrefix(entry, textStack, meta, options);
+		textStack[0] += `<p class="rd__p-list-item" ${entry.name ? `data-roll-name-ancestor="${Renderer.stripTags(entry.name).qq()}"` : ""}>`;
+		if (entry.name) {
+			textStack[0] += `<span class="${this._getMutatedStyleString(entry.style) || entry.type === "itemSub" ? "italic" : "bold"} rd__list-item-name">${this.render(entry.name)}${this._renderItemSubtypes_isAddPeriod(entry) ? "." : ""}</span> `;
+		}
+		if (entry.entry) this._recursiveRender(entry.entry, textStack, meta);
+		else if (entry.entries) {
+			const len = entry.entries.length;
+			for (let i = 0; i < len; ++i) this._recursiveRender(entry.entries[i], textStack, meta, {prefix: i > 0 ? `<span class="rd__p-cont-indent">` : "", suffix: i > 0 ? "</span>" : ""});
+		}
+		textStack[0] += "</p>";
+		this._renderSuffix(entry, textStack, meta, options);
+	};
 
-    this._renderItem_isAddPeriod = function (entry) {
-        return entry.name && entry.nameDot !== false && !Renderer._INLINE_HEADER_TERMINATORS.has(entry.name[entry.name.length - 1])
-    }
+	this._renderItemSubtypes_isAddPeriod = function (entry) {
+		return entry.name && entry.nameDot !== false && !Renderer._INLINE_HEADER_TERMINATORS.has(entry.name[entry.name.length - 1]);
+	};
+
+	this._renderItem = function (entry, textStack, meta, options) {
+		this._renderItemSubtypes(entry, textStack, meta, options);
+	};
 
 	this._renderItemSub = function (entry, textStack, meta, options) {
-		this._renderPrefix(entry, textStack, meta, options);
-		const isAddPeriod = entry.name && entry.nameDot !== false && !Renderer._INLINE_HEADER_TERMINATORS.has(entry.name[entry.name.length - 1]);
-		this._recursiveRender(entry.entry, textStack, meta, {prefix: `<p class="rd__p-list-item" ${entry.name ? `data-roll-name-ancestor="${Renderer.stripTags(entry.name).qq()}"` : ""}>${entry.name ? `<span class="italic rd__list-item-name">${this.render(entry.name)}${isAddPeriod ? "." : ""}</span> ` : ""}`, suffix: "</p>"});
-		this._renderSuffix(entry, textStack, meta, options);
+		this._renderItemSubtypes(entry, textStack, meta, options);
 	};
 
     this._renderItemSpell = function (entry, textStack, meta, options) {
@@ -2287,8 +2343,10 @@ globalThis.Renderer = function () {
 				break;
 			}
 			case "@font": {
-				const [displayText, fontFamily] = Renderer.splitTagByPipe(text);
-				textStack[0] += `<span style="font-family: '${fontFamily}'">`;
+				const [displayText, fontDecl] = Renderer.splitTagByPipe(text);
+				const fontInfo = Renderer.tag.TagFont.getFontInfo(fontDecl);
+				if (fontInfo.fontUrl) FontManager.pAddFont({fontId: fontInfo.fontId, fontUrl: fontInfo.fontUrl}).then(null);
+				textStack[0] += `<span style="font-family: '${fontInfo.fontId}'">`;
 				this._recursiveRender(displayText, textStack, meta);
 				textStack[0] += `</span>`;
 				break;
@@ -2322,6 +2380,11 @@ globalThis.Renderer = function () {
 				const [ordinal] = Renderer.splitTagByPipe(text);
 				if (ordinal) textStack[0] += `<i>${Parser.numberToText(ordinal, {isOrdinalForm: true}).toTitleCase()} Failure:</i>`;
 				else textStack[0] += `<i>Failure:</i>`;
+				break;
+			}
+			case "@actSaveFailBy": {
+				const [amount] = Renderer.splitTagByPipe(text);
+				textStack[0] += `<i>Failure by ${amount} or More:</i>`;
 				break;
 			}
 			case "@actSaveSuccessOrFail": textStack[0] += `<i>Failure or Success:</i>`; break;
@@ -3506,12 +3569,14 @@ Renderer.utils = class {
 					<div class="ve-flex-v-center">
 						<h1 class="stats__h-name copyable m-0" onmousedown="event.preventDefault()" onclick="Renderer.utils._pHandleNameClick(this)">${opts.prefix || ""}${name}${opts.suffix || ""}</h1>
 						${opts.controlRhs || ""}
-						${!IS_VTT && ExtensionUtil.ACTIVE && opts.page ? Renderer.utils.getBtnSendToFoundryHtml() : ""}
+						${!globalThis.IS_VTT && ExtensionUtil.ACTIVE && opts.page ? Renderer.utils.getBtnSendToFoundryHtml() : ""}
 					</div>
 					<div class="stats__wrp-h-source ${opts.isInlinedToken ? `stats__wrp-h-source--token` : ""} ve-flex-v-baseline">
-						${tagPartSourceStart} class="help-subtle stats__h-source-abbreviation ${ent.source ? `${Parser.sourceJsonToSourceClassname(ent.source)}" title="${Parser.sourceJsonToFull(ent.source)}${Renderer.utils.getSourceSubText(ent)}` : ""}" ${Parser.sourceJsonToStyle(ent.source)}>${ent.source ? Parser.sourceJsonToAbv(ent.source) : ""}${tagPartSourceEnd}
+						${tagPartSourceStart} class="help-subtle stats__h-source-abbreviation ${ent.source ? `${Parser.sourceJsonToSourceClassname(ent.source)}" title="${Parser.sourceJsonToFull(ent.source)}${Renderer.utils.getSourceSubText(ent)}` : ""}">${ent.source ? Parser.sourceJsonToAbv(ent.source) : ""}${tagPartSourceEnd}
+						
+						${ent.source ? Parser.sourceJsonToMarkerHtml(ent.source, {isStatsName: true}) : ""}
 
-						${Renderer.utils.isDisplayPage(ent.page) ? ` ${tagPartSourceStart} class="rd__stats-name-page ml-1" title="Page ${ent.page}">p${ent.page}${tagPartSourceEnd}` : ""}
+						${Renderer.utils.isDisplayPage(ent.page) ? ` ${tagPartSourceStart} class="rd__stats-name-page ml-1 lst-is-exporting-image__no-wrap" title="Page ${ent.page}">p${ent.page}${tagPartSourceEnd}` : ""}
 
 						${ptBrewSourceLink}
 					</div>
@@ -3606,20 +3671,20 @@ Renderer.utils = class {
         const otherSourceText = Renderer.utils._getAltSourceHtmlOrText(it, "otherSources", "Also found in", isText)
         const externalSourceText = Renderer.utils._getAltSourceHtmlOrText(it, "externalSources", "External sources:", isText)
 
-        const srdText = it.srd52
-            ? `${isText ? "" : `the <span title="Systems Reference Document (5.2)">`}SRD${isText ? "" : `</span>`}${typeof it.srd === "string" ? ` (as &quot;${it.srd}&quot;)` : ""}`
-            : it.srd
-                ? `${isText ? "" : `the <span title="Systems Reference Document (5.1)">`}SRD${isText ? "" : `</span>`}${typeof it.srd === "string" ? ` (as &quot;${it.srd}&quot;)` : ""}`
-                : ""
-        const basicRulesText = it.freeRules2024
-            ? `the Free Rules (2024)${typeof it.freeRules2024 === "string" ? ` (as &quot;${it.freeRules2024}&quot;)` : ""}`
-            : it.basicRules
-                ? `the Basic Rules (2014)${typeof it.basicRules === "string" ? ` (as &quot;${it.basicRules}&quot;)` : ""}`
-                : ""
-        const srdAndBasicRulesText = (srdText || basicRulesText) ? `Available in ${[srdText, basicRulesText].filter(it => it).join(" and ")}` : ""
+		const srdText = it.srd52
+			? `${isText ? "" : `the <span title="Systems Reference Document (5.2)">`}SRD 5.2.1${isText ? "" : `</span>`}${typeof it.srd === "string" ? ` (as &quot;${it.srd}&quot;)` : ""}`
+			: it.srd
+				? `${isText ? "" : `the <span title="Systems Reference Document (5.1)">`}SRD 5.1${isText ? "" : `</span>`}${typeof it.srd === "string" ? ` (as &quot;${it.srd}&quot;)` : ""}`
+				: "";
+		const basicRulesText = it.basicRules2024
+			? `the Basic Rules (2024)${typeof it.basicRules2024 === "string" ? ` (as &quot;${it.basicRules2024}&quot;)` : ""}`
+			: it.basicRules
+				? `the Basic Rules (2014)${typeof it.basicRules === "string" ? ` (as &quot;${it.basicRules}&quot;)` : ""}`
+				: "";
+		const srdAndBasicRulesText = (srdText || basicRulesText) ? `Available in ${[srdText, basicRulesText].filter(it => it).join(" and ")}` : "";
 
-        return `${[baseText, addSourceText, reprintedAsText, otherSourceText, srdAndBasicRulesText, externalSourceText].filter(it => it).join(". ")}${baseText && (addSourceText || otherSourceText || srdAndBasicRulesText || externalSourceText) ? "." : ""}`
-    }
+		return `${[baseText, addSourceText, reprintedAsText, otherSourceText, srdAndBasicRulesText, externalSourceText].filter(it => it).join(". ")}${baseText && (addSourceText || otherSourceText || srdAndBasicRulesText || externalSourceText) ? "." : ""}`;
+	}
 
     static async _pHandleNameClick(ele) {
         await MiscUtil.pCopyTextToClipboard($(ele).text())
@@ -3800,25 +3865,25 @@ Renderer.utils = class {
 
         assignPropsIfExist(entry.fluff, "name", "type", "entries", "images")
 
-        if (entry.fluff[mappedProp]) {
-            const fromList = await DataLoader.pCacheAndGet(
-                fluffProp,
-                entry.source,
-                UrlUtil.URL_TO_HASH_BUILDER[fluffProp](entry.fluff[mappedProp]),
-                {
-                    lockToken2,
-                    isCopy: true,
-                },
-            )
-            if (fromList) {
-                assignPropsIfExist(fromList, "name", "type", "entries", "images")
-            }
-        }
+		if (entry.fluff[mappedProp]) {
+			const fromList = await DataLoader.pCacheAndGet(
+				fluffProp,
+				SourceUtil.getEntitySource(entry),
+				UrlUtil.URL_TO_HASH_BUILDER[fluffProp](entry.fluff[mappedProp]),
+				{
+					lockToken2,
+					isCopy: true,
+				},
+			);
+			if (fromList) {
+				assignPropsIfExist(fromList, "name", "type", "entries", "images");
+			}
+		}
 
 		if (entry.fluff[mappedPropAppend]) {
 			const fromList = await DataLoader.pCacheAndGet(
 				fluffProp,
-				entry.source,
+				SourceUtil.getEntitySource(entry),
 				UrlUtil.URL_TO_HASH_BUILDER[fluffProp](entry.fluff[mappedPropAppend]),
 				{
 					lockToken2,
@@ -3836,31 +3901,50 @@ Renderer.utils = class {
 			}
 		}
 
+		if (fluff.entries?.length || fluff.images?.length) {
+			fluff.name = entry.name;
+			fluff.source = SourceUtil.getEntitySource(entry);
+		}
+
 		return fluff;
 	}
 
 	static async _pGetImplicitFluff ({entity, fluffProp, lockToken2} = {}) {
-		if (!entity.hasFluff && !entity.hasFluffImages) return null;
+		if (
+			!entity.hasFluff
+			&& !entity.hasFluffImages
+			&& (!entity._versionBase_isVersion || (!entity._versionBase_hasFluff && !entity._versionBase_hasFluffImages))
+		) return null;
 
-		const fluffEntity = await DataLoader.pCacheAndGet(fluffProp, entity.source, UrlUtil.URL_TO_HASH_BUILDER[fluffProp](entity), {lockToken2});
+		const fluffEntity = await DataLoader.pCacheAndGet(fluffProp, SourceUtil.getEntitySource(entity), UrlUtil.URL_TO_HASH_BUILDER[fluffProp](entity), {lockToken2});
 		if (fluffEntity) return fluffEntity;
 
-        if (entity._versionBase_name && entity._versionBase_source) {
-            return DataLoader.pCacheAndGet(
-                fluffProp,
-                entity.source,
-                UrlUtil.URL_TO_HASH_BUILDER[fluffProp]({
-                    name: entity._versionBase_name,
-                    source: entity._versionBase_source,
-                }),
-                {
-                    lockToken2,
-                },
-            )
-        }
+		if (entity._versionBase_isVersion && (entity._versionBase_hasFluff || entity._versionBase_hasFluffImages)) {
+			return DataLoader.pCacheAndGet(
+				fluffProp,
+				SourceUtil.getEntitySource(entity),
+				entity._versionBase_hash,
+				{
+					lockToken2,
+				},
+			);
+		}
 
-        return null
-    }
+		return null;
+	}
+
+	static async pGetProxyFluff ({entity, prop = null}) {
+		prop ||= entity?.__prop;
+		switch (prop) {
+			case "monster":
+				return Renderer.monster.pGetFluff(entity);
+			case "item":
+			case "magivariant":
+			case "baseitem":
+				return Renderer.item.pGetFluff(entity);
+			default: return Renderer.utils.pGetFluff({entity, fluffProp: `${prop}Fluff`});
+		}
+	}
 
     // TODO(Future) move into `DataLoader`; cleanup `lockToken2` usage
     static async pGetFluff({ entity, pFnPostProcess, fluffProp, lockToken2 = null } = {}) {
@@ -4008,26 +4092,28 @@ Renderer.utils = class {
             return `${start}${end}`.toTitleCase()
         }
 
-        /**
-         * @param prerequisites
-         * @param isListMode
-         * @param blocklistKeys
-         * @param isTextOnly
-         * @param isSkipPrefix
-         * @param {"classic" | null} styleHint
-         * @return {string}
-         */
-        static getHtml(
-            prerequisites,
-            {
-                isListMode = false,
-                blocklistKeys = new Set(),
-                isTextOnly = false,
-                isSkipPrefix = false,
-                styleHint = null,
-            } = {},
-        ) {
-            if (!prerequisites?.length) return isListMode ? "\u2014" : ""
+		/**
+		 * @param prerequisites
+		 * @param isListMode
+		 * @param {?Set} blocklistKeys
+		 * @param {?object} keyOptions
+		 * @param isTextOnly
+		 * @param isSkipPrefix
+		 * @param {"classic" | null} styleHint
+		 * @return {string}
+		 */
+		static getHtml (
+			prerequisites,
+			{
+				isListMode = false,
+				blocklistKeys = null,
+				keyOptions = null,
+				isTextOnly = false,
+				isSkipPrefix = false,
+				styleHint = null,
+			} = {},
+		) {
+			if (!prerequisites?.length) return isListMode ? "\u2014" : "";
 
             styleHint ||= VetoolsConfig.get("styleSwitcher", "style")
 
@@ -4055,42 +4141,42 @@ Renderer.utils = class {
                         hasNote = true
                     }
 
-                    const prereqsToJoin = Object.entries(pr)
-                        .filter(([k]) => !prereqsShared[k])
-                        .sort(([kA], [kB]) => this._WEIGHTS[kA] - this._WEIGHTS[kB])
-                        .map(([k, v]) => {
-                            if (k === "note" || blocklistKeys.has(k)) return false
+					const prereqsToJoin = Object.entries(pr)
+						.filter(([k]) => !prereqsShared[k])
+						.sort(([kA], [kB]) => this._WEIGHTS[kA] - this._WEIGHTS[kB])
+						.map(([k, v]) => {
+							if (k === "note" || blocklistKeys?.has(k)) return false;
 
                             cntPrerequisites += 1
 
 							switch (k) {
-								case "level": return this._getHtml_level({v, isListMode, isTextOnly, styleHint});
-								case "pact": return this._getHtml_pact({v, isListMode, isTextOnly, styleHint});
-								case "patron": return this._getHtml_patron({v, isListMode, isTextOnly, styleHint});
-								case "spell": return this._getHtml_spell({v, isListMode, isTextOnly, styleHint});
-								case "feat": return this._getHtml_feat({v, isListMode, isTextOnly, styleHint});
-								case "optionalfeature": return this._getHtml_optionalfeature({v, isListMode, isTextOnly, styleHint});
-								case "feature": return this._getHtml_feature({v, isListMode, isTextOnly, styleHint});
-								case "item": return this._getHtml_item({v, isListMode, isTextOnly, styleHint});
-								case "itemType": return this._getHtml_itemType({v, isListMode, isTextOnly, styleHint});
-								case "itemProperty": return this._getHtml_itemProperty({v, isListMode, isTextOnly, styleHint});
-								case "otherSummary": return this._getHtml_otherSummary({v, isListMode, isTextOnly, styleHint});
-								case "other": return this._getHtml_other({v, isListMode, isTextOnly, styleHint});
-								case "race": return this._getHtml_race({v, isListMode, isTextOnly, styleHint});
-								case "background": return this._getHtml_background({v, isListMode, isTextOnly, styleHint});
-								case "ability": return this._getHtml_ability({v, isListMode, isTextOnly, styleHint});
-								case "proficiency": return this._getHtml_proficiency({v, isListMode, isTextOnly, styleHint});
-								case "expertise": return this._getHtml_expertise({v, isListMode, isTextOnly, styleHint});
-								case "spellcasting": return this._getHtml_spellcasting({v, isListMode, isTextOnly, styleHint});
-								case "spellcasting2020": return this._getHtml_spellcasting2020({v, isListMode, isTextOnly, styleHint});
-								case "spellcastingFeature": return this._getHtml_spellcastingFeature({v, isListMode, isTextOnly, styleHint});
-								case "spellcastingPrepared": return this._getHtml_spellcastingPrepared({v, isListMode, isTextOnly, styleHint});
-								case "spellcastingFocus": return this._getHtml_spellcastingFocus({v, isListMode, isTextOnly, styleHint});
-								case "psionics": return this._getHtml_psionics({v, isListMode, isTextOnly, styleHint});
-								case "alignment": return this._getHtml_alignment({v, isListMode, isTextOnly, styleHint});
-								case "campaign": return this._getHtml_campaign({v, isListMode, isTextOnly, styleHint});
-								case "culture": return this._getHtml_culture({v, isListMode, isTextOnly, styleHint});
-								case "group": return this._getHtml_group({v, isListMode, isTextOnly, styleHint});
+								case "level": return this._getHtml_level({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "pact": return this._getHtml_pact({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "patron": return this._getHtml_patron({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "spell": return this._getHtml_spell({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "feat": return this._getHtml_feat({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "optionalfeature": return this._getHtml_optionalfeature({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "feature": return this._getHtml_feature({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "item": return this._getHtml_item({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "itemType": return this._getHtml_itemType({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "itemProperty": return this._getHtml_itemProperty({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "otherSummary": return this._getHtml_otherSummary({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "other": return this._getHtml_other({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "race": return this._getHtml_race({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "background": return this._getHtml_background({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "ability": return this._getHtml_ability({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "proficiency": return this._getHtml_proficiency({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "expertise": return this._getHtml_expertise({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "spellcasting": return this._getHtml_spellcasting({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "spellcasting2020": return this._getHtml_spellcasting2020({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "spellcastingFeature": return this._getHtml_spellcastingFeature({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "spellcastingPrepared": return this._getHtml_spellcastingPrepared({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "spellcastingFocus": return this._getHtml_spellcastingFocus({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "psionics": return this._getHtml_psionics({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "alignment": return this._getHtml_alignment({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "campaign": return this._getHtml_campaign({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "culture": return this._getHtml_culture({v, isListMode, keyOptions, isTextOnly, styleHint});
+								case "group": return this._getHtml_group({v, isListMode, keyOptions, isTextOnly, styleHint});
 								default: throw new Error(`Unhandled key: ${k}`);
 							}
 						})
@@ -4129,29 +4215,34 @@ Renderer.utils = class {
             return `${ptPrefix}${[shared, joinedChoices].filter(Boolean).join(ptsSharedOtherJoiner)}`
         }
 
-        static _getHtml_level({ v, isListMode, styleHint }) {
-            // a generic level requirement
-            if (typeof v === "number") {
-                if (isListMode) return `Lvl ${v}`
+		static _getHtml_level ({v, isListMode, keyOptions, isTextOnly, styleHint}) {
+			// a generic level requirement
+			if (typeof v === "number") {
+				if (keyOptions?.level?.isNameOnly) return "";
+
+				if (isListMode) return `Lvl ${v}`;
 
                 if (styleHint === "classic") return `${Parser.getOrdinalForm(v)} level`
                 return `Level ${v}+`
             }
 
-            if (!v.class && !v.subclass) {
-                if (isListMode) return `Lvl ${v.level}`
+			if (!v.class && !v.subclass) {
+				if (keyOptions?.level?.isNameOnly) return "";
 
-                if (styleHint === "classic") return `${Parser.getOrdinalForm(v.level)} level`
-                return `Level ${v.level}+`
-            }
+				if (isListMode) return `Lvl ${v.level}`;
 
-            const isLevelVisible = v.level !== 1 // Hide the "implicit" 1st level.
-            const isSubclassVisible = v.subclass && v.subclass.visible
-            const isClassVisible = v.class && (v.class.visible || isSubclassVisible) // force the class name to be displayed if there's a subclass being displayed
-            if (isListMode) {
-                const shortNameRaw = isClassVisible ? this._getShortClassName(v.class.name) : null
-                return `${isClassVisible ? `${shortNameRaw.slice(0, 4)}${isSubclassVisible ? "*" : "."}` : ""}${isLevelVisible ? ` Lvl ${v.level}` : ""}`
-            }
+				if (styleHint === "classic") return `${Parser.getOrdinalForm(v.level)} level`;
+				return `Level ${v.level}+`;
+			}
+
+			const isLevelVisible = v.level !== 1 // Hide the "implicit" 1st level.
+				&& !keyOptions?.level?.isNameOnly;
+			const isSubclassVisible = v.subclass?.visible;
+			const isClassVisible = v.class && (v.class.visible || isSubclassVisible); // force the class name to be displayed if there's a subclass being displayed
+			if (isListMode) {
+				const shortNameRaw = isClassVisible ? this._getShortClassName(v.class.name) : null;
+				return `${isClassVisible ? `${shortNameRaw.slice(0, 4)}${isSubclassVisible ? "*" : "."}` : ""}${isLevelVisible ? ` Lvl ${v.level}` : ""}`;
+			}
 
             let classPart = ""
             if (isClassVisible && isSubclassVisible) classPart = ` ${v.class.name} (${v.subclass.name})`
@@ -4175,30 +4266,30 @@ Renderer.utils = class {
             return isListMode ? `${Parser.prereqPatronToShort(v)} patron` : `${v} patron`
         }
 
-        static _getHtml_spell({ v, isListMode, isTextOnly }) {
-            return isListMode
-                ? v.map(sp => {
-                    if (typeof sp === "string") return sp.split("#")[0].split("|")[0].toTitleCase()
-                    return sp.entrySummary || sp.entry
-                })
-                    .join("/")
-                : v.map(sp => {
-                    if (typeof sp === "string") return Parser.prereqSpellToFull(sp, { isTextOnly })
-                    return isTextOnly ? Renderer.stripTags(sp.entry) : Renderer.get().render(`{@filter ${sp.entry}|spells|${sp.choose}}`)
-                })
-                    .joinConjunct(", ", " or ")
-        }
+		static _getHtml_spell ({v, isListMode, keyOptions, isTextOnly}) {
+			return isListMode
+				? v.map(sp => {
+					if (typeof sp === "string") return sp.split("#")[0].split("|")[0].toTitleCase();
+					return sp.entrySummary || sp.entry;
+				})
+					.join("/")
+				: v.map(sp => {
+					if (typeof sp === "string") return Parser.prereqSpellToFull(sp, {isTextOnly});
+					return isTextOnly ? Renderer.stripTags(sp.entry) : Renderer.get().render(`{@filter ${sp.entry}|spells|${sp.choose}}`);
+				})
+					.joinConjunct(", ", " or ");
+		}
 
-        static _getHtml_feat({ v, isListMode, isTextOnly, styleHint }) {
-            return this._getHtml_uidTag({ v, isListMode, isTextOnly, styleHint, tag: "feat" })
-        }
+		static _getHtml_feat ({v, isListMode, keyOptions, isTextOnly, styleHint}) {
+			return this._getHtml_uidTag({v, isListMode, keyOptions, isTextOnly, styleHint, tag: "feat"});
+		}
 
-        static _getHtml_optionalfeature({ v, isListMode, isTextOnly, styleHint }) {
-            return this._getHtml_uidTag({ v, isListMode, isTextOnly, styleHint, tag: "optfeature" })
-        }
+		static _getHtml_optionalfeature ({v, isListMode, keyOptions, isTextOnly, styleHint}) {
+			return this._getHtml_uidTag({v, isListMode, keyOptions, isTextOnly, styleHint, tag: "optfeature"});
+		}
 
-        static _getHtml_uidTag({ v, isListMode, isTextOnly, styleHint, tag }) {
-            if (isListMode) return v.map(x => x.split("|")[0].toTitleCase()).join("/")
+		static _getHtml_uidTag ({v, isListMode, keyOptions, isTextOnly, styleHint, tag}) {
+			if (isListMode) return v.map(x => x.split("|")[0].toTitleCase()).join("/");
 
             return v
                 .map(uid => {
@@ -4209,14 +4300,14 @@ Renderer.utils = class {
                 .joinConjunct(", ", " or ")
         }
 
-        static _getHtml_feature({ v, isListMode, isTextOnly, styleHint }) {
-            if (isListMode) return v.map(x => Renderer.stripTags(x).toTitleCase()).join("/")
+		static _getHtml_feature ({v, isListMode, keyOptions, isTextOnly, styleHint}) {
+			if (isListMode) return v.map(x => Renderer.stripTags(x).toTitleCase()).join("/");
 
-            const ptNames = v.map(it => isTextOnly ? Renderer.stripTags(it) : Renderer.get().render(it)).joinConjunct(", ", " or ")
+			const ptNames = v.map(it => isTextOnly ? Renderer.stripTags(it) : Renderer.get().render(it)).joinConjunct(", ", " or ");
 
-            if (styleHint === "classic") return ptNames
-            return `${ptNames} Feature${v.length === 1 ? "" : "s"}`
-        }
+			if (styleHint === "classic") return ptNames;
+			return `${ptNames} Feature${v.length === 1 ? "" : "s"}`;
+		}
 
         static _getHtml_item({ v, isListMode }) {
             return isListMode ? v.map(x => x.toTitleCase()).join("/") : v.joinConjunct(", ", " or ")
@@ -4255,41 +4346,41 @@ Renderer.utils = class {
                 )
         }
 
-        static _getHtml_otherSummary({ v, isListMode, isTextOnly }) {
-            return isListMode
-                ? (v.entrySummary || Renderer.stripTags(v.entry))
-                : (isTextOnly ? Renderer.stripTags(v.entry) : Renderer.get().render(v.entry))
-        }
+		static _getHtml_otherSummary ({v, isListMode, keyOptions, isTextOnly}) {
+			return isListMode
+				? (v.entrySummary || Renderer.stripTags(v.entry))
+				: (isTextOnly ? Renderer.stripTags(v.entry) : Renderer.get().render(v.entry));
+		}
 
-        static _getHtml_other({ v, isListMode, isTextOnly }) {
-            return isListMode ? "Special" : (isTextOnly ? Renderer.stripTags(v) : Renderer.get().render(v))
-        }
+		static _getHtml_other ({v, isListMode, keyOptions, isTextOnly}) {
+			return isListMode ? "Special" : (isTextOnly ? Renderer.stripTags(v) : Renderer.get().render(v));
+		}
 
-        static _getHtml_race({ v, isListMode, isTextOnly }) {
-            const parts = v.map((it, i) => {
-                if (isListMode) {
-                    return `${it.name.toTitleCase()}${it.subrace != null ? ` (${it.subrace})` : ""}`
-                } else {
-                    const raceName = it.displayEntry ? (isTextOnly ? Renderer.stripTags(it.displayEntry) : Renderer.get().render(it.displayEntry)) : i === 0 ? it.name.toTitleCase() : it.name
-                    return `${raceName}${it.subrace != null ? ` (${it.subrace})` : ""}`
-                }
-            })
-            return isListMode ? parts.join("/") : parts.joinConjunct(", ", " or ")
-        }
+		static _getHtml_race ({v, isListMode, keyOptions, isTextOnly}) {
+			const parts = v.map((it, i) => {
+				if (isListMode) {
+					return `${it.name.toTitleCase()}${it.subrace != null ? ` (${it.subrace})` : ""}`;
+				} else {
+					const raceName = it.displayEntry ? (isTextOnly ? Renderer.stripTags(it.displayEntry) : Renderer.get().render(it.displayEntry)) : i === 0 ? it.name.toTitleCase() : it.name;
+					return `${raceName}${it.subrace != null ? ` (${it.subrace})` : ""}`;
+				}
+			});
+			return isListMode ? parts.join("/") : parts.joinConjunct(", ", " or ");
+		}
 
-        static _getHtml_background({ v, isListMode, isTextOnly }) {
-            const parts = v.map((it, i) => {
-                if (isListMode) {
-                    return `${it.name.toTitleCase()}`
-                } else {
-                    return it.displayEntry ? (isTextOnly ? Renderer.stripTags(it.displayEntry) : Renderer.get().render(it.displayEntry)) : i === 0 ? it.name.toTitleCase() : it.name
-                }
-            })
-            return isListMode ? parts.join("/") : parts.joinConjunct(", ", " or ")
-        }
+		static _getHtml_background ({v, isListMode, keyOptions, isTextOnly}) {
+			const parts = v.map((it, i) => {
+				if (isListMode) {
+					return `${it.name.toTitleCase()}`;
+				} else {
+					return it.displayEntry ? (isTextOnly ? Renderer.stripTags(it.displayEntry) : Renderer.get().render(it.displayEntry)) : i === 0 ? it.name.toTitleCase() : it.name;
+				}
+			});
+			return isListMode ? parts.join("/") : parts.joinConjunct(", ", " or ");
+		}
 
-        static _getHtml_ability({ v, isListMode, isTextOnly, styleHint }) {
-            // `v` is an array or objects with str/dex/... properties; array is "OR"'d togther, object is "AND"'d together
+		static _getHtml_ability ({v, isListMode, keyOptions, isTextOnly, styleHint}) {
+			// `v` is an array or objects with str/dex/... properties; array is "OR"'d together, object is "AND"'d together
 
             let hadMultipleInner = false
             let hadMultiMultipleInner = false
@@ -4354,15 +4445,15 @@ Renderer.utils = class {
             return `${joined}${allValuesEqual != null ? ` ${allValuesEqual}${ptHigher}` : ""}`
         }
 
-        static _getHtml_proficiency({ v, isListMode, styleHint }) {
-            const parts = v.map(obj => {
-                return Object.entries(obj).map(([profType, prof]) => {
-                    switch (profType) {
-                        case "armor": {
-                            if (prof === "shield") {
-                                if (isListMode) return styleHint === "classic" ? `Prof ${prof}` : `${prof.toTitleCase()} Trai.`
-                                return styleHint === "classic" ? `Proficiency with ${prof}s` : `${prof.toTitleCase()} Training`
-                            }
+		static _getHtml_proficiency ({v, isListMode, keyOptions, isTextOnly, styleHint}) {
+			const parts = v.map(obj => {
+				return Object.entries(obj).map(([profType, prof]) => {
+					switch (profType) {
+						case "armor": {
+							if (prof === "shield") {
+								if (isListMode) return styleHint === "classic" ? `Prof ${prof}` : `${prof.toTitleCase()} Trai.`;
+								return styleHint === "classic" ? `Proficiency with ${prof}s` : `${prof.toTitleCase()} Training`;
+							}
 
 							if (isListMode) return styleHint === "classic" ? `Prof ${Parser.armorFullToAbv(prof)} armor` : `${Parser.armorFullToAbv(prof).toTitleCase()} Armor Trai.`;
 							return styleHint === "classic" ? `Proficiency with ${prof} armor` : `${prof.toTitleCase()} Armor Training`;
@@ -4380,7 +4471,7 @@ Renderer.utils = class {
 			return isListMode ? parts.join("/") : parts.joinConjunct(", ", " or ");
 		}
 
-		static _getHtml_expertise ({v, isListMode, styleHint}) {
+		static _getHtml_expertise ({v, isListMode, keyOptions, isTextOnly, styleHint}) {
 			const parts = v.map(obj => {
 				return Object.entries(obj).map(([profType, prof]) => {
 					switch (profType) {
@@ -4400,10 +4491,10 @@ Renderer.utils = class {
             return isListMode ? "Spellcasting" : "The ability to cast at least one spell"
         }
 
-        static _getHtml_spellcasting2020({ v, isListMode, styleHint }) {
-            if (isListMode) return "Spellcasting"
-            return styleHint === "classic" ? "Spellcasting or Pact Magic feature" : "Spellcasting or Pact Magic Feature"
-        }
+		static _getHtml_spellcasting2020 ({v, isListMode, keyOptions, isTextOnly, styleHint}) {
+			if (isListMode) return "Spellcasting";
+			return styleHint === "classic" ? "Spellcasting or Pact Magic feature" : "Spellcasting or Pact Magic Feature";
+		}
 
         static _getHtml_spellcastingFeature({ v, isListMode }) {
             return isListMode ? "Spellcasting" : "Spellcasting Feature"
@@ -4418,13 +4509,13 @@ Renderer.utils = class {
 			"druid": "Druidic Focus",
 			"holy": "Holy Symbol",
 		};
-		static _getHtml_spellcastingFocus ({v, isListMode, isTextOnly, styleHint}) {
+		static _getHtml_spellcastingFocus ({v, isListMode, keyOptions, isTextOnly, styleHint}) {
 			if (isListMode) {
 				if (v === true) return `Spellcasting Focus`;
 				return v.map(n => this._SCF_TYPE_TO_NAME[n] || `Spellcasting ${n.toTitleCase()}`).join("/");
 			}
 
-			const ptScfSuffix = styleHint === "classic" ? "spellcasting focus" : "{@variantrule Spellcasting Focus|XPHB}";
+			const ptScfSuffix = "spellcasting focus";
 			if (v === true) {
 				const ent = `Ability to use a ${ptScfSuffix}`;
 				return isTextOnly ? Renderer.stripTags(ent) : Renderer.get().render(ent);
@@ -4435,11 +4526,11 @@ Renderer.utils = class {
 					if (!i) {
 						const a = Parser.getArticle(this._SCF_TYPE_TO_NAME[scf] || scf);
 						if (!this._SCF_TYPE_TO_NAME[scf]) return `${a} ${scf}`;
-						return `${a} {@item ${this._SCF_TYPE_TO_NAME[scf]}${styleHint === "classic" ? "" : "|XPHB"}}`;
+						return `${a} {@item ${this._SCF_TYPE_TO_NAME[scf]}}`;
 					}
 
 					if (!this._SCF_TYPE_TO_NAME[scf]) return scf;
-					return `{@item ${this._SCF_TYPE_TO_NAME[scf]}${styleHint === "classic" ? "" : "|XPHB"}}`;
+					return `{@item ${this._SCF_TYPE_TO_NAME[scf]}}`;
 				})
 				.joinConjunct(", ", " or ");
 
@@ -4448,11 +4539,11 @@ Renderer.utils = class {
 			return (isTextOnly ? Renderer.stripTags : Renderer.get().render.bind(Renderer.get()))(ent);
 		}
 
-        static _getHtml_psionics({ v, isListMode, isTextOnly }) {
-            return isListMode
-                ? "Psionics"
-                : (isTextOnly ? Renderer.stripTags : Renderer.get().render.bind(Renderer.get()))("Psionic Talent feature or Wild Talent feat")
-        }
+		static _getHtml_psionics ({v, isListMode, keyOptions, isTextOnly}) {
+			return isListMode
+				? "Psionics"
+				: (isTextOnly ? Renderer.stripTags : Renderer.get().render.bind(Renderer.get()))("Psionic Talent feature or Wild Talent feat");
+		}
 
         static _getHtml_alignment({ v, isListMode }) {
             return isListMode
@@ -4506,26 +4597,26 @@ Renderer.utils = class {
     static getSensesEntry(senses, { isTitleCase = false } = {}) {
         if (typeof senses === "string") senses = [senses] // handle legacy format
 
-        if (!Renderer.utils._FN_TAG_SENSES) {
-            Renderer.utils._SENSE_TAG_METAS = [
-                ...MiscUtil.copyFast(Parser.SENSES),
-                ...(PrereleaseUtil.getBrewProcessedFromCache("sense") || []),
-                ...(BrewUtil2.getBrewProcessedFromCache("sense") || []),
-            ]
-            const seenNames = new Set()
-            Renderer.utils._SENSE_TAG_METAS
-                .filter(it => {
-                    if (seenNames.has(it.name.toLowerCase())) return false
-                    seenNames.add(it.name.toLowerCase())
-                    return true
-                })
-                .forEach(it => it._re = new RegExp(`\\b(?<sense>${it.name.escapeRegexp()})\\b`, "gi"))
-            Renderer.utils._FN_TAG_SENSES = str => {
-                Renderer.utils._SENSE_TAG_METAS
-                    .forEach(({ name, source, _re }) => str = str.replace(_re, (...m) => `{@sense ${m.last().sense[isTitleCase ? "toTitleCase" : "toString"]()}|${source}}`))
-                return str
-            }
-        }
+		if (!Renderer.utils._FN_TAG_SENSES) {
+			Renderer.utils._SENSE_TAG_METAS = [
+				...MiscUtil.copyFast(Parser.getSenses()),
+				...(PrereleaseUtil.getBrewProcessedFromCache("sense") || []),
+				...(BrewUtil2.getBrewProcessedFromCache("sense") || []),
+			];
+			const seenNames = new Set();
+			Renderer.utils._SENSE_TAG_METAS
+				.filter(it => {
+					if (seenNames.has(it.name.toLowerCase())) return false;
+					seenNames.add(it.name.toLowerCase());
+					return true;
+				})
+				.forEach(it => it._re = new RegExp(`\\b(?<sense>${it.name.escapeRegexp()})\\b`, "gi"));
+			Renderer.utils._FN_TAG_SENSES = str => {
+				Renderer.utils._SENSE_TAG_METAS
+					.forEach(({name, source, _re}) => str = str.replace(_re, (...m) => `{@sense ${m.last().sense[isTitleCase ? "toTitleCase" : "toString"]()}|${source}}`));
+				return str;
+			};
+		}
 
         return senses
             .map(str => {
@@ -5302,12 +5393,13 @@ Renderer.utils = class {
 };
 
 Renderer.tag = class {
-    static _TagBase = class {
-        tagName
-        defaultSource = null;
-        page = null;
+	static _TagBase = class {
+		tagName;
+		defaultSource = null;
+		page = null;
+		isStandalone = false;
 
-        get tag() { return `@${this.tagName}` }
+		get tag () { return `@${this.tagName}`; }
 
         getStripped(tag, text) {
             text = DataUtil.generic.variableResolver.getHumanReadableString(text) // replace any variables
@@ -5329,9 +5421,9 @@ Renderer.tag = class {
         get tag() { return `#${this.tagName}` }
     };
 
-    static _TagTextStyle = class extends this._TagBaseAt {
-        _getStripped(tag, text) { return text.split("|")[0] }
-    };
+	static _TagTextStyle = class extends this._TagBaseAt {
+		_getStripped (tag, text) { return Renderer.splitTagByPipe(text)[0] || ""; }
+	};
 
     static TagBoldShort = class extends this._TagTextStyle {
         tagName = "b";
@@ -5401,9 +5493,39 @@ Renderer.tag = class {
         tagName = "style";
     };
 
-    static TagFont = class extends this._TagTextStyle {
-        tagName = "font";
-    };
+	static TagFont = class extends this._TagTextStyle {
+		tagName = "font";
+
+		static getFontInfo (fontDecl) {
+			if (!fontDecl) {
+				return {
+					fontId: null,
+					fontUrl: null,
+				};
+			}
+
+			const spl = fontDecl.split("/");
+
+			if (spl.length === 1) {
+				return {
+					fontId: spl[0],
+					fontUrl: null,
+				};
+			}
+
+			const ptName = spl.at(-1);
+			const fontIdFaux = ptName.split(".")[0];
+
+			const fontUrl = /^https?:\/\//.test(fontDecl)
+				? fontDecl
+				: Renderer.get().getMediaUrl("fonts", fontDecl);
+
+			return {
+				fontId: fontIdFaux,
+				fontUrl,
+			};
+		}
+	};
 
     static TagComic = class extends this._TagTextStyle {
         tagName = "comic";
@@ -5452,14 +5574,16 @@ Renderer.tag = class {
         _getStripped(tag, text) { return `${Parser.attAbvToFull(text)} Saving Throw:` }
     };
 
-    static TagActSaveSuccess = class extends this._TagBaseAt {
-        tagName = "actSaveSuccess";
+	static TagActSaveSuccess = class extends this._TagBaseAt {
+		tagName = "actSaveSuccess";
+		isStandalone = true;
 
         _getStripped(tag, text) { return "Success:" }
     };
 
-    static TagActSaveFailure = class extends this._TagBaseAt {
-        tagName = "actSaveFail";
+	static TagActSaveFailure = class extends this._TagBaseAt {
+		tagName = "actSaveFail";
+		isStandalone = true;
 
 		_getStripped (tag, text) {
 			const [ordinal] = Renderer.splitTagByPipe(text);
@@ -5468,38 +5592,53 @@ Renderer.tag = class {
 		}
 	};
 
+	static TagActSaveFailureBy = class extends this._TagBaseAt {
+		tagName = "actSaveFailBy";
+
+		_getStripped (tag, text) {
+			const [amount] = Renderer.splitTagByPipe(text);
+			return `Failure by ${amount} or More:`;
+		}
+	};
+
 	static TagActSaveSuccessOrFailure = class extends this._TagBaseAt {
 		tagName = "actSaveSuccessOrFail";
+		isStandalone = true;
 
 		_getStripped (tag, text) { return "Failure or Success:"; }
 	};
 
-    static TagActTrigger = class extends this._TagBaseAt {
-        tagName = "actTrigger";
+	static TagActTrigger = class extends this._TagBaseAt {
+		tagName = "actTrigger";
+		isStandalone = true;
 
         _getStripped(tag, text) { return "Trigger:" }
     };
 
-    static TagActResponse = class extends this._TagBaseAt {
-        tagName = "actResponse";
+	static TagActResponse = class extends this._TagBaseAt {
+		tagName = "actResponse";
+		isStandalone = true;
 
 		_getStripped (tag, text) { return `Response${text.includes("d") ? "\u2014" : ":"}`; }
 	};
 
-    static TagHitText = class extends this._TagBaseAt {
-        tagName = "h";
+	static TagHitText = class extends this._TagBaseAt {
+		tagName = "h";
+		isStandalone = true;
 
         _getStripped(tag, text) { return "Hit: " }
     };
 
-    static TagMissText = class extends this._TagBaseAt {
-        tagName = "m";
+	static TagMissText = class extends this._TagBaseAt {
+		tagName = "m";
+		isStandalone = true;
 
 		_getStripped (tag, text) { return "Miss: "; }
 	};
 
 	static TagHitOrMissText = class extends this._TagBaseAt {
 		tagName = "hom";
+		isStandalone = true;
 
 		_getStripped (tag, text) { return "Hit or Miss: "; } // I guess they never miss
 	};
@@ -5516,14 +5655,15 @@ Renderer.tag = class {
         _getStripped(tag, text) { return Renderer.attackTagToFull(text, { isRoll: true }) }
     };
 
-    static TagHitYourSpellAttack = class extends this._TagBaseAt {
-        tagName = "hitYourSpellAttack";
+	static TagHitYourSpellAttack = class extends this._TagBaseAt {
+		tagName = "hitYourSpellAttack";
+		isStandalone = true;
 
-        _getStripped(tag, text) {
-            const [displayText] = Renderer.splitTagByPipe(text)
-            return displayText || "your spell attack modifier"
-        }
-    };
+		_getStripped (tag, text) {
+			const [displayText] = Renderer.splitTagByPipe(text);
+			return displayText || "your spell attack modifier";
+		}
+	};
 
     static TagDc = class extends this._TagBaseAt {
         tagName = "dc";
@@ -5534,14 +5674,15 @@ Renderer.tag = class {
         }
     };
 
-    static TagDcYourSpellSave = class extends this._TagBaseAt {
-        tagName = "dcYourSpellSave";
+	static TagDcYourSpellSave = class extends this._TagBaseAt {
+		tagName = "dcYourSpellSave";
+		isStandalone = true;
 
-        _getStripped(tag, text) {
-            const [displayText] = Renderer.splitTagByPipe(text)
-            return displayText || "your spell save DC"
-        }
-    };
+		_getStripped (tag, text) {
+			const [displayText] = Renderer.splitTagByPipe(text);
+			return displayText || "your spell save DC";
+		}
+	};
 
     static _TagDiceFlavor = class extends this._TagBaseAt {
         _getStripped(tag, text) {
@@ -5613,9 +5754,10 @@ Renderer.tag = class {
         tagName = "initiative";
     };
 
-    static TagRecharge = class extends this._TagDiceFlavor {
-        tagName = "recharge";
-    };
+	static TagRecharge = class extends this._TagDiceFlavor {
+		tagName = "recharge";
+		isStandalone = true;
+	};
 
     static TagAbility = class extends this._TagDiceFlavor {
         tagName = "ability";
@@ -5644,14 +5786,15 @@ Renderer.tag = class {
         tagName = "scaledamage";
     };
 
-    static TagCoinflip = class extends this._TagBaseAt {
-        tagName = "coinflip";
+	static TagCoinflip = class extends this._TagBaseAt {
+		tagName = "coinflip";
+		isStandalone = true;
 
-        _getStripped(tag, text) {
-            const [displayText] = Renderer.splitTagByPipe(text)
-            return displayText || "flip a coin"
-        }
-    };
+		_getStripped (tag, text) {
+			const [displayText] = Renderer.splitTagByPipe(text);
+			return displayText || "flip a coin";
+		}
+	};
 
     static _TagPipedNoDisplayText = class extends this._TagBaseAt {
         _getStripped(tag, text) {
@@ -6067,6 +6210,7 @@ Renderer.tag = class {
 		new this.TagActSave(),
 		new this.TagActSaveSuccess(),
 		new this.TagActSaveFailure(),
+		new this.TagActSaveFailureBy(),
 		new this.TagActSaveSuccessOrFailure(),
 		new this.TagActTrigger(),
 		new this.TagActResponse(),
@@ -7295,9 +7439,9 @@ class _RenderCompactSpellsImplBase extends _RenderCompactImplBase {
         return Renderer.spell.getHtmlPtCastingTime(ent, { styleHint: this._style })
     }
 
-    _getHtmlParts_range({ ent }) {
-        return Renderer.spell.getHtmlPtRange(ent)
-    }
+	_getHtmlParts_range ({ent}) {
+		return Renderer.spell.getHtmlPtRange(ent, {styleHint: this._style, isDisplaySelfArea: SourceUtil.isClassicSource(ent.source)});
+	}
 
     _getHtmlParts_components({ ent }) {
         return Renderer.spell.getHtmlPtComponents(ent)
@@ -7361,7 +7505,7 @@ Renderer.spell = class {
         return `<b>Casting Time:</b> ${Parser.spTimeListToFull(spell.time, spell.meta, { styleHint })}`
     }
 
-	static getHtmlPtRange (spell) { return `<b>Range:</b> ${Parser.spRangeToFull(spell.range)}`; }
+	static getHtmlPtRange (spell, {styleHint = null, isDisplaySelfArea = false} = {}) { return `<b>Range:</b> ${Parser.spRangeToFull(spell.range, {styleHint, isDisplaySelfArea})}`; }
 	static getHtmlPtComponents (spell) { return `<b>Components:</b> ${Parser.spComponentsToFull(spell.components, spell.level)}`; }
 	static getHtmlPtDuration (spell, {styleHint = null} = {}) { return `<b>Duration:</b> ${Parser.spDurationToFull(spell.duration, {styleHint})}`; }
 
@@ -8438,23 +8582,23 @@ Renderer.race = class {
         return MiscUtil.copyFast(race.subraces).map(s => Renderer.race._getMergedSubrace(race, s))
     }
 
-    static _getMergedSubrace(race, cpySr) {
-        const cpy = MiscUtil.copyFast(race)
-        cpy._baseName = cpy.name
-        cpy._baseSource = cpy.source
-        cpy._baseSrd = cpy.srd
-        cpy._baseSrd52 = cpy.srd52
-        cpy._baseBasicRules = cpy.basicRules
-        cpy._baseFreeRules2024 = cpy.freeRules2024
-        delete cpy.subraces
-        delete cpy.srd
-        delete cpy.srd52
-        delete cpy.basicRules
-        delete cpy.freeRules2024
-        delete cpy._versions
-        delete cpy.hasFluff
-        delete cpy.hasFluffImages
-        delete cpySr.__prop
+	static _getMergedSubrace (race, cpySr) {
+		const cpy = MiscUtil.copyFast(race);
+		cpy._baseName = cpy.name;
+		cpy._baseSource = cpy.source;
+		cpy._baseSrd = cpy.srd;
+		cpy._baseSrd52 = cpy.srd52;
+		cpy._baseBasicRules = cpy.basicRules;
+		cpy._baseFreeRules2024 = cpy.basicRules2024;
+		delete cpy.subraces;
+		delete cpy.srd;
+		delete cpy.srd52;
+		delete cpy.basicRules;
+		delete cpy.basicRules2024;
+		delete cpy._versions;
+		delete cpy.hasFluff;
+		delete cpy.hasFluffImages;
+		delete cpySr.__prop;
 
         // merge names, abilities, entries, tags
         if (cpySr.name) {
@@ -9095,8 +9239,8 @@ Renderer.traphazard = class {
 }
 
 Renderer.cultboon = class {
-    static getCultRenderableEntriesMeta(ent) {
-        if (!ent.goal && !ent.cultists && !ent.signaturespells) return null
+	static getCultRenderableEntriesMeta (ent) {
+		if (!ent.goal && !ent.cultists && !ent.signatureSpells) return null;
 
         const fauxList = {
             type: "list",
@@ -9112,20 +9256,20 @@ Renderer.cultboon = class {
             })
         }
 
-        if (ent.cultists) {
-            fauxList.items.push({
-                type: "item",
-                name: "Typical Cultists:",
-                entry: ent.cultists.entry,
-            })
-        }
-        if (ent.signaturespells) {
-            fauxList.items.push({
-                type: "item",
-                name: "Signature Spells:",
-                entry: ent.signaturespells.entry,
-            })
-        }
+		if (ent.cultists) {
+			fauxList.items.push({
+				type: "item",
+				name: "Typical Cultists:",
+				entry: ent.cultists.entry,
+			});
+		}
+		if (ent.signatureSpells) {
+			fauxList.items.push({
+				type: "item",
+				name: "Signature Spells:",
+				entry: ent.signatureSpells.entry,
+			});
+		}
 
         return { listGoalsCultistsSpells: fauxList }
     }
@@ -9138,8 +9282,8 @@ Renderer.cultboon = class {
 
     /* -------------------------------------------- */
 
-    static getBoonRenderableEntriesMeta(ent) {
-        if (!ent.ability && !ent.signaturespells) return null
+	static getBoonRenderableEntriesMeta (ent) {
+		if (!ent.ability && !ent.signatureSpells) return null;
 
         const benefits = { type: "list", style: "list-hang-notitle", items: [] }
 
@@ -9151,13 +9295,13 @@ Renderer.cultboon = class {
             })
         }
 
-        if (ent.signaturespells) {
-            benefits.items.push({
-                type: "item",
-                name: "Signature Spells:",
-                entry: ent.signaturespells ? ent.signaturespells.entry : "None",
-            })
-        }
+		if (ent.signatureSpells) {
+			benefits.items.push({
+				type: "item",
+				name: "Signature Spells:",
+				entry: ent.signatureSpells ? ent.signatureSpells.entry : "None",
+			});
+		}
 
         return { listBenefits: benefits }
     }
@@ -9573,13 +9717,14 @@ class _RenderCompactBestiaryImplClassic extends _RenderCompactBestiaryImplBase {
             mon,
             renderer,
 
-            entsTrait,
-        },
-    ) {
-        return {
-            htmlPtSavingThrows: this._getHtmlParts_savingThrows({ mon }),
-            htmlPtDamageImmunities: this._getHtmlParts_damageImmunities({ mon }),
-            htmlPtConditionImmunities: this._getHtmlParts_conditionImmunities({ mon }),
+			entsTrait,
+		},
+	) {
+		return {
+			htmlPtSavingThrows: this._getHtmlParts_savingThrows({mon}),
+			htmlPtInitiative: this._getHtmlParts_initiative({mon, renderer}),
+			htmlPtDamageImmunities: this._getHtmlParts_damageImmunities({mon}),
+			htmlPtConditionImmunities: this._getHtmlParts_conditionImmunities({mon}),
 
             htmlPtTraits: this._getHtmlParts_traits({ mon, renderer, entsTrait }),
         }
@@ -9587,13 +9732,17 @@ class _RenderCompactBestiaryImplClassic extends _RenderCompactBestiaryImplBase {
 
     /* ----- */
 
-    _getHtmlParts_savingThrows({ mon }) {
-        return mon.save ? `<p><b>Saving Throws</b> ${Renderer.monster.getSavesPart(mon)}</p>` : ""
-    }
+	_getHtmlParts_savingThrows ({mon}) {
+		return mon.save ? `<p><b>Saving Throws</b> ${Renderer.monster.getSavesPart(mon)}</p>` : "";
+	}
 
-    _getHtmlParts_damageImmunities({ mon }) {
-        return mon.immune ? `<p><b>Damage Imm.</b> ${Parser.getFullImmRes(mon.immune)}</p>` : ""
-    }
+	_getHtmlParts_initiative ({mon, renderer}) {
+		return mon.initiative ? `<p><b>Initiative</b> ${Renderer.monster.getInitiativePart(mon, {renderer})}</p>` : "";
+	}
+
+	_getHtmlParts_damageImmunities ({mon}) {
+		return mon.immune ? `<p><b>Damage Imm.</b> ${Parser.getFullImmRes(mon.immune)}</p>` : "";
+	}
 
     _getHtmlParts_conditionImmunities({ mon }) {
         return mon.conditionImmune ? `<p><b>Condition Imm.</b> ${Parser.getFullCondImm(mon.conditionImmune)}</p>` : ""
@@ -9681,10 +9830,11 @@ class _RenderCompactBestiaryImplClassic extends _RenderCompactBestiaryImplBase {
 			legGroup,
 		});
 
-        const {
-            htmlPtSavingThrows,
-            htmlPtDamageImmunities,
-            htmlPtConditionImmunities,
+		const {
+			htmlPtSavingThrows,
+			htmlPtInitiative,
+			htmlPtDamageImmunities,
+			htmlPtConditionImmunities,
 
             htmlPtTraits,
         } = this._getHtmlParts({
@@ -9715,6 +9865,7 @@ class _RenderCompactBestiaryImplClassic extends _RenderCompactBestiaryImplBase {
 					${htmlPtsResources.join("")}
 					${htmlPtSavingThrows}
 					${htmlPtSkills}
+					${htmlPtInitiative}
 					${htmlPtTools}
 					${htmlPtVulnerabilities}
 					${htmlPtResistances}
@@ -10012,12 +10163,12 @@ Renderer.monster = class {
             return [vFtd, vBasic].filter(Boolean)
         }
 
-        static getHtml(dragon, { renderer = null } = {}) {
-            const variantEntrues = Renderer.monster.dragonCasterVariant.getVariantEntries(dragon)
-            if (!variantEntrues.length) return null
-            return variantEntrues.map(it => renderer.render(it)).join("")
-        }
-    };
+		static getHtml (dragon, {renderer = null} = {}) {
+			const variantEntries = Renderer.monster.dragonCasterVariant.getVariantEntries(dragon);
+			if (!variantEntries.length) return null;
+			return variantEntries.map(it => renderer.render(it)).join("");
+		}
+	};
 
 	static getCrScaleTarget (
 		{
@@ -10187,13 +10338,47 @@ Renderer.monster = class {
     static getTypeAlignmentPart(mon) {
         const typeObj = Parser.monTypeToFullObj(mon.type)
 
-        return `${mon.level ? `${Parser.getOrdinalForm(mon.level)}-level ` : ""}${typeObj.asTextSidekick ? `${typeObj.asTextSidekick}; ` : ""}${Renderer.utils.getRenderedSize(mon.size)}${mon.sizeNote ? ` ${mon.sizeNote}` : ""} ${typeObj.asText}${mon.alignment ? `, ${mon.alignmentPrefix ? Renderer.get().render(mon.alignmentPrefix) : ""}${Parser.alignmentListToFull(mon.alignment).toTitleCase()}` : ""}`
-    }
+		return `${mon.level != null ? `${Parser.getOrdinalForm(mon.level)}-level ` : ""}${typeObj.asTextSidekick ? `${typeObj.asTextSidekick}; ` : ""}${Renderer.utils.getRenderedSize(mon.size)}${mon.sizeNote ? ` ${mon.sizeNote}` : ""} ${typeObj.asText}${mon.alignment ? `, ${mon.alignmentPrefix ? Renderer.get().render(mon.alignmentPrefix) : ""}${Parser.alignmentListToFull(mon.alignment).toTitleCase()}` : ""}`;
+	}
+
+	static _getInitiativePart_passive ({mon, initPassive}) {
+		if (!mon.initiative?.advantageMode) return initPassive;
+		const ptTitle = `This creature has ${mon.initiative?.advantageMode === "adv" ? "Advantage" : "Disadvantage"} on Initiative.`;
+		return `<span title="${ptTitle.qq()}" class="help-subtle">${initPassive}</span>`;
+	}
+
+	static getInitiativePart (mon, {isPlainText = false, renderer = null} = {}) {
+		const initBonus = this.getInitiativeBonusNumber({mon});
+		const initPassive = this._getInitiativePassive({mon, initBonus});
+		if (initBonus == null || initPassive == null) return "\u2014";
+		const entry = `{@initiative ${initBonus}} (${this._getInitiativePart_passive({mon, initPassive})})`;
+		return isPlainText ? Renderer.stripTags(entry) : (renderer || Renderer.get()).render(entry);
+	}
+
+	static getInitiativeBonusNumber ({mon}) {
+		if (mon.initiative == null && (mon.dex == null || mon.dex.special)) return null;
+		if (mon.initiative == null) return Parser.getAbilityModNumber(mon.dex);
+		if (typeof mon.initiative === "number") return mon.initiative;
+		if (typeof mon.initiative !== "object") return null;
+		if (typeof mon.initiative.initiative === "number") return mon.initiative.initiative;
+		if (mon.dex == null) return;
+		const profBonus = mon.initiative.proficiency && Parser.crToNumber(mon.cr) < VeCt.CR_CUSTOM
+			? mon.initiative.proficiency * Parser.crToPb(mon.cr)
+			: 0;
+		return Parser.getAbilityModNumber(mon.dex) + profBonus;
+	}
+
+	static _getInitiativePassive ({mon, initBonus}) {
+		if (initBonus == null) return null;
+		if (mon.initiative == null || typeof mon.initiative !== "object") return 10 + initBonus;
+		const advDisMod = mon.initiative.advantageMode === "adv" ? 5 : mon.initiative.advantageMode === "dis" ? -5 : 0;
+		return 10 + initBonus + advDisMod;
+	}
 
     static getSavesPart(mon) { return `${Object.keys(mon.save || {}).sort(SortUtil.ascSortAtts).map(s => Renderer.monster.getSave(Renderer.get(), s, mon.save[s])).join(", ")}` }
 
 	static getSensesPart (mon, {isTitleCase = false, isForcePassive = false} = {}) {
-		const passive = mon.passive ?? (typeof mon.wis === "number" ? (10 + Parser.attAbvToFull(mon.wis)) : null);
+		const passive = mon.passive ?? (typeof mon.wis === "number" ? (10 + Parser.getAbilityModNumber(mon.wis)) : null);
 
 		const pts = [
 			mon.senses ? Renderer.utils.getRenderedSenses(mon.senses, {isTitleCase}) : "",
@@ -10509,12 +10694,24 @@ Renderer.monster = class {
         //  - Other actions (alphabetical)
         // Insert our spellcasting section into the "Other actions" part, in an alphabetically-appropriate place.
 
-        const ixLastAttack = actions.findLastIndex(it => it.entries && it.entries.length && typeof it.entries[0] === "string" && /\{@atkr? /.test(it.entries[0]))
-        const ixNext = actions.findIndex((act, ix) => ix > ixLastAttack && act.name && SortUtil.ascSortLower(act.name, "Spellcasting") >= 0)
-        if (~ixNext) actions.splice(ixNext, 0, ...spellActions)
-        else actions.push(...spellActions)
-        return actions
-    }
+		const ixLastAttack = actions.findLastIndex(it => it.entries && it.entries.length && typeof it.entries[0] === "string" && /\{@atkr? /.test(it.entries[0]));
+
+		const actionsAttack = ~ixLastAttack ? actions.slice(0, ixLastAttack) : [];
+		const actionsOther = ~ixLastAttack ? actions.slice(ixLastAttack) : actions;
+
+		// Weave spellcasting actions into the "other" actions block.
+		// This attempts to minimize re-ordering, which would otherwise occur if we were to use e.g. `sort`.
+		spellActions
+			.forEach(ent => {
+				if (!ent.name) return actionsOther.push(ent);
+
+				const ixInsert = actionsOther.findIndex((entAction, ix) => entAction.name && SortUtil.ascSortLower(entAction.name, ent.name) >= 0);
+				if (~ixInsert) actionsOther.splice(ixInsert, 0, ent);
+				else actionsOther.push(ent);
+			});
+
+		return [...actionsAttack, ...actionsOther];
+	}
 
     static getSkillsString(renderer, mon) {
         if (!mon.skill) return ""
@@ -10980,8 +11177,8 @@ Renderer.item = class {
 					"prop_name_lower": pFull.name.replace(/-/g, "\u2011").toLowerCase(),
 				},
 				mapCustomFns: {
-					"item.dmg1": () => Renderer.item._getTaggedDamage(item.dmg1),
-					"item.dmg2": () => Renderer.item._getTaggedDamage(item.dmg2),
+					"item.dmg1": () => Renderer.item._getTaggedDamage(item.dmg1, {renderer}),
+					"item.dmg2": () => Renderer.item._getTaggedDamage(item.dmg2, {renderer}),
 
 					"item.ammoType": () => {
 						if (!item.ammoType) return "";
@@ -11686,59 +11883,66 @@ Renderer.item = class {
         // Remove "base item" flag
         delete specificVariant._isBaseItem
 
-        // Reset enhancements/entry cache
-        specificVariant._isEnhanced = false
-        delete specificVariant._fullEntries
+		// Reset enhancements/entry cache
+		specificVariant._isEnhanced = false;
+		delete specificVariant._fullEntries;
 
-        specificVariant._baseName = baseItem.name
-        specificVariant._baseSrd = baseItem.srd
-        specificVariant._baseSrd52 = baseItem.srd52
-        specificVariant._baseBasicRules = baseItem.basicRules
-        specificVariant._baseFreeRules2024 = baseItem.freeRules2024
-        if (baseItem.source !== inherits.source) specificVariant._baseSource = baseItem.source
+		specificVariant._baseName = baseItem.name;
+		specificVariant._baseSrd = baseItem.srd;
+		specificVariant._baseSrd52 = baseItem.srd52;
+		specificVariant._baseBasicRules = baseItem.basicRules;
+		specificVariant._baseFreeRules2024 = baseItem.basicRules2024;
+		if (baseItem.source !== inherits.source) specificVariant._baseSource = baseItem.source;
 
-        specificVariant._variantName = genericVariant.name
+		specificVariant._variantName = genericVariant.name;
 
 		// Magic items do not inherit the value of the non-magical item
 		specificVariant._baseValue = baseItem.value;
 		delete specificVariant.value;
 
-        // Magic variants apply their own SRD info; page info
-        delete specificVariant.srd
-        delete specificVariant.srd52
-        delete specificVariant.basicRules
-        delete specificVariant.freeRules2024
-        delete specificVariant.page
+		// Magic variants apply their own SRD info; page info
+		delete specificVariant.srd;
+		delete specificVariant.srd52;
+		delete specificVariant.basicRules;
+		delete specificVariant.basicRules2024;
+		delete specificVariant.page;
 
         // Remove fluff specifiers
         delete specificVariant.hasFluff
         delete specificVariant.hasFluffImages
 
-        specificVariant._category = "Specific Variant"
-        Object.entries(inherits)
-            .forEach(([inheritedProperty, val]) => {
-                switch (inheritedProperty) {
-                    case "namePrefix": specificVariant.name = `${val}${specificVariant.name}`; break
-                    case "nameSuffix": specificVariant.name = `${specificVariant.name}${val}`; break
-                    case "entries": {
-                        Renderer.item._initFullEntries(specificVariant)
+		specificVariant._category = "Specific Variant";
+		Object.entries(inherits)
+			// Always apply "remove"s first
+			// This allows for e.g.
+			//   - base item: "Very Rare Reagent"
+			//   - variant: "Poisonous Reagent"
+			//     `{"nameRemove": "Reagent", "nameSuffix": "Poisonous Reagent"}`
+			//   -> `"Very Rare Poisonous Reagent"`
+			.sort(([kA], [kB]) => kB.includes("Remove") - kA.includes("Remove"))
+			.forEach(([inheritedProperty, val]) => {
+				switch (inheritedProperty) {
+					case "namePrefix": specificVariant.name = `${val}${specificVariant.name}`; break;
+					case "nameSuffix": specificVariant.name = `${specificVariant.name}${val}`; break;
+					case "entries": {
+						Renderer.item._initFullEntries(specificVariant);
 
-                        const appliedPropertyEntries = Renderer.applyAllProperties(val, Renderer.item._getInjectableProps(baseItem, inherits))
-                        appliedPropertyEntries.forEach((ent, i) => specificVariant._fullEntries.splice(i, 0, ent))
-                        break
-                    }
-                    case "vulnerable":
-                    case "resist":
-                    case "immune": {
-                        // Handled below
-                        break
-                    }
-                    case "conditionImmune": {
-                        specificVariant[inheritedProperty] = [...specificVariant[inheritedProperty] || [], ...val].unique()
-                        break
-                    }
-                    case "nameRemove": {
-                        specificVariant.name = specificVariant.name.replace(new RegExp(val.escapeRegexp(), "g"), "")
+						const appliedPropertyEntries = Renderer.applyAllProperties(val, Renderer.item._getInjectableProps(baseItem, inherits));
+						appliedPropertyEntries.forEach((ent, i) => specificVariant._fullEntries.splice(i, 0, ent));
+						break;
+					}
+					case "vulnerable":
+					case "resist":
+					case "immune": {
+						// Handled below
+						break;
+					}
+					case "conditionImmune": {
+						specificVariant[inheritedProperty] = [...specificVariant[inheritedProperty] || [], ...val].unique();
+						break;
+					}
+					case "nameRemove": {
+						specificVariant.name = specificVariant.name.replace(new RegExp(val.escapeRegexp(), "g"), "");
 
                         break
                     }
@@ -11995,8 +12199,8 @@ Renderer.item = class {
         if (item.type && (Renderer.item.getType(item.type)?.entries || Renderer.item.getType(item.type)?.entriesTemplate)) {
             Renderer.item._initFullEntries(item)
 
-			const propetyEntries = Renderer.item._enhanceItem_getItemPropertyTypeEntries({item, ent: Renderer.item.getType(item.type)});
-			propetyEntries.forEach(e => item._fullEntries.push({type: "wrapper", wrapped: e, data: {[VeCt.ENTDATA_ITEM_MERGED_ENTRY_TAG]: "type"}}));
+			const propertyEntries = Renderer.item._enhanceItem_getItemPropertyTypeEntries({item, ent: Renderer.item.getType(item.type)});
+			propertyEntries.forEach(e => item._fullEntries.push({type: "wrapper", wrapped: e, data: {[VeCt.ENTDATA_ITEM_MERGED_ENTRY_TAG]: "type"}}));
 		}
 		if (item.property) {
 			item.property.forEach(p => {
@@ -12005,8 +12209,8 @@ Renderer.item = class {
 
 				Renderer.item._initFullEntries(item);
 
-				const propetyEntries = Renderer.item._enhanceItem_getItemPropertyTypeEntries({item, ent: entProperty});
-				propetyEntries.forEach(e => item._fullEntries.push({type: "wrapper", wrapped: e, data: {[VeCt.ENTDATA_ITEM_MERGED_ENTRY_TAG]: "property"}}));
+				const propertyEntries = Renderer.item._enhanceItem_getItemPropertyTypeEntries({item, ent: entProperty});
+				propertyEntries.forEach(e => item._fullEntries.push({type: "wrapper", wrapped: e, data: {[VeCt.ENTDATA_ITEM_MERGED_ENTRY_TAG]: "property"}}));
 			});
 		}
 		// The following could be encoded in JSON, but they depend on more than one JSON property; maybe fix if really bored later
@@ -12299,8 +12503,51 @@ Renderer.item = class {
         }
         if (item.type && DataUtil.itemType.unpackUid(item.type).abbreviation === Parser.ITM_TYP_ABV__GENERIC_VARIANT) return ExcludeUtil.isExcluded(hash, "magicvariant", source)
 
-        return false
-    }
+		return false;
+	}
+
+	/* -------------------------------------------- */
+
+	static getFlatAttachedSpells (item) {
+		if (!item.attachedSpells) return null;
+		if (item.attachedSpells instanceof Array) return item.attachedSpells;
+		const out = [];
+		Object.entries(item.attachedSpells)
+			.forEach(([useType, v]) => {
+				switch (useType) {
+					case "will":
+					case "ritual":
+					case "other": {
+						v.forEach(uid => {
+							if (!out.includes(uid)) out.push(uid);
+						});
+						break;
+					}
+
+					case "rest":
+					case "daily":
+					case "limited":
+					case "charges":
+					case "resource": {
+						Object.values(v)
+							.forEach(arr => {
+								arr.forEach(uid => {
+									if (!out.includes(uid)) out.push(uid);
+								});
+							});
+						break;
+					}
+
+					case "ability": break;
+					case "resourceName": break;
+
+					default: throw new Error(`Unhandled "attachedSpells" key "${useType}"!`);
+				}
+			});
+		return out;
+	}
+
+	/* -------------------------------------------- */
 
     static async pGetFluff(item) {
         const fluffItem = await Renderer.utils.pGetFluff({
@@ -13477,15 +13724,15 @@ Renderer.recipe = class {
                                     obj[k] = Math.round(base * scaleFactor * Renderer.recipe._SCALED_PRECISION_LIMIT) / Renderer.recipe._SCALED_PRECISION_LIMIT
                                 })
 
-                            // region Attempt to singleize/pluralize units
-                            const amountsOriginal = Object.keys(objOriginal).filter(k => /^amount\d+$/.test(k)).map(k => objOriginal[k])
-                            const amountsScaled = Object.keys(obj).filter(k => /^amount\d+$/.test(k)).map(k => obj[k])
+							// region Attempt to singularize/pluralize units
+							const amountsOriginal = Object.keys(objOriginal).filter(k => /^amount\d+$/.test(k)).map(k => objOriginal[k]);
+							const amountsScaled = Object.keys(obj).filter(k => /^amount\d+$/.test(k)).map(k => obj[k]);
 
-                            const entryParts = obj.entry.split(Renderer.recipe._RE_AMOUNT).filter(Boolean)
-                            const entryPartsOut = entryParts.slice(0, entryParts.findIndex(it => Renderer.recipe._RE_AMOUNT.test(it)) + 1)
-                            let ixAmount = 0
-                            for (let i = entryPartsOut.length; i < entryParts.length; ++i) {
-                                let pt = entryParts[i]
+							const entryParts = obj.entry.split(Renderer.recipe._RE_AMOUNT).filter(Boolean);
+							const entryPartsOut = entryParts.slice(0, entryParts.findIndex(it => Renderer.recipe._RE_AMOUNT.test(it)) + 1);
+							let ixAmount = 0;
+							for (let i = entryPartsOut.length; i < entryParts.length; ++i) {
+								let pt = entryParts[i];
 
                                 if (Renderer.recipe._RE_AMOUNT.test(pt)) {
                                     ixAmount++
@@ -13506,10 +13753,10 @@ Renderer.recipe = class {
                                     continue
                                 }
 
-                                if (isSingleToPlural) pt = Renderer.recipe._getPluralizedUnits(pt)
-                                else if (isPluralToSingle) pt = Renderer.recipe._getSingleizedUnits(pt)
-                                entryPartsOut.push(pt)
-                            }
+								if (isSingleToPlural) pt = Renderer.recipe._getPluralizedUnits(pt);
+								else if (isPluralToSingle) pt = Renderer.recipe._getSingularizedUnits(pt);
+								entryPartsOut.push(pt);
+							}
 
                             obj.entry = entryPartsOut.join("")
                             // endregion
@@ -13560,13 +13807,13 @@ Renderer.recipe = class {
     static _FNS_SINGLE_TO_PLURAL = [];
     static _FNS_PLURAL_TO_SINGLE = [];
 
-    static _getSingleizedUnits(str) {
-        if (!Renderer.recipe._FNS_PLURAL_TO_SINGLE.length) {
-            Renderer.recipe._FNS_PLURAL_TO_SINGLE = [
-                ...Renderer.recipe._UNITS_SINGLE_TO_PLURAL_S.map(word => str => str.replace(new RegExp(`\\b${word.escapeRegexp()}s\\b`, "gi"), (...m) => m[0].slice(0, -1))),
-                ...Renderer.recipe._UNITS_SINGLE_TO_PLURAL_ES.map(word => str => str.replace(new RegExp(`\\b${word.escapeRegexp()}es\\b`, "gi"), (...m) => m[0].slice(0, -2))),
-            ]
-        }
+	static _getSingularizedUnits (str) {
+		if (!Renderer.recipe._FNS_PLURAL_TO_SINGLE.length) {
+			Renderer.recipe._FNS_PLURAL_TO_SINGLE = [
+				...Renderer.recipe._UNITS_SINGLE_TO_PLURAL_S.map(word => str => str.replace(new RegExp(`\\b${word.escapeRegexp()}s\\b`, "gi"), (...m) => m[0].slice(0, -1))),
+				...Renderer.recipe._UNITS_SINGLE_TO_PLURAL_ES.map(word => str => str.replace(new RegExp(`\\b${word.escapeRegexp()}es\\b`, "gi"), (...m) => m[0].slice(0, -2))),
+			];
+		}
 
         Renderer.recipe._FNS_PLURAL_TO_SINGLE.forEach(fn => str = fn(str))
 
@@ -13812,50 +14059,51 @@ Renderer.generic = class {
     // region Mirror the schema
     static FEATURE__SKILLS_ALL = Object.keys(Parser.SKILL_TO_ATB_ABV).sort(SortUtil.ascSortLower);
 
-    static FEATURE__TOOLS_ARTISANS = [
-        "alchemist's supplies",
-        "brewer's supplies",
-        "calligrapher's supplies",
-        "carpenter's tools",
-        "cartographer's tools",
-        "cobbler's tools",
-        "cook's utensils",
-        "glassblower's tools",
-        "jeweler's tools",
-        "leatherworker's tools",
-        "mason's tools",
-        "painter's supplies",
-        "potter's tools",
-        "smith's tools",
-        "tinker's tools",
-        "weaver's tools",
-        "woodcarver's tools",
-    ];
-    static FEATURE__TOOLS_MUSICAL_INSTRUMENTS = [
-        "bagpipes",
-        "drum",
-        "dulcimer",
-        "flute",
-        "horn",
-        "lute",
-        "lyre",
-        "pan flute",
-        "shawm",
-        "viol",
-    ];
-    static FEATURE__TOOLS_GAMING_SETS = [
-        "dragonchess set",
-        "dice set",
-        "three-dragon ante set",
-    ];
-    static _FEATURE__TOOL_GROUPS = new Set([
-        "artisan's tools",
-        "gaming set",
-        "musical instrument",
-    ]);
-    static FEATURE__TOOLS_ALL = [
-        "artisan's tools",
-        ...this.FEATURE__TOOLS_ARTISANS,
+	static FEATURE__TOOLS_ARTISANS = [
+		"alchemist's supplies",
+		"brewer's supplies",
+		"calligrapher's supplies",
+		"carpenter's tools",
+		"cartographer's tools",
+		"cobbler's tools",
+		"cook's utensils",
+		"glassblower's tools",
+		"jeweler's tools",
+		"leatherworker's tools",
+		"mason's tools",
+		"painter's supplies",
+		"potter's tools",
+		"smith's tools",
+		"tinker's tools",
+		"weaver's tools",
+		"woodcarver's tools",
+	];
+	static FEATURE__TOOLS_MUSICAL_INSTRUMENTS = [
+		"bagpipes",
+		"drum",
+		"dulcimer",
+		"flute",
+		"horn",
+		"lute",
+		"lyre",
+		"pan flute",
+		"shawm",
+		"viol",
+	];
+	static FEATURE__TOOLS_GAMING_SETS = [
+		"dragonchess set",
+		"dice set",
+		"playing card set",
+		"three-dragon ante set",
+	];
+	static _FEATURE__TOOL_GROUPS = new Set([
+		"artisan's tools",
+		"gaming set",
+		"musical instrument",
+	]);
+	static FEATURE__TOOLS_ALL = [
+		"artisan's tools",
+		...this.FEATURE__TOOLS_ARTISANS,
 
         "disguise kit",
         "forgery kit",
@@ -14339,7 +14587,7 @@ Renderer.hover = class {
         let meta = Renderer.hover._handleGenericMouseOverStart({ evt, ele })
         if (meta == null) return
 
-        if ((EventUtil.isCtrlMetaKey(evt)) && Renderer.hover._pageToFluffFn(page)) meta.isFluff = true
+		if (EventUtil.isCtrlMetaKey(evt)) meta.isFluff = true;
 
         let toRender
         if (preloadId != null) { // FIXME(Future) remove in favor of `customHashId`
@@ -14364,7 +14612,8 @@ Renderer.hover = class {
 			toRender = await Renderer.hover.pApplyCustomHashId(page, toRender, customHashId);
 			this._pHandleLinkMouseOver_doVerifyToRender({toRender, page, source, hash, preloadId, customHashId, isFluff: meta.isFluff});
 		} else if (meta.isFluff) {
-			toRender = await Renderer.hover.pGetHoverableFluff(page, source, hash);
+			const entity = await DataLoader.pCacheAndGet(page, source, hash);
+			if (entity) toRender = await Renderer.utils.pGetProxyFluff({entity});
 		} else {
 			toRender = await DataLoader.pCacheAndGet(page, source, hash);
 			this._pHandleLinkMouseOver_doVerifyToRender({toRender, page, source, hash, preloadId, customHashId, isFluff: meta.isFluff});
@@ -14461,46 +14710,19 @@ Renderer.hover = class {
             meta.windowMeta = null
         }
 
-        meta.windowMeta = Renderer.hover.getShowWindow(
-            $content,
-            Renderer.hover.getWindowPositionFromEvent(tmpEvt || evt, { isPreventFlicker: !meta.isPermanent }),
-            {
-                title: entry?.name || "",
-                isPermanent: meta.isPermanent,
-                pageUrl: null,
-                cbClose: () => meta.isHovered = meta.isPermanent = meta.isLoading = false,
-                isBookContent: true,
-                sourceData: entry,
-            },
-        )
-    }
-
-    static async pGetHoverableFluff(page, source, hash, opts) {
-        // Try to fetch the fluff directly
-        let toRender = await DataLoader.pCacheAndGet(`${page}Fluff`, source, hash, opts)
-
-        if (!toRender) {
-            // Fall back on fluff attached to the object itself
-            const entity = await DataLoader.pCacheAndGet(page, source, hash, opts)
-
-            const pFnGetFluff = Renderer.hover._pageToFluffFn(page)
-            if (!pFnGetFluff && opts?.isSilent) return null
-
-            toRender = await pFnGetFluff(entity)
-        }
-
-        if (!toRender) return toRender
-
-        // For inline homebrew fluff, populate the name/source
-        if (toRender && (!toRender.name || !toRender.source)) {
-            const toRenderParent = await DataLoader.pCacheAndGet(page, source, hash, opts)
-            toRender = MiscUtil.copyFast(toRender)
-            toRender.name = toRenderParent.name
-            toRender.source = toRenderParent.source
-        }
-
-        return toRender
-    }
+		meta.windowMeta = Renderer.hover.getShowWindow(
+			$content,
+			Renderer.hover.getWindowPositionFromEvent(tmpEvt || evt, {isPreventFlicker: !meta.isPermanent}),
+			{
+				title: entry?.name || "",
+				isPermanent: meta.isPermanent,
+				pageUrl: null,
+				cbClose: () => meta.isHovered = meta.isPermanent = meta.isLoading = false,
+				isBookContent: true,
+				sourceData: entry,
+			},
+		);
+	}
 
     // (Baked into render strings)
     static handleLinkMouseLeave(evt, ele) {
@@ -14743,7 +14965,7 @@ Renderer.hover = class {
 				<html lang="en" class="ve-popwindow ${typeof styleSwitcher !== "undefined" ? styleSwitcher.getDayNightClassNames() : ""}"><head>
 					<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 					<title>${opts.title}</title>
-					${$(`link[rel="stylesheet"][href]`).map((i, e) => e.outerHTML).get().join("\n")}
+					${[...document.querySelectorAll(`link[rel="stylesheet"][href]`)].map(ele => ele.outerHTML).join("\n")}
 					<!-- Favicons -->
 					<link rel="icon" type="image/svg+xml" href="favicon.svg">
 					<link rel="icon" type="image/png" sizes="256x256" href="favicon-256x256.png">
@@ -14773,6 +14995,9 @@ Renderer.hover = class {
 
 					<!-- macOS Safari Pinned Tab and Touch Bar -->
 					<link rel="mask-icon" href="safari-pinned-tab.svg" color="#006bc4">
+					
+					${PrereleaseUtil.getPopoutStyleElementHtml()}
+					${BrewUtil2.getPopoutStyleElementHtml()}
 
 					<style>
 						html, body { width: 100%; height: 100%; }
@@ -14807,97 +15032,106 @@ Renderer.hover = class {
 
 	/* -------------------------------------------- */
 
-    /**
-     * @param $content Content to append to the window.
-     * @param position The position of the window. Can be specified in various formats.
-     * @param [opts] Options object.
-     * @param [opts.isPermanent] If the window should have the expanded toolbar of a "permanent" window.
-     * @param [opts.title] The window title.
-     * @param [opts.isBookContent] If the hover window contains book content. Affects the styling of borders.
-     * @param [opts.pageUrl] A page URL which is navigable via a button in the window header
-     * @param [opts.cbClose] Callback to run on window close.
-     * @param [opts.width] An initial width for the window.
-     * @param [opts.height] An initial height fot the window.
-     * @param [opts.$pFnGetPopoutContent] A function which loads content for this window when it is popped out.
-     * @param [opts.fnGetPopoutSize] A function which gets a `{width: ..., height: ...}` object with dimensions for a
-     * popout window.
-     * @param [opts.isPopout] If the window should be immediately popped out.
-     * @param [opts.compactReferenceData] Reference (e.g. page/source/hash/others) which can be used to load the contents into the DM screen.
-     * @param [opts.sourceData] Source JSON (as raw as possible) used to construct this popout.
-     * @param [opts.isResizeOnlyWidth]
-     * @param [opts.isHideBottomBorder]
-     */
-    static getShowWindow($content, position, opts) {
-        opts = opts || {}
-        const { isHideBottomBorder, isResizeOnlyWidth } = opts
+	/**
+	 * @param $content Content to append to the window.
+	 * @param position The position of the window. Can be specified in various formats.
+	 * @param [opts] Options object.
+	 * @param [opts.isPermanent] If the window should have the expanded toolbar of a "permanent" window.
+	 * @param [opts.title] The window title.
+	 * @param [opts.isBookContent] If the hover window contains book content. Affects the styling of borders.
+	 * @param [opts.pageUrl] A page URL which is navigable via a button in the window header
+	 * @param [opts.cbClose] Callback to run on window close.
+	 * @param [opts.width] An initial width for the window.
+	 * @param [opts.height] An initial height fot the window.
+	 * @param [opts.$pFnGetPopoutContent] A function which loads content for this window when it is popped out.
+	 * @param [opts.fnGetPopoutSize] A function which gets a `{width: ..., height: ...}` object with dimensions for a
+	 * popout window.
+	 * @param [opts.isPopout] If the window should be immediately popped out.
+	 * @param [opts.compactReferenceData] Reference (e.g. page/source/hash/others) which can be used to load the contents into the DM screen.
+	 * @param [opts.sourceData] Source JSON (as raw as possible) used to construct this popout.
+	 * @param [opts.isResizeOnlyWidth]
+	 * @param [opts.isHideBottomBorder]
+	 */
+	static getShowWindow ($content, position, opts) {
+		opts = opts || {};
+		const {isHideBottomBorder, isResizeOnlyWidth} = opts;
 
-        if (isHideBottomBorder && !isResizeOnlyWidth) throw new Error(`"isHideBottomBorder" option requires "isResizeOnlyWidth"!`)
+		if (isHideBottomBorder && !isResizeOnlyWidth) throw new Error(`"isHideBottomBorder" option requires "isResizeOnlyWidth"!`);
 
-        Renderer.hover._doInit()
+		Renderer.hover._doInit();
 
-        const initialWidth = opts.width == null ? Renderer.hover._DEFAULT_WIDTH_PX : opts.width
-        const initialZIndex = Renderer.hover._getNextZIndex()
+		const initialWidth = opts.width == null ? Renderer.hover._DEFAULT_WIDTH_PX : opts.width;
+		const initialZIndex = Renderer.hover._getNextZIndex();
 
-        const $body = $(position.window.document.body)
-        const $hov = $(`<div class="hwin"></div>`)
-            .css({
-                "right": -initialWidth,
-                "width": initialWidth,
-                "zIndex": initialZIndex,
-            })
-        const $wrpContent = $(`<div class="hwin__wrp-table"></div>`)
-        if (opts.height != null) $wrpContent.css("height", opts.height)
-        const $hovTitle = $(`<span class="window-title min-w-0 ve-overflow-ellipsis" title="${`${opts.title || ""}`.qq()}">${opts.title || ""}</span>`)
+		const $body = $(position.window.document.body);
+		const $hov = $(`<div class="hwin"></div>`)
+			.css({
+				"right": -initialWidth,
+				"width": initialWidth,
+				"zIndex": initialZIndex,
+			});
+		const $wrpContent = $(`<div class="hwin__wrp-table"></div>`);
+		if (opts.height != null) $wrpContent.css("height", opts.height);
+		const hovTitle = ee`<span class="window-title min-w-0 ve-overflow-ellipsis" title="${`${opts.title || ""}`.qq()}">${opts.title || ""}</span>`;
 
-        const hoverWindow = {}
-        const hoverId = Renderer.hover._getNextId()
-        Renderer.hover._WINDOW_METAS[hoverId] = hoverWindow
-        const mouseUpId = `mouseup.${hoverId} touchend.${hoverId}`
-        const mouseMoveId = `mousemove.${hoverId} touchmove.${hoverId}`
-        const resizeId = `resize.${hoverId}`
-        const drag = {}
+		const hoverWindow = {};
+		const hoverId = Renderer.hover._getNextId();
+		Renderer.hover._WINDOW_METAS[hoverId] = hoverWindow;
+		const mouseUpId = `mouseup.${hoverId} touchend.${hoverId}`;
+		const mouseMoveId = `mousemove.${hoverId} touchmove.${hoverId}`;
+		const resizeId = `resize.${hoverId}`;
+		const drag = {};
 
-        const $brdrTopRightResize = $(`<div class="hoverborder__resize-ne"></div>`)
-            .on("mousedown touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({ hoverWindow, hoverId, $hov, drag, $wrpContent }, { evt, type: 1, isResizeOnlyWidth }))
-        if (isResizeOnlyWidth) $brdrTopRightResize.hideVe()
+		const brdrTopRightResize = ee`<div class="hoverborder__resize-ne"></div>`
+			.onn("mousedown", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 1, isResizeOnlyWidth}))
+			.onn("touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 1, isResizeOnlyWidth}));
+		if (isResizeOnlyWidth) brdrTopRightResize.hideVe();
 
-        const $brdrRightResize = $(`<div class="hoverborder__resize-e"></div>`)
-            .on("mousedown touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({ hoverWindow, hoverId, $hov, drag, $wrpContent }, { evt, type: 2, isResizeOnlyWidth }))
+		const brdrRightResize = ee`<div class="hoverborder__resize-e"></div>`
+			.onn("mousedown", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 2, isResizeOnlyWidth}))
+			.onn("touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 2, isResizeOnlyWidth}));
 
-        const $brdrBottomRightResize = $(`<div class="hoverborder__resize-se"></div>`)
-            .on("mousedown touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({ hoverWindow, hoverId, $hov, drag, $wrpContent }, { evt, type: 3, isResizeOnlyWidth }))
-        if (isResizeOnlyWidth) $brdrBottomRightResize.hideVe()
+		const brdrBottomRightResize = ee`<div class="hoverborder__resize-se"></div>`
+			.onn("mousedown", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 3, isResizeOnlyWidth}))
+			.onn("touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 3, isResizeOnlyWidth}));
+		if (isResizeOnlyWidth) brdrBottomRightResize.hideVe();
 
-        const $brdrBtm = $(`<div class="hoverborder hoverborder--btm ${opts.isBookContent ? "hoverborder-book" : ""}"></div>`)
-        const $brdrBtmResize = $(`<div class="hoverborder__resize-s"></div>`)
-            .on("mousedown touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({ hoverWindow, hoverId, $hov, drag, $wrpContent }, { evt, type: 4, isResizeOnlyWidth }))
-            .appendTo($brdrBtm)
-        if (isResizeOnlyWidth) $brdrBtmResize.hideVe()
-        if (isHideBottomBorder) $brdrBtm.hideVe()
+		const brdrBtmResize = ee`<div class="hoverborder__resize-s"></div>`
+			.onn("mousedown", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 4, isResizeOnlyWidth}))
+			.onn("touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 4, isResizeOnlyWidth}));
+		if (isResizeOnlyWidth) brdrBtmResize.hideVe();
 
-        const $brdrBtmLeftResize = $(`<div class="hoverborder__resize-sw"></div>`)
-            .on("mousedown touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({ hoverWindow, hoverId, $hov, drag, $wrpContent }, { evt, type: 5, isResizeOnlyWidth }))
-        if (isResizeOnlyWidth) $brdrBtmLeftResize.hideVe()
+		const brdrBtm = ee`<div class="hoverborder hoverborder--btm ${opts.isBookContent ? "hoverborder-book" : ""}">${brdrBtmResize}</div>`;
+		if (isHideBottomBorder) brdrBtm.hideVe();
 
-        const $brdrLeftResize = $(`<div class="hoverborder__resize-w"></div>`)
-            .on("mousedown touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({ hoverWindow, hoverId, $hov, drag, $wrpContent }, { evt, type: 6, isResizeOnlyWidth }))
+		const brdrBtmLeftResize = ee`<div class="hoverborder__resize-sw"></div>`
+			.onn("mousedown", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 5, isResizeOnlyWidth}))
+			.onn("touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 5, isResizeOnlyWidth}));
+		if (isResizeOnlyWidth) brdrBtmLeftResize.hideVe();
 
-        const $brdrTopLeftResize = $(`<div class="hoverborder__resize-nw"></div>`)
-            .on("mousedown touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({ hoverWindow, hoverId, $hov, drag, $wrpContent }, { evt, type: 7, isResizeOnlyWidth }))
-        if (isResizeOnlyWidth) $brdrTopLeftResize.hideVe()
+		const brdrLeftResize = ee`<div class="hoverborder__resize-w"></div>`
+			.onn("mousedown", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 6, isResizeOnlyWidth}))
+			.onn("touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 6, isResizeOnlyWidth}));
 
-        const $brdrTopResize = $(`<div class="hoverborder__resize-n"></div>`)
-            .on("mousedown touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({ hoverWindow, hoverId, $hov, drag, $wrpContent }, { evt, type: 8, isResizeOnlyWidth }))
-        if (isResizeOnlyWidth) $brdrTopResize.hideVe()
+		const brdrTopLeftResize = ee`<div class="hoverborder__resize-nw"></div>`
+			.onn("mousedown", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 7, isResizeOnlyWidth}))
+			.onn("touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 7, isResizeOnlyWidth}));
+		if (isResizeOnlyWidth) brdrTopLeftResize.hideVe();
 
-        const $brdrTop = $(`<div class="hoverborder hoverborder--top ${opts.isBookContent ? "hoverborder-book" : ""}" ${opts.isPermanent ? `data-perm="true"` : ""}></div>`)
-            .on("mousedown touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({ hoverWindow, hoverId, $hov, drag, $wrpContent }, { evt, type: 9, isResizeOnlyWidth }))
-            .on("contextmenu", (evt) => {
-                Renderer.hover._contextMenuLastClicked = {
-                    hoverId,
-                }
-                ContextUtil.pOpenMenu(evt, Renderer.hover._contextMenu)
-            })
+		const brdrTopResize = ee`<div class="hoverborder__resize-n"></div>`
+			.onn("mousedown", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 8, isResizeOnlyWidth}))
+			.onn("touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 8, isResizeOnlyWidth}));
+		if (isResizeOnlyWidth) brdrTopResize.hideVe();
+
+		const brdrTop = ee`<div class="hoverborder hoverborder--top ${opts.isBookContent ? "hoverborder-book" : ""}" ${opts.isPermanent ? `data-perm="true"` : ""}></div>`
+			.onn("mousedown", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 9, isResizeOnlyWidth}))
+			.onn("touchstart", (evt) => Renderer.hover._getShowWindow_handleDragMousedown({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type: 9, isResizeOnlyWidth}))
+			.onn("contextmenu", (evt) => {
+				Renderer.hover._contextMenuLastClicked = {
+					hoverId,
+				};
+				ContextUtil.pOpenMenu(evt, Renderer.hover._contextMenu);
+			});
 
         $(position.window.document)
             .on(mouseUpId, (evt) => {
@@ -14959,26 +15193,26 @@ Renderer.hover = class {
                         drag.baseTop = parseFloat($hov.css("top"))
                         drag.baseLeft = parseFloat($hov.css("left"))
 
-                        // handle DM screen integration
-                        if (this._dmScreen) {
-                            const panel = this._dmScreen.getPanelPx(EventUtil.getClientX(evt), EventUtil.getClientY(evt))
-                            if (!panel) return
-                            this._dmScreen.setHoveringPanel(panel)
-                            const target = panel.getAddButtonPos()
+						// handle DM screen integration
+						if (this._dmScreen) {
+							const panel = this._dmScreen.getPanelPx(EventUtil.getClientX(evt), EventUtil.getClientY(evt));
+							if (!panel) return;
+							this._dmScreen.setHoveringPanel(panel);
+							const target = panel.getAddButtonPos();
 
-                            if (Renderer.hover._getShowWindow_isOverHoverTarget({ evt, target })) this._dmScreen.setHoveringButton(panel)
-                            else this._dmScreen.resetHoveringButton()
-                        }
-                        break
-                    }
-                }
-            })
-        $(position.window).on(resizeId, () => Renderer.hover._getShowWindow_adjustPosition({ $hov, $wrpContent, position }))
+							if (Renderer.hover._getShowWindow_isOverHoverTarget({evt, target})) this._dmScreen.setHoveringButton(panel);
+							else this._dmScreen.resetHoveringButton();
+						}
+						break;
+					}
+				}
+			});
+		$(position.window).on(resizeId, () => Renderer.hover._getShowWindow_adjustPosition({$hov, $wrpContent, position}));
 
-        $brdrTop.attr("data-display-title", false)
-        $brdrTop.on("dblclick", () => Renderer.hover._getShowWindow_doToggleMinimizedMaximized({ $brdrTop, $hov }))
-        $brdrTop.append($hovTitle)
-        const $brdTopRhs = $(`<div class="ve-flex ml-auto no-shrink"></div>`).appendTo($brdrTop)
+		brdrTop.attr("data-display-title", false);
+		brdrTop.onn("dblclick", () => Renderer.hover._getShowWindow_doToggleMinimizedMaximized({$brdrTop: brdrTop, $hov}));
+		brdrTop.appends(hovTitle);
+		const $brdTopRhs = $(`<div class="ve-flex ml-auto no-shrink"></div>`).appendTo(brdrTop);
 
         if (opts.pageUrl && !position.window._IS_POPOUT && !Renderer.get().isInternalLinksDisabled()) {
             const $btnGotoPage = $(`<a class="hwin__top-border-icon glyphicon glyphicon-modal-window" title="Go to Page" href="${opts.pageUrl}"></a>`)
@@ -15033,69 +15267,69 @@ Renderer.hover = class {
 
         $wrpContent.append($content)
 
-        $hov.append($brdrTopResize).append($brdrTopRightResize).append($brdrRightResize).append($brdrBottomRightResize)
-            .append($brdrBtmLeftResize).append($brdrLeftResize).append($brdrTopLeftResize)
+		$hov.append(brdrTopResize).append(brdrTopRightResize).append(brdrRightResize).append(brdrBottomRightResize)
+			.append(brdrBtmLeftResize).append(brdrLeftResize).append(brdrTopLeftResize)
 
-            .append($brdrTop)
-            .append($wrpContent)
-            .append($brdrBtm)
+			.append(brdrTop)
+			.append($wrpContent)
+			.append(brdrBtm);
 
-        $body.append($hov)
+		$body.append($hov);
 
-        Renderer.hover._getShowWindow_setPosition({ $hov, $wrpContent, position }, position)
+		Renderer.hover._getShowWindow_setPosition({$hov, $wrpContent, position}, position);
 
-        hoverWindow.$windowTitle = $hovTitle
-        hoverWindow.zIndex = initialZIndex
-        hoverWindow.setZIndex = Renderer.hover._getNextZIndex.bind(this, { $hov, hoverWindow })
+		hoverWindow.zIndex = initialZIndex;
+		hoverWindow.setZIndex = Renderer.hover._getNextZIndex.bind(this, {$hov, hoverWindow});
 
-        hoverWindow.setPosition = Renderer.hover._getShowWindow_setPosition.bind(this, { $hov, $wrpContent, position })
-        hoverWindow.setIsPermanent = Renderer.hover._getShowWindow_setIsPermanent.bind(this, { opts, $brdrTop })
-        hoverWindow.doClose = Renderer.hover._getShowWindow_doClose.bind(this, { $hov, position, mouseUpId, mouseMoveId, resizeId, hoverId, opts, hoverWindow })
-        hoverWindow.doMaximize = Renderer.hover._getShowWindow_doMaximize.bind(this, { $brdrTop, $hov })
-        hoverWindow.doZIndexToFront = Renderer.hover._getShowWindow_doZIndexToFront.bind(this, { $hov, hoverWindow, hoverId })
+		hoverWindow.setPosition = Renderer.hover._getShowWindow_setPosition.bind(this, {$hov, $wrpContent, position});
+		hoverWindow.setIsPermanent = Renderer.hover._getShowWindow_setIsPermanent.bind(this, {opts, $brdrTop: brdrTop});
+		hoverWindow.doClose = Renderer.hover._getShowWindow_doClose.bind(this, {$hov, position, mouseUpId, mouseMoveId, resizeId, hoverId, opts, hoverWindow});
+		hoverWindow.doMaximize = Renderer.hover._getShowWindow_doMaximize.bind(this, {$brdrTop: brdrTop, $hov});
+		hoverWindow.doZIndexToFront = Renderer.hover._getShowWindow_doZIndexToFront.bind(this, {$hov, hoverWindow, hoverId});
 
-        hoverWindow.getPosition = Renderer.hover._getShowWindow_getPosition.bind(this, { $hov, $wrpContent, position })
+		hoverWindow.getPosition = Renderer.hover._getShowWindow_getPosition.bind(this, {$hov, $wrpContent, position});
 
-        hoverWindow.$setContent = ($contentNxt) => $wrpContent.empty().append($contentNxt)
+		hoverWindow.$setContent = ($contentNxt) => $wrpContent.empty().append($contentNxt);
 
-        if (opts.isPopout) Renderer.hover._getShowWindow_pDoPopout({ $hov, position, mouseUpId, mouseMoveId, resizeId, hoverId, opts, hoverWindow, $content })
+		if (opts.isPopout) Renderer.hover._getShowWindow_pDoPopout({$hov, position, mouseUpId, mouseMoveId, resizeId, hoverId, opts, hoverWindow, $content});
 
-        return hoverWindow
-    }
+		return hoverWindow;
+	}
 
-    static _getShowWindow_doClose({ $hov, position, mouseUpId, mouseMoveId, resizeId, hoverId, opts, hoverWindow }) {
-        $hov.remove()
-        $(position.window.document).off(mouseUpId)
-        $(position.window.document).off(mouseMoveId)
-        $(position.window).off(resizeId)
+	static _getShowWindow_doClose ({$hov, position, mouseUpId, mouseMoveId, resizeId, hoverId, opts, hoverWindow}) {
+		$hov.remove();
+		$(position.window.document).off(mouseUpId);
+		$(position.window.document).off(mouseMoveId);
+		$(position.window).off(resizeId);
 
-        delete Renderer.hover._WINDOW_METAS[hoverId]
+		delete Renderer.hover._WINDOW_METAS[hoverId];
 
-        if (opts.cbClose) opts.cbClose(hoverWindow)
-    }
+		if (opts.cbClose) opts.cbClose(hoverWindow);
+	}
 
-    static _getShowWindow_handleDragMousedown({ hoverWindow, hoverId, $hov, drag, $wrpContent }, { evt, type, isResizeOnlyWidth }) {
-        if (evt.which === 0 || evt.which === 1) evt.preventDefault()
-        hoverWindow.zIndex = Renderer.hover._getNextZIndex(hoverId)
-        $hov.css({
-            "z-index": hoverWindow.zIndex,
-            "animation": "initial",
-        })
-        drag.type = type
-        drag.startX = EventUtil.getClientX(evt)
-        drag.startY = EventUtil.getClientY(evt)
-        drag.baseTop = parseFloat($hov.css("top"))
-        drag.baseLeft = parseFloat($hov.css("left"))
-        if (!isResizeOnlyWidth) drag.baseHeight = $wrpContent.height()
-        drag.baseWidth = parseFloat($hov.css("width"))
-        if (type < 9) {
-            $wrpContent.css({
-                ...(isResizeOnlyWidth ? {} : { "height": drag.baseHeight }),
-                "max-height": "initial",
-            })
-            $hov.css("max-width", "initial")
-        }
-    }
+	static _getShowWindow_handleDragMousedown ({hoverWindow, hoverId, $hov, drag, $wrpContent}, {evt, type, isResizeOnlyWidth}) {
+		if (evt.button === 0) evt.preventDefault();
+
+		hoverWindow.zIndex = Renderer.hover._getNextZIndex(hoverId);
+		$hov.css({
+			"z-index": hoverWindow.zIndex,
+			"animation": "initial",
+		});
+		drag.type = type;
+		drag.startX = EventUtil.getClientX(evt);
+		drag.startY = EventUtil.getClientY(evt);
+		drag.baseTop = parseFloat($hov.css("top"));
+		drag.baseLeft = parseFloat($hov.css("left"));
+		if (!isResizeOnlyWidth) drag.baseHeight = $wrpContent.height();
+		drag.baseWidth = parseFloat($hov.css("width"));
+		if (type < 9) {
+			$wrpContent.css({
+				...(isResizeOnlyWidth ? {} : {"height": drag.baseHeight}),
+				"max-height": "initial",
+			});
+			$hov.css("max-width", "initial");
+		}
+	}
 
     static _getShowWindow_isOverHoverTarget({ evt, target }) {
         return EventUtil.getClientX(evt) >= target.left
@@ -15192,20 +15426,20 @@ Renderer.hover = class {
 
                 let yPos = positionNxt.y
 
-                const { bottom: posBottom, height: winHeight } = $hov[0].getBoundingClientRect()
-                const height = position.window.innerHeight
-                if (posBottom > height) {
-                    yPos = position.window.innerHeight - winHeight
-                    $hov.css({
-                        "top": yPos,
-                        "animation": "",
-                    })
-                }
+				const {bottom: posBottom, height: winHeight} = $hov[0].getBoundingClientRect();
+				const height = position.window.innerHeight;
+				if (posBottom > height) {
+					yPos = position.window.innerHeight - winHeight;
+					$hov.css({
+						"top": yPos,
+						"animation": "",
+					});
+				}
 
-                break
-            }
-            default: throw new Error(`Positiong mode unimplemented: "${positionNxt.mode}"`)
-        }
+				break;
+			}
+			default: throw new Error(`Positioning mode unimplemented: "${positionNxt.mode}"`);
+		}
 
         Renderer.hover._getShowWindow_adjustPosition({ $hov, $wrpContent, position })
     }
@@ -15497,26 +15731,6 @@ Renderer.hover = class {
 		}
 	}
 
-	static _pageToFluffFn (page) {
-		switch (page) {
-			case UrlUtil.PG_BESTIARY: return Renderer.monster.pGetFluff.bind(Renderer.monster);
-			case UrlUtil.PG_ITEMS: return Renderer.item.pGetFluff.bind(Renderer.item);
-			case UrlUtil.PG_CONDITIONS_DISEASES: return Renderer.conditionDisease.pGetFluff.bind(Renderer.conditionDisease);
-			case UrlUtil.PG_SPELLS: return Renderer.spell.pGetFluff.bind(Renderer.spell);
-			case UrlUtil.PG_RACES: return Renderer.race.pGetFluff.bind(Renderer.race);
-			case UrlUtil.PG_BACKGROUNDS: return Renderer.background.pGetFluff.bind(Renderer.background);
-			case UrlUtil.PG_FEATS: return Renderer.feat.pGetFluff.bind(Renderer.feat);
-			case UrlUtil.PG_OPT_FEATURES: return Renderer.optionalfeature.pGetFluff.bind(Renderer.optionalfeature);
-			case UrlUtil.PG_LANGUAGES: return Renderer.language.pGetFluff.bind(Renderer.language);
-			case UrlUtil.PG_VEHICLES: return Renderer.vehicle.pGetFluff.bind(Renderer.vehicle);
-			case UrlUtil.PG_CHAR_CREATION_OPTIONS: return Renderer.charoption.pGetFluff.bind(Renderer.charoption);
-			case UrlUtil.PG_RECIPES: return Renderer.recipe.pGetFluff.bind(Renderer.recipe);
-			case UrlUtil.PG_TRAPS_HAZARDS: return Renderer.traphazard.pGetFluff.bind(Renderer.traphazard);
-			case UrlUtil.PG_CLASSES: return Renderer.classSubclass.pGetFluff.bind(Renderer.classSubclass);
-			default: return null;
-		}
-	}
-
 	static isSmallScreen (evt) {
 		if (typeof window === "undefined") return false;
 
@@ -15774,10 +15988,10 @@ Renderer.getRollableRow = function (row, opts) {
     try {
         const cleanRow = String(row[0]).trim()
 
-        // format: "20 or lower"; "99 or higher"
-        const mLowHigh = /^(\d+) or (lower|higher)$/i.exec(cleanRow)
-        if (mLowHigh) {
-            row[0] = { type: "cell", entry: cleanRow } // Preseve the original text
+		// format: "20 or lower"; "99 or higher"
+		const mLowHigh = /^(\d+) or (lower|higher)$/i.exec(cleanRow);
+		if (mLowHigh) {
+			row[0] = {type: "cell", entry: cleanRow}; // Preserve the original text
 
             if (mLowHigh[2].toLowerCase() === "lower") {
                 row[0].roll = {

@@ -408,7 +408,7 @@
 							"id": "019",
 							"entries": [
 								"The central campus\u2014shown on map 1.1\u2014is the heart of Strixhaven. Its extensive grounds include residence halls for first-year students, dining halls, administration buildings, classrooms and laboratories (mostly used for first-year classes and interdisciplinary studies), and space for social gatherings.",
-								"Two of the sites on map 1.1 are described elsewhere in the book: Aerojaunt Field (see {@adventure chapter 4|SCC-HfMT|0|Map 4.2: aerojaunt field}) and Captain Dapplewing's Manor (see {@adventure chapter 3|SCC-CK|0|Map 3.4: captain dapplewing's manor}).",
+								"Two of the sites on map 1.1 are described elsewhere in the book: Aerojaunt Field (see {@adventure chapter 4|SCC-HfMT|0|Map 4.2: aerojaunt field}) and Captain Dapplewing's Manor (see {@adventure chapter 3|SCC-CK|0|Map 3.4: Captain Dapplewing's Manor}).",
 								{
 									"type": "image",
 									"href": {
@@ -714,7 +714,7 @@
 									"id": "02d",
 									"entries": [
 										"Kollema Hall is a grand, multitiered gallery built into a large outcrop at the end of Effigy Row. Here, Lorehold mages gather for large lectures. At the center of the hall towers a magnificent statue of Kollema, a wise monastic who was one of the first Lorehold professors.",
-										"{@adventure Chapter 5|SCC-TMM|0|Map 5.2: kollema hall} includes a partial map of Kollema Hall."
+										"{@adventure Chapter 5|SCC-TMM|0|Map 5.2: Kollema hall} includes a partial map of Kollema Hall."
 									]
 								}
 							]
@@ -885,7 +885,7 @@
 									"page": 17,
 									"id": "035",
 									"entries": [
-										"Nassari (chaotic good genasi {@creature Prismari professor of expression|SCC}) is the current Dean of Expression. Nazzari always want to see art that is bigger, more radical in concept, and more emotionally powerful. For their final project as a mage-student, Nassari famously \"turned in\" an earthquake, which almost destroyed three campus buildings. The piece received a standing ovation from the mage-student body\u2014and a grumpy thumbs down from the campus construction golems.",
+										"Nassari (chaotic good genasi {@creature Prismari professor of expression|SCC}) is the current Dean of Expression. Nassari always wants to see art that is bigger, more radical in concept, and more emotionally powerful. For their final project as a mage-student, Nassari famously \"turned in\" an earthquake, which almost destroyed three campus buildings. The piece received a standing ovation from the mage-student body\u2014and a grumpy thumbs down from the campus construction golems.",
 										"Nassari believes that true expression comes from the heart. They encourage their students to treat the entire world as a canvas on which to spread emotion and excitement. Nassari takes little heed of Dean Mistcoiler's quiet masterpieces and often feigns forgetfulness about Dean Mistcoiler's very existence."
 									]
 								},
@@ -1563,7 +1563,7 @@
 									"page": 25,
 									"id": "060",
 									"entries": [
-										"Dean Lissette (neutral good human {@creature Witherbloom professor of growth|SCC}) is a world-class healer and herbalist; it's even said she once cured the Lorehold founder dragon of a secret illness. Lisette's classes lean more toward demonstration and hands-on experience than lectures. When Lisette speaks, her words are soft and full of colorful metaphors.",
+										"Dean Lisette (neutral good human {@creature Witherbloom professor of growth|SCC}) is a world-class healer and herbalist; it's even said she once cured the Lorehold founder dragon of a secret illness. Lisette's classes lean more toward demonstration and hands-on experience than lectures. When Lisette speaks, her words are soft and full of colorful metaphors.",
 										"Lisette believes in preserving nature and life, and she instills in her students a respect for all living things. While Dean Valentin's exploitation of living creatures disgusts her, she also knows she can use the results of his cruelty to help future lives."
 									]
 								},
