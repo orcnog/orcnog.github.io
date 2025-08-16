@@ -106,7 +106,7 @@
 									"id": "encounter block test",
 									"combatants": [
 										{
-											"creature": "{@creature Hamelia|HoE}",
+											"creature": "{@creature Hamelia|THoE}",
 											"quantity": 1,
 											"npc": true
 										},
@@ -134,7 +134,7 @@
 											"variantName": "3",
 											"combatants": [
 												{
-													"creature": "{@creature Hamelia|HoE}",
+													"creature": "{@creature Hamelia|THoE}",
 													"quantity": 1,
 													"npc": true
 												},
@@ -157,7 +157,7 @@
 											"default": true,
 											"combatants": [
 												{
-													"creature": "{@creature Hamelia|HoE}",
+													"creature": "{@creature Hamelia|THoE}",
 													"quantity": 1,
 													"npc": true
 												},
@@ -179,7 +179,7 @@
 											"variantName": "5",
 											"combatants": [
 												{
-													"creature": "{@creature Hamelia|HoE}",
+													"creature": "{@creature Hamelia|THoE}",
 													"quantity": 1,
 													"npc": true
 												},

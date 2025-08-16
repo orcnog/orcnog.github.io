@@ -1328,8 +1328,9 @@ globalThis.Renderer = function () {
         const partExpandCollapse = !this._isPartPageExpandCollapseDisabled ? this._getPtExpandCollapseSpecial() : ""
         const partPageExpandCollapse = `<span class="ve-flex-vh-center">${[pagePart, partExpandCollapse].filter(Boolean).join("")}</span>`
 
-        const defaultVariant = entry.variations?.find(v => v.default) || entry.variations[0] || {} // Default to the first found
-        const DEFAULT_VARIANT_INDEX = entry.variations.findIndex(v => v.variantName === defaultVariant.variantName) || 0
+        // const defaultVariant = entry.variations?.find(v => v.default) || entry.variations[0] || {} // Default to the first found
+        const defaultVariant = entry.variations ? (entry.variations.find(v => v.default === true) || entry.variations[0]) : {} // Default to the first found
+        const DEFAULT_VARIANT_INDEX = entry.variations ? (entry.variations.findIndex(v => v.variantName === defaultVariant.variantName) || 0) : 0
 
         textStack[0] += `<${this.wrapperTag} class="encounter-title">`
         if (entry.name != null) {
@@ -1473,7 +1474,7 @@ globalThis.Renderer = function () {
                     page,
                     hash,
                 )
-                if (!baseMon || !baseMon.name) throw Error({ message: `Error retrieving monster` })
+                if (!baseMon || !baseMon.name) throw Error(`Error retrieving monster ${hash} (${name}) from source ${source}.`)
                 const scaledCr = subhashes?.find(item => item.key === "scaled")?.value
                 const mon = typeof scaledCr !== "undefined" ? await ScaleCreature.scale(baseMon, scaledCr) : baseMon
 
@@ -1560,7 +1561,7 @@ globalThis.Renderer = function () {
                 const percentage = Math.round((overThreshold / (nextThreshold - xpThresholds[difficultyKey])) * 100);
                 extraDifficulty = `${percentage}%`;
             }
-            const difficultyTempStack = [""]
+            let difficultyTempStack = [""]
             this._recursiveRender(`{@footnote ${difficultyText} ${extraDifficulty ? `+${extraDifficulty}` :``}|
 				Based on a party size of {@color ${partySize}|--rgb-warning} player characters at level {@color ${avgPartyLevel}|--rgb-warning} fighting {@color ${totalNumOfMonsters}|--rgb-warning} hostile creatures:<br/><br/>
 				{@b Difficulty}: {@color {@footnote ${difficultyText}|${_TITLE_DIFFICULTIES[difficultyKey]}|${difficultyText} Encounter} ${overThreshold > 0 ? `+{@footnote ${extraDifficulty}|This encounter's Adjusted XP is {@color ${overThreshold} xp|--rgb-warning} above, or {@color ${extraDifficulty} past|--rgb-warning}, the {@color ${difficultyText}|--rgb-warning} threshold of {@color ${xpThresholds[difficultyKey]}|--rgb-warning} for a party of {@color ${partySize}|--rgb-warning} players at level {@color ${avgPartyLevel}|--rgb-warning}.|${extraDifficulty} beyond ${difficultyText}}` : ``}|--rgb-warning}<br/>
@@ -1573,13 +1574,12 @@ globalThis.Renderer = function () {
 
             // UPDATE THE DOM
             $ele.find(".adj-xp-value").text(adjXp)
-            // $ele.find(".difficulty-value").text(difficultyText);
             $ele.find(".difficulty-value").html(difficultyTempStack.join(""))
             $ele.find(".daily-budget-value").text(dailyBudget)
             $ele.find(".initiative-tracker-link").attr("data-encounter", JSON.stringify(encounterData))
         } catch (e) {
             $ele.find(".adj-xp-value").html(`<span class="text-danger">Error</span>`)
-            $ele.find(".initiative-tracker-link").html(`<span class="text-danger">Error: ${e.message}</span>`)
+            $ele.find(".initiative-tracker-link").html(`<span class="text-danger">${e.message}</span>`)
         }
     }
 

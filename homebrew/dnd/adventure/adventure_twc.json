@@ -2,8 +2,8 @@
 	"_meta": {
 		"sources": [
 			{
-				"json": "twc",
-				"abbreviation": "twc",
+				"json": "TWC",
+				"abbreviation": "TWC",
 				"full": "Thw Witchlight Carnival",
 				"url": "https://raw.githubusercontent.com/orcnog/5etools-brew/main/WBtW/TWC.json",
 				"convertedBy": [
@@ -1441,7 +1441,7 @@
 			"hasToken": true,
 			"hasFluff": true,
 			"hasFluffImages": true,
-			"tokenUrl": "https://github.com/5etools-mirror-1/5etools-mirror-1.github.io/raw/master/img/WBtW/Mister%20Light.png"
+			"tokenUrl": "https://raw.githubusercontent.com/5etools-mirror-3/5etools-2014-img/refs/heads/main/bestiary/tokens/WBtW/Mister%20Light.webp"
 		},
 		{
 			"name": "Mister Witch",
@@ -1582,7 +1582,7 @@
 			"hasToken": true,
 			"hasFluff": true,
 			"hasFluffImages": true,
-			"tokenUrl": "https://github.com/5etools-mirror-1/5etools-mirror-1.github.io/raw/master/img/WBtW/Mister%20Witch.png"
+			"tokenUrl": "https://raw.githubusercontent.com/5etools-mirror-3/5etools-2014-img/refs/heads/main/bestiary/tokens/WBtW/Mister%20Witch.webp"
 		},
 		{
 			"name": "Witchlight Hand (Medium)",
@@ -1670,7 +1670,7 @@
 			],
 			"hasToken": true,
 			"hasFluff": true,
-			"tokenUrl": "https://github.com/5etools-mirror-1/5etools-mirror-1.github.io/raw/master/img/WBtW/Witchlight%20Hand%20(Medium).png"
+			"tokenUrl": "https://raw.githubusercontent.com/5etools-mirror-3/5etools-2014-img/refs/heads/main/bestiary/tokens/WBtW/Witchlight%20Hand%20(Medium).webp"
 		},
 		{
 			"name": "Witchlight Hand (Small)",
@@ -1693,7 +1693,7 @@
 			},
 			"hasToken": true,
 			"hasFluff": true,
-			"tokenUrl": "https://github.com/5etools-mirror-1/5etools-mirror-1.github.io/raw/master/img/WBtW/Witchlight%20Hand%20(Small).png"
+			"tokenUrl": "https://raw.githubusercontent.com/5etools-mirror-3/5etools-2014-img/refs/heads/main/bestiary/tokens/WBtW/Witchlight%20Hand%20(Small).webp"
 		},
 		{
 			"name": "Kester the Kenku",
@@ -1791,7 +1791,7 @@
 			"conditionInflict": [
 				"unconscious"
 			],
-			"tokenUrl": "https://github.com/5etools-mirror-1/5etools-mirror-1.github.io/raw/master/img/WBtW/Kettlesteam%20the%20Kenku.png"
+			"tokenUrl": "https://raw.githubusercontent.com/5etools-mirror-3/5etools-2014-img/refs/heads/main/bestiary/tokens/WBtW/Kettlesteam%20the%20Kenku.webp"
 		},
 		{
 			"name": "Treant Sapling",
@@ -1897,7 +1897,7 @@
 			],
 			"hasToken": true,
 			"hasFluffImages": true,
-			"tokenUrl": "https://github.com/5etools-mirror-1/5etools-mirror-1.github.io/raw/master/img/WBtW/Treant%20Sapling.png"
+			"tokenUrl": "https://raw.githubusercontent.com/5etools-mirror-3/5etools-2014-img/refs/heads/main/bestiary/tokens/WBtW/Treant%20Sapling.webp"
 		},
 		{
 			"name": "Giant Dragonfly",
@@ -1967,7 +1967,7 @@
 			"hasToken": true,
 			"hasFluff": true,
 			"hasFluffImages": true,
-			"tokenUrl": "https://github.com/5etools-mirror-1/5etools-mirror-1.github.io/raw/master/img/WBtW/Giant%20Dragonfly.png"
+			"tokenUrl": "https://raw.githubusercontent.com/5etools-mirror-3/5etools-2014-img/refs/heads/main/bestiary/tokens/WBtW/Giant%20Dragonfly.webp"
 		},
 		{
 			"name": "Giant Snail",
@@ -2041,7 +2041,7 @@
 			"hasToken": true,
 			"hasFluff": true,
 			"hasFluffImages": true,
-			"tokenUrl": "https://github.com/5etools-mirror-1/5etools-mirror-1.github.io/raw/master/img/WBtW/Giant%20Snail.png"
+			"tokenUrl": "https://raw.githubusercontent.com/5etools-mirror-3/5etools-2014-img/refs/heads/main/bestiary/tokens/WBtW/Giant%20Snail.webp"
 		},
 		{
 			"name": "Giant Swan",
@@ -2120,7 +2120,7 @@
 				"MW"
 			],
 			"hasToken": true,
-			"tokenUrl": "https://github.com/5etools-mirror-1/5etools-mirror-1.github.io/raw/master/img/WBtW/Giant%20Swan.png"
+			"tokenUrl": "https://raw.githubusercontent.com/5etools-mirror-3/5etools-2014-img/refs/heads/main/bestiary/tokens/WBtW/Giant%20Swan.webp"
 		}
 	],
 	"adventure": [
@@ -2129,7 +2129,7 @@
 			"id": "TWC",
 			"source": "TWC",
 			"group": "homebrew",
-			"coverUrl": "https://raw.githubusercontent.com/orcnog/5etools-brew/main/WBtW/images/witchlight-carnival-bookshelf-img.png",
+			"coverUrl": "https://raw.githubusercontent.com/orcnog/5etools-brew/main/WBtW/images/witchlight-carnival-bookshelf-img.webp",
 			"contents": [
 				{
 					"name": "Intro",
@@ -2206,7 +2206,7 @@
 							"page": 1,
 							"href": {
 								"type": "internal",
-								"path": "adventure/WBtW/007-00-008.png"
+								"path": "adventure/WBtW/007-00-008.webp"
 							},
 							"title": "The arrival of the Witchlight Carnival is a highly anticipated event",
 							"width": 1700,
@@ -2340,7 +2340,7 @@
 													"type": "image",
 													"href": {
 														"type": "internal",
-														"path": "adventure/WBtW/009-00-010.madryck-roslof.png"
+														"path": "adventure/WBtW/009-00-010.madryck-roslof.webp"
 													},
 													"title": "Madryck Roslof",
 													"width": 850,
@@ -2509,7 +2509,7 @@
 													"type": "image",
 													"href": {
 														"type": "internal",
-														"path": "adventure/WBtW/013-637677442905361755.png"
+														"path": "adventure/WBtW/013-637677442905361755.webp"
 													},
 													"title": "{@creature Mister Witch|TWC}",
 													"width": 300,
@@ -2531,7 +2531,7 @@
 											"type": "image",
 											"href": {
 												"type": "internal",
-												"path": "adventure/WBtW/014-637677442564423044.png"
+												"path": "adventure/WBtW/014-637677442564423044.webp"
 											},
 											"title": "{@creature Mister Light|TWC}",
 											"width": 400,
@@ -2675,7 +2675,7 @@
 											"type": "image",
 											"href": {
 												"type": "internal",
-												"path": "adventure/WBtW/033-637677441694763205.png"
+												"path": "adventure/WBtW/033-637677441694763205.webp"
 											},
 											"title": "{@creature Kester the Kenku|TWC}",
 											"width": 400,
@@ -3006,7 +3006,7 @@
 											"type": "image",
 											"href": {
 												"type": "internal",
-												"path": "adventure/WBtW/032-01-017.witch-and-light.png"
+												"path": "adventure/WBtW/032-01-017.witch-and-light.webp"
 											},
 											"title": "Mister Witch and Mister Light don't like strangers eavesdropping on their private conversations",
 											"width": 1700,
@@ -3125,7 +3125,7 @@
 													"type": "image",
 													"href": {
 														"type": "internal",
-														"path": "adventure/WBtW/034-01-018.the-feywild-awaits.png"
+														"path": "adventure/WBtW/034-01-018.the-feywild-awaits.webp"
 													},
 													"title": "Fantasy Costco awaits!",
 													"width": 1700,
@@ -3414,7 +3414,7 @@
 											"type": "image",
 											"href": {
 												"type": "internal",
-												"path": "adventure/WBtW/017-01-003.fire-breather.png"
+												"path": "adventure/WBtW/017-01-003.fire-breather.webp"
 											},
 											"title": "A tiefling fire-breather entertains the crowd under the Big Top",
 											"width": 1700,
@@ -3525,7 +3525,7 @@
 									"type": "image",
 									"href": {
 										"type": "internal",
-										"path": "adventure/WBtW/019-637677446430863372.png"
+										"path": "adventure/WBtW/019-637677446430863372.webp"
 									},
 									"title": "{@creature Treant Sapling|TWC}",
 									"width": 370,
@@ -3697,7 +3697,7 @@
 											"type": "image",
 											"href": {
 												"type": "internal",
-												"path": "adventure/WBtW/021-01-006.candlefoot.png"
+												"path": "adventure/WBtW/021-01-006.candlefoot.webp"
 											},
 											"title": "Candlefoot",
 											"width": 600,
@@ -4042,7 +4042,7 @@
 									"type": "image",
 									"href": {
 										"type": "internal",
-										"path": "adventure/WBtW/023-01-008.palasha.png"
+										"path": "adventure/WBtW/023-01-008.palasha.webp"
 									},
 									"title": "Palasha",
 									"width": 850,
@@ -4083,7 +4083,7 @@
 									"type": "image",
 									"href": {
 										"type": "internal",
-										"path": "adventure/WBtW/025-01-010.catch-the-dragon-by-the-tail.png"
+										"path": "adventure/WBtW/025-01-010.catch-the-dragon-by-the-tail.webp"
 									},
 									"title": "Catch the Dragon by the Tail",
 									"width": 850,
@@ -4147,7 +4147,7 @@
 									"type": "image",
 									"href": {
 										"type": "internal",
-										"path": "adventure/WBtW/026-01-011.almiraj-ring-toss.png"
+										"path": "adventure/WBtW/026-01-011.almiraj-ring-toss.webp"
 									},
 									"title": "Almiraj Ring Toss",
 									"width": 850,
@@ -4204,7 +4204,7 @@
 											"type": "image",
 											"href": {
 												"type": "internal",
-												"path": "adventure/WBtW/027-01-012.gnome-poetry-contest.png"
+												"path": "adventure/WBtW/027-01-012.gnome-poetry-contest.webp"
 											},
 											"title": "Gnome Poetry Contest",
 											"width": 850,
@@ -4262,7 +4262,7 @@
 											"type": "image",
 											"href": {
 												"type": "internal",
-												"path": "adventure/WBtW/024-01-009.guess-the-number-of-feathers.png"
+												"path": "adventure/WBtW/024-01-009.guess-the-number-of-feathers.webp"
 											},
 											"title": "Guess the Number of Feathers",
 											"width": 850,
@@ -4289,7 +4289,7 @@
 											"type": "image",
 											"href": {
 												"type": "internal",
-												"path": "adventure/WBtW/028-01-013.outstare-the-cyclops.png"
+												"path": "adventure/WBtW/028-01-013.outstare-the-cyclops.webp"
 											},
 											"title": "Outstare the Cyclops",
 											"width": 850,
@@ -4382,7 +4382,7 @@
 											"type": "image",
 											"href": {
 												"type": "internal",
-												"path": "adventure/WBtW/029-01-014.snail-racing.png"
+												"path": "adventure/WBtW/029-01-014.snail-racing.webp"
 											},
 											"title": "The giant snail race is one of the carnival's most popular attractions.",
 											"width": 1700,
@@ -4504,7 +4504,7 @@
 											"type": "image",
 											"href": {
 												"type": "internal",
-												"path": "adventure/WBtW/030-01-015.burly.png"
+												"path": "adventure/WBtW/030-01-015.burly.webp"
 											},
 											"title": "Burly",
 											"width": 850,
@@ -4541,7 +4541,7 @@
 											"type": "image",
 											"href": {
 												"type": "internal",
-												"path": "adventure/WBtW/031-01-016.thaco.png"
+												"path": "adventure/WBtW/031-01-016.thaco.webp"
 											},
 											"title": "Thaco",
 											"width": 850,
